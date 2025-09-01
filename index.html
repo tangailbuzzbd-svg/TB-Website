@@ -1,0 +1,1467 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tangail Buzz - বাংলাদেশের সেরা ই-কমার্স প্ল্যাটফর্ম</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+        /* বেসিক সিএসএস রিসেট এবং স্টাইল */
+        :root {
+            --primary-color: #E94B62;
+            --secondary-color: #4AC7B9;
+            --text-dark: #333;
+            --text-light: #777;
+            --bg-light: #FFFFFF;
+            --bg-offwhite: #F9FAFB;
+            --border-color: #E5E7EB;
+            --accent-yellow: #FFC94A;
+        }
+
+        body.dark-mode {
+            --text-dark: #E5E7EB; /* Light Gray for dark mode text */
+            --text-light: #9CA3AF; /* Dimmer gray for dark mode */
+            --bg-light: #1F2937;  /* Dark blue-gray for cards/headers */
+            --bg-offwhite: #111827; /* Very dark blue-gray for body */
+            --border-color: #374151; /* Gray for borders in dark mode */
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Noto Sans Bengali', 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-offwhite);
+            color: var(--text-dark);
+            transition: background-color 0.3s, color 0.3s; /* Smooth theme transition */
+        }
+        
+        body.lang-en {
+             font-family: 'Poppins', 'Noto Sans Bengali', sans-serif;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        /* হেডার এবং নেভিগেশন */
+        .main-header {
+            background: var(--bg-light);
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: background-color 0.3s; /* Smooth theme transition */
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-dark);
+            cursor: pointer;
+        }
+
+        .logo-icon {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 8px 10px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1.2em;
+            margin-right: 10px;
+        }
+
+        .logo-text {
+            font-size: 1.5em;
+            font-weight: 600;
+        }
+
+        .navbar {
+            display: flex;
+            gap: 25px;
+        }
+
+        .navbar a {
+            text-decoration: none;
+            color: var(--text-light);
+            font-weight: 500;
+            font-size: 1.1em;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        .navbar a:hover {
+            color: var(--primary-color);
+        }
+        
+        .search-bar {
+            position: relative;
+            width: 250px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 8px 35px 8px 15px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            font-size: 1em;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .search-bar input::placeholder {
+            color: var(--text-light);
+        }
+        
+        .search-bar .search-icon {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .header-controls .icon-btn {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .language-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .selected-lang {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: var(--bg-offwhite);
+            border: 1px solid var(--border-color);
+            padding: 8px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            color: var(--text-dark);
+            font-weight: 500;
+            width: 120px;
+        }
+
+        .selected-lang svg {
+            width: 20px;
+            height: 15px;
+            border-radius: 3px;
+        }
+
+        .dropdown-options {
+            display: none;
+            position: absolute;
+            top: 110%;
+            left: 0;
+            background-color: var(--bg-light);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            z-index: 1001;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .language-dropdown.open .dropdown-options {
+            display: block;
+        }
+        
+        .lang-btn {
+            background: transparent;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-dark);
+            font-weight: 500;
+            width: 100%;
+            text-align: left;
+        }
+        
+        .lang-btn svg {
+             width: 20px;
+             height: 15px;
+             border-radius: 3px;
+        }
+
+        .lang-option:hover {
+            background-color: var(--bg-offwhite);
+        }
+
+        .header-controls .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.8em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* হিরো বা শোকেস সেকশন */
+        #showcase {
+            background: linear-gradient(100deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
+        }
+
+        #showcase h1 {
+            font-size: 3.2em;
+            font-weight: 700;
+            margin: 0;
+        }
+        
+        #showcase p {
+            font-size: 1.3em;
+            margin: 15px 0 30px 0;
+        }
+
+        .cta-button {
+            background: var(--accent-yellow);
+            color: #333; /* Dark text on yellow button */
+            padding: 14px 35px;
+            text-decoration: none;
+            border-radius: 25px;
+            font-size: 1.1em;
+            font-weight: 600;
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+        
+        .cta-button:hover {
+            transform: scale(1.05);
+        }
+
+        /* ক্যাটাগরি সেকশন */
+        #categories {
+            padding: 60px 0;
+            text-align: center;
+        }
+
+        #categories h2 {
+            font-size: 2.2em;
+            margin-bottom: 30px;
+            color: var(--text-dark);
+        }
+        
+        .category-filters {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .filter-btn {
+            background: var(--bg-light);
+            border: 1px solid var(--border-color);
+            padding: 10px 25px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 500;
+            transition: background-color 0.3s, color 0.3s;
+            color: var(--text-dark);
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* পণ্য সেকশন */
+        #products {
+            padding: 20px 0 60px 0;
+        }
+        
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .product-card {
+            background: var(--bg-light);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            display: flex;
+            transition: background-color 0.3s, border-color 0.3s; /* Smooth theme transition */
+            flex-direction: column;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: contain;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        
+        .product-info {
+            padding: 0 20px 20px 20px;
+            text-align: left;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card h3 {
+            font-size: 1.1em;
+            margin: 0 0 10px 0;
+            font-weight: 500;
+        }
+        
+        .product-price {
+            margin-bottom: 15px;
+        }
+
+        .current-price {
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 1.2em;
+        }
+        
+        .old-price {
+            color: var(--text-light);
+            text-decoration: line-through;
+            margin-left: 10px;
+            font-size: 1em;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: auto; /* Pushes buttons to the bottom */
+        }
+        
+        .btn {
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-weight: 500;
+            text-align: center;
+            flex-grow: 1;
+            font-size: 0.9em;
+            cursor: pointer;
+        }
+        
+        .btn-details {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-add-cart {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .offer-tag {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background-color: var(--accent-yellow);
+            color: #333; /* Dark text on yellow tag */
+            padding: 4px 10px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        /* About Us Section */
+        #about-us {
+            padding: 80px 0;
+            background: var(--bg-light);
+            transition: background-color 0.3s; /* Smooth theme transition */
+            display: none; /* প্রাথমিকভাবে লুকানো থাকবে */
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .about-image img {
+            width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .about-text h2 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        .about-text p {
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: var(--text-light);
+            margin-bottom: 15px;
+        }
+
+        .founder-info {
+            margin-top: 30px;
+            background: var(--bg-offwhite);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid var(--primary-color);
+        }
+
+        .founder-info h3 {
+            margin: 0 0 5px 0;
+            font-size: 1.5em;
+        }
+
+        .founder-info p {
+            margin: 0;
+            font-size: 1.1em;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+
+        /* ফুটার */
+        .main-footer {
+            background: #2D3748; /* Dark Grayish Blue */
+            color: #A0AEC0; /* Light Gray */
+            padding: 60px 0 20px 0;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-col h4 {
+            color: #FFFFFF; /* Footer titles are always white */
+            font-size: 1.3em;
+            margin-bottom: 20px;
+        }
+
+        .footer-col p, .footer-col a {
+            color: #A0AEC0;
+            text-decoration: none;
+            line-height: 1.8;
+        }
+
+        .footer-col a:hover {
+            color: var(--secondary-color);
+        }
+
+        .footer-col ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 10px;
+        }
+
+        .contact-info li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px !important;
+        }
+
+        .payment-methods {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .payment-methods span {
+            background: #FFFFFF;
+            color: #333;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            background: rgba(255,255,255, 0.1);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            color: white;
+            transition: background-color 0.3s;
+        }
+
+        .social-links a:hover {
+            background: var(--secondary-color);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #4A5568;
+            text-align: center;
+            padding-top: 20px;
+        }
+
+        /* পণ্য বিবরণী মোডাল স্টাইল */
+        .modal-overlay {
+            display: none; /* ডিফল্টভাবে লুকানো থাকবে */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-overlay.visible {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-light);
+            padding: 30px;
+            border-radius: 15px;
+            width: 80%;
+            max-width: 900px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 2em;
+            cursor: pointer;
+            line-height: 1;
+        }
+        
+        .modal-images .main-image img {
+            width: 100%;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        .thumbnail-images {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .thumbnail-images img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 2px solid var(--border-color);
+            transition: border-color 0.3s;
+        }
+
+        .thumbnail-images img:hover, .thumbnail-images img.active {
+            border-color: var(--primary-color);
+        }
+        
+        .modal-details h2 {
+            font-size: 2em;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .stars {
+            color: #FFC107; /* Yellow for stars */
+        }
+        
+        .modal-price {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .modal-description {
+            line-height: 1.7;
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+
+        .spec-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .spec-list li {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .spec-list li:last-child {
+            border-bottom: none;
+        }
+
+        .spec-list li strong {
+            color: var(--text-dark);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- হেডার সেকশন -->
+    <header class="main-header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">TB</span>
+                    <span class="logo-text">TangailBuzz</span>
+                </div>
+                <nav class="navbar">
+                    <a href="" id="nav-home" data-lang-key="nav-home">হোম</a>
+                    <a id="nav-products" data-lang-key="nav-products">পণ্য</a>
+                    <a id="nav-offer" data-lang-key="nav-offer">অফার</a>
+                    <a id="nav-about" data-lang-key="nav-about">আমাদের সম্পর্কে</a>
+                </nav>
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="পণ্য খুঁজুন..." data-lang-key="search-placeholder">
+                    <span class="search-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    </span>
+                </div>
+                <div class="header-controls">
+                     <div class="language-dropdown">
+                        <button class="selected-lang">
+                            <!-- JS will populate this -->
+                        </button>
+                        <div class="dropdown-options">
+                            <button class="lang-btn lang-option" data-lang="bn">
+                             <svg viewBox="0 0 21 15"><path fill="#006a4e" d="M0 0h21v15H0z"></path><path fill="#f42a41" d="M9.5 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"></path></svg>
+                             <span>বাংলা</span>
+                            </button>
+                            <button class="lang-btn lang-option" data-lang="en">
+                           <svg viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg"><clipPath id="a"><path d="M0 0v30h60V0z"></path></clipPath><clipPath id="b"><path d="M30 15h30v15zv-15h-30zH0V0h30v15z"></path></clipPath><g clip-path="url(#a)"><path d="M0 0v30h60V0z" fill="#012169"></path><path d="M0 0l60 30m0-30L0 30" stroke="#fff" stroke-width="6"></path><path d="M0 0l60 30m0-30L0 30" clip-path="url(#b)" stroke="#C8102E" stroke-width="4"></path><path d="M30 0v30M0 15h60" stroke="#fff" stroke-width="10"></path><path d="M30 0v30M0 15h60" stroke="#C8102E" stroke-width="6"></path></g></svg>
+                             <span>English</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="icon-btn" id="theme-toggle-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    </div>
+                    <div class="icon-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    </div>
+                    <div class="icon-btn">
+                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                        <span class="cart-count">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div id="main-content-wrapper">
+        <!-- হিরো সেকশন -->
+        <section id="showcase">
+            <div class="container">
+                <h1 data-lang-key="showcase-h1">TangailBuzz এ আপনাকে স্বাগতম</h1>
+                <p data-lang-key="showcase-p">বাংলাদেশের সেরা ই-কমার্স প্ল্যাটফর্ম। আপনার প্রয়োজনীয় সবকিছু এক জায়গায়।</p>
+                <a id="cta-btn" class="cta-button" data-lang-key="cta-button">শপিং শুরু করুন</a>
+            </div>
+        </section>
+
+        <!-- ক্যাটাগরি সেকশন -->
+        <section id="categories">
+            <div class="container">
+                <h2 data-lang-key="categories-h2">আমাদের ক্যাটাগরি সমূহ</h2>
+                <div class="category-filters">
+                    <button class="filter-btn active" data-filter="all" data-lang-key="cat-all">সব পণ্য</button>
+                    <button class="filter-btn" data-filter="electronics" data-lang-key="cat-electronics">ইলেকট্রনিক্স</button>
+                    <button class="filter-btn" data-filter="fashion" data-lang-key="cat-fashion">পোশাক</button>
+                    <button class="filter-btn" data-filter="cosmetics" data-lang-key="cat-cosmetics">কসমেটিক</button>
+                    <button class="filter-btn" data-filter="household" data-lang-key="cat-household">গৃহস্থালী</button>
+                    <button class="filter-btn" data-filter="toys" data-lang-key="cat-toys">খেলনা</button>
+                    <button class="filter-btn" data-filter="books" data-lang-key="cat-books">বই</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- পণ্য সেকশন -->
+        <main id="products">
+            <div class="container">
+                <div class="product-grid">
+                    <!-- ইলেকট্রনিক্স পণ্য -->
+                    <div class="product-card" 
+                         data-category="electronics"
+                         data-description-bn="সুপার অ্যামোলেড ডিসপ্লে এবং সেরা ক্যামেরা সিস্টেম সহ একটি শক্তিশালী ফ্ল্যাগশিপ ফোন।"
+                         data-description-en="A powerful flagship phone with a Super AMOLED display and a top-tier camera system."
+                         data-rating="4.8"
+                         data-specs-bn='{"প্রকাশিত": "২০২৫, আগস্ট ০১", "ওএস": "Android 15, HyperOS 2", "ডিসপ্লে": "6.9\" 1080x2340 pixels", "ক্যামেরা": "50MP 1080p", "র‍্যাম": "4/8GB RAM Snapdragon 6s Gen 3", "ব্যাটারি": "7000mAh 33W"}'
+                         data-specs-en='{"Released": "2025, August 01", "OS": "Android 15, HyperOS 2", "Display": "6.9\" 1080x2340 pixels", "Camera": "50MP 1080p", "RAM": "4/8GB RAM Snapdragon 6s Gen 3", "Battery": "7000mAh 33W"}'
+                         data-img-main="https://placehold.co/400x400/F0F0F0/333?text=Samsung+S23+Main"
+                         data-img-thumb1="https://placehold.co/100x100/F0F0F0/333?text=S23+Side"
+                         data-img-thumb2="https://placehold.co/100x100/F0F0F0/333?text=S23+Back"
+                         data-img-thumb3="https://placehold.co/100x100/F0F0F0/333?text=S23+Camera">
+                        <div class="offer-tag" data-lang-key="tag-offer">অফার</div>
+                        <img src="https://placehold.co/300x200/F0F0F0/333?text=Samsung+S23" alt="Samsung Galaxy S23 Ultra">
+                        <div class="product-info">
+                            <h3 data-lang-key="product-name-s23">Samsung গ্যালাক্সি এস২৩ আলট্রা</h3>
+                            <div class="product-price">
+                                <span class="current-price" data-price="105000"></span>
+                                <span class="old-price" data-price-old="110000"></span>
+                            </div>
+                            <div class="product-actions">
+                                <a class="btn btn-details" data-lang-key="btn-details">বিস্তারিত</a>
+                                <a class="btn btn-add-cart" data-lang-key="btn-add-cart">কার্টে যোগ করুন</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Fashion Product 1 -->
+                    <div class="product-card" 
+                         data-category="fashion"
+                         data-description-bn="আরামদায়ক কটন কাপড়ের তৈরি আকর্ষণীয় ডিজাইনের কুর্তি, যা আপনাকে দেবে স্বাচ্ছন্দ্য ও স্টাইল।"
+                         data-description-en="An attractively designed kurti made of comfortable cotton fabric, giving you both comfort and style."
+                         data-rating="4.5"
+                         data-specs-bn='{"উপাদান": "কটন", "সাইজ": "S, M, L, XL", "রং": "লাল, নীল, সবুজ"}'
+                         data-specs-en='{"Material": "Cotton", "Size": "S, M, L, XL", "Color": "Red, Blue, Green"}'
+                         data-img-main="https://placehold.co/400x400/F0F0F0/333?text=Kurti+Main">
+                        <img src="https://placehold.co/300x200/F0F0F0/333?text=Women%27s+Kurti" alt="Women's Kurti">
+                        <div class="product-info">
+                            <h3 data-lang-key="product-name-kurti">নারীদের কটন কুর্তি</h3>
+                            <div class="product-price">
+                                <span class="current-price" data-price="1500"></span>
+                            </div>
+                            <div class="product-actions">
+                                <a class="btn btn-details" data-lang-key="btn-details">বিস্তারিত</a>
+                                <a class="btn btn-add-cart" data-lang-key="btn-add-cart">কার্টে যোগ করুন</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Cosmetics Product 1 -->
+                    <div class="product-card" 
+                         data-category="cosmetics"
+                         data-description-bn="আপনার ত্বকের উজ্জ্বলতা বাড়াতে এবং দাগ কমাতে একটি কার্যকরী সিরাম।"
+                         data-description-en="An effective serum to enhance your skin's radiance and reduce blemishes."
+                         data-rating="4.7"
+                         data-specs-bn='{"পরিমাণ": "30 ml", "উপাদান": "Vitamin C, Hyaluronic Acid", "ত্বকের ধরন": "সকল"}'
+                         data-specs-en='{"Volume": "30 ml", "Ingredients": "Vitamin C, Hyaluronic Acid", "Skin Type": "All"}'
+                         data-img-main="https://placehold.co/400x400/F0F0F0/333?text=Serum+Main">
+                        <img src="https://placehold.co/300x200/F0F0F0/333?text=Skincare+Serum" alt="Skincare Serum">
+                        <div class="product-info">
+                            <h3 data-lang-key="product-name-serum">স্কিনকেয়ার ফেসিয়াল সিরাম</h3>
+                            <div class="product-price">
+                                <span class="current-price" data-price="950"></span>
+                            </div>
+                            <div class="product-actions">
+                                <a class="btn btn-details" data-lang-key="btn-details">বিস্তারিত</a>
+                                <a class="btn btn-add-cart" data-lang-key="btn-add-cart">কার্টে যোগ করুন</a>
+                            </div>
+                        </div>
+                    </div>
+
+                     <!-- Toy Product 1 -->
+                    <div class="product-card" 
+                         data-category="toys"
+                         data-description-bn="সহজে নিয়ন্ত্রণযোগ্য এবং মজাদার একটি রিমোট কন্ট্রোল ড্রোন, যা নতুনদের জন্য চমৎকার।"
+                         data-description-en="An easy-to-control and fun remote control drone, excellent for beginners."
+                         data-rating="4.6"
+                         data-specs-bn='{"ব্যাটারি": "500 mAh", "ফ্লাইট টাইম": "১৫ মিনিট", "কন্ট্রোল রেঞ্জ": "৫০ মিটার"}'
+                         data-specs-en='{"Battery": "500 mAh", "Flight Time": "15 minutes", "Control Range": "50 meters"}'
+                         data-img-main="https://placehold.co/400x400/F0F0F0/333?text=Drone+Main">
+                        <img src="https://placehold.co/300x200/F0F0F0/333?text=RC+Drone" alt="RC Drone">
+                        <div class="product-info">
+                            <h3 data-lang-key="product-name-drone">রিমোট কন্ট্রোল ড্রোন</h3>
+                            <div class="product-price">
+                                <span class="current-price" data-price="2500"></span>
+                            </div>
+                            <div class="product-actions">
+                                <a class="btn btn-details" data-lang-key="btn-details">বিস্তারিত</a>
+                                <a class="btn btn-add-cart" data-lang-key="btn-add-cart">কার্টে যোগ করুন</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Fashion Product 2 -->
+                    <div class="product-card" 
+                         data-category="fashion"
+                         data-description-bn="উচ্চমানের আরামদায়ক কটন কাপড়ের তৈরি প্রিমিয়াম টি-শার্ট, যা আপনাকে দেবে দারুণ অনুভূতি।"
+                         data-description-en="A premium t-shirt made from high-quality comfortable cotton fabric that will make you feel great."
+                         data-rating="4.4"
+                         data-specs-bn='{"উপাদান": "১০০% কটন", "সাইজ": "M, L, XL", "ফিট": "রেগুলার"}'
+                         data-specs-en='{"Material": "100% Cotton", "Size": "M, L, XL", "Fit": "Regular"}'
+                         data-img-main="https://placehold.co/400x400/F0F0F0/333?text=T-Shirt+Main">
+                         <div class="offer-tag" data-lang-key="tag-offer">অফার</div>
+                        <img src="https://placehold.co/300x200/F0F0F0/333?text=Men%27s+T-Shirt" alt="Men's T-Shirt">
+                         <div class="product-info">
+                            <h3 data-lang-key="product-name-tshirt">পুরুষদের প্রিমিয়াম টি-শার্ট</h3>
+                            <div class="product-price">
+                                <span class="current-price" data-price="750"></span>
+                                <span class="old-price" data-price-old="900"></span>
+                            </div>
+                            <div class="product-actions">
+                                <a class="btn btn-details" data-lang-key="btn-details">বিস্তারিত</a>
+                                <a class="btn btn-add-cart" data-lang-key="btn-add-cart">কার্টে যোগ করুন</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                     <!-- Cosmetics Product 2 -->
+                    <div class="product-card" 
+                         data-category="cosmetics"
+                         data-description-bn="দীর্ঘস্থায়ী এবং আকর্ষণীয় ৪টি ভিন্ন রঙের ম্যাট লিপস্টিক যা আপনার সৌন্দর্যকে আরও বাড়িয়ে তুলবে।"
+                         data-description-en="Long-lasting and attractive matte lipsticks in 4 different shades that will enhance your beauty."
+                         data-rating="4.8"
+                         data-specs-bn='{"পরিমাণ": "৪টি সেট", "ফিনিশ": "ম্যাট", "বৈশিষ্ট্য": "ওয়াটারপ্রুফ"}'
+                         data-specs-en='{"Quantity": "Set of 4", "Finish": "Matte", "Feature": "Waterproof"}'
+                         data-img-main="https://placehold.co/400x400/F0F0F0/333?text=Lipstick+Main">
+                        <img src="https://placehold.co/300x200/F0F0F0/333?text=Lipstick+Set" alt="Lipstick Set">
+                         <div class="product-info">
+                            <h3 data-lang-key="product-name-lipstick">ম্যাট লিপস্টিক সেট (৪টি)</h3>
+                            <div class="product-price">
+                                <span class="current-price" data-price="1200"></span>
+                            </div>
+                            <div class="product-actions">
+                                <a class="btn btn-details" data-lang-key="btn-details">বিস্তারিত</a>
+                                <a class="btn btn-add-cart" data-lang-key="btn-add-cart">কার্টে যোগ করুন</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                     <!-- Toy Product 2 -->
+                    <div class="product-card" 
+                         data-category="toys"
+                         data-description-bn="বাচ্চাদের সৃজনশীলতা ও সমস্যা সমাধানের দক্ষতা বাড়ানোর জন্য একটি চমৎকার লেগো সেট।"
+                         data-description-en="An excellent LEGO set to enhance children's creativity and problem-solving skills."
+                         data-rating="4.9"
+                         data-specs-bn='{"টুকরা সংখ্যা": "৬৬৮", "বয়স": "৬+", "থিম": "সিটি"}'
+                         data-specs-en='{"Piece Count": "668", "Age": "6+", "Theme": "City"}'
+                         data-img-main="https://placehold.co/400x400/F0F0F0/333?text=LEGO+Main">
+                         <div class="offer-tag" data-lang-key="tag-offer">অফার</div>
+                        <img src="https://placehold.co/300x200/F0F0F0/333?text=LEGO+Set" alt="LEGO Set">
+                         <div class="product-info">
+                            <h3 data-lang-key="product-name-lego">লেগো সিটি পুলিশ স্টেশন</h3>
+                            <div class="product-price">
+                                <span class="current-price" data-price="3200"></span>
+                                <span class="old-price" data-price-old="3500"></span>
+                            </div>
+                            <div class="product-actions">
+                                <a class="btn btn-details" data-lang-key="btn-details">বিস্তারিত</a>
+                                <a class="btn btn-add-cart" data-lang-key="btn-add-cart">কার্টে যোগ করুন</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                     <!-- Electronics Product 2 -->
+                    <div class="product-card" 
+                         data-category="electronics"
+                         data-description-bn="নেক্সট-জেনারেশন গেমিং এর অভিজ্ঞতা নিন অবিশ্বাস্য গ্রাফিক্স এবং গতির সাথে।"
+                         data-description-en="Experience next-generation gaming with incredible graphics and speed."
+                         data-rating="4.9"
+                         data-specs-bn='{"স্টোরেজ": "825GB SSD", "রেজোলিউশন": "Up to 8K", "কন্ট্রোলার": "DualSense Wireless", "ডিস্ক ড্রাইভ": "আছে"}'
+                         data-specs-en='{"Storage": "825GB SSD", "Resolution": "Up to 8K", "Controller": "DualSense Wireless", "Disk Drive": "Included"}'
+                         data-img-main="https://placehold.co/400x400/F0F0F0/333?text=PS5+Main">
+                        <div class="offer-tag" data-lang-key="tag-offer">অফার</div>
+                        <img src="https://placehold.co/300x200/F0F0F0/333?text=Sony+PS5" alt="Sony Playstation 5">
+                        <div class="product-info">
+                            <h3 data-lang-key="product-name-ps5">সনি প্লেস্টেশন ৫ গেমিং কনসোল</h3>
+                            <div class="product-price">
+                                <span class="current-price" data-price="65000"></span>
+                                <span class="old-price" data-price-old="70000"></span>
+                            </div>
+                            <div class="product-actions">
+                                <a class="btn btn-details" data-lang-key="btn-details">বিস্তারিত</a>
+                                <a class="btn btn-add-cart" data-lang-key="btn-add-cart">কার্টে যোগ করুন</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                     <!-- Books Product 1 -->
+                     <div class="product-card" 
+                          data-category="books"
+                          data-description-bn="কিংবদন্তী লেখক হুমায়ূন আহমেদের সেরা এবং পাঠকনন্দিত বইগুলোর একটি অনন্য সংগ্রহ।"
+                          data-description-en="A unique collection of the best and most beloved books by the legendary author Humayun Ahmed."
+                          data-rating="4.9"
+                          data-specs-bn='{"লেখক": "হুমায়ূন আহমেদ", "ধরন": "উপন্যাস, গল্প", "ভাষা": "বাংলা", "প্রকাশনী": "অন্যপ্রকাশ"}'
+                          data-specs-en='{"Author": "Humayun Ahmed", "Genre": "Novel, Story", "Language": "Bengali", "Publisher": "Annyaprokash"}'
+                          data-img-main="https://placehold.co/400x400/F0F0F0/333?text=Books+Main">
+                        <img src="https://placehold.co/300x200/F0F0F0/333?text=Humayun+Ahmed+Books" alt="Humayun Ahmed Books">
+                         <div class="product-info">
+                            <h3 data-lang-key="product-name-books">হুমায়ূন আহমেদ সমগ্র</h3>
+                            <div class="product-price">
+                                <span class="current-price" data-price="1200"></span>
+                            </div>
+                            <div class="product-actions">
+                                <a class="btn btn-details" data-lang-key="btn-details">বিস্তারিত</a>
+                                <a class="btn btn-add-cart" data-lang-key="btn-add-cart">কার্টে যোগ করুন</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Household Product 1 -->
+                    <div class="product-card" 
+                         data-category="household"
+                         data-description-bn="৩২ পিসের আকর্ষণীয় ডিজাইন করা ডিনার সেট, যেকোনো অনুষ্ঠান বা উৎসবের জন্য উপযুক্ত।"
+                         data-description-en="An attractively designed 32-piece dinner set, suitable for any event or festival."
+                         data-rating="4.8"
+                         data-specs-bn='{"উপাদান": "সিরামিক", "পিস সংখ্যা": "৩২", "ব্যবহার": "মাইক্রোওয়েভ নিরাপদ", "ডিজাইন": "ফ্লোরাল"}'
+                         data-specs-en='{"Material": "Ceramic", "Piece Count": "32", "Use": "Microwave Safe", "Design": "Floral"}'
+                         data-img-main="https://placehold.co/400x400/F0F0F0/333?text=Dinner+Set+Main">
+                        <img src="https://placehold.co/300x200/F0F0F0/333?text=Dinner+Set" alt="Dinner Set">
+                        <div class="product-info">
+                            <h3 data-lang-key="product-name-dinnerset">রয়েল ডিনার সেট</h3>
+                            <div class="product-price">
+                                <span class="current-price" data-price="8000"></span>
+                            </div>
+                            <div class="product-actions">
+                                <a class="btn btn-details" data-lang-key="btn-details">বিস্তারিত</a>
+                                <a class="btn btn-add-cart" data-lang-key="btn-add-cart">কার্টে যোগ করুন</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Household Product 2 -->
+                    <div class="product-card" 
+                         data-category="household"
+                         data-description-bn="উচ্চমানের অ্যালুমিনিয়াম দিয়ে তৈরি প্রেসার কুকার যা দ্রুত, নিরাপদে এবং সহজে রান্না করতে সাহায্য করে।"
+                         data-description-en="A high-quality aluminum pressure cooker that helps to cook faster, safer, and easier."
+                         data-rating="4.7"
+                         data-specs-bn='{"ধারণক্ষমতা": "৫ লিটার", "উপাদান": "অ্যালুমিনিয়াম", "নিরাপত্তা": "সুরক্ষা ভালভ", "ওয়ারেন্টি": "১ বছর"}'
+                         data-specs-en='{"Capacity": "5 Liters", "Material": "Aluminum", "Safety": "Safety Valve", "Warranty": "1 Year"}'
+                         data-img-main="https://placehold.co/400x400/F0F0F0/333?text=Cooker+Main">
+                        <div class="offer-tag" data-lang-key="tag-offer">অফার</div>
+                        <img src="https://placehold.co/300x200/F0F0F0/333?text=Pressure+Cooker" alt="Pressure Cooker">
+                        <div class="product-info">
+                            <h3 data-lang-key="product-name-cooker">প্রেসার কুকার</h3>
+                            <div class="product-price">
+                                <span class="current-price" data-price="2200"></span>
+                                <span class="old-price" data-price-old="2500"></span>
+                            </div>
+                            <div class="product-actions">
+                                <a class="btn btn-details" data-lang-key="btn-details">বিস্তারিত</a>
+                                <a class="btn btn-add-cart" data-lang-key="btn-add-cart">কার্টে যোগ করুন</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- আমাদের সম্পর্কে সেকশন -->
+    <section id="about-us">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-image">
+                    <img src="https://i.ibb.co/6wmzWQR/md-eousuf-ali.jpg" alt="MD EOUSUF ALI - Managing Director">
+                </div>
+                <div class="about-text">
+                    <h2 data-lang-key="about-h2">আমাদের পথচলার গল্প</h2>
+                    <p data-lang-key="about-p1">
+                        ২০২৩ সাল থেকে TangailBuzz তার যাত্রা শুরু করে। আমাদের লক্ষ্য ছিল টাঙ্গাইলের ঐতিহ্যবাহী এবং আধুনিক পণ্যগুলোকে সারা বাংলাদেশের মানুষের কাছে পৌঁছে দেওয়া। খুব অল্প সময়ের মধ্যে আমরা গ্রাহকদের আস্থা অর্জন করতে সক্ষম হয়েছি।
+                    </p>
+                    <p data-lang-key="about-p2">
+                        আমরা ইলেকট্রনিক্স, পোশাক, শাড়ি, কসমেটিকস থেকে শুরু করে গৃহস্থালীর প্রয়োজনীয় সকল জিনিস সরবরাহ করি। আমাদের প্রধান উদ্দেশ্য হলো ন্যায্য মূল্যে সেরা মানের পণ্য গ্রাহকদের হাতে তুলে দেওয়া এবং তাদের অনলাইন কেনাকাটার অভিজ্ঞতাকে আরও সহজ ও আনন্দদায়ক করে তোলা।
+                    </p>
+                    <div class="founder-info">
+                        <h3 data-lang-key="founder-name">MD EOUSUF ALI</h3>
+                        <p data-lang-key="founder-title">Managing Director, TangailBuzz</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- পণ্য বিবরণী মোডাল -->
+    <div class="modal-overlay" id="product-details-modal">
+        <div class="modal-content">
+            <span class="modal-close" id="modal-close-btn">&times;</span>
+            <div class="modal-images">
+                <div class="main-image">
+                    <img src="" id="modal-main-image" alt="Main product image">
+                </div>
+                <div class="thumbnail-images" id="modal-thumbnails">
+                    <!-- Thumbnail images will be generated by JS -->
+                </div>
+            </div>
+            <div class="modal-details">
+                <h2 id="modal-product-name"></h2>
+                <div class="product-rating">
+                    <span class="stars" id="modal-rating-stars"></span>
+                    <span id="modal-rating-text"></span>
+                </div>
+                <div class="modal-price" id="modal-product-price"></div>
+                <h3 data-lang-key="modal-overview-title">Product Overview</h3>
+                <p class="modal-description" id="modal-product-description"></p>
+                <h3 data-lang-key="modal-specs-title">বিস্তারিত তথ্য</h3>
+                <ul class="spec-list" id="modal-spec-list">
+                    <!-- Specification list will be generated by JS -->
+                </ul>
+                 <div class="product-actions" style="margin-top: 20px;">
+                    <a class="btn btn-add-cart" style="flex-grow: 2;" data-lang-key="btn-add-cart">কার্টে যোগ করুন</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ফুটার সেকশন -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>TangailBuzz</h4>
+                    <p data-lang-key="footer-desc">বাংলাদেশের সেরা ই-কমার্স প্ল্যাটফর্ম। আপনার প্রয়োজনীয় সবকিছু এক জায়গায়।</p>
+                    <div class="payment-methods">
+                        <span>Visa</span><span>MC</span><span>AE</span><span>Nagad</span><span>SC</span>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4 data-lang-key="footer-links-title">দ্রুত লিঙ্ক</h4>
+                    <ul>
+                        <li><a id="footer-home" data-lang-key="nav-home">হোম</a></li><li><a id="footer-products" data-lang-key="nav-products">পণ্য</a></li><li><a data-lang-key="nav-offer">অফার</a></li><li><a id="footer-about" data-lang-key="nav-about">আমাদের সম্পর্কে</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4 data-lang-key="footer-contact-title">যোগাযোগ</h4>
+                    <ul class="contact-info">
+                        <li><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg> <a href="https://mail.google.com/mail/u/2/#inbox" target="_blank">tangailbuzz.bd@gmail.com</a></li>
+                        <li><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg> <a href="tel:+8801863205976" style="color: #A0AEC0; text-decoration: none;">+8801863205976</a></li>
+                        <li><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> <a href="https://www.google.com/maps/place/Tangail+District" target="_blank" style="color: #A0AEC0; text-decoration: none;" data-lang-key="location">টাঙ্গাইল, বাংলাদেশ</a></li>
+                    </ul>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/Tangailbuzz/" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></a>
+                        <a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                        <a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg></a>
+                        <a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2A29 29 0 0 0 23 11.75a29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p data-lang-key="footer-copyright">&copy; ২০২৫ TangailBuzz - সকল অধিকার সংরক্ষিত</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const translations = {
+                'bn': {
+                    'nav-home': 'হোম',
+                    'nav-products': 'পণ্য',
+                    'nav-offer': 'অফার',
+                    'nav-about': 'আমাদের সম্পর্কে',
+                    'search-placeholder': 'পণ্য খুঁজুন...',
+                    'showcase-h1': 'TangailBuzz এ আপনাকে স্বাগতম',
+                    'showcase-p': 'বাংলাদেশের সেরা ই-কমার্স প্ল্যাটফর্ম। আপনার প্রয়োজনীয় সবকিছু এক জায়গায়।',
+                    'cta-button': 'শপিং শুরু করুন',
+                    'categories-h2': 'আমাদের ক্যাটাগরি সমূহ',
+                    'cat-all': 'সব পণ্য',
+                    'cat-electronics': 'ইলেকট্রনিক্স',
+                    'cat-fashion': 'পোশাক',
+                    'cat-cosmetics': 'কসমেটিক',
+                    'cat-household': 'গৃহস্থালী',
+                    'cat-toys': 'খেলনা',
+                    'cat-books': 'বই',
+                    'tag-offer': 'অফার',
+                    'product-name-s23': 'Samsung গ্যালাক্সি এস২৩ আলট্রা',
+                    'product-name-kurti': 'নারীদের কটন কুর্তি',
+                    'product-name-serum': 'স্কিনকেয়ার ফেসিয়াল সিরাম',
+                    'product-name-drone': 'রিমোট কন্ট্রোল ড্রোন',
+                    'product-name-tshirt': 'পুরুষদের প্রিমিয়াম টি-শার্ট',
+                    'product-name-lipstick': 'ম্যাট লিপস্টিক সেট (৪টি)',
+                    'product-name-lego': 'লেগো সিটি পুলিশ স্টেশন',
+                    'product-name-ps5': 'সনি প্লেস্টেশন ৫ গেমিং কনসোল',
+                    'product-name-books': 'হুমায়ূন আহমেদ সমগ্র',
+                    'product-name-dinnerset': 'রয়েল ডিনার সেট',
+                    'product-name-cooker': 'প্রেসার কুকার',
+                    'btn-details': 'বিস্তারিত',
+                    'btn-add-cart': 'কার্টে যোগ করুন',
+                    'about-h2': 'আমাদের পথচলার গল্প',
+                    'about-p1': '২০২৩ সাল থেকে TangailBuzz তার যাত্রা শুরু করে। আমাদের লক্ষ্য ছিল টাঙ্গাইলের ঐতিহ্যবাহী এবং আধুনিক পণ্যগুলোকে সারা বাংলাদেশের মানুষের কাছে পৌঁছে দেওয়া। খুব অল্প সময়ের মধ্যে আমরা গ্রাহকদের আস্থা অর্জন করতে সক্ষম হয়েছি।',
+                    'about-p2': 'আমরা ইলেকট্রনিক্স, পোশাক, শাড়ি, কসমেটিকস থেকে শুরু করে গৃহস্থালীর প্রয়োজনীয় সকল জিনিস সরবরাহ করি। আমাদের প্রধান উদ্দেশ্য হলো ন্যায্য মূল্যে সেরা মানের পণ্য গ্রাহকদের হাতে তুলে দেওয়া এবং তাদের অনলাইন কেনাকাটার অভিজ্ঞতাকে আরও সহজ ও আনন্দদায়ক করে তোলা।',
+                    'founder-name': 'MD EOUSUF ALI',
+                    'founder-title': 'Managing Director, TangailBuzz',
+                    'modal-overview-title': 'পণ্যের বিবরণ',
+                    'modal-specs-title': 'বিস্তারিত তথ্য',
+                    'modal-rating-text': 'রেটিং',
+                    'footer-desc': 'বাংলাদেশের সেরা ই-কমার্স প্ল্যাটফর্ম। আপনার প্রয়োজনীয় সবকিছু এক জায়গায়।',
+                    'footer-links-title': 'দ্রুত লিঙ্ক',
+                    'footer-contact-title': 'যোগাযোগ',
+                    'location': 'টাঙ্গাইল, বাংলাদেশ',
+                    'footer-copyright': '© ২০২৫ TangailBuzz - সকল অধিকার সংরক্ষিত',
+                },
+                'en': {
+                    'nav-home': 'Home',
+                    'nav-products': 'Products',
+                    'nav-offer': 'Offers',
+                    'nav-about': 'About Us',
+                    'search-placeholder': 'Search products...',
+                    'showcase-h1': 'Welcome to TangailBuzz',
+                    'showcase-p': 'The best e-commerce platform in Bangladesh. Everything you need in one place.',
+                    'cta-button': 'Start Shopping',
+                    'categories-h2': 'Our Categories',
+                    'cat-all': 'All Products',
+                    'cat-electronics': 'Electronics',
+                    'cat-fashion': 'Fashion',
+                    'cat-cosmetics': 'Cosmetics',
+                    'cat-household': 'Household',
+                    'cat-toys': 'Toys',
+                    'cat-books': 'Books',
+                    'tag-offer': 'Offer',
+                    'product-name-s23': 'Samsung Galaxy S23 Ultra',
+                    'product-name-kurti': 'Women\'s Cotton Kurti',
+                    'product-name-serum': 'Skincare Facial Serum',
+                    'product-name-drone': 'Remote Control Drone',
+                    'product-name-tshirt': 'Men\'s Premium T-Shirt',
+                    'product-name-lipstick': 'Matte Lipstick Set (4pcs)',
+                    'product-name-lego': 'LEGO City Police Station',
+                    'product-name-ps5': 'Sony PlayStation 5 Gaming Console',
+                    'product-name-books': 'Humayun Ahmed Collection',
+                    'product-name-dinnerset': 'Royal Dinner Set',
+                    'product-name-cooker': 'Pressure Cooker',
+                    'btn-details': 'Details',
+                    'btn-add-cart': 'Add to Cart',
+                    'about-h2': 'Our Journey',
+                    'about-p1': 'TangailBuzz started its journey in 2023. Our goal was to bring the traditional and modern products of Tangail to people all over Bangladesh. In a very short time, we have been able to earn the trust of our customers.',
+                    'about-p2': 'We supply everything from electronics, clothing, sarees, cosmetics to necessary household items. Our main objective is to deliver the best quality products at fair prices to customers and to make their online shopping experience easier and more enjoyable.',
+                    'founder-name': 'MD EOUSUF ALI',
+                    'founder-title': 'Managing Director, TangailBuzz',
+                    'modal-overview-title': 'Product Overview',
+                    'modal-specs-title': 'Specifications',
+                    'modal-rating-text': 'Ratings',
+                    'footer-desc': 'The best e-commerce platform in Bangladesh. Everything you need in one place.',
+                    'footer-links-title': 'Quick Links',
+                    'footer-contact-title': 'Contact',
+                    'location': 'Tangail, Bangladesh',
+                    'footer-copyright': '© 2025 TangailBuzz - All rights reserved',
+                }
+            };
+
+            // Language Switcher Logic
+            const dropdown = document.querySelector('.language-dropdown');
+            const selectedLangBtn = dropdown.querySelector('.selected-lang');
+            const body = document.body;
+            const langOptions = dropdown.querySelectorAll('.lang-option');
+
+            const bengaliDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+            function formatPrice(price, lang) {
+                const number = parseInt(price);
+                const formattedNumber = number.toLocaleString('en-IN'); // For comma style like 1,05,000
+                if (lang === 'bn') {
+                    return '৳ ' + formattedNumber.split('').map(digit => bengaliDigits[digit] || digit).join('');
+                }
+                return '৳ ' + formattedNumber;
+            }
+
+            function setLanguage(lang) {
+                document.querySelectorAll('[data-lang-key]').forEach(element => {
+                    const key = element.getAttribute('data-lang-key');
+                    if (translations[lang] && translations[lang][key]) {
+                        if (element.tagName === 'INPUT' && element.type === 'text') {
+                             element.placeholder = translations[lang][key];
+                        } else {
+                            element.textContent = translations[lang][key];
+                        }
+                    }
+                });
+                
+                document.querySelectorAll('.current-price, .old-price').forEach(priceEl => {
+                    const priceValue = priceEl.dataset.price || priceEl.dataset.priceOld;
+                    if(priceValue) {
+                        priceEl.textContent = formatPrice(priceValue, lang);
+                    }
+                });
+
+                body.classList.toggle('lang-en', lang === 'en');
+                const selectedOption = dropdown.querySelector(`.lang-option[data-lang="${lang}"]`);
+                selectedLangBtn.innerHTML = selectedOption.innerHTML;
+                localStorage.setItem('language', lang);
+            }
+            
+
+            selectedLangBtn.addEventListener('click', () => {
+                dropdown.classList.toggle('open');
+            });
+
+            langOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    const lang = option.dataset.lang;
+                    setLanguage(lang);
+                    dropdown.classList.remove('open');
+                });
+            });
+
+            window.addEventListener('click', (e) => {
+                if (!dropdown.contains(e.target)) {
+                    dropdown.classList.remove('open');
+                }
+            });
+
+            // Theme Toggle Logic
+            const themeToggleBtn = document.getElementById('theme-toggle-btn');
+
+            if (localStorage.getItem('theme') === 'dark') {
+                body.classList.add('dark-mode');
+            }
+
+            themeToggleBtn.addEventListener('click', () => {
+                body.classList.toggle('dark-mode');
+                if (body.classList.contains('dark-mode')) {
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    localStorage.setItem('theme', 'light');
+                }
+            });
+
+            //পেজ নেভিগেশন ভ্যারিয়েবল
+            const navProducts = document.getElementById('nav-products');
+            const navOffer = document.getElementById('nav-offer');
+            const navAbout = document.getElementById('nav-about');
+            const mainContentWrapper = document.getElementById('main-content-wrapper');
+            const aboutUsSection = document.getElementById('about-us');
+            const logo = document.querySelector('.logo');
+            const footerHome = document.getElementById('footer-home');
+            const footerProducts = document.getElementById('footer-products');
+            const footerAbout = document.getElementById('footer-about');
+            const ctaButton = document.getElementById('cta-btn');
+
+            // ফিল্টার এবং সার্চ এর জন্য ভ্যারিয়েবল
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const productCards = document.querySelectorAll('.product-card');
+            const searchInput = document.getElementById('searchInput');
+
+            // মোডাল এর জন্য ভ্যারিয়েবল
+            const modalOverlay = document.getElementById('product-details-modal');
+            const modalCloseBtn = document.getElementById('modal-close-btn');
+            const detailsButtons = document.querySelectorAll('.btn-details');
+
+            function showMainContent() {
+                mainContentWrapper.style.display = 'block';
+                aboutUsSection.style.display = 'none';
+            }
+            
+            function showAboutSection() {
+                mainContentWrapper.style.display = 'none';
+                aboutUsSection.style.display = 'block';
+                 window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            navProducts.addEventListener('click', () => {
+                showMainContent();
+                document.querySelector('.filter-btn[data-filter="all"]').click();
+                window.scrollTo({ top: document.getElementById('categories').offsetTop, behavior: 'smooth' });
+            });
+            
+            ctaButton.addEventListener('click', () => {
+                showMainContent();
+                document.querySelector('.filter-btn[data-filter="all"]').click();
+                window.scrollTo({ top: document.getElementById('categories').offsetTop, behavior: 'smooth' });
+            });
+
+            navOffer.addEventListener('click', () => {
+                showMainContent();
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                productCards.forEach(card => {
+                    card.style.display = card.querySelector('.offer-tag') ? 'flex' : 'none';
+                });
+                window.scrollTo({ top: document.getElementById('categories').offsetTop, behavior: 'smooth' });
+            });
+
+            logo.addEventListener('click', showMainContent);
+            footerHome.addEventListener('click', showMainContent);
+            footerProducts.addEventListener('click', () => {
+                showMainContent();
+                document.querySelector('.filter-btn[data-filter="all"]').click();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+            navAbout.addEventListener('click', showAboutSection);
+            footerAbout.addEventListener('click', showAboutSection);
+
+            function filterAndSearchProducts() {
+                const searchQuery = searchInput.value.toLowerCase();
+                const activeFilter = document.querySelector('.filter-btn.active').getAttribute('data-filter');
+
+                productCards.forEach(card => {
+                    const cardCategory = card.getAttribute('data-category');
+                    const productNameKey = card.querySelector('h3').dataset.langKey;
+                    const currentLang = localStorage.getItem('language') || 'bn';
+                    const productName = translations[currentLang][productNameKey].toLowerCase();
+
+                    const categoryMatch = (activeFilter === 'all' || activeFilter === cardCategory);
+                    const searchMatch = productName.includes(searchQuery);
+
+                    if (categoryMatch && searchMatch) {
+                        card.style.display = 'flex';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            }
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    filterAndSearchProducts();
+                });
+            });
+
+            if(searchInput) {
+                 searchInput.addEventListener('keyup', filterAndSearchProducts);
+            }
+
+            detailsButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const card = this.closest('.product-card');
+                    if (!card) return;
+                    
+                    const currentLang = localStorage.getItem('language') || 'bn';
+                    const nameKey = card.querySelector('h3').dataset.langKey;
+
+                    const name = translations[currentLang][nameKey];
+                    const priceEl = card.querySelector('.current-price');
+                    const price = priceEl.textContent;
+                    
+                    const description = card.dataset[`description-${currentLang}`] || "No description available.";
+                    const rating = parseFloat(card.dataset.rating) || 0;
+                    const specs = JSON.parse(card.dataset[`specs-${currentLang}`] || '{}');
+                    
+                    const mainImage = card.dataset.imgMain;
+                    const thumbnails = [card.dataset.imgThumb1, card.dataset.imgThumb2, card.dataset.imgThumb3].filter(Boolean);
+
+                    document.getElementById('modal-product-name').textContent = name;
+                    document.getElementById('modal-product-price').textContent = price;
+                    document.getElementById('modal-product-description').textContent = description;
+                    
+                    const ratingStars = document.getElementById('modal-rating-stars');
+                    let starsHTML = '';
+                    for(let i = 1; i <= 5; i++) {
+                        if (i <= rating) starsHTML += '★';
+                        else if (i - 0.5 <= rating) starsHTML += '½';
+                        else starsHTML += '☆';
+                    }
+                    ratingStars.innerHTML = starsHTML;
+                    const ratingTextKey = 'modal-rating-text';
+                    document.getElementById('modal-rating-text').textContent = `(${rating} ${translations[currentLang][ratingTextKey]})`;
+                    
+                    const specList = document.getElementById('modal-spec-list');
+                    specList.innerHTML = '';
+                    for (const key in specs) {
+                        const listItem = document.createElement('li');
+                        listItem.innerHTML = `<strong>${key}:</strong> <span>${specs[key]}</span>`;
+                        specList.appendChild(listItem);
+                    }
+
+                    const mainImageEl = document.getElementById('modal-main-image');
+                    mainImageEl.src = mainImage || card.querySelector('img').src;
+
+                    const thumbnailsContainer = document.getElementById('modal-thumbnails');
+                    thumbnailsContainer.innerHTML = '';
+                    const allImages = [mainImage, ...thumbnails];
+                    allImages.forEach((imgSrc, index) => {
+                        if(imgSrc) {
+                            const img = document.createElement('img');
+                            img.src = imgSrc;
+                            img.addEventListener('click', () => {
+                                mainImageEl.src = imgSrc;
+                                thumbnailsContainer.querySelectorAll('img').forEach(i => i.classList.remove('active'));
+                                img.classList.add('active');
+                            });
+                            if (index === 0) img.classList.add('active');
+                            thumbnailsContainer.appendChild(img);
+                        }
+                    });
+                    modalOverlay.classList.add('visible');
+                });
+            });
+
+            function closeModal() {
+                modalOverlay.classList.remove('visible');
+            }
+
+            modalCloseBtn.addEventListener('click', closeModal);
+            modalOverlay.addEventListener('click', function(event) {
+                if (event.target === modalOverlay) {
+                    closeModal();
+                }
+            });
+
+            // Initial Language Load
+            const savedLang = localStorage.getItem('language') || 'bn';
+            setLanguage(savedLang);
+        });
+    </script>
+
+</body>
+</html>
+
