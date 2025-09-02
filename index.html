@@ -21,11 +21,11 @@
         }
 
         body.dark-mode {
-            --text-dark: #E5E7EB; /* Light Gray for dark mode text */
-            --text-light: #9CA3AF; /* Dimmer gray for dark mode */
-            --bg-light: #1F2937;  /* Dark blue-gray for cards/headers */
-            --bg-offwhite: #111827; /* Very dark blue-gray for body */
-            --border-color: #374151; /* Gray for borders in dark mode */
+            --text-dark: #E5E7EB; 
+            --text-light: #9CA3AF; 
+            --bg-light: #1F2937;  
+            --bg-offwhite: #111827; 
+            --border-color: #374151; 
         }
 
         html {
@@ -38,7 +38,7 @@
             padding: 0;
             background-color: var(--bg-offwhite);
             color: var(--text-dark);
-            transition: background-color 0.3s, color 0.3s; /* Smooth theme transition */
+            transition: background-color 0.3s, color 0.3s;
         }
         
         body.lang-en {
@@ -60,7 +60,7 @@
             top: 0;
             z-index: 1000;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            transition: background-color 0.3s; /* Smooth theme transition */
+            transition: background-color 0.3s;
         }
 
         .header-content {
@@ -230,6 +230,319 @@
             justify-content: center;
             align-items: center;
         }
+        
+        /* Cart Modal Styles */
+        #cart-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        #cart-modal-overlay.visible { display: flex; }
+        .cart-modal-content {
+            background-color: var(--bg-light);
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .cart-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+        .cart-items-list {
+            flex-grow: 1;
+            overflow-y: auto;
+            margin-bottom: 15px;
+        }
+        .cart-item {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .cart-item:last-child { border-bottom: none; }
+        .cart-item img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .cart-item-details { flex-grow: 1; }
+        .cart-item-quantity {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .quantity-btn {
+            background-color: var(--bg-offwhite);
+            border: 1px solid var(--border-color);
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .cart-item-remove { cursor: pointer; color: var(--primary-color); }
+        .cart-summary {
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+        }
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .cart-total {
+            font-weight: 700;
+            font-size: 1.2em;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border-color);
+        }
+        .checkout-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background-color: var(--secondary-color);
+            color: white;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        #empty-cart-message { text-align: center; padding: 40px 0; }
+
+        /* Payment Modal */
+        .payment-option {
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        .payment-option.active {
+            border-color: var(--primary-color);
+            background-color: var(--bg-offwhite);
+        }
+        .sub-options {
+            display: none;
+            padding-left: 20px;
+            margin-top: 10px;
+        }
+        .payment-option.active .sub-options { display: block; }
+        
+        /* Order Success Modal */
+        #order-success-modal-overlay .auth-modal-content {
+            text-align: center;
+        }
+        #order-success-modal-overlay .success-icon {
+            font-size: 3em;
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+        }
+
+        /* Auth Modal Styles */
+        #auth-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #auth-modal-overlay.visible {
+            display: flex;
+        }
+
+        .auth-modal-content {
+            background-color: var(--bg-light);
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .auth-modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5em;
+            cursor: pointer;
+            line-height: 1;
+            color: var(--text-light);
+        }
+        
+        .auth-view {
+            display: none;
+        }
+        .auth-view.active {
+            display: block;
+        }
+
+        .auth-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+        .auth-tab {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-light);
+            border-bottom: 2px solid transparent;
+        }
+        .auth-tab.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        .auth-form h3 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-sizing: border-box;
+            background-color: var(--bg-offwhite);
+            color: var(--text-dark);
+        }
+
+        .auth-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .google-btn {
+            background-color: #4285F4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .auth-link {
+            text-align: center;
+            margin-top: 15px;
+        }
+        .auth-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .auth-message {
+            text-align: center;
+            margin-top: 15px;
+            font-weight: 500;
+        }
+        .auth-message.error { color: var(--primary-color); }
+        .auth-message.success { color: var(--secondary-color); }
+
+
+        #account-view ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        #account-view li {
+            padding: 15px 10px;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+        }
+        #account-view li:hover {
+            background-color: var(--bg-offwhite);
+        }
+        #account-view li:last-child {
+            border-bottom: none;
+        }
+        #logout-btn, #delete-account-btn {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        #address-list {
+            margin-top: 20px;
+        }
+        .address-item {
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        #password-requirements {
+            font-size: 0.9em;
+            margin-top: -10px;
+            margin-bottom: 15px;
+            color: var(--text-light);
+        }
+        #password-requirements ul {
+            list-style: none;
+            padding: 0;
+            margin: 5px 0 0 0;
+        }
+        #password-requirements li {
+            padding-left: 20px;
+            position: relative;
+            transition: color 0.3s;
+        }
+        #password-requirements li::before {
+            content: '✖';
+            color: var(--primary-color);
+            position: absolute;
+            left: 0;
+        }
+        #password-requirements li.valid {
+            color: var(--secondary-color);
+        }
+        #password-requirements li.valid::before {
+            content: '✔';
+            color: var(--secondary-color);
+        }
+
 
         /* হিরো বা শোকেস সেকশন */
         #showcase {
@@ -630,20 +943,16 @@
         .product-rating {
             display: flex;
             align-items: center;
-            gap: 10px;
             margin-bottom: 15px;
             font-size: 1.2em;
-        }
-
-        .stars {
-            color: #FFC107; /* Yellow for stars */
+            color: var(--text-light);
         }
         
         .modal-price {
             font-size: 1.8em;
             font-weight: 700;
             color: var(--primary-color);
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .modal-description {
@@ -655,13 +964,14 @@
         .spec-list {
             list-style: none;
             padding: 0;
-            margin: 0;
+            margin: 20px 0 0 0;
         }
 
         .spec-list li {
             display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 0;
             border-bottom: 1px solid var(--border-color);
         }
 
@@ -669,9 +979,56 @@
             border-bottom: none;
         }
 
-        .spec-list li strong {
+        .spec-icon {
+            color: var(--secondary-color);
+            flex-shrink: 0;
+        }
+
+        .spec-text .spec-key {
+            font-size: 0.9em;
+            color: var(--text-light);
+            display: block;
+        }
+        .spec-text .spec-value {
+            font-weight: 600;
+            color: var(--text-dark);
+            display: block;
+        }
+
+        .modal-meta-info {
+            font-size: 0.9em;
+            color: var(--text-light);
+            margin-bottom: 15px;
+            padding: 10px;
+            background: var(--bg-offwhite);
+            border-radius: 8px;
+        }
+        .modal-meta-info p {
+            margin: 4px 0;
+        }
+        .modal-meta-info strong {
             color: var(--text-dark);
         }
+        .modal-tags {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .modal-tags span {
+            padding: 4px 10px;
+            border-radius: 5px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+        .tag-available {
+            background-color: #4CAF50; /* Green */
+            color: white;
+        }
+        .tag-unofficial {
+            background-color: #FF9800; /* Orange */
+            color: white;
+        }
+
     </style>
 </head>
 <body>
@@ -715,10 +1072,10 @@
                     <div class="icon-btn" id="theme-toggle-btn">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
                     </div>
-                    <div class="icon-btn">
+                    <div class="icon-btn" id="profile-btn">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                     </div>
-                    <div class="icon-btn">
+                    <div class="icon-btn" id="cart-btn">
                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
                         <span class="cart-count">0</span>
                     </div>
@@ -759,7 +1116,10 @@
                 <div class="product-grid">
                     <!-- ইলেকট্রনিক্স পণ্য -->
                     <div class="product-card" 
+                         data-product-id="BuzzP0001"
                          data-category="electronics"
+                         data-brand-bn="স্যামসাং"
+                         data-brand-en="Samsung"
                          data-description-bn="সুপার অ্যামোলেড ডিসপ্লে এবং সেরা ক্যামেরা সিস্টেম সহ একটি শক্তিশালী ফ্ল্যাগশিপ ফোন।"
                          data-description-en="A powerful flagship phone with a Super AMOLED display and a top-tier camera system."
                          data-rating="4.8"
@@ -785,10 +1145,11 @@
                     </div>
 
                     <!-- Fashion Product 1 -->
-                    <div class="product-card" 
+                    <div class="product-card"
+                         data-product-id="BuzzP0002"
                          data-category="fashion"
-                         data-description-bn="আরামদায়ক কটন কাপড়ের তৈরি আকর্ষণীয় ডিজাইনের কুর্তি, যা আপনাকে দেবে স্বাচ্ছন্দ্য ও স্টাইল।"
-                         data-description-en="An attractively designed kurti made of comfortable cotton fabric, giving you both comfort and style."
+                         data-description-bn="আরামদায়ক কটন কাপড়ের তৈরি আকর্ষণীয় ডিজাইনের কুর্তি।"
+                         data-description-en="An attractively designed kurti made of comfortable cotton fabric."
                          data-rating="4.5"
                          data-specs-bn='{"উপাদান": "কটন", "সাইজ": "S, M, L, XL", "রং": "লাল, নীল, সবুজ"}'
                          data-specs-en='{"Material": "Cotton", "Size": "S, M, L, XL", "Color": "Red, Blue, Green"}'
@@ -808,9 +1169,10 @@
                     
                     <!-- Cosmetics Product 1 -->
                     <div class="product-card" 
+                         data-product-id="BuzzP0003"
                          data-category="cosmetics"
-                         data-description-bn="আপনার ত্বকের উজ্জ্বলতা বাড়াতে এবং দাগ কমাতে একটি কার্যকরী সিরাম।"
-                         data-description-en="An effective serum to enhance your skin's radiance and reduce blemishes."
+                         data-description-bn="আপনার ত্বকের উজ্জ্বলতা বাড়াতে একটি কার্যকরী সিরাম।"
+                         data-description-en="An effective serum to enhance your skin's radiance."
                          data-rating="4.7"
                          data-specs-bn='{"পরিমাণ": "30 ml", "উপাদান": "Vitamin C, Hyaluronic Acid", "ত্বকের ধরন": "সকল"}'
                          data-specs-en='{"Volume": "30 ml", "Ingredients": "Vitamin C, Hyaluronic Acid", "Skin Type": "All"}'
@@ -829,12 +1191,13 @@
                     </div>
 
                      <!-- Toy Product 1 -->
-                    <div class="product-card" 
+                    <div class="product-card"
+                         data-product-id="BuzzP0004"
                          data-category="toys"
-                         data-description-bn="সহজে নিয়ন্ত্রণযোগ্য এবং মজাদার একটি রিমোট কন্ট্রোল ড্রোন, যা নতুনদের জন্য চমৎকার।"
-                         data-description-en="An easy-to-control and fun remote control drone, excellent for beginners."
+                         data-description-bn="সহজে নিয়ন্ত্রণযোগ্য এবং মজাদার একটি রিমোট কন্ট্রোল ড্রোন।"
+                         data-description-en="An easy-to-control and fun remote control drone."
                          data-rating="4.6"
-                         data-specs-bn='{"ব্যাটারি": "500 mAh", "ফ্লাইট টাইম": "১৫ মিনিট", "কন্ট্রোল রেঞ্জ": "৫০ মিটার"}'
+                         data-specs-bn='{"ব্যাটারি": "500 mAh", "ফ্লাইট টাইম": "15 minutes", "কন্ট্রোল রেঞ্জ": "50 meters"}'
                          data-specs-en='{"Battery": "500 mAh", "Flight Time": "15 minutes", "Control Range": "50 meters"}'
                          data-img-main="https://placehold.co/400x400/F0F0F0/333?text=Drone+Main">
                         <img src="https://placehold.co/300x200/F0F0F0/333?text=RC+Drone" alt="RC Drone">
@@ -852,12 +1215,13 @@
 
                     <!-- Fashion Product 2 -->
                     <div class="product-card" 
+                         data-product-id="BuzzP0005"
                          data-category="fashion"
-                         data-description-bn="উচ্চমানের আরামদায়ক কটন কাপড়ের তৈরি প্রিমিয়াম টি-শার্ট, যা আপনাকে দেবে দারুণ অনুভূতি।"
-                         data-description-en="A premium t-shirt made from high-quality comfortable cotton fabric that will make you feel great."
+                         data-description-bn="উচ্চমানের আরামদায়ক কটন কাপড়ের তৈরি।"
+                         data-description-en="Made from high-quality comfortable cotton fabric."
                          data-rating="4.4"
-                         data-specs-bn='{"উপাদান": "১০০% কটন", "সাইজ": "M, L, XL", "ফিট": "রেগুলার"}'
-                         data-specs-en='{"Material": "100% Cotton", "Size": "M, L, XL", "Fit": "Regular"}'
+                         data-specs-bn='{"উপাদান": "১০০% কটন", "সাইজ": "M, L, XL"}'
+                         data-specs-en='{"Material": "100% Cotton", "Size": "M, L, XL"}'
                          data-img-main="https://placehold.co/400x400/F0F0F0/333?text=T-Shirt+Main">
                          <div class="offer-tag" data-lang-key="tag-offer">অফার</div>
                         <img src="https://placehold.co/300x200/F0F0F0/333?text=Men%27s+T-Shirt" alt="Men's T-Shirt">
@@ -876,12 +1240,13 @@
                     
                      <!-- Cosmetics Product 2 -->
                     <div class="product-card" 
+                         data-product-id="BuzzP0006"
                          data-category="cosmetics"
-                         data-description-bn="দীর্ঘস্থায়ী এবং আকর্ষণীয় ৪টি ভিন্ন রঙের ম্যাট লিপস্টিক যা আপনার সৌন্দর্যকে আরও বাড়িয়ে তুলবে।"
-                         data-description-en="Long-lasting and attractive matte lipsticks in 4 different shades that will enhance your beauty."
+                         data-description-bn="দীর্ঘস্থায়ী এবং আকর্ষণীয় ৪টি ভিন্ন রঙের ম্যাট লিপস্টিক।"
+                         data-description-en="Long-lasting and attractive matte lipsticks in 4 different shades."
                          data-rating="4.8"
-                         data-specs-bn='{"পরিমাণ": "৪টি সেট", "ফিনিশ": "ম্যাট", "বৈশিষ্ট্য": "ওয়াটারপ্রুফ"}'
-                         data-specs-en='{"Quantity": "Set of 4", "Finish": "Matte", "Feature": "Waterproof"}'
+                         data-specs-bn='{"পরিমাণ": "৪টি সেট", "ফিনিশ": "ম্যাট"}'
+                         data-specs-en='{"Quantity": "Set of 4", "Finish": "Matte"}'
                          data-img-main="https://placehold.co/400x400/F0F0F0/333?text=Lipstick+Main">
                         <img src="https://placehold.co/300x200/F0F0F0/333?text=Lipstick+Set" alt="Lipstick Set">
                          <div class="product-info">
@@ -898,12 +1263,13 @@
                     
                      <!-- Toy Product 2 -->
                     <div class="product-card" 
+                         data-product-id="BuzzP0007"
                          data-category="toys"
-                         data-description-bn="বাচ্চাদের সৃজনশীলতা ও সমস্যা সমাধানের দক্ষতা বাড়ানোর জন্য একটি চমৎকার লেগো সেট।"
-                         data-description-en="An excellent LEGO set to enhance children's creativity and problem-solving skills."
+                         data-description-bn="বাচ্চাদের সৃজনশীলতা বাড়ানোর জন্য একটি চমৎকার লেগো সেট।"
+                         data-description-en="An excellent LEGO set to enhance children's creativity."
                          data-rating="4.9"
-                         data-specs-bn='{"টুকরা সংখ্যা": "৬৬৮", "বয়স": "৬+", "থিম": "সিটি"}'
-                         data-specs-en='{"Piece Count": "668", "Age": "6+", "Theme": "City"}'
+                         data-specs-bn='{"টুকরা সংখ্যা": "৬৬৮", "বয়স": "৬+"}'
+                         data-specs-en='{"Piece Count": "668", "Age": "6+"}'
                          data-img-main="https://placehold.co/400x400/F0F0F0/333?text=LEGO+Main">
                          <div class="offer-tag" data-lang-key="tag-offer">অফার</div>
                         <img src="https://placehold.co/300x200/F0F0F0/333?text=LEGO+Set" alt="LEGO Set">
@@ -922,12 +1288,13 @@
                     
                      <!-- Electronics Product 2 -->
                     <div class="product-card" 
+                         data-product-id="BuzzP0008"
                          data-category="electronics"
                          data-description-bn="নেক্সট-জেনারেশন গেমিং এর অভিজ্ঞতা নিন অবিশ্বাস্য গ্রাফিক্স এবং গতির সাথে।"
                          data-description-en="Experience next-generation gaming with incredible graphics and speed."
                          data-rating="4.9"
-                         data-specs-bn='{"স্টোরেজ": "825GB SSD", "রেজোলিউশন": "Up to 8K", "কন্ট্রোলার": "DualSense Wireless", "ডিস্ক ড্রাইভ": "আছে"}'
-                         data-specs-en='{"Storage": "825GB SSD", "Resolution": "Up to 8K", "Controller": "DualSense Wireless", "Disk Drive": "Included"}'
+                         data-specs-bn='{"স্টোরেজ": "825GB SSD", "রেজোলিউশন": "Up to 8K", "কন্ট্রোলার": "DualSense Wireless"}'
+                         data-specs-en='{"Storage": "825GB SSD", "Resolution": "Up to 8K", "Controller": "DualSense Wireless"}'
                          data-img-main="https://placehold.co/400x400/F0F0F0/333?text=PS5+Main">
                         <div class="offer-tag" data-lang-key="tag-offer">অফার</div>
                         <img src="https://placehold.co/300x200/F0F0F0/333?text=Sony+PS5" alt="Sony Playstation 5">
@@ -946,12 +1313,13 @@
                     
                      <!-- Books Product 1 -->
                      <div class="product-card" 
+                          data-product-id="BuzzP0009"
                           data-category="books"
-                          data-description-bn="কিংবদন্তী লেখক হুমায়ূন আহমেদের সেরা এবং পাঠকনন্দিত বইগুলোর একটি অনন্য সংগ্রহ।"
-                          data-description-en="A unique collection of the best and most beloved books by the legendary author Humayun Ahmed."
+                          data-description-bn="কিংবদন্তী লেখক হুমায়ূন আহমেদের সেরা বইগুলোর একটি সংগ্রহ।"
+                          data-description-en="A collection of the best books by the legendary author Humayun Ahmed."
                           data-rating="4.9"
-                          data-specs-bn='{"লেখক": "হুমায়ূন আহমেদ", "ধরন": "উপন্যাস, গল্প", "ভাষা": "বাংলা", "প্রকাশনী": "অন্যপ্রকাশ"}'
-                          data-specs-en='{"Author": "Humayun Ahmed", "Genre": "Novel, Story", "Language": "Bengali", "Publisher": "Annyaprokash"}'
+                          data-specs-bn='{"লেখক": "হুমায়ূন আহমেদ", "ধরন": "উপন্যাস, গল্প"}'
+                          data-specs-en='{"Author": "Humayun Ahmed", "Genre": "Novel, Story"}'
                           data-img-main="https://placehold.co/400x400/F0F0F0/333?text=Books+Main">
                         <img src="https://placehold.co/300x200/F0F0F0/333?text=Humayun+Ahmed+Books" alt="Humayun Ahmed Books">
                          <div class="product-info">
@@ -968,12 +1336,13 @@
 
                     <!-- Household Product 1 -->
                     <div class="product-card" 
+                         data-product-id="BuzzP0010"
                          data-category="household"
-                         data-description-bn="৩২ পিসের আকর্ষণীয় ডিজাইন করা ডিনার সেট, যেকোনো অনুষ্ঠান বা উৎসবের জন্য উপযুক্ত।"
-                         data-description-en="An attractively designed 32-piece dinner set, suitable for any event or festival."
+                         data-description-bn="৩২ পিসের আকর্ষণীয় ডিজাইন করা ডিনার সেট, যেকোনো অনুষ্ঠানের জন্য উপযুক্ত।"
+                         data-description-en="An attractively designed 32-piece dinner set, suitable for any occasion."
                          data-rating="4.8"
-                         data-specs-bn='{"উপাদান": "সিরামিক", "পিস সংখ্যা": "৩২", "ব্যবহার": "মাইক্রোওয়েভ নিরাপদ", "ডিজাইন": "ফ্লোরাল"}'
-                         data-specs-en='{"Material": "Ceramic", "Piece Count": "32", "Use": "Microwave Safe", "Design": "Floral"}'
+                         data-specs-bn='{"উপাদান": "সিরামিক", "পিস সংখ্যা": "৩২", "ব্যবহার": "মাইক্রোওয়েভ নিরাপদ"}'
+                         data-specs-en='{"Material": "Ceramic", "Piece Count": "32", "Use": "Microwave Safe"}'
                          data-img-main="https://placehold.co/400x400/F0F0F0/333?text=Dinner+Set+Main">
                         <img src="https://placehold.co/300x200/F0F0F0/333?text=Dinner+Set" alt="Dinner Set">
                         <div class="product-info">
@@ -990,12 +1359,13 @@
 
                     <!-- Household Product 2 -->
                     <div class="product-card" 
+                         data-product-id="BuzzP0011"
                          data-category="household"
-                         data-description-bn="উচ্চমানের অ্যালুমিনিয়াম দিয়ে তৈরি প্রেসার কুকার যা দ্রুত, নিরাপদে এবং সহজে রান্না করতে সাহায্য করে।"
-                         data-description-en="A high-quality aluminum pressure cooker that helps to cook faster, safer, and easier."
+                         data-description-bn="উচ্চমানের অ্যালুমিনিয়াম দিয়ে তৈরি প্রেসার কুকার যা দ্রুত রান্না করতে সাহায্য করে।"
+                         data-description-en="High-quality aluminum pressure cooker that helps to cook faster."
                          data-rating="4.7"
-                         data-specs-bn='{"ধারণক্ষমতা": "৫ লিটার", "উপাদান": "অ্যালুমিনিয়াম", "নিরাপত্তা": "সুরক্ষা ভালভ", "ওয়ারেন্টি": "১ বছর"}'
-                         data-specs-en='{"Capacity": "5 Liters", "Material": "Aluminum", "Safety": "Safety Valve", "Warranty": "1 Year"}'
+                         data-specs-bn='{"ধারণক্ষমতা": "৫ লিটার", "উপাদান": "অ্যালুমিনিয়াম", "নিরাপত্তা": "সুরক্ষা ভালভ"}'
+                         data-specs-en='{"Capacity": "5 Liters", "Material": "Aluminum", "Safety": "Safety Valve"}'
                          data-img-main="https://placehold.co/400x400/F0F0F0/333?text=Cooker+Main">
                         <div class="offer-tag" data-lang-key="tag-offer">অফার</div>
                         <img src="https://placehold.co/300x200/F0F0F0/333?text=Pressure+Cooker" alt="Pressure Cooker">
@@ -1055,20 +1425,253 @@
             <div class="modal-details">
                 <h2 id="modal-product-name"></h2>
                 <div class="product-rating">
-                    <span class="stars" id="modal-rating-stars"></span>
                     <span id="modal-rating-text"></span>
                 </div>
                 <div class="modal-price" id="modal-product-price"></div>
-                <h3 data-lang-key="modal-overview-title">Product Overview</h3>
+                 <div class="modal-meta-info">
+                    <p><strong data-lang-key="product-id">Product ID:</strong> <span id="modal-product-id"></span></p>
+                    <p><strong data-lang-key="brand">Brand:</strong> <span id="modal-brand"></span></p>
+                    <p><strong data-lang-key="category">Category:</strong> <span id="modal-category"></span></p>
+                </div>
+                <div class="modal-tags">
+                    <span class="tag-available" data-lang-key="tag-available">AVAILABLE</span>
+                    <span class="tag-unofficial" data-lang-key="tag-unofficial">UNOFFICIAL</span>
+                </div>
                 <p class="modal-description" id="modal-product-description"></p>
                 <h3 data-lang-key="modal-specs-title">বিস্তারিত তথ্য</h3>
                 <ul class="spec-list" id="modal-spec-list">
                     <!-- Specification list will be generated by JS -->
                 </ul>
                  <div class="product-actions" style="margin-top: 20px;">
-                    <a class="btn btn-add-cart" style="flex-grow: 2;" data-lang-key="btn-add-cart">কার্টে যোগ করুন</a>
+                    <a class="btn btn-add-cart" id="modal-add-to-cart-btn" style="flex-grow: 2;" data-lang-key="btn-add-cart">কার্টে যোগ করুন</a>
                 </div>
             </div>
+        </div>
+    </div>
+    
+    <!-- Auth Modal -->
+    <div id="auth-modal-overlay">
+        <div class="auth-modal-content">
+            <span class="auth-modal-close" id="auth-modal-close">&times;</span>
+            
+            <!-- Login/Register View -->
+            <div id="login-register-view" class="auth-view">
+                <div class="auth-tabs">
+                    <div class="auth-tab active" data-tab="login" data-lang-key="auth-login-tab">লগইন</div>
+                    <div class="auth-tab" data-tab="register" data-lang-key="auth-register-tab">রেজিস্টার</div>
+                </div>
+                
+                <!-- Login Form -->
+                <div id="login-form-container" class="auth-form">
+                     <form id="login-form">
+                        <h3 data-lang-key="login-title">আপনার একাউন্টে লগইন করুন</h3>
+                        <div class="form-group">
+                            <label for="login-email" data-lang-key="email-label">ইমেইল</label>
+                            <input type="email" id="login-email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="login-password" data-lang-key="password-label">পাসওয়ার্ড</label>
+                            <input type="password" id="login-password" required>
+                        </div>
+                        <button type="submit" class="auth-btn" data-lang-key="login-btn">লগইন</button>
+                    </form>
+                    <div class="auth-link">
+                        <a id="show-forgot-password" data-lang-key="forgot-password-link">পাসওয়ার্ড ভুলে গেছেন?</a>
+                    </div>
+                </div>
+                
+                <!-- Register Form -->
+                <div id="register-form-container" class="auth-form" style="display: none;">
+                    <form id="register-form">
+                        <h3 data-lang-key="register-title">নতুন একাউন্ট তৈরি করুন</h3>
+                        <div class="form-group">
+                            <label for="register-name" data-lang-key="name-label">নাম</label>
+                            <input type="text" id="register-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-mobile" data-lang-key="mobile-label">মোবাইল</label>
+                            <input type="tel" id="register-mobile" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-address" data-lang-key="address-label">ঠিকানা</label>
+                            <input type="text" id="register-address" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-email" data-lang-key="email-label">ইমেইল</label>
+                            <input type="email" id="register-email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-password" data-lang-key="password-label">পাসওয়ার্ড</label>
+                            <input type="password" id="register-password" required>
+                        </div>
+                         <div class="form-group">
+                            <label for="register-retype-password" data-lang-key="retype-password-label">পুনরায় পাসওয়ার্ড দিন</label>
+                            <input type="password" id="register-retype-password" required>
+                        </div>
+                        <button type="submit" class="auth-btn" data-lang-key="register-btn">রেজিস্টার</button>
+                    </form>
+                </div>
+                <button id="google-signin-btn" class="auth-btn google-btn">
+                     <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><path d="M17.64 9.2045c0-.6381-.0573-1.2518-.1636-1.8409H9v3.4818h4.8436c-.2086 1.125-.8441 2.0782-1.7777 2.7218v2.2582h2.9082c1.7018-1.5668 2.6836-3.8741 2.6836-6.621z" fill="#4285F4"></path><path d="M9 18c2.43 0 4.4673-.806 5.9564-2.1805l-2.9082-2.2582c-.806.54-1.8377.86-3.0482.86-2.344 0-4.3282-1.5818-5.0355-3.7104H.9573v2.3318C2.4382 15.9832 5.4818 18 9 18z" fill="#34A853"></path><path d="M3.9645 10.71c-.1827-.54-.2827-1.1168-.2827-1.71s.1-1.17.2827-1.71V4.9582H.9573A8.9965 8.9965 0 000 9c0 1.4523.3464 2.8273.9573 4.0418L3.9645 10.71z" fill="#FBBC05"></path><path d="M9 3.5795c1.3214 0 2.5077.4541 3.4405 1.346l2.5813-2.5814C13.4632.8918 11.4259 0 9 0 5.4818 0 2.4382 2.0168.9573 4.9582L3.9645 7.29C4.6718 5.1618 6.656 3.5795 9 3.5795z" fill="#EA4335"></path></g></svg>
+                    <span data-lang-key="google-login-btn">গুগল দিয়ে লগইন করুন</span>
+                </button>
+                 <div id="auth-message-container" class="auth-message"></div>
+            </div>
+
+            <!-- Forgot Password View -->
+            <div id="forgot-password-view" class="auth-view">
+                 <form id="forgot-password-form">
+                    <h3 data-lang-key="forgot-password-title">পাসওয়ার্ড রিসেট</h3>
+                    <div class="form-group">
+                        <label for="forgot-email" data-lang-key="email-label">আপনার ইমেইল দিন</label>
+                        <input type="email" id="forgot-email" required>
+                    </div>
+                    <button type="submit" class="auth-btn" data-lang-key="reset-password-btn">রিসেট লিঙ্ক পাঠান</button>
+                    <div class="auth-link">
+                         <a id="back-to-login" data-lang-key="back-to-login-link">&laquo; লগইনে ফিরে যান</a>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Account View (Logged In) -->
+            <div id="account-view" class="auth-view">
+                <h3 id="user-greeting"></h3>
+                <ul>
+                    <li id="manage-address-btn" data-lang-key="manage-address">ঠিকানা পরিচালনা করুন</li>
+                    <li id="change-mobile-btn" data-lang-key="change-mobile">মোবাইল নম্বর পরিবর্তন করুন</li>
+                    <li id="logout-btn" data-lang-key="logout">লগআউট</li>
+                    <li id="delete-account-btn" data-lang-key="delete-account">একাউন্ট মুছে ফেলুন</li>
+                </ul>
+            </div>
+            
+            <!-- Address View -->
+            <div id="address-view" class="auth-view">
+                 <h3 data-lang-key="address-title">আমার ডিফল্ট ঠিকানা</h3>
+                 <div id="address-list"></div>
+                 <form id="address-form">
+                     <div class="form-group">
+                         <label for="address-line1" data-lang-key="address-line1-label">ঠিকানা</label>
+                         <input type="text" id="address-line1" required>
+                     </div>
+                     <div class="form-group">
+                         <label for="address-city" data-lang-key="address-city-label">শহর</label>
+                         <input type="text" id="address-city" required>
+                     </div>
+                     <div class="form-group">
+                         <label for="address-postal" data-lang-key="address-postal-label">পোস্টাল কোড</label>
+                         <input type="text" id="address-postal" required>
+                     </div>
+                     <button type="submit" class="auth-btn" data-lang-key="save-address-btn">ঠিকানা সংরক্ষণ করুন</button>
+                 </form>
+                 <div class="auth-link">
+                     <a id="back-to-account" data-lang-key="back-to-account-link">&laquo; একাউন্টে ফিরে যান</a>
+                </div>
+            </div>
+            
+             <!-- Mobile Change View -->
+            <div id="mobile-view" class="auth-view">
+                 <h3 data-lang-key="mobile-title">মোবাইল নম্বর পরিবর্তন</h3>
+                 <form id="mobile-form">
+                     <div class="form-group">
+                         <label for="mobile-number" data-lang-key="mobile-label">নতুন মোবাইল নম্বর</label>
+                         <input type="tel" id="mobile-number" required>
+                     </div>
+                     <button type="submit" class="auth-btn" data-lang-key="save-mobile-btn">সংরক্ষণ করুন</button>
+                 </form>
+                 <div class="auth-link">
+                     <a id="back-to-account-from-mobile" data-lang-key="back-to-account-link">&laquo; একাউন্টে ফিরে যান</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    
+    <!-- Cart Modal -->
+    <div id="cart-modal-overlay">
+        <div class="cart-modal-content">
+            <div class="cart-modal-header">
+                <h3 data-lang-key="cart-title">আপনার শপিং কার্ট</h3>
+                <span class="auth-modal-close" id="cart-modal-close">&times;</span>
+            </div>
+            <div id="cart-items-list" class="cart-items-list">
+                 <!-- Cart items will be injected here by JS -->
+            </div>
+             <div id="empty-cart-message" style="display: none;">
+                <p data-lang-key="empty-cart">আপনার কার্ট খালি।</p>
+            </div>
+            <div id="cart-footer" style="display: none;">
+                <div class="cart-summary">
+                    <div class="summary-row">
+                        <span data-lang-key="subtotal">সাবটোটাল:</span>
+                        <span id="cart-subtotal-price"></span>
+                    </div>
+                     <div class="summary-row" id="delivery-charge-row" style="display: none;">
+                        <span data-lang-key="delivery-charge">ডেলিভারি চার্জ:</span>
+                        <span id="cart-delivery-charge"></span>
+                    </div>
+                </div>
+                <div class="summary-row cart-total">
+                    <span data-lang-key="total-price">সর্বমোট:</span>
+                    <span id="cart-total-price"></span>
+                </div>
+                <button id="checkout-btn" class="checkout-btn" data-lang-key="checkout">চেকআউট</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Payment Modal -->
+    <div id="payment-modal-overlay" class="modal-overlay">
+        <div class="auth-modal-content">
+             <span class="auth-modal-close" id="payment-modal-close">&times;</span>
+             <h3 data-lang-key="payment-title">পেমেন্ট পদ্ধতি নির্বাচন করুন</h3>
+             <div class="payment-options">
+                 <div class="payment-option" data-method="card">
+                     <strong data-lang-key="payment-card">কার্ড</strong>
+                     <div class="sub-options">
+                         <div class="form-group">
+                            <label for="card-name" data-lang-key="card-name-label">কার্ডে থাকা নাম</label>
+                            <input type="text" id="card-name" placeholder="Abul Kalam">
+                        </div>
+                         <div class="form-group">
+                             <label data-lang-key="card-number-label">কার্ড নম্বর</label>
+                             <input type="text" placeholder="1234 5678 9101 1121">
+                         </div>
+                         <div class="form-group" style="display: flex; gap: 10px;">
+                             <div style="flex: 1;">
+                                 <label data-lang-key="expiry-label">মেয়াদ</label>
+                                 <input type="text" placeholder="MM/YY">
+                             </div>
+                             <div style="flex: 1;">
+                                 <label data-lang-key="cvc-label">CVC</label>
+                                 <input type="text" placeholder="123">
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+                 <div class="payment-option" data-method="mobile">
+                     <strong data-lang-key="payment-mobile">মোবাইল ব্যাংকিং</strong>
+                     <div class="sub-options">
+                         <input type="radio" id="bkash" name="mobile-banking" value="Bkash" checked>
+                         <label for="bkash">Bkash</label><br>
+                         <input type="radio" id="nagad" name="mobile-banking" value="Nagad">
+                         <label for="nagad">Nagad</label>
+                     </div>
+                 </div>
+                  <div class="payment-option" data-method="cod">
+                     <strong data-lang-key="cod">ক্যাশ অন ডেলিভারি</strong>
+                 </div>
+             </div>
+             <button id="confirm-order-btn" class="auth-btn" data-lang-key="confirm-order-btn">অর্ডার নিশ্চিত করুন</button>
+        </div>
+    </div>
+    
+    <!-- Order Success Modal -->
+    <div id="order-success-modal-overlay" class="modal-overlay">
+        <div class="auth-modal-content">
+             <span class="auth-modal-close" id="order-success-modal-close">&times;</span>
+             <div class="success-icon">✔</div>
+             <h3 data-lang-key="order-success">আপনার অর্ডারটি সফলভাবে সম্পন্ন হয়েছে!</h3>
+             <p data-lang-key="order-success-msg">আমরা আপনার অর্ডারটি গ্রহণ করেছি। একটি কনফার্মেশন ইমেইল পাঠানো হয়েছে।</p>
         </div>
     </div>
 
@@ -1110,107 +1713,124 @@
             </div>
         </div>
     </footer>
+    
+    <script type="module">
+        // Firebase SDKs
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { 
+            getAuth, 
+            createUserWithEmailAndPassword,
+            signInWithEmailAndPassword,
+            signInWithPopup,
+            GoogleAuthProvider,
+            sendPasswordResetEmail,
+            onAuthStateChanged,
+            signOut,
+            updateProfile,
+            deleteUser
+        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { 
+            getFirestore, 
+            doc, 
+            setDoc,
+            getDoc,
+            updateDoc,
+            collection,
+            addDoc,
+            serverTimestamp,
+            query,
+            where,
+            getDocs,
+            deleteDoc
+        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyBEoqth3U1rNXiDefi7uNvRkLzC_qjw5IU",
+          authDomain: "tangail-buzz-login-project.firebaseapp.com",
+          projectId: "tangail-buzz-login-project",
+          storageBucket: "tangail-buzz-login-project.appspot.com",
+          messagingSenderId: "267766420151",
+          appId: "1:267766420151:web:7cafd9281350e903aa7332"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const googleProvider = new GoogleAuthProvider();
+
         document.addEventListener('DOMContentLoaded', function () {
 
             const translations = {
                 'bn': {
-                    'nav-home': 'হোম',
-                    'nav-products': 'পণ্য',
-                    'nav-offer': 'অফার',
-                    'nav-about': 'আমাদের সম্পর্কে',
-                    'search-placeholder': 'পণ্য খুঁজুন...',
-                    'showcase-h1': 'TangailBuzz এ আপনাকে স্বাগতম',
-                    'showcase-p': 'বাংলাদেশের সেরা ই-কমার্স প্ল্যাটফর্ম। আপনার প্রয়োজনীয় সবকিছু এক জায়গায়।',
-                    'cta-button': 'শপিং শুরু করুন',
-                    'categories-h2': 'আমাদের ক্যাটাগরি সমূহ',
-                    'cat-all': 'সব পণ্য',
-                    'cat-electronics': 'ইলেকট্রনিক্স',
-                    'cat-fashion': 'পোশাক',
-                    'cat-cosmetics': 'কসমেটিক',
-                    'cat-household': 'গৃহস্থালী',
-                    'cat-toys': 'খেলনা',
-                    'cat-books': 'বই',
-                    'tag-offer': 'অফার',
-                    'product-name-s23': 'Samsung গ্যালাক্সি এস২৩ আলট্রা',
-                    'product-name-kurti': 'নারীদের কটন কুর্তি',
-                    'product-name-serum': 'স্কিনকেয়ার ফেসিয়াল সিরাম',
-                    'product-name-drone': 'রিমোট কন্ট্রোল ড্রোন',
-                    'product-name-tshirt': 'পুরুষদের প্রিমিয়াম টি-শার্ট',
-                    'product-name-lipstick': 'ম্যাট লিপস্টিক সেট (৪টি)',
-                    'product-name-lego': 'লেগো সিটি পুলিশ স্টেশন',
-                    'product-name-ps5': 'সনি প্লেস্টেশন ৫ গেমিং কনসোল',
-                    'product-name-books': 'হুমায়ূন আহমেদ সমগ্র',
-                    'product-name-dinnerset': 'রয়েল ডিনার সেট',
-                    'product-name-cooker': 'প্রেসার কুকার',
-                    'btn-details': 'বিস্তারিত',
-                    'btn-add-cart': 'কার্টে যোগ করুন',
+                    'nav-home': 'হোম', 'nav-products': 'পণ্য', 'nav-offer': 'অফার', 'nav-about': 'আমাদের সম্পর্কে', 'search-placeholder': 'পণ্য খুঁজুন...',
+                    'showcase-h1': 'TangailBuzz এ আপনাকে স্বাগতম', 'showcase-p': 'বাংলাদেশের সেরা ই-কমার্স প্ল্যাটফর্ম। আপনার প্রয়োজনীয় সবকিছু এক জায়গায়।',
+                    'cta-button': 'শপিং শুরু করুন', 'categories-h2': 'আমাদের ক্যাটাগরি সমূহ', 'cat-all': 'সব পণ্য', 'cat-electronics': 'ইলেকট্রনিক্স',
+                    'cat-fashion': 'পোশাক', 'cat-cosmetics': 'কসমেটিক', 'cat-household': 'গৃহস্থালী', 'cat-toys': 'খেলনা', 'cat-books': 'বই',
+                    'tag-offer': 'অফার', 'tag-available': 'উপলব্ধ', 'tag-unofficial': 'আনঅফিসিয়াল', 'brand': 'ব্র্যান্ড', 'category': 'ক্যাটাগরি',
+                    'product-id': 'প্রোডাক্ট আইডি',
+                    'product-name-s23': 'Samsung গ্যালাক্সি এস২৩ আলট্রা', 'product-name-kurti': 'নারীদের কটন কুর্তি', 'product-name-serum': 'স্কিনকেয়ার ফেসিয়াল সিরাম',
+                    'product-name-drone': 'রিমোট কন্ট্রোল ড্রোন', 'product-name-tshirt': 'পুরুষদের প্রিমিয়াম টি-শার্ট', 'product-name-lipstick': 'ম্যাট লিপস্টিক সেট (৪টি)',
+                    'product-name-lego': 'লেগো সিটি পুলিশ স্টেশন', 'product-name-ps5': 'সনি প্লেস্টেশন ৫ গেমিং কনসোল', 'product-name-books': 'হুমায়ূন আহমেদ সমগ্র',
+                    'product-name-dinnerset': 'রয়েল ডিনার সেট', 'product-name-cooker': 'প্রেসার কুকার', 'btn-details': 'বিস্তারিত', 'btn-add-cart': 'কার্টে যোগ করুন',
                     'about-h2': 'আমাদের পথচলার গল্প',
                     'about-p1': '২০২৩ সাল থেকে TangailBuzz তার যাত্রা শুরু করে। আমাদের লক্ষ্য ছিল টাঙ্গাইলের ঐতিহ্যবাহী এবং আধুনিক পণ্যগুলোকে সারা বাংলাদেশের মানুষের কাছে পৌঁছে দেওয়া। খুব অল্প সময়ের মধ্যে আমরা গ্রাহকদের আস্থা অর্জন করতে সক্ষম হয়েছি।',
                     'about-p2': 'আমরা ইলেকট্রনিক্স, পোশাক, শাড়ি, কসমেটিকস থেকে শুরু করে গৃহস্থালীর প্রয়োজনীয় সকল জিনিস সরবরাহ করি। আমাদের প্রধান উদ্দেশ্য হলো ন্যায্য মূল্যে সেরা মানের পণ্য গ্রাহকদের হাতে তুলে দেওয়া এবং তাদের অনলাইন কেনাকাটার অভিজ্ঞতাকে আরও সহজ ও আনন্দদায়ক করে তোলা।',
-                    'founder-name': 'MD EOUSUF ALI',
-                    'founder-title': 'Managing Director, TangailBuzz',
-                    'modal-overview-title': 'পণ্যের বিবরণ',
-                    'modal-specs-title': 'বিস্তারিত তথ্য',
-                    'modal-rating-text': 'রেটিং',
-                    'footer-desc': 'বাংলাদেশের সেরা ই-কমার্স প্ল্যাটফর্ম। আপনার প্রয়োজনীয় সবকিছু এক জায়গায়।',
-                    'footer-links-title': 'দ্রুত লিঙ্ক',
-                    'footer-contact-title': 'যোগাযোগ',
-                    'location': 'টাঙ্গাইল, বাংলাদেশ',
-                    'footer-copyright': '© ২০২৫ TangailBuzz - সকল অধিকার সংরক্ষিত',
+                    'founder-name': 'MD EOUSUF ALI', 'founder-title': 'Managing Director, TangailBuzz', 'modal-specs-title': 'বিস্তারিত তথ্য', 'modal-rating-text': 'রেটিং',
+                    'footer-desc': 'বাংলাদেশের সেরা ই-কমার্স প্ল্যাটফর্ম। আপনার প্রয়োজনীয় সবকিছু এক জায়গায়।', 'footer-links-title': 'দ্রুত লিঙ্ক',
+                    'footer-contact-title': 'যোগাযোগ', 'location': 'টাঙ্গাইল, বাংলাদেশ', 'footer-copyright': '© ২০২৫ TangailBuzz - সকল অধিকার সংরক্ষিত',
+                    'auth-login-tab': 'লগইন', 'auth-register-tab': 'রেজিস্টার', 'login-title': 'আপনার একাউন্টে লগইন করুন', 'email-label': 'ইমেইল', 'password-label': 'পাসওয়ার্ড',
+                    'login-btn': 'লগইন', 'forgot-password-link': 'পাসওয়ার্ড ভুলে গেছেন?', 'register-title': 'নতুন একাউন্ট তৈরি করুন', 'register-btn': 'রেজিস্টার',
+                    'google-login-btn': 'গুগল দিয়ে লগইন করুন', 'forgot-password-title': 'পাসওয়ার্ড রিসেট', 'reset-password-btn': 'রিসেট লিঙ্ক পাঠান',
+                    'back-to-login-link': '« লগইনে ফিরে যান', 'manage-address': 'ঠিকানা পরিচালনা করুন', 'logout': 'লগআউট', 'address-title': 'আমার ডিফল্ট ঠিকানা',
+                    'address-line1-label': 'ঠিকানা', 'address-city-label': 'শহর', 'address-postal-label': 'পোস্টাল কোড', 'save-address-btn': 'ঠিকানা সংরক্ষণ করুন',
+                    'back-to-account-link': '« একাউন্টে ফিরে যান', 'user-greeting': 'স্বাগতম,', 'my-account-title': 'আমার একাউন্ট', 'name-label': 'নাম',
+                    'mobile-label': 'মোবাইল', 'address-label': 'ঠিকানা', 'retype-password-label': 'পুনরায় পাসওয়ার্ড দিন', 'password-mismatch': 'পাসওয়ার্ড মেলেনি!',
+                    'password-reset-success': 'পাসওয়ার্ড রিসেট লিঙ্ক পাঠানো হয়েছে! আপনার ইমেইল ইনবক্স বা স্প্যাম ফোল্ডার চেক করুন।', 'cart-title': 'আপনার শপিং কার্ট',
+                    'empty-cart': 'আপনার কার্ট খালি।', 'total-price': 'সর্বমোট:', 'checkout': 'চেকআউট', 'payment-title': 'পেমেন্ট পদ্ধতি নির্বাচন করুন',
+                    'payment-card': 'কার্ড', 'payment-mobile': 'মোবাইল ব্যাংকিং', 'cod': 'ক্যাশ অন ডেলিভারি', 'confirm-order-btn': 'অর্ডার নিশ্চিত করুন', 'order-success': 'আপনার অর্ডারটি সফলভাবে সম্পন্ন হয়েছে!',
+                    'order-success-msg': 'আমরা আপনার অর্ডারটি গ্রহণ করেছি। একটি কনফার্মেশন ইমেইল পাঠানো হয়েছে।', 'subtotal': 'সাবটোটাল:', 'delivery-charge': 'ডেলিভারি চার্জ:',
+                    'card-name-label': 'কার্ডে থাকা নাম', 'change-mobile': 'মোবাইল নম্বর পরিবর্তন করুন', 'mobile-title': 'মোবাইল নম্বর পরিবর্তন', 'save-mobile-btn': 'সংরক্ষণ করুন',
+                    'delete-account': 'একাউন্ট মুছে ফেলুন', 'account-deleted': 'আপনার একাউন্ট সফলভাবে মুছে ফেলা হয়েছে।'
                 },
                 'en': {
-                    'nav-home': 'Home',
-                    'nav-products': 'Products',
-                    'nav-offer': 'Offers',
-                    'nav-about': 'About Us',
-                    'search-placeholder': 'Search products...',
-                    'showcase-h1': 'Welcome to TangailBuzz',
-                    'showcase-p': 'The best e-commerce platform in Bangladesh. Everything you need in one place.',
-                    'cta-button': 'Start Shopping',
-                    'categories-h2': 'Our Categories',
-                    'cat-all': 'All Products',
-                    'cat-electronics': 'Electronics',
-                    'cat-fashion': 'Fashion',
-                    'cat-cosmetics': 'Cosmetics',
-                    'cat-household': 'Household',
-                    'cat-toys': 'Toys',
-                    'cat-books': 'Books',
-                    'tag-offer': 'Offer',
-                    'product-name-s23': 'Samsung Galaxy S23 Ultra',
-                    'product-name-kurti': 'Women\'s Cotton Kurti',
-                    'product-name-serum': 'Skincare Facial Serum',
-                    'product-name-drone': 'Remote Control Drone',
-                    'product-name-tshirt': 'Men\'s Premium T-Shirt',
-                    'product-name-lipstick': 'Matte Lipstick Set (4pcs)',
-                    'product-name-lego': 'LEGO City Police Station',
-                    'product-name-ps5': 'Sony PlayStation 5 Gaming Console',
-                    'product-name-books': 'Humayun Ahmed Collection',
-                    'product-name-dinnerset': 'Royal Dinner Set',
-                    'product-name-cooker': 'Pressure Cooker',
-                    'btn-details': 'Details',
-                    'btn-add-cart': 'Add to Cart',
-                    'about-h2': 'Our Journey',
-                    'about-p1': 'TangailBuzz started its journey in 2023. Our goal was to bring the traditional and modern products of Tangail to people all over Bangladesh. In a very short time, we have been able to earn the trust of our customers.',
+                    'nav-home': 'Home', 'nav-products': 'Products', 'nav-offer': 'Offers', 'nav-about': 'About Us', 'search-placeholder': 'Search products...',
+                    'showcase-h1': 'Welcome to TangailBuzz', 'showcase-p': 'The best e-commerce platform in Bangladesh. Everything you need in one place.',
+                    'cta-button': 'Start Shopping', 'categories-h2': 'Our Categories', 'cat-all': 'All Products', 'cat-electronics': 'Electronics',
+                    'cat-fashion': 'Fashion', 'cat-cosmetics': 'Cosmetics', 'cat-household': 'Household', 'cat-toys': 'Toys', 'cat-books': 'Books',
+                    'tag-offer': 'Offer', 'tag-available': 'AVAILABLE', 'tag-unofficial': 'UNOFFICIAL', 'brand': 'Brand', 'category': 'Category',
+                     'product-id': 'Product ID',
+                    'product-name-s23': 'Samsung Galaxy S23 Ultra', 'product-name-kurti': 'Women\'s Cotton Kurti', 'product-name-serum': 'Skincare Facial Serum',
+                    'product-name-drone': 'Remote Control Drone', 'product-name-tshirt': 'Men\'s Premium T-Shirt', 'product-name-lipstick': 'Matte Lipstick Set (4pcs)',
+                    'product-name-lego': 'LEGO City Police Station', 'product-name-ps5': 'Sony PlayStation 5 Gaming Console', 'product-name-books': 'Humayun Ahmed Collection',
+                    'product-name-dinnerset': 'Royal Dinner Set', 'product-name-cooker': 'Pressure Cooker', 'btn-details': 'Details', 'btn-add-cart': 'Add to Cart',
+                    'about-h2': 'Our Journey', 'about-p1': 'TangailBuzz started its journey in 2023. Our goal was to bring the traditional and modern products of Tangail to people all over Bangladesh. In a very short time, we have been able to earn the trust of our customers.',
                     'about-p2': 'We supply everything from electronics, clothing, sarees, cosmetics to necessary household items. Our main objective is to deliver the best quality products at fair prices to customers and to make their online shopping experience easier and more enjoyable.',
-                    'founder-name': 'MD EOUSUF ALI',
-                    'founder-title': 'Managing Director, TangailBuzz',
-                    'modal-overview-title': 'Product Overview',
-                    'modal-specs-title': 'Specifications',
-                    'modal-rating-text': 'Ratings',
-                    'footer-desc': 'The best e-commerce platform in Bangladesh. Everything you need in one place.',
-                    'footer-links-title': 'Quick Links',
-                    'footer-contact-title': 'Contact',
-                    'location': 'Tangail, Bangladesh',
-                    'footer-copyright': '© 2025 TangailBuzz - All rights reserved',
+                    'founder-name': 'MD EOUSUF ALI', 'founder-title': 'Managing Director, TangailBuzz', 'modal-specs-title': 'Specifications', 'modal-rating-text': 'Ratings',
+                    'footer-desc': 'The best e-commerce platform in Bangladesh. Everything you need in one place.', 'footer-links-title': 'Quick Links',
+                    'footer-contact-title': 'Contact', 'location': 'Tangail, Bangladesh', 'footer-copyright': '© 2025 TangailBuzz - All rights reserved',
+                    'auth-login-tab': 'Login', 'auth-register-tab': 'Register', 'login-title': 'Login to your account', 'email-label': 'Email', 'password-label': 'Password',
+                    'login-btn': 'Login', 'forgot-password-link': 'Forgot password?', 'register-title': 'Create a new account', 'register-btn': 'Register',
+                    'google-login-btn': 'Login with Google', 'forgot-password-title': 'Reset Password', 'reset-password-btn': 'Send Reset Link',
+                    'back-to-login-link': '« Back to Login', 'manage-address': 'Manage Address', 'logout': 'Logout', 'address-title': 'My Default Address',
+                    'address-line1-label': 'Address', 'address-city-label': 'City', 'address-postal-label': 'Postal Code', 'save-address-btn': 'Save Address',
+                    'back-to-account-link': '« Back to Account', 'user-greeting': 'Welcome,', 'my-account-title': 'My Account', 'name-label': 'Name',
+                    'mobile-label': 'Mobile', 'address-label': 'Address', 'retype-password-label': 'Retype Password', 'password-mismatch': 'Passwords do not match!',
+                    'password-reset-success': 'Password reset link sent! Please check your email inbox or spam folder.', 'cart-title': 'Your Shopping Cart',
+                    'empty-cart': 'Your cart is empty.', 'total-price': 'Total:', 'checkout': 'Checkout', 'payment-title': 'Select Payment Method',
+                    'payment-card': 'Card', 'payment-mobile': 'Mobile Banking', 'cod': 'Cash on Delivery', 'confirm-order-btn': 'Confirm Order', 'order-success': 'Your order has been placed successfully!',
+                    'order-success-msg': 'We have received your order. A confirmation email has been sent.', 'subtotal': 'Subtotal:', 'delivery-charge': 'Delivery Charge:',
+                    'card-name-label': 'Name on Card', 'change-mobile': 'Change Mobile Number', 'mobile-title': 'Change Mobile Number', 'save-mobile-btn': 'Save',
+                    'delete-account': 'Delete Account', 'account-deleted': 'Your account has been successfully deleted.'
                 }
             };
+            
+            const body = document.body;
 
             // Language Switcher Logic
             const dropdown = document.querySelector('.language-dropdown');
             const selectedLangBtn = dropdown.querySelector('.selected-lang');
-            const body = document.body;
             const langOptions = dropdown.querySelectorAll('.lang-option');
 
             const bengaliDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
@@ -1241,49 +1861,34 @@
                         priceEl.textContent = formatPrice(priceValue, lang);
                     }
                 });
+                updateCartUI();
 
                 body.classList.toggle('lang-en', lang === 'en');
                 const selectedOption = dropdown.querySelector(`.lang-option[data-lang="${lang}"]`);
-                selectedLangBtn.innerHTML = selectedOption.innerHTML;
+                if(selectedOption) selectedLangBtn.innerHTML = selectedOption.innerHTML;
                 localStorage.setItem('language', lang);
             }
             
-
-            selectedLangBtn.addEventListener('click', () => {
-                dropdown.classList.toggle('open');
-            });
-
+            selectedLangBtn.addEventListener('click', () => dropdown.classList.toggle('open'));
             langOptions.forEach(option => {
                 option.addEventListener('click', () => {
-                    const lang = option.dataset.lang;
-                    setLanguage(lang);
+                    setLanguage(option.dataset.lang);
                     dropdown.classList.remove('open');
                 });
             });
-
             window.addEventListener('click', (e) => {
-                if (!dropdown.contains(e.target)) {
-                    dropdown.classList.remove('open');
-                }
+                if (!dropdown.contains(e.target)) dropdown.classList.remove('open');
             });
 
             // Theme Toggle Logic
             const themeToggleBtn = document.getElementById('theme-toggle-btn');
-
-            if (localStorage.getItem('theme') === 'dark') {
-                body.classList.add('dark-mode');
-            }
-
+            if (localStorage.getItem('theme') === 'dark') body.classList.add('dark-mode');
             themeToggleBtn.addEventListener('click', () => {
                 body.classList.toggle('dark-mode');
-                if (body.classList.contains('dark-mode')) {
-                    localStorage.setItem('theme', 'dark');
-                } else {
-                    localStorage.setItem('theme', 'light');
-                }
+                localStorage.setItem('theme', body.classList.contains('dark-mode') ? 'dark' : 'light');
             });
 
-            //পেজ নেভিগেশন ভ্যারিয়েবল
+            // Page Navigation & Content Toggling
             const navProducts = document.getElementById('nav-products');
             const navOffer = document.getElementById('nav-offer');
             const navAbout = document.getElementById('nav-about');
@@ -1295,140 +1900,122 @@
             const footerAbout = document.getElementById('footer-about');
             const ctaButton = document.getElementById('cta-btn');
 
-            // ফিল্টার এবং সার্চ এর জন্য ভ্যারিয়েবল
-            const filterButtons = document.querySelectorAll('.filter-btn');
-            const productCards = document.querySelectorAll('.product-card');
-            const searchInput = document.getElementById('searchInput');
-
-            // মোডাল এর জন্য ভ্যারিয়েবল
-            const modalOverlay = document.getElementById('product-details-modal');
-            const modalCloseBtn = document.getElementById('modal-close-btn');
-            const detailsButtons = document.querySelectorAll('.btn-details');
-
             function showMainContent() {
                 mainContentWrapper.style.display = 'block';
                 aboutUsSection.style.display = 'none';
             }
-            
             function showAboutSection() {
                 mainContentWrapper.style.display = 'none';
                 aboutUsSection.style.display = 'block';
-                 window.scrollTo({ top: 0, behavior: 'smooth' });
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
 
-            navProducts.addEventListener('click', () => {
-                showMainContent();
-                document.querySelector('.filter-btn[data-filter="all"]').click();
-                window.scrollTo({ top: document.getElementById('categories').offsetTop, behavior: 'smooth' });
-            });
-            
-            ctaButton.addEventListener('click', () => {
-                showMainContent();
-                document.querySelector('.filter-btn[data-filter="all"]').click();
-                window.scrollTo({ top: document.getElementById('categories').offsetTop, behavior: 'smooth' });
-            });
-
+            [logo, footerHome].forEach(el => el.addEventListener('click', showMainContent));
+            [navAbout, footerAbout].forEach(el => el.addEventListener('click', showAboutSection));
+            [ctaButton, navProducts, footerProducts].forEach(el => el.addEventListener('click', () => {
+                 showMainContent();
+                 document.querySelector('.filter-btn[data-filter="all"]').click();
+                 const target = document.getElementById('categories');
+                 if(target) window.scrollTo({ top: target.offsetTop - 70, behavior: 'smooth' });
+            }));
             navOffer.addEventListener('click', () => {
                 showMainContent();
                 filterButtons.forEach(btn => btn.classList.remove('active'));
                 productCards.forEach(card => {
                     card.style.display = card.querySelector('.offer-tag') ? 'flex' : 'none';
                 });
-                window.scrollTo({ top: document.getElementById('categories').offsetTop, behavior: 'smooth' });
+                const target = document.getElementById('categories');
+                if(target) window.scrollTo({ top: target.offsetTop - 70, behavior: 'smooth' });
             });
 
-            logo.addEventListener('click', showMainContent);
-            footerHome.addEventListener('click', showMainContent);
-            footerProducts.addEventListener('click', () => {
-                showMainContent();
-                document.querySelector('.filter-btn[data-filter="all"]').click();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            });
-            navAbout.addEventListener('click', showAboutSection);
-            footerAbout.addEventListener('click', showAboutSection);
+            // Search and Filter Logic
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const productCards = document.querySelectorAll('.product-card');
+            const searchInput = document.getElementById('searchInput');
 
             function filterAndSearchProducts() {
                 const searchQuery = searchInput.value.toLowerCase();
-                const activeFilter = document.querySelector('.filter-btn.active').getAttribute('data-filter');
+                const activeFilterBtn = document.querySelector('.filter-btn.active');
+                if (!activeFilterBtn) return;
+                const activeFilter = activeFilterBtn.getAttribute('data-filter');
 
                 productCards.forEach(card => {
                     const cardCategory = card.getAttribute('data-category');
                     const productNameKey = card.querySelector('h3').dataset.langKey;
                     const currentLang = localStorage.getItem('language') || 'bn';
-                    const productName = translations[currentLang][productNameKey].toLowerCase();
+                    const productName = translations[currentLang][productNameKey]?.toLowerCase() || '';
 
                     const categoryMatch = (activeFilter === 'all' || activeFilter === cardCategory);
                     const searchMatch = productName.includes(searchQuery);
 
-                    if (categoryMatch && searchMatch) {
-                        card.style.display = 'flex';
-                    } else {
-                        card.style.display = 'none';
-                    }
+                    card.style.display = (categoryMatch && searchMatch) ? 'flex' : 'none';
                 });
             }
+            filterButtons.forEach(button => button.addEventListener('click', function () {
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                filterAndSearchProducts();
+            }));
+            if(searchInput) searchInput.addEventListener('keyup', filterAndSearchProducts);
 
-            filterButtons.forEach(button => {
-                button.addEventListener('click', function () {
-                    filterButtons.forEach(btn => btn.classList.remove('active'));
-                    this.classList.add('active');
-                    filterAndSearchProducts();
-                });
-            });
-
-            if(searchInput) {
-                 searchInput.addEventListener('keyup', filterAndSearchProducts);
+            // Product Details Modal Logic
+            const modalOverlay = document.getElementById('product-details-modal');
+            const modalCloseBtn = document.getElementById('modal-close-btn');
+            
+            function getSpecIcon(key) {
+                const lowerKey = key.toLowerCase();
+                if (lowerKey.includes('released') || lowerKey.includes('প্রকাশিত')) return `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>`;
+                if (lowerKey.includes('os') || lowerKey.includes('ওএস')) return `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 18a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2"></path><path d="M12 14v4"></path><path d="M16 11V7a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v4"></path><path d="m11 5 2 2"></path><path d="m5 11 2-2"></path></svg>`;
+                if (lowerKey.includes('display') || lowerKey.includes('ডিসপ্লে')) return `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>`;
+                if (lowerKey.includes('camera') || lowerKey.includes('ক্যামেরা')) return `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>`;
+                if (lowerKey.includes('ram') || lowerKey.includes('র‍্যাম')) return `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h20"></path><path d="M5 12v6"></path><path d="M19 12v6"></path><path d="M2 18h20"></path><path d="M5 6v6"></path><path d="M19 6v6"></path><path d="M2 6h20"></path></svg>`;
+                if (lowerKey.includes('battery') || lowerKey.includes('ব্যাটারি')) return `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="6" width="18" height="12" rx="2" ry="2"></rect><line x1="23" y1="13" x2="23" y2="11"></line></svg>`;
+                return `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>`;
             }
 
-            detailsButtons.forEach(button => {
+            document.querySelectorAll('.btn-details').forEach(button => {
                 button.addEventListener('click', function() {
                     const card = this.closest('.product-card');
                     if (!card) return;
                     
                     const currentLang = localStorage.getItem('language') || 'bn';
                     const nameKey = card.querySelector('h3').dataset.langKey;
-
                     const name = translations[currentLang][nameKey];
-                    const priceEl = card.querySelector('.current-price');
-                    const price = priceEl.textContent;
-                    
-                    const description = card.dataset[`description-${currentLang}`] || "No description available.";
+                    const price = card.querySelector('.current-price').textContent;
+                    const productId = card.dataset.productId;
+                    const brand = card.dataset[`brand-${currentLang}`];
+                    const categoryKey = card.dataset.category;
+                    const category = translations[currentLang][`cat-${categoryKey}`];
+                    const description = card.getAttribute(`data-description-${currentLang}`) || "";
                     const rating = parseFloat(card.dataset.rating) || 0;
-                    const specs = JSON.parse(card.dataset[`specs-${currentLang}`] || '{}');
-                    
+                    const specs = JSON.parse(card.getAttribute(`data-specs-${currentLang}`) || '{}');
                     const mainImage = card.dataset.imgMain;
                     const thumbnails = [card.dataset.imgThumb1, card.dataset.imgThumb2, card.dataset.imgThumb3].filter(Boolean);
-
+                    
+                    document.getElementById('modal-product-id').textContent = productId;
                     document.getElementById('modal-product-name').textContent = name;
+                    document.getElementById('modal-product-name').dataset.langKey = nameKey;
                     document.getElementById('modal-product-price').textContent = price;
+                    document.getElementById('modal-brand').textContent = brand || '-';
+                    document.getElementById('modal-category').textContent = category || '-';
+                    document.querySelector('.modal-meta-info').style.display = brand ? 'block' : 'none';
+                    document.querySelector('.modal-tags').style.display = nameKey === 'product-name-s23' ? 'flex' : 'none';
                     document.getElementById('modal-product-description').textContent = description;
                     
-                    const ratingStars = document.getElementById('modal-rating-stars');
-                    let starsHTML = '';
-                    for(let i = 1; i <= 5; i++) {
-                        if (i <= rating) starsHTML += '★';
-                        else if (i - 0.5 <= rating) starsHTML += '½';
-                        else starsHTML += '☆';
-                    }
-                    ratingStars.innerHTML = starsHTML;
                     const ratingTextKey = 'modal-rating-text';
                     document.getElementById('modal-rating-text').textContent = `(${rating} ${translations[currentLang][ratingTextKey]})`;
                     
                     const specList = document.getElementById('modal-spec-list');
                     specList.innerHTML = '';
                     for (const key in specs) {
-                        const listItem = document.createElement('li');
-                        listItem.innerHTML = `<strong>${key}:</strong> <span>${specs[key]}</span>`;
-                        specList.appendChild(listItem);
+                        specList.innerHTML += `<li><div class="spec-icon">${getSpecIcon(key)}</div><div class="spec-text"><span class="spec-key">${key}</span><span class="spec-value">${specs[key]}</span></div></li>`;
                     }
 
                     const mainImageEl = document.getElementById('modal-main-image');
                     mainImageEl.src = mainImage || card.querySelector('img').src;
-
                     const thumbnailsContainer = document.getElementById('modal-thumbnails');
                     thumbnailsContainer.innerHTML = '';
-                    const allImages = [mainImage, ...thumbnails];
-                    allImages.forEach((imgSrc, index) => {
+                    [mainImage, ...thumbnails].forEach((imgSrc, index) => {
                         if(imgSrc) {
                             const img = document.createElement('img');
                             img.src = imgSrc;
@@ -1441,27 +2028,512 @@
                             thumbnailsContainer.appendChild(img);
                         }
                     });
+                     // Set product ID on modal add to cart button
+                    document.getElementById('modal-add-to-cart-btn').dataset.productId = card.dataset.productId;
+
                     modalOverlay.classList.add('visible');
                 });
             });
 
-            function closeModal() {
-                modalOverlay.classList.remove('visible');
+            function closeModal(modalId) {
+                document.getElementById(modalId).classList.remove('visible');
             }
+            modalCloseBtn.addEventListener('click', () => closeModal('product-details-modal'));
+            modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeModal('product-details-modal'); });
 
-            modalCloseBtn.addEventListener('click', closeModal);
-            modalOverlay.addEventListener('click', function(event) {
-                if (event.target === modalOverlay) {
-                    closeModal();
+            // Auth Modal & Firebase Logic
+            const authModal = document.getElementById('auth-modal-overlay');
+            const authModalClose = document.getElementById('auth-modal-close');
+            const profileBtn = document.getElementById('profile-btn');
+            const authViews = document.querySelectorAll('.auth-view');
+            
+            const showView = (viewId) => {
+                authViews.forEach(v => v.classList.remove('active'));
+                document.getElementById(viewId)?.classList.add('active');
+            };
+            
+            profileBtn.addEventListener('click', () => authModal.classList.add('visible'));
+            authModalClose.addEventListener('click', () => closeModal('auth-modal-overlay'));
+            authModal.addEventListener('click', e => { if(e.target === authModal) closeModal('auth-modal-overlay'); });
+
+            // Tab switching
+            document.querySelectorAll('.auth-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    document.getElementById('login-form-container').style.display = tab.dataset.tab === 'login' ? 'block' : 'none';
+                    document.getElementById('register-form-container').style.display = tab.dataset.tab === 'register' ? 'block' : 'none';
+                });
+            });
+
+            // Navigation links inside auth modal
+            document.getElementById('show-forgot-password').addEventListener('click', () => showView('forgot-password-view'));
+            document.getElementById('back-to-login').addEventListener('click', () => showView('login-register-view'));
+            document.getElementById('manage-address-btn').addEventListener('click', () => showView('address-view'));
+            document.getElementById('change-mobile-btn').addEventListener('click', () => showView('mobile-view'));
+            document.getElementById('back-to-account').addEventListener('click', () => showView('account-view'));
+            document.getElementById('back-to-account-from-mobile').addEventListener('click', () => showView('account-view'));
+
+
+            const authMessageContainer = document.getElementById('auth-message-container');
+            const showAuthMessage = (message, isError = false) => {
+                const currentLang = localStorage.getItem('language') || 'bn';
+                authMessageContainer.textContent = translations[currentLang][message] || message;
+                authMessageContainer.className = `auth-message ${isError ? 'error' : 'success'}`;
+                setTimeout(() => authMessageContainer.textContent = '', 4000);
+            };
+
+            // Firebase Auth Handlers
+            document.getElementById('register-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const name = document.getElementById('register-name').value;
+                const mobile = document.getElementById('register-mobile').value;
+                const address = document.getElementById('register-address').value;
+                const email = document.getElementById('register-email').value;
+                const password = document.getElementById('register-password').value;
+                const retypePassword = document.getElementById('register-retype-password').value;
+                
+                if (password !== retypePassword) {
+                    showAuthMessage('password-mismatch', true);
+                    return;
+                }
+
+                try {
+                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                    const user = userCredential.user;
+                    
+                    await updateProfile(user, { displayName: name });
+                    
+                    const userDocRef = doc(db, "users", user.uid);
+                    await setDoc(userDocRef, {
+                        name: name,
+                        email: email,
+                        mobile: mobile,
+                        address: {
+                            line1: address,
+                            city: '',
+                            postal: ''
+                        }
+                    });
+
+                    showAuthMessage('Registration successful!');
+                    closeModal('auth-modal-overlay');
+
+                } catch (error) {
+                    showAuthMessage(error.message, true);
                 }
             });
 
-            // Initial Language Load
+            document.getElementById('login-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const email = document.getElementById('login-email').value;
+                const password = document.getElementById('login-password').value;
+                signInWithEmailAndPassword(auth, email, password)
+                    .then(userCredential => {
+                        showAuthMessage('Login successful!');
+                        closeModal('auth-modal-overlay');
+                    })
+                    .catch(error => showAuthMessage(error.message, true));
+            });
+
+            document.getElementById('google-signin-btn').addEventListener('click', () => {
+                signInWithPopup(auth, googleProvider)
+                    .then(result => {
+                        showAuthMessage('Google sign-in successful!');
+                        closeModal('auth-modal-overlay');
+                    }).catch(error => showAuthMessage(error.message, true));
+            });
+            
+            document.getElementById('forgot-password-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const email = document.getElementById('forgot-email').value;
+                sendPasswordResetEmail(auth, email)
+                    .then(() => {
+                        showAuthMessage('password-reset-success');
+                        showView('login-register-view');
+                    })
+                    .catch(error => showAuthMessage(error.message, true));
+            });
+
+            document.getElementById('logout-btn').addEventListener('click', () => {
+                signOut(auth).then(() => {
+                    showAuthMessage('Logged out successfully.');
+                    closeModal('auth-modal-overlay');
+                }).catch(error => showAuthMessage(error.message, true));
+            });
+            
+            document.getElementById('delete-account-btn').addEventListener('click', async () => {
+                const user = auth.currentUser;
+                if (user) {
+                     try {
+                        const userDocRef = doc(db, "users", user.uid);
+                        await deleteDoc(userDocRef);
+                        await deleteUser(user);
+                        showAuthMessage('account-deleted');
+                        closeModal('auth-modal-overlay');
+                    } catch (error) {
+                        console.error("Error deleting account: ", error);
+                        showAuthMessage(error.message, true);
+                    }
+                }
+            });
+
+            // Auth State Change Handler
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    showView('account-view');
+                     const userDocRef = doc(db, "users", user.uid);
+                     const docSnap = await getDoc(userDocRef);
+                     let name = user.email;
+                     if (docSnap.exists() && docSnap.data().name) {
+                         name = docSnap.data().name;
+                     } else if (user.displayName) {
+                         name = user.displayName;
+                     }
+                    document.getElementById('user-greeting').textContent = `${translations[localStorage.getItem('language') || 'bn']['user-greeting']} ${name}`;
+                    await loadAddress(user.uid);
+                    await loadMobile(user.uid);
+                } else {
+                    showView('login-register-view');
+                     // Reset to login tab
+                    document.querySelector('.auth-tab[data-tab="login"]').click();
+                }
+            });
+
+            // Address Management (Firestore)
+            const addressForm = document.getElementById('address-form');
+            const addressListDiv = document.getElementById('address-list');
+
+            async function saveAddress(userId) {
+                const addressData = {
+                    line1: document.getElementById('address-line1').value,
+                    city: document.getElementById('address-city').value,
+                    postal: document.getElementById('address-postal').value,
+                };
+                try {
+                    const userDocRef = doc(db, "users", userId);
+                    await setDoc(userDocRef, { address: addressData }, { merge: true });
+                    showAuthMessage('Address saved!');
+                    loadAddress(userId);
+                } catch (e) {
+                    showAuthMessage('Error saving address: ' + e.message, true);
+                }
+            }
+
+            async function loadAddress(userId) {
+                try {
+                    const userDocRef = doc(db, "users", userId);
+                    const docSnap = await getDoc(userDocRef);
+                    if (docSnap.exists() && docSnap.data().address) {
+                        const data = docSnap.data().address;
+                        addressListDiv.innerHTML = `<div class="address-item">${data.line1}, ${data.city || ''} - ${data.postal || ''}</div>`;
+                        document.getElementById('address-line1').value = data.line1 || '';
+                        document.getElementById('address-city').value = data.city || '';
+                        document.getElementById('address-postal').value = data.postal || '';
+                    } else {
+                        addressListDiv.innerHTML = "<p>No address saved.</p>";
+                    }
+                } catch(e) {
+                     addressListDiv.innerHTML = "<p>Could not load address.</p>";
+                }
+            }
+
+            addressForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const user = auth.currentUser;
+                if(user) {
+                    saveAddress(user.uid);
+                }
+            });
+
+            // Mobile Management
+            const mobileForm = document.getElementById('mobile-form');
+
+            async function saveMobile(userId) {
+                const newMobile = document.getElementById('mobile-number').value;
+                 try {
+                    const userDocRef = doc(db, "users", userId);
+                    await updateDoc(userDocRef, { mobile: newMobile });
+                    showAuthMessage('Mobile number updated!');
+                } catch (e) {
+                    showAuthMessage('Error updating mobile: ' + e.message, true);
+                }
+            }
+
+             async function loadMobile(userId) {
+                try {
+                    const userDocRef = doc(db, "users", userId);
+                    const docSnap = await getDoc(userDocRef);
+                    if (docSnap.exists() && docSnap.data().mobile) {
+                        document.getElementById('mobile-number').value = docSnap.data().mobile;
+                    }
+                } catch(e) {
+                     console.error("Could not load mobile number.");
+                }
+            }
+
+            mobileForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const user = auth.currentUser;
+                if(user) {
+                    saveMobile(user.uid);
+                }
+            });
+            
+            // Cart Logic
+            const cartBtn = document.getElementById('cart-btn');
+            const cartModal = document.getElementById('cart-modal-overlay');
+            const cartModalClose = document.getElementById('cart-modal-close');
+            const cartItemsList = document.getElementById('cart-items-list');
+            const cartSubtotalPriceEl = document.getElementById('cart-subtotal-price');
+            const cartDeliveryChargeEl = document.getElementById('cart-delivery-charge');
+            const deliveryChargeRow = document.getElementById('delivery-charge-row');
+            const cartTotalPriceEl = document.getElementById('cart-total-price');
+            const cartCountEl = document.querySelector('.cart-count');
+            const emptyCartMessage = document.getElementById('empty-cart-message');
+            const cartFooter = document.getElementById('cart-footer');
+            const checkoutBtn = document.getElementById('checkout-btn');
+            
+            let cart = JSON.parse(localStorage.getItem('shoppingCart')) || [];
+            
+            function saveCart() {
+                localStorage.setItem('shoppingCart', JSON.stringify(cart));
+                updateCartUI();
+            }
+
+            function addToCart(productId, langKey, price, img) {
+                 const existingItem = cart.find(item => item.id === productId);
+                if (existingItem) {
+                    existingItem.quantity++;
+                } else {
+                    cart.push({ id: productId, langKey: langKey, price: parseInt(price), quantity: 1, img: img });
+                }
+                saveCart();
+            }
+            
+            document.querySelectorAll('.product-card .btn-add-cart').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const card = e.target.closest('.product-card');
+                    if (!card) return;
+                    const productId = card.dataset.productId;
+                    const langKey = card.querySelector('h3').dataset.langKey;
+                    const price = card.querySelector('.current-price').dataset.price;
+                    const img = card.querySelector('img').src;
+                    addToCart(productId, langKey, price, img);
+                });
+            });
+
+            document.getElementById('modal-add-to-cart-btn').addEventListener('click', (e) => {
+                 const productId = e.target.dataset.productId;
+                 const langKey = document.getElementById('modal-product-name').dataset.langKey;
+                 const card = document.querySelector(`.product-card[data-product-id="${productId}"]`);
+                 const price = card.querySelector('.current-price').dataset.price;
+                 const img = card.querySelector('img').src;
+                 addToCart(productId, langKey, price, img);
+                 closeModal('product-details-modal');
+            });
+            
+            function updateCartQuantity(productId, action) {
+                const itemIndex = cart.findIndex(item => item.id === productId);
+                if (itemIndex > -1) {
+                    if (action === 'increase') {
+                        cart[itemIndex].quantity++;
+                    } else if (action === 'decrease') {
+                        cart[itemIndex].quantity--;
+                    }
+                    
+                    if(cart[itemIndex].quantity <= 0) {
+                        cart.splice(itemIndex, 1);
+                    }
+                    saveCart();
+                }
+            }
+            
+            async function updateCartUI() {
+                const currentLang = localStorage.getItem('language') || 'bn';
+                
+                if(cart.length === 0) {
+                    cartItemsList.innerHTML = '';
+                    emptyCartMessage.style.display = 'block';
+                    cartFooter.style.display = 'none';
+                } else {
+                    emptyCartMessage.style.display = 'none';
+                    cartFooter.style.display = 'block';
+                    cartItemsList.innerHTML = cart.map(item => {
+                        const name = translations[currentLang][item.langKey] || 'Unknown Product';
+                        const price = formatPrice(item.price * item.quantity, currentLang);
+                        return `
+                            <div class="cart-item">
+                                <img src="${item.img}" alt="${name}">
+                                <div class="cart-item-details">
+                                    <strong>${name}</strong>
+                                     <div class="cart-item-quantity">
+                                        <button class="quantity-btn" data-id="${item.id}" data-action="decrease">-</button>
+                                        <span>${item.quantity}</span>
+                                        <button class="quantity-btn" data-id="${item.id}" data-action="increase">+</button>
+                                    </div>
+                                </div>
+                                <span>${price}</span>
+                                <span class="cart-item-remove" data-id="${item.id}">&times;</span>
+                            </div>
+                        `;
+                    }).join('');
+                }
+                
+                const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+                let deliveryCharge = 0;
+                
+                const user = auth.currentUser;
+                if(user && cart.length > 0) {
+                    const ordersRef = collection(db, "orders");
+                    const q = query(ordersRef, where("userId", "==", user.uid));
+                    const querySnapshot = await getDocs(q);
+                    
+                    const userDocRef = doc(db, "users", user.uid);
+                    const userDocSnap = await getDoc(userDocRef);
+
+                    if (querySnapshot.empty) {
+                        deliveryCharge = 0; // First order is free
+                    } else if (userDocSnap.exists() && userDocSnap.data().address && userDocSnap.data().address.city) {
+                        const city = userDocSnap.data().address.city.toLowerCase();
+                        if (city.includes('tangail')) {
+                            deliveryCharge = 100;
+                        } else {
+                            deliveryCharge = 200;
+                        }
+                    } else {
+                        // Default charge if city is not set
+                        deliveryCharge = 200;
+                    }
+                    deliveryChargeRow.style.display = 'flex';
+                } else {
+                    deliveryChargeRow.style.display = 'none';
+                }
+                
+                const grandTotal = subtotal + deliveryCharge;
+
+                cartSubtotalPriceEl.textContent = formatPrice(subtotal, currentLang);
+                cartDeliveryChargeEl.textContent = formatPrice(deliveryCharge, currentLang);
+                cartTotalPriceEl.textContent = formatPrice(grandTotal, currentLang);
+                cartCountEl.textContent = cart.reduce((total, item) => total + item.quantity, 0);
+            }
+            
+            cartItemsList.addEventListener('click', (e) => {
+                if (e.target.classList.contains('cart-item-remove')) {
+                    const productId = e.target.dataset.id;
+                    cart = cart.filter(item => item.id !== productId);
+                    saveCart();
+                } else if (e.target.classList.contains('quantity-btn')) {
+                    updateCartQuantity(e.target.dataset.id, e.target.dataset.action);
+                }
+            });
+
+            cartBtn.addEventListener('click', () => cartModal.classList.add('visible'));
+            cartModalClose.addEventListener('click', () => closeModal('cart-modal-overlay'));
+            cartModal.addEventListener('click', e => { if(e.target === cartModal) closeModal('cart-modal-overlay'); });
+
+            // Checkout Logic
+            const paymentModal = document.getElementById('payment-modal-overlay');
+            const paymentModalClose = document.getElementById('payment-modal-close');
+            const confirmOrderBtn = document.getElementById('confirm-order-btn');
+            const successModal = document.getElementById('order-success-modal-overlay');
+            const successModalClose = document.getElementById('order-success-modal-close');
+
+            checkoutBtn.addEventListener('click', () => {
+                if (auth.currentUser) {
+                    closeModal('cart-modal-overlay');
+                    paymentModal.classList.add('visible');
+                } else {
+                    closeModal('cart-modal-overlay');
+                    authModal.classList.add('visible');
+                    showAuthMessage('Please login to checkout', true);
+                }
+            });
+            
+             paymentModalClose.addEventListener('click', () => closeModal('payment-modal-overlay'));
+             paymentModal.addEventListener('click', e => { if(e.target === paymentModal) closeModal('payment-modal-overlay'); });
+             successModalClose.addEventListener('click', () => closeModal('order-success-modal-overlay'));
+             successModal.addEventListener('click', e => { if(e.target === successModal) closeModal('order-success-modal-overlay'); });
+             
+            document.querySelectorAll('.payment-option').forEach(opt => {
+                opt.addEventListener('click', () => {
+                    document.querySelectorAll('.payment-option').forEach(o => o.classList.remove('active'));
+                    opt.classList.add('active');
+                });
+            });
+
+            confirmOrderBtn.addEventListener('click', async () => {
+                const user = auth.currentUser;
+                if (!user || cart.length === 0) return;
+                
+                const userDocRef = doc(db, "users", user.uid);
+                const docSnap = await getDoc(userDocRef);
+                
+                if (!docSnap.exists() || !docSnap.data().address || !docSnap.data().address.line1) {
+                    showAuthMessage('Please save your address first!', true);
+                    closeModal('payment-modal-overlay');
+                    authModal.classList.add('visible');
+                    showView('address-view');
+                    return;
+                }
+                
+                const userData = docSnap.data();
+                const paymentMethodEl = document.querySelector('.payment-option.active');
+                if(!paymentMethodEl) {
+                    showAuthMessage('Please select a payment method', true);
+                    return;
+                }
+                const paymentMethod = paymentMethodEl.dataset.method;
+                const mobilePayment = document.querySelector('input[name="mobile-banking"]:checked')?.value;
+                
+                const ordersRef = collection(db, "orders");
+                const q = query(ordersRef, where("userId", "==", user.uid));
+                const querySnapshot = await getDocs(q);
+                let deliveryCharge = 0;
+                if (!querySnapshot.empty) {
+                    const city = userData.address.city.toLowerCase();
+                    deliveryCharge = city.includes('tangail') ? 100 : 200;
+                }
+
+                const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+                
+                const orderData = {
+                    userId: user.uid,
+                    userName: userData.name,
+                    userEmail: user.email,
+                    userMobile: userData.mobile,
+                    shippingAddress: userData.address,
+                    items: cart.map(item => ({
+                        productId: item.id,
+                        name: translations['en'][item.langKey],
+                        quantity: item.quantity,
+                        price: item.price
+                    })),
+                    subtotal: subtotal,
+                    deliveryCharge: deliveryCharge,
+                    totalPrice: subtotal + deliveryCharge,
+                    paymentMethod: paymentMethod === 'mobile' ? mobilePayment : paymentMethod,
+                    status: 'Pending',
+                    createdAt: serverTimestamp()
+                };
+
+                try {
+                    await addDoc(collection(db, "orders"), orderData);
+                    closeModal('payment-modal-overlay');
+                    successModal.classList.add('visible');
+                    cart = [];
+                    saveCart();
+                } catch(e) {
+                    showAuthMessage('Order failed: ' + e.message, true);
+                }
+            });
+
+            // Initial Load
             const savedLang = localStorage.getItem('language') || 'bn';
             setLanguage(savedLang);
+            updateCartUI();
         });
     </script>
 
 </body>
 </html>
-
