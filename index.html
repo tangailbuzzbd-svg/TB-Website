@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tangail Buzz - বাংলাদেশের সেরা ই-কমার্স প্ল্যাটফর্ম</title>
+    <!-- jsPDF Libraries for Invoice Generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
@@ -141,13 +145,27 @@
         .header-controls {
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 15px;
         }
         
         .header-controls .icon-btn {
             position: relative;
             cursor: pointer;
         }
+        
+        .hamburger {
+            display: none;
+            cursor: pointer;
+        }
+        
+        .hamburger div {
+            width: 25px;
+            height: 3px;
+            background-color: var(--text-dark);
+            margin: 5px 0;
+            transition: all 0.3s;
+        }
+
 
         .language-dropdown {
             position: relative;
@@ -247,10 +265,10 @@
         #cart-modal-overlay.visible { display: flex; }
         .cart-modal-content {
             background-color: var(--bg-light);
-            padding: 30px;
+            padding: 20px;
             border-radius: 15px;
             width: 90%;
-            max-width: 500px;
+            max-width: 600px;
             max-height: 80vh;
             display: flex;
             flex-direction: column;
@@ -259,9 +277,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid var(--border-color);
             padding-bottom: 15px;
-            margin-bottom: 15px;
+            margin-bottom: 0;
         }
         .cart-items-list {
             flex-grow: 1;
@@ -407,6 +424,7 @@
             display: flex;
             border-bottom: 1px solid var(--border-color);
             margin-bottom: 20px;
+            width: 100%;
         }
         .auth-tab {
             flex: 1;
@@ -542,6 +560,66 @@
             content: '✔';
             color: var(--secondary-color);
         }
+        
+        /* Order History Styles */
+        #order-history-view h3 { text-align: center; margin-bottom: 20px; }
+        .orders-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .order-card {
+            background-color: var(--bg-light);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 15px;
+        }
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .order-header strong { font-size: 0.9em; color: var(--text-light); }
+        .order-status {
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+        .status-pending { background-color: #FEF3C7; color: #92400E; } /* Amber */
+        .status-confirmed { background-color: #D1FAE5; color: #065F46; } /* Green */
+        .status-shipped { background-color: #DBEAFE; color: #1E40AF; } /* Blue */
+        .status-delivered { background-color: #E5E7EB; color: #374151; } /* Gray */
+        .status-cancelled { background-color: #FEE2E2; color: #991B1B; } /* Red */
+        .order-item {
+            font-size: 0.9em;
+            color: var(--text-light);
+            margin-bottom: 4px;
+        }
+        .order-footer {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .order-total {
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+        .invoice-btn {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
 
 
         /* হিরো বা শোকেস সেকশন */
@@ -627,6 +705,8 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 25px;
+            min-height: 300px; /* To show loader */
+            position: relative;
         }
 
         .product-card {
@@ -667,6 +747,7 @@
             font-size: 1.1em;
             margin: 0 0 10px 0;
             font-weight: 500;
+            min-height: 44px; /* For 2 lines of text */
         }
         
         .product-price {
@@ -1029,6 +1110,67 @@
             color: white;
         }
 
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-wrap: wrap;
+                justify-content: space-between;
+            }
+            .navbar {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                background: var(--bg-light);
+                position: absolute;
+                top: 100%;
+                left: 0;
+                padding: 10px 0;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            }
+             .navbar.active {
+                display: flex;
+            }
+            .navbar a {
+                padding: 10px 20px;
+                width: 100%;
+                box-sizing: border-box;
+            }
+            .hamburger {
+                display: block;
+            }
+             .hamburger.active .bar:nth-child(2) {
+                opacity: 0;
+            }
+            .hamburger.active .bar:nth-child(1) {
+                transform: translateY(8px) rotate(45deg);
+            }
+            .hamburger.active .bar:nth-child(3) {
+                transform: translateY(-8px) rotate(-45deg);
+            }
+
+            .search-bar {
+                order: 3;
+                width: 100%;
+                margin-top: 15px;
+            }
+            .header-controls {
+                 gap: 10px;
+            }
+
+            #showcase h1 {
+                font-size: 2.5em;
+            }
+
+            .about-content, .modal-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .auth-modal-content, .cart-modal-content {
+                width: 95%;
+                padding: 20px;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -1040,6 +1182,38 @@
                 <div class="logo">
                     <span class="logo-icon">TB</span>
                     <span class="logo-text">TangailBuzz</span>
+                </div>
+                <div class="header-controls">
+                     <div class="language-dropdown">
+                          <button class="selected-lang">
+                              <!-- JS will populate this -->
+                          </button>
+                          <div class="dropdown-options">
+                              <button class="lang-btn lang-option" data-lang="bn">
+                                  <svg viewBox="0 0 21 15"><path fill="#006a4e" d="M0 0h21v15H0z"></path><path fill="#f42a41" d="M9.5 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"></path></svg>
+                                  <span>বাংলা</span>
+                              </button>
+                              <button class="lang-btn lang-option" data-lang="en">
+                                 <svg viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg"><clipPath id="a"><path d="M0 0v30h60V0z"></path></clipPath><clipPath id="b"><path d="M30 15h30v15zv-15h-30zH0V0h30v15z"></path></clipPath><g clip-path="url(#a)"><path d="M0 0v30h60V0z" fill="#012169"></path><path d="M0 0l60 30m0-30L0 30" stroke="#fff" stroke-width="6"></path><path d="M0 0l60 30m0-30L0 30" clip-path="url(#b)" stroke="#C8102E" stroke-width="4"></path><path d="M30 0v30M0 15h60" stroke="#fff" stroke-width="10"></path><path d="M30 0v30M0 15h60" stroke="#C8102E" stroke-width="6"></path></g></svg>
+                                  <span>English</span>
+                              </button>
+                          </div>
+                     </div>
+                    <div class="icon-btn" id="theme-toggle-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    </div>
+                    <div class="icon-btn" id="profile-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    </div>
+                    <div class="icon-btn" id="cart-btn">
+                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                        <span class="cart-count">0</span>
+                    </div>
+                    <div class="hamburger">
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                    </div>
                 </div>
                 <nav class="navbar">
                     <a href="" id="nav-home" data-lang-key="nav-home">হোম</a>
@@ -1053,33 +1227,6 @@
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                     </span>
                 </div>
-                <div class="header-controls">
-                     <div class="language-dropdown">
-                        <button class="selected-lang">
-                            <!-- JS will populate this -->
-                        </button>
-                        <div class="dropdown-options">
-                            <button class="lang-btn lang-option" data-lang="bn">
-                             <svg viewBox="0 0 21 15"><path fill="#006a4e" d="M0 0h21v15H0z"></path><path fill="#f42a41" d="M9.5 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"></path></svg>
-                             <span>বাংলা</span>
-                            </button>
-                            <button class="lang-btn lang-option" data-lang="en">
-                           <svg viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg"><clipPath id="a"><path d="M0 0v30h60V0z"></path></clipPath><clipPath id="b"><path d="M30 15h30v15zv-15h-30zH0V0h30v15z"></path></clipPath><g clip-path="url(#a)"><path d="M0 0v30h60V0z" fill="#012169"></path><path d="M0 0l60 30m0-30L0 30" stroke="#fff" stroke-width="6"></path><path d="M0 0l60 30m0-30L0 30" clip-path="url(#b)" stroke="#C8102E" stroke-width="4"></path><path d="M30 0v30M0 15h60" stroke="#fff" stroke-width="10"></path><path d="M30 0v30M0 15h60" stroke="#C8102E" stroke-width="6"></path></g></svg>
-                             <span>English</span>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="icon-btn" id="theme-toggle-btn">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-                    </div>
-                    <div class="icon-btn" id="profile-btn">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                    </div>
-                    <div class="icon-btn" id="cart-btn">
-                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-                        <span class="cart-count">0</span>
-                    </div>
-                </div>
             </div>
         </div>
     </header>
@@ -1089,7 +1236,7 @@
         <section id="showcase">
             <div class="container">
                 <h1 data-lang-key="showcase-h1">TangailBuzz এ আপনাকে স্বাগতম</h1>
-                <p data-lang-key="showcase-p">বাংলাদেশের সেরা ই-কমার্স প্ল্যাটফর্ম। আপনার প্রয়োজনীয় সবকিছু এক জায়গায়।</p>
+                <p data-lang-key="showcase-p">বাংলাদেশের সেরা ই-কমার্স প্ল্যাটফর্ম। আপনার প্রয়োজনীয় সবকিছু এক জায়গায়।</p>
                 <a id="cta-btn" class="cta-button" data-lang-key="cta-button">শপিং শুরু করুন</a>
             </div>
         </section>
@@ -1114,273 +1261,7 @@
         <main id="products">
             <div class="container">
                 <div class="product-grid">
-                    <!-- ইলেকট্রনিক্স পণ্য -->
-                    <div class="product-card" 
-                         data-product-id="BuzzP0001"
-                         data-category="electronics"
-                         data-brand-bn="স্যামসাং"
-                         data-brand-en="Samsung"
-                         data-description-bn="সুপার অ্যামোলেড ডিসপ্লে এবং সেরা ক্যামেরা সিস্টেম সহ একটি শক্তিশালী ফ্ল্যাগশিপ ফোন।"
-                         data-description-en="A powerful flagship phone with a Super AMOLED display and a top-tier camera system."
-                         data-rating="4.8"
-                         data-specs-bn='{"প্রকাশিত": "২০২৫, আগস্ট ০১", "ওএস": "Android 15, HyperOS 2", "ডিসপ্লে": "6.9\" 1080x2340 pixels", "ক্যামেরা": "50MP 1080p", "র‍্যাম": "4/8GB RAM Snapdragon 6s Gen 3", "ব্যাটারি": "7000mAh 33W"}'
-                         data-specs-en='{"Released": "2025, August 01", "OS": "Android 15, HyperOS 2", "Display": "6.9\" 1080x2340 pixels", "Camera": "50MP 1080p", "RAM": "4/8GB RAM Snapdragon 6s Gen 3", "Battery": "7000mAh 33W"}'
-                         data-img-main="https://placehold.co/400x400/F0F0F0/333?text=Samsung+S23+Main"
-                         data-img-thumb1="https://placehold.co/100x100/F0F0F0/333?text=S23+Side"
-                         data-img-thumb2="https://placehold.co/100x100/F0F0F0/333?text=S23+Back"
-                         data-img-thumb3="https://placehold.co/100x100/F0F0F0/333?text=S23+Camera">
-                        <div class="offer-tag" data-lang-key="tag-offer">অফার</div>
-                        <img src="https://placehold.co/300x200/F0F0F0/333?text=Samsung+S23" alt="Samsung Galaxy S23 Ultra">
-                        <div class="product-info">
-                            <h3 data-lang-key="product-name-s23">Samsung গ্যালাক্সি এস২৩ আলট্রা</h3>
-                            <div class="product-price">
-                                <span class="current-price" data-price="105000"></span>
-                                <span class="old-price" data-price-old="110000"></span>
-                            </div>
-                            <div class="product-actions">
-                                <a class="btn btn-details" data-lang-key="btn-details">বিস্তারিত</a>
-                                <a class="btn btn-add-cart" data-lang-key="btn-add-cart">কার্টে যোগ করুন</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Fashion Product 1 -->
-                    <div class="product-card"
-                         data-product-id="BuzzP0002"
-                         data-category="fashion"
-                         data-description-bn="আরামদায়ক কটন কাপড়ের তৈরি আকর্ষণীয় ডিজাইনের কুর্তি।"
-                         data-description-en="An attractively designed kurti made of comfortable cotton fabric."
-                         data-rating="4.5"
-                         data-specs-bn='{"উপাদান": "কটন", "সাইজ": "S, M, L, XL", "রং": "লাল, নীল, সবুজ"}'
-                         data-specs-en='{"Material": "Cotton", "Size": "S, M, L, XL", "Color": "Red, Blue, Green"}'
-                         data-img-main="https://placehold.co/400x400/F0F0F0/333?text=Kurti+Main">
-                        <img src="https://placehold.co/300x200/F0F0F0/333?text=Women%27s+Kurti" alt="Women's Kurti">
-                        <div class="product-info">
-                            <h3 data-lang-key="product-name-kurti">নারীদের কটন কুর্তি</h3>
-                            <div class="product-price">
-                                <span class="current-price" data-price="1500"></span>
-                            </div>
-                            <div class="product-actions">
-                                <a class="btn btn-details" data-lang-key="btn-details">বিস্তারিত</a>
-                                <a class="btn btn-add-cart" data-lang-key="btn-add-cart">কার্টে যোগ করুন</a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Cosmetics Product 1 -->
-                    <div class="product-card" 
-                         data-product-id="BuzzP0003"
-                         data-category="cosmetics"
-                         data-description-bn="আপনার ত্বকের উজ্জ্বলতা বাড়াতে একটি কার্যকরী সিরাম।"
-                         data-description-en="An effective serum to enhance your skin's radiance."
-                         data-rating="4.7"
-                         data-specs-bn='{"পরিমাণ": "30 ml", "উপাদান": "Vitamin C, Hyaluronic Acid", "ত্বকের ধরন": "সকল"}'
-                         data-specs-en='{"Volume": "30 ml", "Ingredients": "Vitamin C, Hyaluronic Acid", "Skin Type": "All"}'
-                         data-img-main="https://placehold.co/400x400/F0F0F0/333?text=Serum+Main">
-                        <img src="https://placehold.co/300x200/F0F0F0/333?text=Skincare+Serum" alt="Skincare Serum">
-                        <div class="product-info">
-                            <h3 data-lang-key="product-name-serum">স্কিনকেয়ার ফেসিয়াল সিরাম</h3>
-                            <div class="product-price">
-                                <span class="current-price" data-price="950"></span>
-                            </div>
-                            <div class="product-actions">
-                                <a class="btn btn-details" data-lang-key="btn-details">বিস্তারিত</a>
-                                <a class="btn btn-add-cart" data-lang-key="btn-add-cart">কার্টে যোগ করুন</a>
-                            </div>
-                        </div>
-                    </div>
-
-                     <!-- Toy Product 1 -->
-                    <div class="product-card"
-                         data-product-id="BuzzP0004"
-                         data-category="toys"
-                         data-description-bn="সহজে নিয়ন্ত্রণযোগ্য এবং মজাদার একটি রিমোট কন্ট্রোল ড্রোন।"
-                         data-description-en="An easy-to-control and fun remote control drone."
-                         data-rating="4.6"
-                         data-specs-bn='{"ব্যাটারি": "500 mAh", "ফ্লাইট টাইম": "15 minutes", "কন্ট্রোল রেঞ্জ": "50 meters"}'
-                         data-specs-en='{"Battery": "500 mAh", "Flight Time": "15 minutes", "Control Range": "50 meters"}'
-                         data-img-main="https://placehold.co/400x400/F0F0F0/333?text=Drone+Main">
-                        <img src="https://placehold.co/300x200/F0F0F0/333?text=RC+Drone" alt="RC Drone">
-                        <div class="product-info">
-                            <h3 data-lang-key="product-name-drone">রিমোট কন্ট্রোল ড্রোন</h3>
-                            <div class="product-price">
-                                <span class="current-price" data-price="2500"></span>
-                            </div>
-                            <div class="product-actions">
-                                <a class="btn btn-details" data-lang-key="btn-details">বিস্তারিত</a>
-                                <a class="btn btn-add-cart" data-lang-key="btn-add-cart">কার্টে যোগ করুন</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Fashion Product 2 -->
-                    <div class="product-card" 
-                         data-product-id="BuzzP0005"
-                         data-category="fashion"
-                         data-description-bn="উচ্চমানের আরামদায়ক কটন কাপড়ের তৈরি।"
-                         data-description-en="Made from high-quality comfortable cotton fabric."
-                         data-rating="4.4"
-                         data-specs-bn='{"উপাদান": "১০০% কটন", "সাইজ": "M, L, XL"}'
-                         data-specs-en='{"Material": "100% Cotton", "Size": "M, L, XL"}'
-                         data-img-main="https://placehold.co/400x400/F0F0F0/333?text=T-Shirt+Main">
-                         <div class="offer-tag" data-lang-key="tag-offer">অফার</div>
-                        <img src="https://placehold.co/300x200/F0F0F0/333?text=Men%27s+T-Shirt" alt="Men's T-Shirt">
-                         <div class="product-info">
-                            <h3 data-lang-key="product-name-tshirt">পুরুষদের প্রিমিয়াম টি-শার্ট</h3>
-                            <div class="product-price">
-                                <span class="current-price" data-price="750"></span>
-                                <span class="old-price" data-price-old="900"></span>
-                            </div>
-                            <div class="product-actions">
-                                <a class="btn btn-details" data-lang-key="btn-details">বিস্তারিত</a>
-                                <a class="btn btn-add-cart" data-lang-key="btn-add-cart">কার্টে যোগ করুন</a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                     <!-- Cosmetics Product 2 -->
-                    <div class="product-card" 
-                         data-product-id="BuzzP0006"
-                         data-category="cosmetics"
-                         data-description-bn="দীর্ঘস্থায়ী এবং আকর্ষণীয় ৪টি ভিন্ন রঙের ম্যাট লিপস্টিক।"
-                         data-description-en="Long-lasting and attractive matte lipsticks in 4 different shades."
-                         data-rating="4.8"
-                         data-specs-bn='{"পরিমাণ": "৪টি সেট", "ফিনিশ": "ম্যাট"}'
-                         data-specs-en='{"Quantity": "Set of 4", "Finish": "Matte"}'
-                         data-img-main="https://placehold.co/400x400/F0F0F0/333?text=Lipstick+Main">
-                        <img src="https://placehold.co/300x200/F0F0F0/333?text=Lipstick+Set" alt="Lipstick Set">
-                         <div class="product-info">
-                            <h3 data-lang-key="product-name-lipstick">ম্যাট লিপস্টিক সেট (৪টি)</h3>
-                            <div class="product-price">
-                                <span class="current-price" data-price="1200"></span>
-                            </div>
-                            <div class="product-actions">
-                                <a class="btn btn-details" data-lang-key="btn-details">বিস্তারিত</a>
-                                <a class="btn btn-add-cart" data-lang-key="btn-add-cart">কার্টে যোগ করুন</a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                     <!-- Toy Product 2 -->
-                    <div class="product-card" 
-                         data-product-id="BuzzP0007"
-                         data-category="toys"
-                         data-description-bn="বাচ্চাদের সৃজনশীলতা বাড়ানোর জন্য একটি চমৎকার লেগো সেট।"
-                         data-description-en="An excellent LEGO set to enhance children's creativity."
-                         data-rating="4.9"
-                         data-specs-bn='{"টুকরা সংখ্যা": "৬৬৮", "বয়স": "৬+"}'
-                         data-specs-en='{"Piece Count": "668", "Age": "6+"}'
-                         data-img-main="https://placehold.co/400x400/F0F0F0/333?text=LEGO+Main">
-                         <div class="offer-tag" data-lang-key="tag-offer">অফার</div>
-                        <img src="https://placehold.co/300x200/F0F0F0/333?text=LEGO+Set" alt="LEGO Set">
-                         <div class="product-info">
-                            <h3 data-lang-key="product-name-lego">লেগো সিটি পুলিশ স্টেশন</h3>
-                            <div class="product-price">
-                                <span class="current-price" data-price="3200"></span>
-                                <span class="old-price" data-price-old="3500"></span>
-                            </div>
-                            <div class="product-actions">
-                                <a class="btn btn-details" data-lang-key="btn-details">বিস্তারিত</a>
-                                <a class="btn btn-add-cart" data-lang-key="btn-add-cart">কার্টে যোগ করুন</a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                     <!-- Electronics Product 2 -->
-                    <div class="product-card" 
-                         data-product-id="BuzzP0008"
-                         data-category="electronics"
-                         data-description-bn="নেক্সট-জেনারেশন গেমিং এর অভিজ্ঞতা নিন অবিশ্বাস্য গ্রাফিক্স এবং গতির সাথে।"
-                         data-description-en="Experience next-generation gaming with incredible graphics and speed."
-                         data-rating="4.9"
-                         data-specs-bn='{"স্টোরেজ": "825GB SSD", "রেজোলিউশন": "Up to 8K", "কন্ট্রোলার": "DualSense Wireless"}'
-                         data-specs-en='{"Storage": "825GB SSD", "Resolution": "Up to 8K", "Controller": "DualSense Wireless"}'
-                         data-img-main="https://placehold.co/400x400/F0F0F0/333?text=PS5+Main">
-                        <div class="offer-tag" data-lang-key="tag-offer">অফার</div>
-                        <img src="https://placehold.co/300x200/F0F0F0/333?text=Sony+PS5" alt="Sony Playstation 5">
-                        <div class="product-info">
-                            <h3 data-lang-key="product-name-ps5">সনি প্লেস্টেশন ৫ গেমিং কনসোল</h3>
-                            <div class="product-price">
-                                <span class="current-price" data-price="65000"></span>
-                                <span class="old-price" data-price-old="70000"></span>
-                            </div>
-                            <div class="product-actions">
-                                <a class="btn btn-details" data-lang-key="btn-details">বিস্তারিত</a>
-                                <a class="btn btn-add-cart" data-lang-key="btn-add-cart">কার্টে যোগ করুন</a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                     <!-- Books Product 1 -->
-                     <div class="product-card" 
-                          data-product-id="BuzzP0009"
-                          data-category="books"
-                          data-description-bn="কিংবদন্তী লেখক হুমায়ূন আহমেদের সেরা বইগুলোর একটি সংগ্রহ।"
-                          data-description-en="A collection of the best books by the legendary author Humayun Ahmed."
-                          data-rating="4.9"
-                          data-specs-bn='{"লেখক": "হুমায়ূন আহমেদ", "ধরন": "উপন্যাস, গল্প"}'
-                          data-specs-en='{"Author": "Humayun Ahmed", "Genre": "Novel, Story"}'
-                          data-img-main="https://placehold.co/400x400/F0F0F0/333?text=Books+Main">
-                        <img src="https://placehold.co/300x200/F0F0F0/333?text=Humayun+Ahmed+Books" alt="Humayun Ahmed Books">
-                         <div class="product-info">
-                            <h3 data-lang-key="product-name-books">হুমায়ূন আহমেদ সমগ্র</h3>
-                            <div class="product-price">
-                                <span class="current-price" data-price="1200"></span>
-                            </div>
-                            <div class="product-actions">
-                                <a class="btn btn-details" data-lang-key="btn-details">বিস্তারিত</a>
-                                <a class="btn btn-add-cart" data-lang-key="btn-add-cart">কার্টে যোগ করুন</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Household Product 1 -->
-                    <div class="product-card" 
-                         data-product-id="BuzzP0010"
-                         data-category="household"
-                         data-description-bn="৩২ পিসের আকর্ষণীয় ডিজাইন করা ডিনার সেট, যেকোনো অনুষ্ঠানের জন্য উপযুক্ত।"
-                         data-description-en="An attractively designed 32-piece dinner set, suitable for any occasion."
-                         data-rating="4.8"
-                         data-specs-bn='{"উপাদান": "সিরামিক", "পিস সংখ্যা": "৩২", "ব্যবহার": "মাইক্রোওয়েভ নিরাপদ"}'
-                         data-specs-en='{"Material": "Ceramic", "Piece Count": "32", "Use": "Microwave Safe"}'
-                         data-img-main="https://placehold.co/400x400/F0F0F0/333?text=Dinner+Set+Main">
-                        <img src="https://placehold.co/300x200/F0F0F0/333?text=Dinner+Set" alt="Dinner Set">
-                        <div class="product-info">
-                            <h3 data-lang-key="product-name-dinnerset">রয়েল ডিনার সেট</h3>
-                            <div class="product-price">
-                                <span class="current-price" data-price="8000"></span>
-                            </div>
-                            <div class="product-actions">
-                                <a class="btn btn-details" data-lang-key="btn-details">বিস্তারিত</a>
-                                <a class="btn btn-add-cart" data-lang-key="btn-add-cart">কার্টে যোগ করুন</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Household Product 2 -->
-                    <div class="product-card" 
-                         data-product-id="BuzzP0011"
-                         data-category="household"
-                         data-description-bn="উচ্চমানের অ্যালুমিনিয়াম দিয়ে তৈরি প্রেসার কুকার যা দ্রুত রান্না করতে সাহায্য করে।"
-                         data-description-en="High-quality aluminum pressure cooker that helps to cook faster."
-                         data-rating="4.7"
-                         data-specs-bn='{"ধারণক্ষমতা": "৫ লিটার", "উপাদান": "অ্যালুমিনিয়াম", "নিরাপত্তা": "সুরক্ষা ভালভ"}'
-                         data-specs-en='{"Capacity": "5 Liters", "Material": "Aluminum", "Safety": "Safety Valve"}'
-                         data-img-main="https://placehold.co/400x400/F0F0F0/333?text=Cooker+Main">
-                        <div class="offer-tag" data-lang-key="tag-offer">অফার</div>
-                        <img src="https://placehold.co/300x200/F0F0F0/333?text=Pressure+Cooker" alt="Pressure Cooker">
-                        <div class="product-info">
-                            <h3 data-lang-key="product-name-cooker">প্রেসার কুকার</h3>
-                            <div class="product-price">
-                                <span class="current-price" data-price="2200"></span>
-                                <span class="old-price" data-price-old="2500"></span>
-                            </div>
-                            <div class="product-actions">
-                                <a class="btn btn-details" data-lang-key="btn-details">বিস্তারিত</a>
-                                <a class="btn btn-add-cart" data-lang-key="btn-add-cart">কার্টে যোগ করুন</a>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- Products will be loaded here from Firebase -->
                 </div>
             </div>
         </main>
@@ -1396,10 +1277,10 @@
                 <div class="about-text">
                     <h2 data-lang-key="about-h2">আমাদের পথচলার গল্প</h2>
                     <p data-lang-key="about-p1">
-                        ২০২৩ সাল থেকে TangailBuzz তার যাত্রা শুরু করে। আমাদের লক্ষ্য ছিল টাঙ্গাইলের ঐতিহ্যবাহী এবং আধুনিক পণ্যগুলোকে সারা বাংলাদেশের মানুষের কাছে পৌঁছে দেওয়া। খুব অল্প সময়ের মধ্যে আমরা গ্রাহকদের আস্থা অর্জন করতে সক্ষম হয়েছি।
+                        ২০২৩ সাল থেকে TangailBuzz তার যাত্রা শুরু করে। আমাদের লক্ষ্য ছিল টাঙ্গাইলের ঐতিহ্যবাহী এবং আধুনিক পণ্যগুলোকে সারা বাংলাদেশের মানুষের কাছে পৌঁছে দেওয়া। খুব অল্প সময়ের মধ্যে আমরা গ্রাহকদের আস্থা অর্জন করতে সক্ষম হয়েছি।
                     </p>
                     <p data-lang-key="about-p2">
-                        আমরা ইলেকট্রনিক্স, পোশাক, শাড়ি, কসমেটিকস থেকে শুরু করে গৃহস্থালীর প্রয়োজনীয় সকল জিনিস সরবরাহ করি। আমাদের প্রধান উদ্দেশ্য হলো ন্যায্য মূল্যে সেরা মানের পণ্য গ্রাহকদের হাতে তুলে দেওয়া এবং তাদের অনলাইন কেনাকাটার অভিজ্ঞতাকে আরও সহজ ও আনন্দদায়ক করে তোলা।
+                        আমরা ইলেকট্রনিক্স, পোশাক, শাড়ি, কসমেটিকস থেকে শুরু করে গৃহস্থালীর প্রয়োজনীয় সকল জিনিস সরবরাহ করি। আমাদের প্রধান উদ্দেশ্য হলো ন্যায্য মূল্যে সেরা মানের পণ্য গ্রাহকদের হাতে তুলে দেওয়া এবং তাদের অনলাইন কেনাকাটার অভিজ্ঞতাকে আরও সহজ ও আনন্দদায়ক করে তোলা।
                     </p>
                     <div class="founder-info">
                         <h3 data-lang-key="founder-name">MD EOUSUF ALI</h3>
@@ -1429,22 +1310,18 @@
                 </div>
                 <div class="modal-price" id="modal-product-price"></div>
                  <div class="modal-meta-info">
-                    <p><strong data-lang-key="product-id">Product ID:</strong> <span id="modal-product-id"></span></p>
-                    <p><strong data-lang-key="brand">Brand:</strong> <span id="modal-brand"></span></p>
-                    <p><strong data-lang-key="category">Category:</strong> <span id="modal-category"></span></p>
-                </div>
-                <div class="modal-tags">
-                    <span class="tag-available" data-lang-key="tag-available">AVAILABLE</span>
-                    <span class="tag-unofficial" data-lang-key="tag-unofficial">UNOFFICIAL</span>
-                </div>
+                     <p><strong data-lang-key="product-id">Product ID:</strong> <span id="modal-product-id"></span></p>
+                     <p><strong data-lang-key="brand">Brand:</strong> <span id="modal-brand"></span></p>
+                     <p><strong data-lang-key="category">Category:</strong> <span id="modal-category"></span></p>
+                 </div>
                 <p class="modal-description" id="modal-product-description"></p>
                 <h3 data-lang-key="modal-specs-title">বিস্তারিত তথ্য</h3>
                 <ul class="spec-list" id="modal-spec-list">
                     <!-- Specification list will be generated by JS -->
                 </ul>
                  <div class="product-actions" style="margin-top: 20px;">
-                    <a class="btn btn-add-cart" id="modal-add-to-cart-btn" style="flex-grow: 2;" data-lang-key="btn-add-cart">কার্টে যোগ করুন</a>
-                </div>
+                     <a class="btn btn-add-cart" id="modal-add-to-cart-btn" style="flex-grow: 2;" data-lang-key="btn-add-cart">কার্টে যোগ করুন</a>
+                 </div>
             </div>
         </div>
     </div>
@@ -1464,19 +1341,19 @@
                 <!-- Login Form -->
                 <div id="login-form-container" class="auth-form">
                      <form id="login-form">
-                        <h3 data-lang-key="login-title">আপনার একাউন্টে লগইন করুন</h3>
-                        <div class="form-group">
-                            <label for="login-email" data-lang-key="email-label">ইমেইল</label>
-                            <input type="email" id="login-email" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="login-password" data-lang-key="password-label">পাসওয়ার্ড</label>
-                            <input type="password" id="login-password" required>
-                        </div>
-                        <button type="submit" class="auth-btn" data-lang-key="login-btn">লগইন</button>
-                    </form>
+                         <h3 data-lang-key="login-title">আপনার একাউন্টে লগইন করুন</h3>
+                         <div class="form-group">
+                             <label for="login-email" data-lang-key="email-label">ইমেইল</label>
+                             <input type="email" id="login-email" required>
+                         </div>
+                         <div class="form-group">
+                             <label for="login-password" data-lang-key="password-label">পাসওয়ার্ড</label>
+                             <input type="password" id="login-password" required>
+                         </div>
+                         <button type="submit" class="auth-btn" data-lang-key="login-btn">লগইন</button>
+                     </form>
                     <div class="auth-link">
-                        <a id="show-forgot-password" data-lang-key="forgot-password-link">পাসওয়ার্ড ভুলে গেছেন?</a>
+                        <a id="show-forgot-password" data-lang-key="forgot-password-link">পাসওয়ার্ড ভুলে গেছেন?</a>
                     </div>
                 </div>
                 
@@ -1501,19 +1378,19 @@
                             <input type="email" id="register-email" required>
                         </div>
                         <div class="form-group">
-                            <label for="register-password" data-lang-key="password-label">পাসওয়ার্ড</label>
+                            <label for="register-password" data-lang-key="password-label">পাসওয়ার্ড</label>
                             <input type="password" id="register-password" required>
                         </div>
                          <div class="form-group">
-                            <label for="register-retype-password" data-lang-key="retype-password-label">পুনরায় পাসওয়ার্ড দিন</label>
-                            <input type="password" id="register-retype-password" required>
-                        </div>
+                             <label for="register-retype-password" data-lang-key="retype-password-label">পুনরায় পাসওয়ার্ড দিন</label>
+                             <input type="password" id="register-retype-password" required>
+                         </div>
                         <button type="submit" class="auth-btn" data-lang-key="register-btn">রেজিস্টার</button>
                     </form>
                 </div>
                 <button id="google-signin-btn" class="auth-btn google-btn">
                      <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><path d="M17.64 9.2045c0-.6381-.0573-1.2518-.1636-1.8409H9v3.4818h4.8436c-.2086 1.125-.8441 2.0782-1.7777 2.7218v2.2582h2.9082c1.7018-1.5668 2.6836-3.8741 2.6836-6.621z" fill="#4285F4"></path><path d="M9 18c2.43 0 4.4673-.806 5.9564-2.1805l-2.9082-2.2582c-.806.54-1.8377.86-3.0482.86-2.344 0-4.3282-1.5818-5.0355-3.7104H.9573v2.3318C2.4382 15.9832 5.4818 18 9 18z" fill="#34A853"></path><path d="M3.9645 10.71c-.1827-.54-.2827-1.1168-.2827-1.71s.1-1.17.2827-1.71V4.9582H.9573A8.9965 8.9965 0 000 9c0 1.4523.3464 2.8273.9573 4.0418L3.9645 10.71z" fill="#FBBC05"></path><path d="M9 3.5795c1.3214 0 2.5077.4541 3.4405 1.346l2.5813-2.5814C13.4632.8918 11.4259 0 9 0 5.4818 0 2.4382 2.0168.9573 4.9582L3.9645 7.29C4.6718 5.1618 6.656 3.5795 9 3.5795z" fill="#EA4335"></path></g></svg>
-                    <span data-lang-key="google-login-btn">গুগল দিয়ে লগইন করুন</span>
+                    <span data-lang-key="google-login-btn">গুগল দিয়ে লগইন করুন</span>
                 </button>
                  <div id="auth-message-container" class="auth-message"></div>
             </div>
@@ -1521,22 +1398,23 @@
             <!-- Forgot Password View -->
             <div id="forgot-password-view" class="auth-view">
                  <form id="forgot-password-form">
-                    <h3 data-lang-key="forgot-password-title">পাসওয়ার্ড রিসেট</h3>
-                    <div class="form-group">
-                        <label for="forgot-email" data-lang-key="email-label">আপনার ইমেইল দিন</label>
-                        <input type="email" id="forgot-email" required>
-                    </div>
-                    <button type="submit" class="auth-btn" data-lang-key="reset-password-btn">রিসেট লিঙ্ক পাঠান</button>
-                    <div class="auth-link">
-                         <a id="back-to-login" data-lang-key="back-to-login-link">&laquo; লগইনে ফিরে যান</a>
-                    </div>
-                </form>
+                     <h3 data-lang-key="forgot-password-title">পাসওয়ার্ড রিসেট</h3>
+                     <div class="form-group">
+                         <label for="forgot-email" data-lang-key="email-label">আপনার ইমেইল দিন</label>
+                         <input type="email" id="forgot-email" required>
+                     </div>
+                     <button type="submit" class="auth-btn" data-lang-key="reset-password-btn">রিসেট লিঙ্ক পাঠান</button>
+                     <div class="auth-link">
+                          <a id="back-to-login" data-lang-key="back-to-login-link">&laquo; লগইনে ফিরে যান</a>
+                     </div>
+                 </form>
             </div>
 
             <!-- Account View (Logged In) -->
             <div id="account-view" class="auth-view">
                 <h3 id="user-greeting"></h3>
                 <ul>
+                    <li id="order-history-btn" data-lang-key="order-history">অর্ডার ইতিহাস</li>
                     <li id="manage-address-btn" data-lang-key="manage-address">ঠিকানা পরিচালনা করুন</li>
                     <li id="change-mobile-btn" data-lang-key="change-mobile">মোবাইল নম্বর পরিবর্তন করুন</li>
                     <li id="logout-btn" data-lang-key="logout">লগআউট</li>
@@ -1549,72 +1427,98 @@
                  <h3 data-lang-key="address-title">আমার ডিফল্ট ঠিকানা</h3>
                  <div id="address-list"></div>
                  <form id="address-form">
-                     <div class="form-group">
-                         <label for="address-line1" data-lang-key="address-line1-label">ঠিকানা</label>
-                         <input type="text" id="address-line1" required>
-                     </div>
-                     <div class="form-group">
-                         <label for="address-city" data-lang-key="address-city-label">শহর</label>
-                         <input type="text" id="address-city" required>
-                     </div>
-                     <div class="form-group">
-                         <label for="address-postal" data-lang-key="address-postal-label">পোস্টাল কোড</label>
-                         <input type="text" id="address-postal" required>
-                     </div>
-                     <button type="submit" class="auth-btn" data-lang-key="save-address-btn">ঠিকানা সংরক্ষণ করুন</button>
+                       <div class="form-group">
+                           <label for="address-line1" data-lang-key="address-line1-label">ঠিকানা</label>
+                           <input type="text" id="address-line1" required>
+                       </div>
+                       <div class="form-group">
+                           <label for="address-city" data-lang-key="address-city-label">শহর</label>
+                           <input type="text" id="address-city" required>
+                       </div>
+                       <div class="form-group">
+                           <label for="address-postal" data-lang-key="address-postal-label">পোস্টাল কোড</label>
+                           <input type="text" id="address-postal" required>
+                       </div>
+                       <button type="submit" class="auth-btn" data-lang-key="save-address-btn">ঠিকানা সংরক্ষণ করুন</button>
                  </form>
                  <div class="auth-link">
                      <a id="back-to-account" data-lang-key="back-to-account-link">&laquo; একাউন্টে ফিরে যান</a>
-                </div>
+                 </div>
             </div>
             
              <!-- Mobile Change View -->
             <div id="mobile-view" class="auth-view">
                  <h3 data-lang-key="mobile-title">মোবাইল নম্বর পরিবর্তন</h3>
                  <form id="mobile-form">
-                     <div class="form-group">
-                         <label for="mobile-number" data-lang-key="mobile-label">নতুন মোবাইল নম্বর</label>
-                         <input type="tel" id="mobile-number" required>
-                     </div>
-                     <button type="submit" class="auth-btn" data-lang-key="save-mobile-btn">সংরক্ষণ করুন</button>
+                       <div class="form-group">
+                           <label for="mobile-number" data-lang-key="mobile-label">নতুন মোবাইল নম্বর</label>
+                           <input type="tel" id="mobile-number" required>
+                       </div>
+                       <button type="submit" class="auth-btn" data-lang-key="save-mobile-btn">সংরক্ষণ করুন</button>
                  </form>
                  <div class="auth-link">
                      <a id="back-to-account-from-mobile" data-lang-key="back-to-account-link">&laquo; একাউন্টে ফিরে যান</a>
+                 </div>
+            </div>
+
+            <!-- Order History View -->
+            <div id="order-history-view" class="auth-view">
+                <h3 data-lang-key="order-history-title">আমার অর্ডারসমূহ</h3>
+                <div id="orders-list" class="orders-list">
+                    <!-- Orders will be dynamically injected here -->
+                </div>
+                <div class="auth-link">
+                    <a id="back-to-account-from-history" data-lang-key="back-to-account-link">&laquo; একাউন্টে ফিরে যান</a>
                 </div>
             </div>
+
 
         </div>
     </div>
     
-    <!-- Cart Modal -->
+    <!-- Cart & Orders Modal -->
     <div id="cart-modal-overlay">
         <div class="cart-modal-content">
             <div class="cart-modal-header">
-                <h3 data-lang-key="cart-title">আপনার শপিং কার্ট</h3>
+                <div class="auth-tabs">
+                    <div class="auth-tab active" data-tab="shopping-cart" data-lang-key="cart-title">আপনার শপিং কার্ট</div>
+                    <div class="auth-tab" data-tab="order-history" data-lang-key="order-history">অর্ডার ইতিহাস</div>
+                </div>
                 <span class="auth-modal-close" id="cart-modal-close">&times;</span>
             </div>
-            <div id="cart-items-list" class="cart-items-list">
-                 <!-- Cart items will be injected here by JS -->
-            </div>
-             <div id="empty-cart-message" style="display: none;">
-                <p data-lang-key="empty-cart">আপনার কার্ট খালি।</p>
-            </div>
-            <div id="cart-footer" style="display: none;">
-                <div class="cart-summary">
-                    <div class="summary-row">
-                        <span data-lang-key="subtotal">সাবটোটাল:</span>
-                        <span id="cart-subtotal-price"></span>
-                    </div>
-                     <div class="summary-row" id="delivery-charge-row" style="display: none;">
-                        <span data-lang-key="delivery-charge">ডেলিভারি চার্জ:</span>
-                        <span id="cart-delivery-charge"></span>
-                    </div>
+
+            <!-- Shopping Cart View -->
+            <div id="shopping-cart-view" class="auth-view active">
+                <div id="cart-items-list" class="cart-items-list">
+                    <!-- Cart items will be injected here by JS -->
                 </div>
-                <div class="summary-row cart-total">
-                    <span data-lang-key="total-price">সর্বমোট:</span>
-                    <span id="cart-total-price"></span>
+                <div id="empty-cart-message" style="display: none;">
+                    <p data-lang-key="empty-cart">আপনার কার্ট খালি।</p>
                 </div>
-                <button id="checkout-btn" class="checkout-btn" data-lang-key="checkout">চেকআউট</button>
+                <div id="cart-footer" style="display: none;">
+                    <div class="cart-summary">
+                        <div class="summary-row">
+                            <span data-lang-key="subtotal">সাবটোটাল:</span>
+                            <span id="cart-subtotal-price"></span>
+                        </div>
+                        <div class="summary-row" id="delivery-charge-row" style="display: none;">
+                            <span data-lang-key="delivery-charge">ডেলিভারি চার্জ:</span>
+                            <span id="cart-delivery-charge"></span>
+                        </div>
+                    </div>
+                    <div class="summary-row cart-total">
+                        <span data-lang-key="total-price">সর্বমোট:</span>
+                        <span id="cart-total-price"></span>
+                    </div>
+                    <button id="checkout-btn" class="checkout-btn" data-lang-key="checkout">চেকআউট</button>
+                </div>
+            </div>
+            
+            <!-- Order History View (Inside Cart Modal) -->
+            <div id="order-history-cart-view" class="auth-view" style="max-height: 400px; overflow-y: auto;">
+                 <div id="orders-list-cart" class="orders-list">
+                         <!-- Orders will be dynamically injected here -->
+                 </div>
             </div>
         </div>
     </div>
@@ -1625,41 +1529,41 @@
              <span class="auth-modal-close" id="payment-modal-close">&times;</span>
              <h3 data-lang-key="payment-title">পেমেন্ট পদ্ধতি নির্বাচন করুন</h3>
              <div class="payment-options">
-                 <div class="payment-option" data-method="card">
-                     <strong data-lang-key="payment-card">কার্ড</strong>
-                     <div class="sub-options">
-                         <div class="form-group">
-                            <label for="card-name" data-lang-key="card-name-label">কার্ডে থাকা নাম</label>
-                            <input type="text" id="card-name" placeholder="Abul Kalam">
-                        </div>
-                         <div class="form-group">
-                             <label data-lang-key="card-number-label">কার্ড নম্বর</label>
-                             <input type="text" placeholder="1234 5678 9101 1121">
-                         </div>
-                         <div class="form-group" style="display: flex; gap: 10px;">
-                             <div style="flex: 1;">
-                                 <label data-lang-key="expiry-label">মেয়াদ</label>
-                                 <input type="text" placeholder="MM/YY">
-                             </div>
-                             <div style="flex: 1;">
-                                 <label data-lang-key="cvc-label">CVC</label>
-                                 <input type="text" placeholder="123">
-                             </div>
-                         </div>
-                     </div>
-                 </div>
-                 <div class="payment-option" data-method="mobile">
-                     <strong data-lang-key="payment-mobile">মোবাইল ব্যাংকিং</strong>
-                     <div class="sub-options">
-                         <input type="radio" id="bkash" name="mobile-banking" value="Bkash" checked>
-                         <label for="bkash">Bkash</label><br>
-                         <input type="radio" id="nagad" name="mobile-banking" value="Nagad">
-                         <label for="nagad">Nagad</label>
-                     </div>
-                 </div>
-                  <div class="payment-option" data-method="cod">
-                     <strong data-lang-key="cod">ক্যাশ অন ডেলিভারি</strong>
-                 </div>
+                  <div class="payment-option" data-method="card">
+                       <strong data-lang-key="payment-card">কার্ড</strong>
+                       <div class="sub-options">
+                           <div class="form-group">
+                               <label for="card-name" data-lang-key="card-name-label">কার্ডে থাকা নাম</label>
+                               <input type="text" id="card-name" placeholder="Abul Kalam">
+                           </div>
+                           <div class="form-group">
+                                 <label data-lang-key="card-number-label">কার্ড নম্বর</label>
+                                 <input type="text" placeholder="1234 5678 9101 1121">
+                           </div>
+                           <div class="form-group" style="display: flex; gap: 10px;">
+                               <div style="flex: 1;">
+                                   <label data-lang-key="expiry-label">মেয়াদ</label>
+                                   <input type="text" placeholder="MM/YY">
+                               </div>
+                               <div style="flex: 1;">
+                                   <label data-lang-key="cvc-label">CVC</label>
+                                   <input type="text" placeholder="123">
+                               </div>
+                           </div>
+                       </div>
+                  </div>
+                  <div class="payment-option" data-method="mobile">
+                       <strong data-lang-key="payment-mobile">মোবাইল ব্যাংকিং</strong>
+                       <div class="sub-options">
+                           <input type="radio" id="bkash" name="mobile-banking" value="Bkash" checked>
+                           <label for="bkash">Bkash</label><br>
+                           <input type="radio" id="nagad" name="mobile-banking" value="Nagad">
+                           <label for="nagad">Nagad</label>
+                       </div>
+                  </div>
+                   <div class="payment-option" data-method="cod">
+                      <strong data-lang-key="cod">ক্যাশ অন ডেলিভারি</strong>
+                  </div>
              </div>
              <button id="confirm-order-btn" class="auth-btn" data-lang-key="confirm-order-btn">অর্ডার নিশ্চিত করুন</button>
         </div>
@@ -1670,11 +1574,22 @@
         <div class="auth-modal-content">
              <span class="auth-modal-close" id="order-success-modal-close">&times;</span>
              <div class="success-icon">✔</div>
-             <h3 data-lang-key="order-success">আপনার অর্ডারটি সফলভাবে সম্পন্ন হয়েছে!</h3>
-             <p data-lang-key="order-success-msg">আমরা আপনার অর্ডারটি গ্রহণ করেছি। একটি কনফার্মেশন ইমেইল পাঠানো হয়েছে।</p>
+             <h3 data-lang-key="order-success">আপনার অর্ডারটি সফলভাবে সম্পন্ন হয়েছে!</h3>
+             <p data-lang-key="order-success-msg">আমরা আপনার অর্ডারটি গ্রহণ করেছি। একটি কনফার্মেশন ইমেইল পাঠানো হয়েছে।</p>
         </div>
     </div>
 
+    <!-- Confirmation Modal -->
+    <div id="confirmation-modal-overlay" class="modal-overlay">
+        <div class="auth-modal-content" style="max-width: 450px; text-align: center;">
+            <h3 id="confirmation-title" data-lang-key="confirm-title">নিশ্চিত করুন</h3>
+            <p id="confirmation-message" style="margin: 20px 0;"></p>
+            <div style="display: flex; gap: 15px; justify-content: center;">
+                <button id="confirm-no-btn" class="auth-btn" style="background-color: var(--text-light); flex-grow: 1;" data-lang-key="confirm-no">না</button>
+                <button id="confirm-yes-btn" class="auth-btn" style="flex-grow: 1;" data-lang-key="confirm-yes">হ্যাঁ</button>
+            </div>
+        </div>
+    </div>
 
     <!-- ফুটার সেকশন -->
     <footer class="main-footer">
@@ -1682,7 +1597,7 @@
             <div class="footer-grid">
                 <div class="footer-col">
                     <h4>TangailBuzz</h4>
-                    <p data-lang-key="footer-desc">বাংলাদেশের সেরা ই-কমার্স প্ল্যাটফর্ম। আপনার প্রয়োজনীয় সবকিছু এক জায়গায়।</p>
+                    <p data-lang-key="footer-desc">বাংলাদেশের সেরা ই-কমার্স প্ল্যাটফর্ম। আপনার প্রয়োজনীয় সবকিছু এক জায়গায়।</p>
                     <div class="payment-methods">
                         <span>Visa</span><span>MC</span><span>AE</span><span>Nagad</span><span>SC</span>
                     </div>
@@ -1715,7 +1630,7 @@
     </footer>
     
     <script type="module">
-        // Firebase SDKs
+        // Firebase SDKs - Updated to a newer version for better features and security.
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { 
             getAuth, 
@@ -1741,17 +1656,18 @@
             query,
             where,
             getDocs,
-            deleteDoc
+            deleteDoc,
+            onSnapshot
         } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-        // Firebase Configuration
+        // Firebase Configuration (Using your provided config)
         const firebaseConfig = {
-          apiKey: "AIzaSyBEoqth3U1rNXiDefi7uNvRkLzC_qjw5IU",
-          authDomain: "tangail-buzz-login-project.firebaseapp.com",
-          projectId: "tangail-buzz-login-project",
-          storageBucket: "tangail-buzz-login-project.appspot.com",
-          messagingSenderId: "267766420151",
-          appId: "1:267766420151:web:7cafd9281350e903aa7332"
+          apiKey: "AIzaSyDiPflpWTpsyUUyisSMV6R0eMtK6Hw4nCU",
+          authDomain: "tangail-buzz.firebaseapp.com",
+          projectId: "tangail-buzz",
+          storageBucket: "tangail-buzz.appspot.com",
+          messagingSenderId: "804162460618",
+          appId: "1:804162460618:web:c8d8fd4ef3fbadc2b0cd33"
         };
 
         // Initialize Firebase
@@ -1761,51 +1677,48 @@
         const googleProvider = new GoogleAuthProvider();
 
         document.addEventListener('DOMContentLoaded', function () {
+            // This is the global store for all products fetched from the database
+            let allProducts = [];
 
+            // This object is now only for static UI text, not for dynamic product names.
             const translations = {
                 'bn': {
                     'nav-home': 'হোম', 'nav-products': 'পণ্য', 'nav-offer': 'অফার', 'nav-about': 'আমাদের সম্পর্কে', 'search-placeholder': 'পণ্য খুঁজুন...',
-                    'showcase-h1': 'TangailBuzz এ আপনাকে স্বাগতম', 'showcase-p': 'বাংলাদেশের সেরা ই-কমার্স প্ল্যাটফর্ম। আপনার প্রয়োজনীয় সবকিছু এক জায়গায়।',
+                    'showcase-h1': 'TangailBuzz এ আপনাকে স্বাগতম', 'showcase-p': 'বাংলাদেশের সেরা ই-কমার্স প্ল্যাটফর্ম। আপনার প্রয়োজনীয় সবকিছু এক জায়গায়।',
                     'cta-button': 'শপিং শুরু করুন', 'categories-h2': 'আমাদের ক্যাটাগরি সমূহ', 'cat-all': 'সব পণ্য', 'cat-electronics': 'ইলেকট্রনিক্স',
                     'cat-fashion': 'পোশাক', 'cat-cosmetics': 'কসমেটিক', 'cat-household': 'গৃহস্থালী', 'cat-toys': 'খেলনা', 'cat-books': 'বই',
-                    'tag-offer': 'অফার', 'tag-available': 'উপলব্ধ', 'tag-unofficial': 'আনঅফিসিয়াল', 'brand': 'ব্র্যান্ড', 'category': 'ক্যাটাগরি',
-                    'product-id': 'প্রোডাক্ট আইডি',
-                    'product-name-s23': 'Samsung গ্যালাক্সি এস২৩ আলট্রা', 'product-name-kurti': 'নারীদের কটন কুর্তি', 'product-name-serum': 'স্কিনকেয়ার ফেসিয়াল সিরাম',
-                    'product-name-drone': 'রিমোট কন্ট্রোল ড্রোন', 'product-name-tshirt': 'পুরুষদের প্রিমিয়াম টি-শার্ট', 'product-name-lipstick': 'ম্যাট লিপস্টিক সেট (৪টি)',
-                    'product-name-lego': 'লেগো সিটি পুলিশ স্টেশন', 'product-name-ps5': 'সনি প্লেস্টেশন ৫ গেমিং কনসোল', 'product-name-books': 'হুমায়ূন আহমেদ সমগ্র',
-                    'product-name-dinnerset': 'রয়েল ডিনার সেট', 'product-name-cooker': 'প্রেসার কুকার', 'btn-details': 'বিস্তারিত', 'btn-add-cart': 'কার্টে যোগ করুন',
-                    'about-h2': 'আমাদের পথচলার গল্প',
-                    'about-p1': '২০২৩ সাল থেকে TangailBuzz তার যাত্রা শুরু করে। আমাদের লক্ষ্য ছিল টাঙ্গাইলের ঐতিহ্যবাহী এবং আধুনিক পণ্যগুলোকে সারা বাংলাদেশের মানুষের কাছে পৌঁছে দেওয়া। খুব অল্প সময়ের মধ্যে আমরা গ্রাহকদের আস্থা অর্জন করতে সক্ষম হয়েছি।',
-                    'about-p2': 'আমরা ইলেকট্রনিক্স, পোশাক, শাড়ি, কসমেটিকস থেকে শুরু করে গৃহস্থালীর প্রয়োজনীয় সকল জিনিস সরবরাহ করি। আমাদের প্রধান উদ্দেশ্য হলো ন্যায্য মূল্যে সেরা মানের পণ্য গ্রাহকদের হাতে তুলে দেওয়া এবং তাদের অনলাইন কেনাকাটার অভিজ্ঞতাকে আরও সহজ ও আনন্দদায়ক করে তোলা।',
+                    'tag-offer': 'অফার', 'off-text': 'ছাড়', 'tag-available': 'উপলব্ধ', 'tag-unofficial': 'আনঅফিসিয়াল', 'brand': 'ব্র্যান্ড', 'category': 'ক্যাটাগরি',
+                    'product-id': 'প্রোডাক্ট আইডি', 'btn-details': 'বিস্তারিত', 'btn-add-cart': 'কার্টে যোগ করুন', 'about-h2': 'আমাদের পথচলার গল্প',
+                    'about-p1': '২০২৩ সাল থেকে TangailBuzz তার যাত্রা শুরু করে। আমাদের লক্ষ্য ছিল টাঙ্গাইলের ঐতিহ্যবাহী এবং আধুনিক পণ্যগুলোকে সারা বাংলাদেশের মানুষের কাছে পৌঁছে দেওয়া। খুব অল্প সময়ের মধ্যে আমরা গ্রাহকদের আস্থা অর্জন করতে সক্ষম হয়েছি।',
+                    'about-p2': 'আমরা ইলেকট্রনিক্স, পোশাক, শাড়ি, কসমেটিকস থেকে শুরু করে গৃহস্থালীর প্রয়োজনীয় সকল জিনিস সরবরাহ করি। আমাদের প্রধান উদ্দেশ্য হলো ন্যায্য মূল্যে সেরা মানের পণ্য গ্রাহকদের হাতে তুলে দেওয়া এবং তাদের অনলাইন কেনাকাটার অভিজ্ঞতাকে আরও সহজ ও আনন্দদায়ক করে তোলা।',
                     'founder-name': 'MD EOUSUF ALI', 'founder-title': 'Managing Director, TangailBuzz', 'modal-specs-title': 'বিস্তারিত তথ্য', 'modal-rating-text': 'রেটিং',
-                    'footer-desc': 'বাংলাদেশের সেরা ই-কমার্স প্ল্যাটফর্ম। আপনার প্রয়োজনীয় সবকিছু এক জায়গায়।', 'footer-links-title': 'দ্রুত লিঙ্ক',
+                    'footer-desc': 'বাংলাদেশের সেরা ই-কমার্স প্ল্যাটফর্ম। আপনার প্রয়োজনীয় সবকিছু এক জায়গায়।', 'footer-links-title': 'দ্রুত লিঙ্ক',
                     'footer-contact-title': 'যোগাযোগ', 'location': 'টাঙ্গাইল, বাংলাদেশ', 'footer-copyright': '© ২০২৫ TangailBuzz - সকল অধিকার সংরক্ষিত',
-                    'auth-login-tab': 'লগইন', 'auth-register-tab': 'রেজিস্টার', 'login-title': 'আপনার একাউন্টে লগইন করুন', 'email-label': 'ইমেইল', 'password-label': 'পাসওয়ার্ড',
-                    'login-btn': 'লগইন', 'forgot-password-link': 'পাসওয়ার্ড ভুলে গেছেন?', 'register-title': 'নতুন একাউন্ট তৈরি করুন', 'register-btn': 'রেজিস্টার',
-                    'google-login-btn': 'গুগল দিয়ে লগইন করুন', 'forgot-password-title': 'পাসওয়ার্ড রিসেট', 'reset-password-btn': 'রিসেট লিঙ্ক পাঠান',
+                    'auth-login-tab': 'লগইন', 'auth-register-tab': 'রেজিস্টার', 'login-title': 'আপনার একাউন্টে লগইন করুন', 'email-label': 'ইমেইল', 'password-label': 'পাসওয়ার্ড',
+                    'login-btn': 'লগইন', 'forgot-password-link': 'পাসওয়ার্ড ভুলে গেছেন?', 'register-title': 'নতুন একাউন্ট তৈরি করুন', 'register-btn': 'রেজিস্টার',
+                    'google-login-btn': 'গুগল দিয়ে লগইন করুন', 'forgot-password-title': 'পাসওয়ার্ড রিসেট', 'reset-password-btn': 'রিসেট লিঙ্ক পাঠান',
                     'back-to-login-link': '« লগইনে ফিরে যান', 'manage-address': 'ঠিকানা পরিচালনা করুন', 'logout': 'লগআউট', 'address-title': 'আমার ডিফল্ট ঠিকানা',
                     'address-line1-label': 'ঠিকানা', 'address-city-label': 'শহর', 'address-postal-label': 'পোস্টাল কোড', 'save-address-btn': 'ঠিকানা সংরক্ষণ করুন',
                     'back-to-account-link': '« একাউন্টে ফিরে যান', 'user-greeting': 'স্বাগতম,', 'my-account-title': 'আমার একাউন্ট', 'name-label': 'নাম',
-                    'mobile-label': 'মোবাইল', 'address-label': 'ঠিকানা', 'retype-password-label': 'পুনরায় পাসওয়ার্ড দিন', 'password-mismatch': 'পাসওয়ার্ড মেলেনি!',
-                    'password-reset-success': 'পাসওয়ার্ড রিসেট লিঙ্ক পাঠানো হয়েছে! আপনার ইমেইল ইনবক্স বা স্প্যাম ফোল্ডার চেক করুন।', 'cart-title': 'আপনার শপিং কার্ট',
+                    'mobile-label': 'মোবাইল', 'address-label': 'ঠিকানা', 'retype-password-label': 'পুনরায় পাসওয়ার্ড দিন', 'password-mismatch': 'পাসওয়ার্ড মেলেনি!',
+                    'password-reset-success': 'পাসওয়ার্ড রিসেট লিঙ্ক পাঠানো হয়েছে! আপনার ইমেইল ইনবক্স বা স্প্যাম ফোল্ডার চেক করুন।', 'cart-title': 'আপনার শপিং কার্ট',
                     'empty-cart': 'আপনার কার্ট খালি।', 'total-price': 'সর্বমোট:', 'checkout': 'চেকআউট', 'payment-title': 'পেমেন্ট পদ্ধতি নির্বাচন করুন',
-                    'payment-card': 'কার্ড', 'payment-mobile': 'মোবাইল ব্যাংকিং', 'cod': 'ক্যাশ অন ডেলিভারি', 'confirm-order-btn': 'অর্ডার নিশ্চিত করুন', 'order-success': 'আপনার অর্ডারটি সফলভাবে সম্পন্ন হয়েছে!',
-                    'order-success-msg': 'আমরা আপনার অর্ডারটি গ্রহণ করেছি। একটি কনফার্মেশন ইমেইল পাঠানো হয়েছে।', 'subtotal': 'সাবটোটাল:', 'delivery-charge': 'ডেলিভারি চার্জ:',
+                    'payment-card': 'কার্ড', 'payment-mobile': 'মোবাইল ব্যাংকিং', 'cod': 'ক্যাশ অন ডেলিভারি', 'confirm-order-btn': 'অর্ডার নিশ্চিত করুন', 'order-success': 'আপনার অর্ডারটি সফলভাবে সম্পন্ন হয়েছে!',
+                    'order-success-msg': 'আমরা আপনার অর্ডারটি গ্রহণ করেছি। একটি কনফার্মেশন ইমেইল পাঠানো হয়েছে।', 'subtotal': 'সাবটোটাল:', 'delivery-charge': 'ডেলিভারি চার্জ:',
                     'card-name-label': 'কার্ডে থাকা নাম', 'change-mobile': 'মোবাইল নম্বর পরিবর্তন করুন', 'mobile-title': 'মোবাইল নম্বর পরিবর্তন', 'save-mobile-btn': 'সংরক্ষণ করুন',
-                    'delete-account': 'একাউন্ট মুছে ফেলুন', 'account-deleted': 'আপনার একাউন্ট সফলভাবে মুছে ফেলা হয়েছে।'
+                    'delete-account': 'একাউন্ট মুছে ফেলুন', 'account-deleted': 'আপনার একাউন্ট সফলভাবে মুছে ফেলা হয়েছে।',
+                    'order-history': 'অর্ডার ইতিহাস', 'order-history-title': 'আমার অর্ডারসমূহ', 'invoice-btn': 'ইনভয়েস ডাউনলোড', 'no-orders': 'এখনও কোনো অর্ডার করা হয়নি।',
+                    'confirm-title': 'নিশ্চিত করুন', 'confirm-yes': 'হ্যাঁ', 'confirm-no': 'না', 'confirm-delete': 'আপনি কি নিশ্চিতভাবে আপনার একাউন্ট মুছে ফেলতে চান? এই কাজটি আর ফেরানো যাবে না।',
+                    'processing-btn': 'প্রসেস হচ্ছে...', 'name-not-found': 'নাম পাওয়া যায়নি', 'no-description': 'কোনো বিবরণ নেই',
                 },
                 'en': {
                     'nav-home': 'Home', 'nav-products': 'Products', 'nav-offer': 'Offers', 'nav-about': 'About Us', 'search-placeholder': 'Search products...',
                     'showcase-h1': 'Welcome to TangailBuzz', 'showcase-p': 'The best e-commerce platform in Bangladesh. Everything you need in one place.',
                     'cta-button': 'Start Shopping', 'categories-h2': 'Our Categories', 'cat-all': 'All Products', 'cat-electronics': 'Electronics',
                     'cat-fashion': 'Fashion', 'cat-cosmetics': 'Cosmetics', 'cat-household': 'Household', 'cat-toys': 'Toys', 'cat-books': 'Books',
-                    'tag-offer': 'Offer', 'tag-available': 'AVAILABLE', 'tag-unofficial': 'UNOFFICIAL', 'brand': 'Brand', 'category': 'Category',
-                     'product-id': 'Product ID',
-                    'product-name-s23': 'Samsung Galaxy S23 Ultra', 'product-name-kurti': 'Women\'s Cotton Kurti', 'product-name-serum': 'Skincare Facial Serum',
-                    'product-name-drone': 'Remote Control Drone', 'product-name-tshirt': 'Men\'s Premium T-Shirt', 'product-name-lipstick': 'Matte Lipstick Set (4pcs)',
-                    'product-name-lego': 'LEGO City Police Station', 'product-name-ps5': 'Sony PlayStation 5 Gaming Console', 'product-name-books': 'Humayun Ahmed Collection',
-                    'product-name-dinnerset': 'Royal Dinner Set', 'product-name-cooker': 'Pressure Cooker', 'btn-details': 'Details', 'btn-add-cart': 'Add to Cart',
-                    'about-h2': 'Our Journey', 'about-p1': 'TangailBuzz started its journey in 2023. Our goal was to bring the traditional and modern products of Tangail to people all over Bangladesh. In a very short time, we have been able to earn the trust of our customers.',
+                    'tag-offer': 'Offer', 'off-text': 'Off', 'tag-available': 'AVAILABLE', 'tag-unofficial': 'UNOFFICIAL', 'brand': 'Brand', 'category': 'Category',
+                     'product-id': 'Product ID', 'btn-details': 'Details', 'btn-add-cart': 'Add to Cart', 'about-h2': 'Our Journey', 
+                    'about-p1': 'TangailBuzz started its journey in 2023. Our goal was to bring the traditional and modern products of Tangail to people all over Bangladesh. In a very short time, we have been able to earn the trust of our customers.',
                     'about-p2': 'We supply everything from electronics, clothing, sarees, cosmetics to necessary household items. Our main objective is to deliver the best quality products at fair prices to customers and to make their online shopping experience easier and more enjoyable.',
                     'founder-name': 'MD EOUSUF ALI', 'founder-title': 'Managing Director, TangailBuzz', 'modal-specs-title': 'Specifications', 'modal-rating-text': 'Ratings',
                     'footer-desc': 'The best e-commerce platform in Bangladesh. Everything you need in one place.', 'footer-links-title': 'Quick Links',
@@ -1822,7 +1735,10 @@
                     'payment-card': 'Card', 'payment-mobile': 'Mobile Banking', 'cod': 'Cash on Delivery', 'confirm-order-btn': 'Confirm Order', 'order-success': 'Your order has been placed successfully!',
                     'order-success-msg': 'We have received your order. A confirmation email has been sent.', 'subtotal': 'Subtotal:', 'delivery-charge': 'Delivery Charge:',
                     'card-name-label': 'Name on Card', 'change-mobile': 'Change Mobile Number', 'mobile-title': 'Change Mobile Number', 'save-mobile-btn': 'Save',
-                    'delete-account': 'Delete Account', 'account-deleted': 'Your account has been successfully deleted.'
+                    'delete-account': 'Delete Account', 'account-deleted': 'Your account has been successfully deleted.',
+                    'order-history': 'Order History', 'order-history-title': 'My Orders', 'invoice-btn': 'Download Invoice', 'no-orders': 'You have not placed any orders yet.',
+                    'confirm-title': 'Confirm Action', 'confirm-yes': 'Yes', 'confirm-no': 'Cancel', 'confirm-delete': 'Are you sure you want to delete your account? This action cannot be undone.',
+                    'processing-btn': 'Processing...', 'name-not-found': 'Name Not Found', 'no-description': 'No description available',
                 }
             };
             
@@ -1835,6 +1751,7 @@
 
             const bengaliDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
             function formatPrice(price, lang) {
+                if (price === undefined || price === null) return '';
                 const number = parseInt(price);
                 const formattedNumber = number.toLocaleString('en-IN'); // For comma style like 1,05,000
                 if (lang === 'bn') {
@@ -1847,7 +1764,7 @@
                 document.querySelectorAll('[data-lang-key]').forEach(element => {
                     const key = element.getAttribute('data-lang-key');
                     if (translations[lang] && translations[lang][key]) {
-                        if (element.tagName === 'INPUT' && element.type === 'text') {
+                        if (element.tagName === 'INPUT' && (element.type === 'text' || element.type === 'email' || element.type === 'password' || element.type === 'tel')) {
                              element.placeholder = translations[lang][key];
                         } else {
                             element.textContent = translations[lang][key];
@@ -1855,18 +1772,17 @@
                     }
                 });
                 
-                document.querySelectorAll('.current-price, .old-price').forEach(priceEl => {
-                    const priceValue = priceEl.dataset.price || priceEl.dataset.priceOld;
-                    if(priceValue) {
-                        priceEl.textContent = formatPrice(priceValue, lang);
-                    }
-                });
                 updateCartUI();
 
                 body.classList.toggle('lang-en', lang === 'en');
                 const selectedOption = dropdown.querySelector(`.lang-option[data-lang="${lang}"]`);
                 if(selectedOption) selectedLangBtn.innerHTML = selectedOption.innerHTML;
                 localStorage.setItem('language', lang);
+                // Also update the dynamically rendered products if they exist
+                if(allProducts.length > 0) {
+                    renderProducts(allProducts);
+                    filterAndSearchProducts();
+                }
             }
             
             selectedLangBtn.addEventListener('click', () => dropdown.classList.toggle('open'));
@@ -1921,16 +1837,15 @@
             navOffer.addEventListener('click', () => {
                 showMainContent();
                 filterButtons.forEach(btn => btn.classList.remove('active'));
-                productCards.forEach(card => {
-                    card.style.display = card.querySelector('.offer-tag') ? 'flex' : 'none';
-                });
+                const filtered = allProducts.filter(p => (p.offerPrice && p.offerPrice < p.price) || p.hasOffer || p.offerTag);
+                renderProducts(filtered);
+
                 const target = document.getElementById('categories');
                 if(target) window.scrollTo({ top: target.offsetTop - 70, behavior: 'smooth' });
             });
 
             // Search and Filter Logic
             const filterButtons = document.querySelectorAll('.filter-btn');
-            const productCards = document.querySelectorAll('.product-card');
             const searchInput = document.getElementById('searchInput');
 
             function filterAndSearchProducts() {
@@ -1938,18 +1853,19 @@
                 const activeFilterBtn = document.querySelector('.filter-btn.active');
                 if (!activeFilterBtn) return;
                 const activeFilter = activeFilterBtn.getAttribute('data-filter');
+                const currentLang = localStorage.getItem('language') || 'bn';
 
-                productCards.forEach(card => {
-                    const cardCategory = card.getAttribute('data-category');
-                    const productNameKey = card.querySelector('h3').dataset.langKey;
-                    const currentLang = localStorage.getItem('language') || 'bn';
-                    const productName = translations[currentLang][productNameKey]?.toLowerCase() || '';
-
-                    const categoryMatch = (activeFilter === 'all' || activeFilter === cardCategory);
+                const filteredProducts = allProducts.filter(product => {
+                    const nameBN = product.productNameBn || product.productNameBengali || (product.name && product.name.bn) || translations[currentLang]['name-not-found'];
+                    const nameEN = product.productNameEn || product.productNameEnglish || (product.name && product.name.en) || translations[currentLang]['name-not-found'];
+                    const productName = (currentLang === 'bn' ? nameBN : nameEN).toLowerCase();
+                    
+                    const categoryMatch = (activeFilter === 'all' || activeFilter === (product.category || "").toLowerCase());
                     const searchMatch = productName.includes(searchQuery);
 
-                    card.style.display = (categoryMatch && searchMatch) ? 'flex' : 'none';
+                    return categoryMatch && searchMatch;
                 });
+                renderProducts(filteredProducts);
             }
             filterButtons.forEach(button => button.addEventListener('click', function () {
                 filterButtons.forEach(btn => btn.classList.remove('active'));
@@ -1973,67 +1889,79 @@
                 return `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>`;
             }
 
-            document.querySelectorAll('.btn-details').forEach(button => {
-                button.addEventListener('click', function() {
-                    const card = this.closest('.product-card');
-                    if (!card) return;
-                    
-                    const currentLang = localStorage.getItem('language') || 'bn';
-                    const nameKey = card.querySelector('h3').dataset.langKey;
-                    const name = translations[currentLang][nameKey];
-                    const price = card.querySelector('.current-price').textContent;
-                    const productId = card.dataset.productId;
-                    const brand = card.dataset[`brand-${currentLang}`];
-                    const categoryKey = card.dataset.category;
-                    const category = translations[currentLang][`cat-${categoryKey}`];
-                    const description = card.getAttribute(`data-description-${currentLang}`) || "";
-                    const rating = parseFloat(card.dataset.rating) || 0;
-                    const specs = JSON.parse(card.getAttribute(`data-specs-${currentLang}`) || '{}');
-                    const mainImage = card.dataset.imgMain;
-                    const thumbnails = [card.dataset.imgThumb1, card.dataset.imgThumb2, card.dataset.imgThumb3].filter(Boolean);
-                    
-                    document.getElementById('modal-product-id').textContent = productId;
-                    document.getElementById('modal-product-name').textContent = name;
-                    document.getElementById('modal-product-name').dataset.langKey = nameKey;
-                    document.getElementById('modal-product-price').textContent = price;
-                    document.getElementById('modal-brand').textContent = brand || '-';
-                    document.getElementById('modal-category').textContent = category || '-';
-                    document.querySelector('.modal-meta-info').style.display = brand ? 'block' : 'none';
-                    document.querySelector('.modal-tags').style.display = nameKey === 'product-name-s23' ? 'flex' : 'none';
-                    document.getElementById('modal-product-description').textContent = description;
-                    
-                    const ratingTextKey = 'modal-rating-text';
-                    document.getElementById('modal-rating-text').textContent = `(${rating} ${translations[currentLang][ratingTextKey]})`;
-                    
-                    const specList = document.getElementById('modal-spec-list');
-                    specList.innerHTML = '';
-                    for (const key in specs) {
-                        specList.innerHTML += `<li><div class="spec-icon">${getSpecIcon(key)}</div><div class="spec-text"><span class="spec-key">${key}</span><span class="spec-value">${specs[key]}</span></div></li>`;
+            function openProductModal(productId) {
+                const product = allProducts.find(p => p.id === productId);
+                if (!product) return;
+
+                const currentLang = localStorage.getItem('language') || 'bn';
+                
+                const nameBN = product.productNameBn || product.productNameBengali || (product.name && product.name.bn) || translations[currentLang]['name-not-found'];
+                const nameEN = product.productNameEn || product.productNameEnglish || (product.name && product.name.en) || translations[currentLang]['name-not-found'];
+                const name = currentLang === 'bn' ? nameBN : nameEN;
+
+                const price = formatPrice(product.offerPrice || product.price, currentLang);
+                
+                const brandBN = product.brandBengali || (product.brand && product.brand.bn);
+                const brandEN = product.brandEnglish || (product.brand && product.brand.en);
+                const brand = (currentLang === 'bn' ? brandBN : brandEN) || 'N/A';
+
+                const descBN = product.descriptionBengali || (product.description && product.description.bn);
+                const descEN = product.descriptionEnglish || (product.description && product.description.en);
+                const description = (currentLang === 'bn' ? descBN : descEN) || translations[currentLang]['no-description'];
+                
+                
+                let specs = {};
+                if (product.sizes && Array.isArray(product.sizes)) {
+                    const sizesKey = currentLang === 'bn' ? 'সাইজ' : 'Sizes';
+                    specs[sizesKey] = product.sizes.join(', ');
+                } 
+                
+                const categoryKey = (product.category || "").toLowerCase();
+                const category = translations[currentLang][`cat-${categoryKey}`] || product.category;
+                const rating = parseFloat(product.rating) || 0;
+                const mainImage = product.mainImageURL || (product.img && product.img.main) || 'https://placehold.co/400x400/F0F0F0/333?text=Image+Not+Found';
+                const thumbnails = (product.img) ? [product.img.thumb1, product.img.thumb2, product.img.thumb3].filter(Boolean) : [];
+                
+                document.getElementById('modal-product-id').textContent = product.id;
+                document.getElementById('modal-product-name').textContent = name;
+                document.getElementById('modal-product-price').textContent = price;
+                document.getElementById('modal-brand').textContent = brand;
+                document.getElementById('modal-category').textContent = category;
+                document.getElementById('modal-product-description').textContent = description;
+                
+                const ratingTextKey = 'modal-rating-text';
+                document.getElementById('modal-rating-text').textContent = `(${rating} ${translations[currentLang][ratingTextKey]})`;
+                
+                const specList = document.getElementById('modal-spec-list');
+                specList.innerHTML = '';
+                for (const key in specs) {
+                    specList.innerHTML += `<li><div class="spec-icon">${getSpecIcon(key)}</div><div class="spec-text"><span class="spec-key">${key}</span><span class="spec-value">${specs[key]}</span></div></li>`;
+                }
+
+                const mainImageEl = document.getElementById('modal-main-image');
+                mainImageEl.src = mainImage;
+                const thumbnailsContainer = document.getElementById('modal-thumbnails');
+                thumbnailsContainer.innerHTML = '';
+                
+                const allDisplayImages = [mainImage, ...thumbnails];
+
+                allDisplayImages.forEach((imgSrc, index) => {
+                    if(imgSrc) {
+                        const img = document.createElement('img');
+                        img.src = imgSrc;
+                        img.addEventListener('click', () => {
+                            mainImageEl.src = imgSrc;
+                            thumbnailsContainer.querySelectorAll('img').forEach(i => i.classList.remove('active'));
+                            img.classList.add('active');
+                        });
+                        if (index === 0) img.classList.add('active');
+                        thumbnailsContainer.appendChild(img);
                     }
-
-                    const mainImageEl = document.getElementById('modal-main-image');
-                    mainImageEl.src = mainImage || card.querySelector('img').src;
-                    const thumbnailsContainer = document.getElementById('modal-thumbnails');
-                    thumbnailsContainer.innerHTML = '';
-                    [mainImage, ...thumbnails].forEach((imgSrc, index) => {
-                        if(imgSrc) {
-                            const img = document.createElement('img');
-                            img.src = imgSrc;
-                            img.addEventListener('click', () => {
-                                mainImageEl.src = imgSrc;
-                                thumbnailsContainer.querySelectorAll('img').forEach(i => i.classList.remove('active'));
-                                img.classList.add('active');
-                            });
-                            if (index === 0) img.classList.add('active');
-                            thumbnailsContainer.appendChild(img);
-                        }
-                    });
-                     // Set product ID on modal add to cart button
-                    document.getElementById('modal-add-to-cart-btn').dataset.productId = card.dataset.productId;
-
-                    modalOverlay.classList.add('visible');
                 });
-            });
+                
+                document.getElementById('modal-add-to-cart-btn').dataset.productId = product.id;
+                modalOverlay.classList.add('visible');
+            }
 
             function closeModal(modalId) {
                 document.getElementById(modalId).classList.remove('visible');
@@ -2071,14 +1999,16 @@
             document.getElementById('back-to-login').addEventListener('click', () => showView('login-register-view'));
             document.getElementById('manage-address-btn').addEventListener('click', () => showView('address-view'));
             document.getElementById('change-mobile-btn').addEventListener('click', () => showView('mobile-view'));
+            document.getElementById('order-history-btn').addEventListener('click', () => showView('order-history-view'));
             document.getElementById('back-to-account').addEventListener('click', () => showView('account-view'));
             document.getElementById('back-to-account-from-mobile').addEventListener('click', () => showView('account-view'));
+            document.getElementById('back-to-account-from-history').addEventListener('click', () => showView('account-view'));
 
 
             const authMessageContainer = document.getElementById('auth-message-container');
-            const showAuthMessage = (message, isError = false) => {
+            const showAuthMessage = (messageKey, isError = false, rawMessage = '') => {
                 const currentLang = localStorage.getItem('language') || 'bn';
-                authMessageContainer.textContent = translations[currentLang][message] || message;
+                authMessageContainer.textContent = translations[currentLang][messageKey] || rawMessage || messageKey;
                 authMessageContainer.className = `auth-message ${isError ? 'error' : 'success'}`;
                 setTimeout(() => authMessageContainer.textContent = '', 4000);
             };
@@ -2120,7 +2050,7 @@
                     closeModal('auth-modal-overlay');
 
                 } catch (error) {
-                    showAuthMessage(error.message, true);
+                    showAuthMessage(null, true, error.message);
                 }
             });
 
@@ -2133,15 +2063,26 @@
                         showAuthMessage('Login successful!');
                         closeModal('auth-modal-overlay');
                     })
-                    .catch(error => showAuthMessage(error.message, true));
+                    .catch(error => showAuthMessage(null, true, error.message));
             });
 
             document.getElementById('google-signin-btn').addEventListener('click', () => {
                 signInWithPopup(auth, googleProvider)
-                    .then(result => {
+                    .then(async (result) => {
+                        const user = result.user;
+                        const userDocRef = doc(db, "users", user.uid);
+                        const docSnap = await getDoc(userDocRef);
+                        if (!docSnap.exists()) {
+                            await setDoc(userDocRef, {
+                                name: user.displayName,
+                                email: user.email,
+                                mobile: user.phoneNumber || '',
+                                address: { line1: '', city: '', postal: '' }
+                            });
+                        }
                         showAuthMessage('Google sign-in successful!');
                         closeModal('auth-modal-overlay');
-                    }).catch(error => showAuthMessage(error.message, true));
+                    }).catch(error => showAuthMessage(null, true, error.message));
             });
             
             document.getElementById('forgot-password-form').addEventListener('submit', (e) => {
@@ -2152,49 +2093,87 @@
                         showAuthMessage('password-reset-success');
                         showView('login-register-view');
                     })
-                    .catch(error => showAuthMessage(error.message, true));
+                    .catch(error => showAuthMessage(null, true, error.message));
             });
 
             document.getElementById('logout-btn').addEventListener('click', () => {
                 signOut(auth).then(() => {
                     showAuthMessage('Logged out successfully.');
                     closeModal('auth-modal-overlay');
-                }).catch(error => showAuthMessage(error.message, true));
+                }).catch(error => showAuthMessage(null, true, error.message));
             });
             
-            document.getElementById('delete-account-btn').addEventListener('click', async () => {
+            // Confirmation Modal Logic
+            const confirmationModal = document.getElementById('confirmation-modal-overlay');
+            const confirmationMessage = document.getElementById('confirmation-message');
+            const confirmYesBtn = document.getElementById('confirm-yes-btn');
+            const confirmNoBtn = document.getElementById('confirm-no-btn');
+            let confirmCallback = null;
+
+            function showConfirmationModal(messageKey, onConfirm) {
+                const currentLang = localStorage.getItem('language') || 'bn';
+                confirmationMessage.textContent = translations[currentLang][messageKey] || messageKey;
+                confirmCallback = onConfirm;
+                confirmationModal.classList.add('visible');
+            }
+
+            confirmYesBtn.addEventListener('click', () => {
+                if (confirmCallback) {
+                    confirmCallback();
+                }
+                confirmationModal.classList.remove('visible');
+            });
+
+            confirmNoBtn.addEventListener('click', () => confirmationModal.classList.remove('visible'));
+            confirmationModal.addEventListener('click', e => { if (e.target === confirmationModal) confirmationModal.classList.remove('visible'); });
+
+            document.getElementById('delete-account-btn').addEventListener('click', () => {
                 const user = auth.currentUser;
                 if (user) {
-                     try {
-                        const userDocRef = doc(db, "users", user.uid);
-                        await deleteDoc(userDocRef);
-                        await deleteUser(user);
-                        showAuthMessage('account-deleted');
-                        closeModal('auth-modal-overlay');
-                    } catch (error) {
-                        console.error("Error deleting account: ", error);
-                        showAuthMessage(error.message, true);
-                    }
+                    showConfirmationModal('confirm-delete', async () => {
+                        try {
+                            const userDocRef = doc(db, "users", user.uid);
+                            // Also delete user's orders
+                            const ordersQuery = query(collection(db, "orders"), where("userId", "==", user.uid));
+                            const ordersSnapshot = await getDocs(ordersQuery);
+                            const deletePromises = ordersSnapshot.docs.map(orderDoc => deleteDoc(orderDoc.ref));
+                            await Promise.all(deletePromises);
+
+                            // Delete user document and auth user
+                            await deleteDoc(userDocRef);
+                            await deleteUser(user);
+                            showAuthMessage('account-deleted');
+                            closeModal('auth-modal-overlay');
+                        } catch (error) {
+                            console.error("Error deleting account: ", error);
+                            showAuthMessage(null, true, "Error: " + error.message);
+                        }
+                    });
                 }
             });
 
+
             // Auth State Change Handler
+            let unsubscribeOrders = null;
             onAuthStateChanged(auth, async (user) => {
                 if (user) {
                     showView('account-view');
-                     const userDocRef = doc(db, "users", user.uid);
-                     const docSnap = await getDoc(userDocRef);
-                     let name = user.email;
-                     if (docSnap.exists() && docSnap.data().name) {
-                         name = docSnap.data().name;
-                     } else if (user.displayName) {
-                         name = user.displayName;
-                     }
+                      const userDocRef = doc(db, "users", user.uid);
+                      const docSnap = await getDoc(userDocRef);
+                      let name = user.email;
+                      if (docSnap.exists() && docSnap.data().name) {
+                          name = docSnap.data().name;
+                      } else if (user.displayName) {
+                          name = user.displayName;
+                      }
                     document.getElementById('user-greeting').textContent = `${translations[localStorage.getItem('language') || 'bn']['user-greeting']} ${name}`;
                     await loadAddress(user.uid);
                     await loadMobile(user.uid);
+                    if (unsubscribeOrders) unsubscribeOrders(); // Unsubscribe from previous listener
+                    listenToOrders(user.uid);
                 } else {
                     showView('login-register-view');
+                    if (unsubscribeOrders) unsubscribeOrders(); // Unsubscribe on logout
                      // Reset to login tab
                     document.querySelector('.auth-tab[data-tab="login"]').click();
                 }
@@ -2261,15 +2240,15 @@
             }
 
              async function loadMobile(userId) {
-                try {
-                    const userDocRef = doc(db, "users", userId);
-                    const docSnap = await getDoc(userDocRef);
-                    if (docSnap.exists() && docSnap.data().mobile) {
-                        document.getElementById('mobile-number').value = docSnap.data().mobile;
-                    }
-                } catch(e) {
-                     console.error("Could not load mobile number.");
-                }
+                 try {
+                     const userDocRef = doc(db, "users", userId);
+                     const docSnap = await getDoc(userDocRef);
+                     if (docSnap.exists() && docSnap.data().mobile) {
+                         document.getElementById('mobile-number').value = docSnap.data().mobile;
+                     }
+                 } catch(e) {
+                      console.error("Could not load mobile number.");
+                 }
             }
 
             mobileForm.addEventListener('submit', (e) => {
@@ -2301,35 +2280,34 @@
                 updateCartUI();
             }
 
-            function addToCart(productId, langKey, price, img) {
+            function addToCart(productId) {
+                 const product = allProducts.find(p => p.id === productId);
+                 if(!product) return;
                  const existingItem = cart.find(item => item.id === productId);
-                if (existingItem) {
-                    existingItem.quantity++;
-                } else {
-                    cart.push({ id: productId, langKey: langKey, price: parseInt(price), quantity: 1, img: img });
-                }
-                saveCart();
+                 const imgSrc = product.mainImageURL || (product.img && product.img.main) || 'https://placehold.co/300x200/F0F0F0/333?text=Image+Not+Found';
+                 
+                 const nameBN = product.productNameBn || product.productNameBengali || (product.name && product.name.bn) || 'প্রোডাক্ট';
+                 const nameEN = product.productNameEn || product.productNameEnglish || (product.name && product.name.en) || 'Product';
+                 const price = parseInt(product.offerPrice || product.price);
+
+                 if (existingItem) {
+                     existingItem.quantity++;
+                 } else {
+                     cart.push({ 
+                         id: productId,
+                         nameEN: nameEN,
+                         nameBN: nameBN,
+                         price: price, 
+                         quantity: 1, 
+                         img: imgSrc
+                    });
+                 }
+                 saveCart();
             }
             
-            document.querySelectorAll('.product-card .btn-add-cart').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const card = e.target.closest('.product-card');
-                    if (!card) return;
-                    const productId = card.dataset.productId;
-                    const langKey = card.querySelector('h3').dataset.langKey;
-                    const price = card.querySelector('.current-price').dataset.price;
-                    const img = card.querySelector('img').src;
-                    addToCart(productId, langKey, price, img);
-                });
-            });
-
             document.getElementById('modal-add-to-cart-btn').addEventListener('click', (e) => {
                  const productId = e.target.dataset.productId;
-                 const langKey = document.getElementById('modal-product-name').dataset.langKey;
-                 const card = document.querySelector(`.product-card[data-product-id="${productId}"]`);
-                 const price = card.querySelector('.current-price').dataset.price;
-                 const img = card.querySelector('img').src;
-                 addToCart(productId, langKey, price, img);
+                 addToCart(productId);
                  closeModal('product-details-modal');
             });
             
@@ -2360,18 +2338,18 @@
                     emptyCartMessage.style.display = 'none';
                     cartFooter.style.display = 'block';
                     cartItemsList.innerHTML = cart.map(item => {
-                        const name = translations[currentLang][item.langKey] || 'Unknown Product';
+                        const name = currentLang === 'bn' ? item.nameBN : item.nameEN;
                         const price = formatPrice(item.price * item.quantity, currentLang);
                         return `
                             <div class="cart-item">
                                 <img src="${item.img}" alt="${name}">
                                 <div class="cart-item-details">
                                     <strong>${name}</strong>
-                                     <div class="cart-item-quantity">
-                                        <button class="quantity-btn" data-id="${item.id}" data-action="decrease">-</button>
-                                        <span>${item.quantity}</span>
-                                        <button class="quantity-btn" data-id="${item.id}" data-action="increase">+</button>
-                                    </div>
+                                      <div class="cart-item-quantity">
+                                           <button class="quantity-btn" data-id="${item.id}" data-action="decrease">-</button>
+                                           <span>${item.quantity}</span>
+                                           <button class="quantity-btn" data-id="${item.id}" data-action="increase">+</button>
+                                       </div>
                                 </div>
                                 <span>${price}</span>
                                 <span class="cart-item-remove" data-id="${item.id}">&times;</span>
@@ -2427,12 +2405,35 @@
                     updateCartQuantity(e.target.dataset.id, e.target.dataset.action);
                 }
             });
+            
+            cartBtn.addEventListener('click', () => {
+                cartModal.classList.add('visible');
+                // If user is logged in, show order history tab by default if cart is empty
+                if (auth.currentUser && cart.length === 0) {
+                    document.querySelector('#cart-modal-overlay .auth-tab[data-tab="order-history"]').click();
+                } else {
+                     document.querySelector('#cart-modal-overlay .auth-tab[data-tab="shopping-cart"]').click();
+                }
+            });
 
-            cartBtn.addEventListener('click', () => cartModal.classList.add('visible'));
             cartModalClose.addEventListener('click', () => closeModal('cart-modal-overlay'));
             cartModal.addEventListener('click', e => { if(e.target === cartModal) closeModal('cart-modal-overlay'); });
 
-            // Checkout Logic
+             // Tab switching for Cart Modal
+            document.querySelectorAll('#cart-modal-overlay .auth-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('#cart-modal-overlay .auth-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    document.getElementById('shopping-cart-view').style.display = tab.dataset.tab === 'shopping-cart' ? 'block' : 'none';
+                    document.getElementById('order-history-cart-view').style.display = tab.dataset.tab === 'order-history' ? 'block' : 'none';
+                    if (tab.dataset.tab === 'order-history' && !auth.currentUser) {
+                         document.getElementById('orders-list-cart').innerHTML = `<p>Please login to see your orders.</p>`;
+                    }
+                });
+            });
+
+
+            // Checkout and Order History Logic
             const paymentModal = document.getElementById('payment-modal-overlay');
             const paymentModalClose = document.getElementById('payment-modal-close');
             const confirmOrderBtn = document.getElementById('confirm-order-btn');
@@ -2442,6 +2443,10 @@
             checkoutBtn.addEventListener('click', () => {
                 if (auth.currentUser) {
                     closeModal('cart-modal-overlay');
+                    // Activate COD by default
+                    document.querySelectorAll('.payment-option').forEach(o => o.classList.remove('active'));
+                    const codOption = document.querySelector('.payment-option[data-method="cod"]');
+                    if (codOption) codOption.classList.add('active');
                     paymentModal.classList.add('visible');
                 } else {
                     closeModal('cart-modal-overlay');
@@ -2461,79 +2466,295 @@
                     opt.classList.add('active');
                 });
             });
+            
+            function generateInvoice(orderData) {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(20);
+                doc.text("TangailBuzz", 14, 22);
+
+                doc.setFontSize(10);
+                doc.setFont('helvetica', 'normal');
+                doc.text(`Invoice for Order: #${orderData.id.substring(0, 8)}`, 14, 30);
+                doc.text(`Date: ${orderData.createdAt.toDate().toLocaleDateString()}`, 14, 35);
+                
+                doc.text(`Bill To:`, 14, 45);
+                doc.text(orderData.userName, 14, 50);
+                doc.text(orderData.shippingAddress.line1, 14, 55);
+                doc.text(`${orderData.shippingAddress.city}, ${orderData.shippingAddress.postal}`, 14, 60);
+
+                const tableColumn = ["Item", "Quantity", "Unit Price", "Total"];
+                const tableRows = [];
+
+                orderData.items.forEach(item => {
+                    const itemData = [
+                        item.name,
+                        item.quantity,
+                        formatPrice(item.price, 'en'),
+                        formatPrice(item.price * item.quantity, 'en')
+                    ];
+                    tableRows.push(itemData);
+                });
+
+                doc.autoTable({
+                    startY: 70,
+                    head: [tableColumn],
+                    body: tableRows,
+                    theme: 'striped',
+                    headStyles: { fillColor: [233, 75, 98] } // primary color
+                });
+                
+                const finalY = doc.autoTable.previous.finalY;
+                doc.setFontSize(10);
+                doc.text(`Subtotal: ${formatPrice(orderData.subtotal, 'en')}`, 14, finalY + 10);
+                doc.text(`Delivery Charge: ${formatPrice(orderData.deliveryCharge, 'en')}`, 14, finalY + 15);
+                doc.setFont('helvetica', 'bold');
+                doc.text(`Total: ${formatPrice(orderData.totalPrice, 'en')}`, 14, finalY + 20);
+                doc.setFont('helvetica', 'normal');
+                doc.text(`Payment Method: ${orderData.paymentMethod}`, 14, finalY + 25);
+
+                doc.save(`TangailBuzz-Invoice-${orderData.id.substring(0,8)}.pdf`);
+            }
+
+            function listenToOrders(userId) {
+                const ordersRef = collection(db, "orders");
+                const q = query(ordersRef, where("userId", "==", userId));
+
+                unsubscribeOrders = onSnapshot(q, (snapshot) => {
+                    const orders = [];
+                    snapshot.forEach(doc => {
+                        orders.push({ id: doc.id, ...doc.data() });
+                    });
+                    
+                    orders.sort((a, b) => {
+                        const dateA = a.createdAt?.toDate() || 0;
+                        const dateB = b.createdAt?.toDate() || 0;
+                        return dateB - dateA; // Descending order
+                    });
+
+                    renderOrders(orders);
+                });
+            }
+
+            function renderOrders(orders) {
+                 const currentLang = localStorage.getItem('language') || 'bn';
+                 const ordersListCart = document.getElementById('orders-list-cart');
+                 const ordersListAccount = document.getElementById('orders-list');
+                 
+                if(orders.length === 0) {
+                    const noOrdersText = `<p>${translations[currentLang]['no-orders']}</p>`;
+                    ordersListCart.innerHTML = noOrdersText;
+                    ordersListAccount.innerHTML = noOrdersText;
+                    return;
+                }
+
+                const ordersHtml = orders.map(order => {
+                    const statusClass = order.status ? `status-${order.status.toLowerCase()}` : 'status-pending';
+                    const itemsHtml = order.items.map(item => `<div class="order-item">${item.quantity} x ${item.name}</div>`).join('');
+                    
+                    return `
+                        <div class="order-card" data-order-id="${order.id}">
+                            <div class="order-header">
+                                <strong>Order #${order.id.substring(0, 8)}</strong>
+                                <span class="order-status ${statusClass}">${order.status}</span>
+                            </div>
+                            <div class="order-body">
+                                ${itemsHtml}
+                            </div>
+                            <div class="order-footer">
+                                <span class="order-total">${formatPrice(order.totalPrice, currentLang)}</span>
+                                ${order.status === 'Delivered' ? `<button class="invoice-btn" data-lang-key="invoice-btn">${translations[currentLang]['invoice-btn']}</button>` : ''}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                ordersListCart.innerHTML = ordersHtml;
+                ordersListAccount.innerHTML = ordersHtml;
+
+                document.querySelectorAll('.invoice-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const orderId = e.target.closest('.order-card').dataset.orderId;
+                        const orderData = orders.find(o => o.id === orderId);
+                        if(orderData) generateInvoice(orderData);
+                    });
+                });
+            }
+
 
             confirmOrderBtn.addEventListener('click', async () => {
                 const user = auth.currentUser;
                 if (!user || cart.length === 0) return;
-                
-                const userDocRef = doc(db, "users", user.uid);
-                const docSnap = await getDoc(userDocRef);
-                
-                if (!docSnap.exists() || !docSnap.data().address || !docSnap.data().address.line1) {
-                    showAuthMessage('Please save your address first!', true);
-                    closeModal('payment-modal-overlay');
-                    authModal.classList.add('visible');
-                    showView('address-view');
-                    return;
-                }
-                
-                const userData = docSnap.data();
-                const paymentMethodEl = document.querySelector('.payment-option.active');
-                if(!paymentMethodEl) {
-                    showAuthMessage('Please select a payment method', true);
-                    return;
-                }
-                const paymentMethod = paymentMethodEl.dataset.method;
-                const mobilePayment = document.querySelector('input[name="mobile-banking"]:checked')?.value;
-                
-                const ordersRef = collection(db, "orders");
-                const q = query(ordersRef, where("userId", "==", user.uid));
-                const querySnapshot = await getDocs(q);
-                let deliveryCharge = 0;
-                if (!querySnapshot.empty) {
-                    const city = userData.address.city.toLowerCase();
-                    deliveryCharge = city.includes('tangail') ? 100 : 200;
-                }
 
-                const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
-                
-                const orderData = {
-                    userId: user.uid,
-                    userName: userData.name,
-                    userEmail: user.email,
-                    userMobile: userData.mobile,
-                    shippingAddress: userData.address,
-                    items: cart.map(item => ({
-                        productId: item.id,
-                        name: translations['en'][item.langKey],
-                        quantity: item.quantity,
-                        price: item.price
-                    })),
-                    subtotal: subtotal,
-                    deliveryCharge: deliveryCharge,
-                    totalPrice: subtotal + deliveryCharge,
-                    paymentMethod: paymentMethod === 'mobile' ? mobilePayment : paymentMethod,
-                    status: 'Pending',
-                    createdAt: serverTimestamp()
-                };
+                confirmOrderBtn.disabled = true;
+                const currentLang = localStorage.getItem('language') || 'bn';
+                confirmOrderBtn.textContent = translations[currentLang]['processing-btn'] || 'Processing...';
 
                 try {
+                    const userDocRef = doc(db, "users", user.uid);
+                    const docSnap = await getDoc(userDocRef);
+                    
+                    if (!docSnap.exists() || !docSnap.data().address || !docSnap.data().address.line1) {
+                        showAuthMessage('Please save your address first!', true);
+                        closeModal('payment-modal-overlay');
+                        authModal.classList.add('visible');
+                        showView('address-view');
+                        return;
+                    }
+                    
+                    const userData = docSnap.data();
+                    const paymentMethodEl = document.querySelector('.payment-option.active');
+                    if(!paymentMethodEl) {
+                        showAuthMessage('Please select a payment method', true);
+                        return;
+                    }
+                    const paymentMethod = paymentMethodEl.dataset.method;
+                    const mobilePayment = document.querySelector('input[name="mobile-banking"]:checked')?.value;
+                    
+                    const ordersRef = collection(db, "orders");
+                    const q = query(ordersRef, where("userId", "==", user.uid));
+                    const querySnapshot = await getDocs(q);
+                    let deliveryCharge = 0;
+                    if (!querySnapshot.empty) {
+                        const city = userData.address.city.toLowerCase();
+                        deliveryCharge = city.includes('tangail') ? 100 : 200;
+                    }
+
+                    const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+                    
+                    const orderData = {
+                        userId: user.uid,
+                        userName: userData.name || user.displayName || 'N/A',
+                        userEmail: user.email,
+                        userMobile: userData.mobile || '',
+                        shippingAddress: userData.address,
+                        items: cart.map(item => ({
+                            productId: item.id,
+                            name: item.nameEN || 'Product',
+                            quantity: item.quantity,
+                            price: item.price
+                        })),
+                        subtotal: subtotal,
+                        deliveryCharge: deliveryCharge,
+                        totalPrice: subtotal + deliveryCharge,
+                        paymentMethod: paymentMethod === 'mobile' ? mobilePayment : paymentMethod.toUpperCase(),
+                        status: 'Pending',
+                        createdAt: serverTimestamp()
+                    };
+
                     await addDoc(collection(db, "orders"), orderData);
                     closeModal('payment-modal-overlay');
                     successModal.classList.add('visible');
                     cart = [];
                     saveCart();
+
+                    setTimeout(() => {
+                        closeModal('order-success-modal-overlay');
+                        cartModal.classList.add('visible');
+                        document.querySelector('#cart-modal-overlay .auth-tab[data-tab="order-history"]').click();
+                    }, 2500);
+
                 } catch(e) {
-                    showAuthMessage('Order failed: ' + e.message, true);
+                    console.error("Order confirmation failed:", e);
+                    showAuthMessage(null, true, 'Order failed: ' + e.message);
+                } finally {
+                    confirmOrderBtn.disabled = false;
+                    confirmOrderBtn.textContent = translations[currentLang]['confirm-order-btn'];
                 }
             });
+
+            // ----------- Product Data & Rendering Logic -----------
+
+            const productGrid = document.querySelector('.product-grid');
+
+            function renderProducts(productsToRender) {
+                const currentLang = localStorage.getItem('language') || 'bn';
+                if(productsToRender.length === 0) {
+                    productGrid.innerHTML = `<p>No products found.</p>`;
+                    return;
+                }
+
+                productGrid.innerHTML = productsToRender.map(p => {
+                    // **PERMANENT NAME FIX** - Checks for multiple possible name fields from the database
+                    const nameBN = p.productNameBn || p.productNameBengali || (p.name && p.name.bn) || translations[currentLang]['name-not-found'];
+                    const nameEN = p.productNameEn || p.productNameEnglish || (p.name && p.name.en) || translations[currentLang]['name-not-found'];
+                    const productName = currentLang === 'bn' ? nameBN : nameEN;
+                    
+                    const priceValue = p.offerPrice || p.price;
+                    const oldPriceValue = p.offerPrice ? p.price : p.oldPrice;
+
+                    const price = formatPrice(priceValue, currentLang);
+                    const oldPrice = oldPriceValue ? `<span class="old-price" data-price-old="${oldPriceValue}">${formatPrice(oldPriceValue, currentLang)}</span>` : '';
+                    
+                    const hasOffer = !!(p.offerPrice && p.offerPrice < p.price) || p.hasOffer || p.offerTag;
+                    let offerTagHTML = '';
+                    if (hasOffer) {
+                        let offerText = translations[currentLang]['tag-offer'];
+                        if (p.offerTag) {
+                            const offText = translations[currentLang]['off-text'];
+                            offerText = `${p.offerTag}% ${offText}`;
+                        }
+                        offerTagHTML = `<div class="offer-tag">${offerText}</div>`;
+                    }
+                    const imgSrc = p.mainImageURL || (p.img && p.img.main) || 'https://placehold.co/300x200/F0F0F0/333?text=Image+Not+Found';
+                    
+                    return `
+                        <div class="product-card" data-product-id="${p.id}">
+                            ${offerTagHTML}
+                            <img src="${imgSrc}" alt="${productName}">
+                            <div class="product-info">
+                                <h3>${productName}</h3>
+                                <div class="product-price">
+                                    <span class="current-price" data-price="${priceValue}">${price}</span>
+                                    ${oldPrice}
+                                </div>
+                                <div class="product-actions">
+                                    <a class="btn btn-details" data-lang-key="btn-details">${translations[currentLang]['btn-details']}</a>
+                                    <a class="btn btn-add-cart" data-lang-key="btn-add-cart">${translations[currentLang]['btn-add-cart']}</a>
+                                </div>
+                            </div>
+                        </div>`;
+                }).join('');
+
+                // Re-attach event listeners after rendering
+                productGrid.querySelectorAll('.btn-details').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const productId = this.closest('.product-card').dataset.productId;
+                        openProductModal(productId);
+                    });
+                });
+                productGrid.querySelectorAll('.btn-add-cart').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const productId = this.closest('.product-card').dataset.productId;
+                        addToCart(productId);
+                    });
+                });
+            }
+
+            async function fetchProducts() {
+                productGrid.innerHTML = '<p>Loading products...</p>';
+                try {
+                    const productsCol = collection(db, 'products');
+                    const productSnapshot = await getDocs(productsCol);
+                    allProducts = productSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                    renderProducts(allProducts);
+                } catch (error) {
+                    console.error("Error fetching products: ", error);
+                    productGrid.innerHTML = '<p>Error loading products. Please try again later.</p>';
+                }
+            }
+
 
             // Initial Load
             const savedLang = localStorage.getItem('language') || 'bn';
             setLanguage(savedLang);
             updateCartUI();
+            fetchProducts();
         });
     </script>
 
 </body>
 </html>
+
