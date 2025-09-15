@@ -81,13 +81,9 @@
             cursor: pointer;
         }
 
-        .logo-icon {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 8px 10px;
-            border-radius: 8px;
-            font-weight: 700;
-            font-size: 1.2em;
+        .logo-image {
+            width: 40px;
+            height: 40px;
             margin-right: 10px;
         }
 
@@ -559,6 +555,8 @@
         #password-requirements li.valid::before {
             content: '✔';
             color: var(--secondary-color);
+            position: absolute;
+            left: 0;
         }
         
         /* Order History Styles */
@@ -624,21 +622,64 @@
 
         /* হিরো বা শোকেস সেকশন */
         #showcase {
-            background: linear-gradient(100deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            padding: 80px 0;
-            text-align: center;
-            border-bottom-left-radius: 40px;
-            border-bottom-right-radius: 40px;
+            height: 60vh; /* Adjust height as needed */
+            max-height: 450px;
+            position: relative;
+            overflow: hidden;
+            display: block; /* ব্যানার অপশনটি আবার দেখানো হয়েছে */
         }
 
-        #showcase h1 {
+        .slider {
+            display: flex;
+            height: 100%;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .slide {
+            min-width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+        }
+
+        .slide img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+        
+        .slide::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 2;
+        }
+        
+        .slide-content {
+            position: relative;
+            z-index: 3;
+            padding: 20px;
+        }
+        
+        .slide-content h1 {
             font-size: 3.2em;
             font-weight: 700;
             margin: 0;
         }
         
-        #showcase p {
+        .slide-content p {
             font-size: 1.3em;
             margin: 15px 0 30px 0;
         }
@@ -658,6 +699,54 @@
         .cta-button:hover {
             transform: scale(1.05);
         }
+        
+        .slider-nav {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 4;
+        }
+        
+        .slider-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .slider-dot.active {
+            background-color: white;
+        }
+
+        .slider-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 5;
+            background-color: rgba(0, 0, 0, 0.3);
+            color: white;
+            border: none;
+            width: 44px;
+            height: 44px;
+            font-size: 24px;
+            cursor: pointer;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.3s;
+        }
+        .slider-arrow:hover {
+            background-color: rgba(0, 0, 0, 0.6);
+        }
+        .prev-btn { left: 20px; }
+        .next-btn { right: 20px; }
+
 
         /* ক্যাটাগরি সেকশন */
         #categories {
@@ -733,6 +822,7 @@
             object-fit: contain;
             padding: 10px;
             box-sizing: border-box;
+            cursor: pointer;
         }
         
         .product-info {
@@ -748,6 +838,12 @@
             margin: 0 0 10px 0;
             font-weight: 500;
             min-height: 44px; /* For 2 lines of text */
+        }
+
+        .product-card .rating {
+             color: var(--accent-yellow);
+             font-size: 1.1em;
+             margin-bottom: 5px;
         }
         
         .product-price {
@@ -765,6 +861,17 @@
             text-decoration: line-through;
             margin-left: 10px;
             font-size: 1em;
+        }
+        .offer-tag-right {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: var(--accent-yellow);
+            color: #333; /* Dark text on yellow tag */
+            padding: 4px 10px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            font-weight: 600;
         }
 
         .product-actions {
@@ -830,6 +937,22 @@
         .about-text h2 {
             font-size: 2.5em;
             margin-bottom: 20px;
+        }
+        
+        .about-text .about-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        .about-text .about-list li {
+            position: relative;
+            padding-left: 25px;
+            margin-bottom: 10px;
+        }
+        .about-text .about-list li::before {
+            content: '✔';
+            color: var(--secondary-color);
+            position: absolute;
+            left: 0;
         }
 
         .about-text p {
@@ -987,6 +1110,7 @@
             font-size: 2em;
             cursor: pointer;
             line-height: 1;
+            color: var(--text-light);
         }
         
         .modal-images .main-image img {
@@ -1095,12 +1219,6 @@
             gap: 10px;
             margin-bottom: 20px;
         }
-        .modal-tags span {
-            padding: 4px 10px;
-            border-radius: 5px;
-            font-size: 0.8em;
-            font-weight: 600;
-        }
         .tag-available {
             background-color: #4CAF50; /* Green */
             color: white;
@@ -1108,6 +1226,91 @@
         .tag-unofficial {
             background-color: #FF9800; /* Orange */
             color: white;
+        }
+        /* Product Reviews section in Modal */
+        #product-reviews {
+            margin-top: 30px;
+        }
+
+        #product-reviews h3 {
+            margin-bottom: 20px;
+        }
+
+        #reviews-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+        }
+
+        .review-card {
+            background-color: var(--bg-offwhite);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        .review-card:last-child {
+            margin-bottom: 0;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .review-header strong {
+            font-weight: 600;
+        }
+
+        .review-header span {
+            color: var(--accent-yellow);
+        }
+
+        #review-form-container {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        #star-rating {
+            display: flex;
+            gap: 5px;
+            font-size: 2em;
+            cursor: pointer;
+            color: var(--text-light);
+        }
+        #star-rating .star.filled {
+            color: var(--accent-yellow);
+        }
+
+        #review-text-area {
+            width: 100%;
+            height: 100px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 10px;
+            box-sizing: border-box;
+            background-color: var(--bg-offwhite);
+            color: var(--text-dark);
+            margin-top: 10px;
+        }
+
+        #review-submit-btn {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
         }
 
         /* Responsive Styles */
@@ -1157,7 +1360,7 @@
                  gap: 10px;
             }
 
-            #showcase h1 {
+            #showcase h1, .slide-content h1 {
                 font-size: 2.5em;
             }
 
@@ -1180,7 +1383,7 @@
         <div class="container">
             <div class="header-content">
                 <div class="logo">
-                    <span class="logo-icon">TB</span>
+                    <img src="https://github.com/tangailbuzzbd-svg/TangailBuzz-Picture-/blob/main/MD%20EOUSUF%20ALI%20BACK-1_upscaled.png?raw=true" alt="TangailBuzz Logo" class="logo-image">
                     <span class="logo-text">TangailBuzz</span>
                 </div>
                 <div class="header-controls">
@@ -1232,13 +1435,16 @@
     </header>
 
     <div id="main-content-wrapper">
-        <!-- হিরো সেকশন -->
+        <!-- হিরো বা শোকেস সেকশন -->
         <section id="showcase">
-            <div class="container">
-                <h1 data-lang-key="showcase-h1">TangailBuzz এ আপনাকে স্বাগতম</h1>
-                <p data-lang-key="showcase-p">বাংলাদেশের সেরা ই-কমার্স প্ল্যাটফর্ম। আপনার প্রয়োজনীয় সবকিছু এক জায়গায়।</p>
-                <a id="cta-btn" class="cta-button" data-lang-key="cta-button">শপিং শুরু করুন</a>
+            <div class="slider">
+                <!-- Slides will be dynamically loaded here -->
             </div>
+            <div class="slider-nav">
+                <!-- Dots will be generated by JS -->
+            </div>
+            <button class="slider-arrow prev-btn" id="prev-btn">&#10094;</button>
+            <button class="slider-arrow next-btn" id="next-btn">&#10095;</button>
         </section>
 
         <!-- ক্যাটাগরি সেকশন -->
@@ -1272,19 +1478,23 @@
         <div class="container">
             <div class="about-content">
                 <div class="about-image">
-                    <img src="https://i.ibb.co/6wmzWQR/md-eousuf-ali.jpg" alt="MD EOUSUF ALI - Managing Director">
+                    <img src="https://github.com/tangailbuzzbd-svg/TangailBuzz-Picture-/blob/448bae242ec48b9d615a15b917e7819e169ea20e/WhatsApp%20Image%202025-07-30%20at%2019.29.33_9f8c7d06.jpg?raw=true" alt="MD EOUSUF ALI - Managing Director">
                 </div>
                 <div class="about-text">
-                    <h2 data-lang-key="about-h2">আমাদের পথচলার গল্প</h2>
-                    <p data-lang-key="about-p1">
-                        ২০২৩ সাল থেকে TangailBuzz তার যাত্রা শুরু করে। আমাদের লক্ষ্য ছিল টাঙ্গাইলের ঐতিহ্যবাহী এবং আধুনিক পণ্যগুলোকে সারা বাংলাদেশের মানুষের কাছে পৌঁছে দেওয়া। খুব অল্প সময়ের মধ্যে আমরা গ্রাহকদের আস্থা অর্জন করতে সক্ষম হয়েছি।
-                    </p>
-                    <p data-lang-key="about-p2">
-                        আমরা ইলেকট্রনিক্স, পোশাক, শাড়ি, কসমেটিকস থেকে শুরু করে গৃহস্থালীর প্রয়োজনীয় সকল জিনিস সরবরাহ করি। আমাদের প্রধান উদ্দেশ্য হলো ন্যায্য মূল্যে সেরা মানের পণ্য গ্রাহকদের হাতে তুলে দেওয়া এবং তাদের অনলাইন কেনাকাটার অভিজ্ঞতাকে আরও সহজ ও আনন্দদায়ক করে তোলা।
-                    </p>
+                    <h2 data-lang-key="about-h2"></h2>
+                    <p data-lang-key="about-p1"></p>
+                    <p data-lang-key="about-p2"></p>
+                    <h4 data-lang-key="about-list-title"></h4>
+                    <ul class="about-list">
+                        <li data-lang-key="about-list-item1"></li>
+                        <li data-lang-key="about-list-item2"></li>
+                        <li data-lang-key="about-list-item3"></li>
+                        <li data-lang-key="about-list-item4"></li>
+                    </ul>
+                    <p data-lang-key="about-p3"></p>
                     <div class="founder-info">
-                        <h3 data-lang-key="founder-name">MD EOUSUF ALI</h3>
-                        <p data-lang-key="founder-title">Managing Director, TangailBuzz</p>
+                        <h3>MD EOUSUF ALI</h3>
+                        <p data-lang-key="founder-title">Founder of TangailBuzz</p>
                     </div>
                 </div>
             </div>
@@ -1319,6 +1529,22 @@
                 <ul class="spec-list" id="modal-spec-list">
                     <!-- Specification list will be generated by JS -->
                 </ul>
+
+                <!-- Review Section -->
+                <div id="product-reviews">
+                    <h3 data-lang-key="reviews-heading">Reviews</h3>
+                    <div id="reviews-list">
+                        <!-- Reviews will be loaded here -->
+                    </div>
+                    <div id="review-form-container">
+                        <h4 data-lang-key="write-review-title">আপনার রিভিউ লিখুন</h4>
+                        <div id="star-rating">
+                            <!-- Star icons will be generated by JS -->
+                        </div>
+                        <textarea id="review-text-area" placeholder="আপনার মতামত..."></textarea>
+                        <button id="review-submit-btn" data-lang-key="review-submit-btn">জমা দিন</button>
+                    </div>
+                </div>
                  <div class="product-actions" style="margin-top: 20px;">
                      <a class="btn btn-add-cart" id="modal-add-to-cart-btn" style="flex-grow: 2;" data-lang-key="btn-add-cart">কার্টে যোগ করুন</a>
                  </div>
@@ -1389,7 +1615,7 @@
                     </form>
                 </div>
                 <button id="google-signin-btn" class="auth-btn google-btn">
-                     <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><path d="M17.64 9.2045c0-.6381-.0573-1.2518-.1636-1.8409H9v3.4818h4.8436c-.2086 1.125-.8441 2.0782-1.7777 2.7218v2.2582h2.9082c1.7018-1.5668 2.6836-3.8741 2.6836-6.621z" fill="#4285F4"></path><path d="M9 18c2.43 0 4.4673-.806 5.9564-2.1805l-2.9082-2.2582c-.806.54-1.8377.86-3.0482.86-2.344 0-4.3282-1.5818-5.0355-3.7104H.9573v2.3318C2.4382 15.9832 5.4818 18 9 18z" fill="#34A853"></path><path d="M3.9645 10.71c-.1827-.54-.2827-1.1168-.2827-1.71s.1-1.17.2827-1.71V4.9582H.9573A8.9965 8.9965 0 000 9c0 1.4523.3464 2.8273.9573 4.0418L3.9645 10.71z" fill="#FBBC05"></path><path d="M9 3.5795c1.3214 0 2.5077.4541 3.4405 1.346l2.5813-2.5814C13.4632.8918 11.4259 0 9 0 5.4818 0 2.4382 2.0168.9573 4.9582L3.9645 7.29C4.6718 5.1618 6.656 3.5795 9 3.5795z" fill="#EA4335"></path></g></svg>
+                    <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><path d="M17.64 9.2045c0-.6381-.0573-1.2518-.1636-1.8409H9v3.4818h4.8436c-.2086 1.125-.8441 2.0782-1.7777 2.7218v2.2582h2.9082c1.7018-1.5668 2.6836-3.8741 2.6836-6.621z" fill="#4285F4"></path><path d="M9 18c2.43 0 4.4673-.806 5.9564-2.1805l-2.9082-2.2582c-.806.54-1.8377.86-3.0482.86-2.344 0-4.3282-1.5818-5.0355-3.7104H.9573v2.3318C2.4382 15.9832 5.4818 18 9 18z" fill="#34A853"></path><path d="M3.9645 10.71c-.1827-.54-.2827-1.1168-.2827-1.71s.1-1.17.2827-1.71V4.9582H.9573A8.9965 8.9965 0 000 9c0 1.4523.3464 2.8273.9573 4.0418L3.9645 10.71z" fill="#FBBC05"></path><path d="M9 3.5795c1.3214 0 2.5077.4541 3.4405 1.346l2.5813-2.5814C13.4632.8918 11.4259 0 9 0 5.4818 0 2.4382 2.0168.9573 4.9582L3.9645 7.29C4.6718 5.1618 6.656 3.5795 9 3.5795z" fill="#EA4335"></path></g></svg>
                     <span data-lang-key="google-login-btn">গুগল দিয়ে লগইন করুন</span>
                 </button>
                  <div id="auth-message-container" class="auth-message"></div>
@@ -1405,7 +1631,7 @@
                      </div>
                      <button type="submit" class="auth-btn" data-lang-key="reset-password-btn">রিসেট লিঙ্ক পাঠান</button>
                      <div class="auth-link">
-                          <a id="back-to-login" data-lang-key="back-to-login-link">&laquo; লগইনে ফিরে যান</a>
+                         <a id="back-to-login" data-lang-key="back-to-login-link">&laquo; লগইনে ফিরে যান</a>
                      </div>
                  </form>
             </div>
@@ -1427,19 +1653,19 @@
                  <h3 data-lang-key="address-title">আমার ডিফল্ট ঠিকানা</h3>
                  <div id="address-list"></div>
                  <form id="address-form">
-                       <div class="form-group">
-                           <label for="address-line1" data-lang-key="address-line1-label">ঠিকানা</label>
-                           <input type="text" id="address-line1" required>
-                       </div>
-                       <div class="form-group">
-                           <label for="address-city" data-lang-key="address-city-label">শহর</label>
-                           <input type="text" id="address-city" required>
-                       </div>
-                       <div class="form-group">
-                           <label for="address-postal" data-lang-key="address-postal-label">পোস্টাল কোড</label>
-                           <input type="text" id="address-postal" required>
-                       </div>
-                       <button type="submit" class="auth-btn" data-lang-key="save-address-btn">ঠিকানা সংরক্ষণ করুন</button>
+                         <div class="form-group">
+                             <label for="address-line1" data-lang-key="address-line1-label">ঠিকানা</label>
+                             <input type="text" id="address-line1" required>
+                         </div>
+                         <div class="form-group">
+                             <label for="address-city" data-lang-key="address-city-label">শহর</label>
+                             <input type="text" id="address-city" required>
+                         </div>
+                         <div class="form-group">
+                             <label for="address-postal" data-lang-key="address-postal-label">পোস্টাল কোড</label>
+                             <input type="text" id="address-postal" required>
+                         </div>
+                         <button type="submit" class="auth-btn" data-lang-key="save-address-btn">ঠিকানা সংরক্ষণ করুন</button>
                  </form>
                  <div class="auth-link">
                      <a id="back-to-account" data-lang-key="back-to-account-link">&laquo; একাউন্টে ফিরে যান</a>
@@ -1450,11 +1676,11 @@
             <div id="mobile-view" class="auth-view">
                  <h3 data-lang-key="mobile-title">মোবাইল নম্বর পরিবর্তন</h3>
                  <form id="mobile-form">
-                       <div class="form-group">
-                           <label for="mobile-number" data-lang-key="mobile-label">নতুন মোবাইল নম্বর</label>
-                           <input type="tel" id="mobile-number" required>
-                       </div>
-                       <button type="submit" class="auth-btn" data-lang-key="save-mobile-btn">সংরক্ষণ করুন</button>
+                         <div class="form-group">
+                             <label for="mobile-number" data-lang-key="mobile-label">নতুন মোবাইল নম্বর</label>
+                             <input type="tel" id="mobile-number" required>
+                         </div>
+                         <button type="submit" class="auth-btn" data-lang-key="save-mobile-btn">সংরক্ষণ করুন</button>
                  </form>
                  <div class="auth-link">
                      <a id="back-to-account-from-mobile" data-lang-key="back-to-account-link">&laquo; একাউন্টে ফিরে যান</a>
@@ -1529,39 +1755,39 @@
              <span class="auth-modal-close" id="payment-modal-close">&times;</span>
              <h3 data-lang-key="payment-title">পেমেন্ট পদ্ধতি নির্বাচন করুন</h3>
              <div class="payment-options">
-                  <div class="payment-option" data-method="card">
-                       <strong data-lang-key="payment-card">কার্ড</strong>
-                       <div class="sub-options">
-                           <div class="form-group">
-                               <label for="card-name" data-lang-key="card-name-label">কার্ডে থাকা নাম</label>
-                               <input type="text" id="card-name" placeholder="Abul Kalam">
-                           </div>
-                           <div class="form-group">
-                                 <label data-lang-key="card-number-label">কার্ড নম্বর</label>
-                                 <input type="text" placeholder="1234 5678 9101 1121">
-                           </div>
-                           <div class="form-group" style="display: flex; gap: 10px;">
-                               <div style="flex: 1;">
+                 <div class="payment-option" data-method="card">
+                     <strong data-lang-key="payment-card">কার্ড</strong>
+                     <div class="sub-options">
+                          <div class="form-group">
+                              <label for="card-name" data-lang-key="card-name-label">কার্ডে থাকা নাম</label>
+                              <input type="text" id="card-name" placeholder="Abul Kalam">
+                          </div>
+                          <div class="form-group">
+                               <label data-lang-key="card-number-label">কার্ড নম্বর</label>
+                               <input type="text" placeholder="1234 5678 9101 1121">
+                          </div>
+                          <div class="form-group" style="display: flex; gap: 10px;">
+                              <div style="flex: 1;">
                                    <label data-lang-key="expiry-label">মেয়াদ</label>
                                    <input type="text" placeholder="MM/YY">
-                               </div>
-                               <div style="flex: 1;">
+                              </div>
+                              <div style="flex: 1;">
                                    <label data-lang-key="cvc-label">CVC</label>
                                    <input type="text" placeholder="123">
-                               </div>
-                           </div>
-                       </div>
-                  </div>
-                  <div class="payment-option" data-method="mobile">
-                       <strong data-lang-key="payment-mobile">মোবাইল ব্যাংকিং</strong>
-                       <div class="sub-options">
-                           <input type="radio" id="bkash" name="mobile-banking" value="Bkash" checked>
-                           <label for="bkash">Bkash</label><br>
-                           <input type="radio" id="nagad" name="mobile-banking" value="Nagad">
-                           <label for="nagad">Nagad</label>
-                       </div>
-                  </div>
-                   <div class="payment-option" data-method="cod">
+                              </div>
+                          </div>
+                     </div>
+                 </div>
+                 <div class="payment-option" data-method="mobile">
+                     <strong data-lang-key="payment-mobile">মোবাইল ব্যাংকিং</strong>
+                     <div class="sub-options">
+                          <input type="radio" id="bkash" name="mobile-banking" value="Bkash" checked>
+                          <label for="bkash">Bkash</label><br>
+                          <input type="radio" id="nagad" name="mobile-banking" value="Nagad">
+                          <label for="nagad">Nagad</label>
+                     </div>
+                 </div>
+                  <div class="payment-option" data-method="cod">
                       <strong data-lang-key="cod">ক্যাশ অন ডেলিভারি</strong>
                   </div>
              </div>
@@ -1618,7 +1844,7 @@
                     <div class="social-links">
                         <a href="https://www.facebook.com/Tangailbuzz/" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></a>
                         <a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
-                        <a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg></a>
+                        <a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg></a>
                         <a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2A29 29 0 0 0 23 11.75a29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg></a>
                     </div>
                 </div>
@@ -1657,7 +1883,9 @@
             where,
             getDocs,
             deleteDoc,
-            onSnapshot
+            onSnapshot,
+            orderBy,
+            arrayUnion
         } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         // Firebase Configuration (Using your provided config)
@@ -1687,11 +1915,18 @@
                     'showcase-h1': 'TangailBuzz এ আপনাকে স্বাগতম', 'showcase-p': 'বাংলাদেশের সেরা ই-কমার্স প্ল্যাটফর্ম। আপনার প্রয়োজনীয় সবকিছু এক জায়গায়।',
                     'cta-button': 'শপিং শুরু করুন', 'categories-h2': 'আমাদের ক্যাটাগরি সমূহ', 'cat-all': 'সব পণ্য', 'cat-electronics': 'ইলেকট্রনিক্স',
                     'cat-fashion': 'পোশাক', 'cat-cosmetics': 'কসমেটিক', 'cat-household': 'গৃহস্থালী', 'cat-toys': 'খেলনা', 'cat-books': 'বই',
-                    'tag-offer': 'অফার', 'off-text': 'ছাড়', 'tag-available': 'উপলব্ধ', 'tag-unofficial': 'আনঅফিসিয়াল', 'brand': 'ব্র্যান্ড', 'category': 'ক্যাটাগরি',
-                    'product-id': 'প্রোডাক্ট আইডি', 'btn-details': 'বিস্তারিত', 'btn-add-cart': 'কার্টে যোগ করুন', 'about-h2': 'আমাদের পথচলার গল্প',
-                    'about-p1': '২০২৩ সাল থেকে TangailBuzz তার যাত্রা শুরু করে। আমাদের লক্ষ্য ছিল টাঙ্গাইলের ঐতিহ্যবাহী এবং আধুনিক পণ্যগুলোকে সারা বাংলাদেশের মানুষের কাছে পৌঁছে দেওয়া। খুব অল্প সময়ের মধ্যে আমরা গ্রাহকদের আস্থা অর্জন করতে সক্ষম হয়েছি।',
-                    'about-p2': 'আমরা ইলেকট্রনিক্স, পোশাক, শাড়ি, কসমেটিকস থেকে শুরু করে গৃহস্থালীর প্রয়োজনীয় সকল জিনিস সরবরাহ করি। আমাদের প্রধান উদ্দেশ্য হলো ন্যায্য মূল্যে সেরা মানের পণ্য গ্রাহকদের হাতে তুলে দেওয়া এবং তাদের অনলাইন কেনাকাটার অভিজ্ঞতাকে আরও সহজ ও আনন্দদায়ক করে তোলা।',
-                    'founder-name': 'MD EOUSUF ALI', 'founder-title': 'Managing Director, TangailBuzz', 'modal-specs-title': 'বিস্তারিত তথ্য', 'modal-rating-text': 'রেটিং',
+                    'tag-offer': 'অফার', 'off-text': 'ছাড়', 'tag-available': 'উপলব্ধ', 'tag-unofficial': 'আনঅফিসিয়াল', 'brand': 'ব্র্যান্ড', 'category': 'ক্যাটাগরি',
+                    'product-id': 'প্রোডাক্ট আইডি', 'btn-details': 'বিস্তারিত', 'btn-add-cart': 'কার্টে যোগ করুন', 
+                    'about-h2': 'আমাদের পথচলার গল্প',
+                    'about-p1': '২০২৫ সালে TangailBuzz তার আনুষ্ঠানিক যাত্রা শুরু করে। টাঙ্গাইল বাংলাদেশের ঐতিহ্যের প্রাণকেন্দ্র, আর সেই ঐতিহ্য ও আধুনিকতার সমন্বয় ঘটিয়ে আমরা এই উদ্যোগের সূচনা করেছি। আমাদের স্বপ্ন ছিল—শুধু টাঙ্গাইল নয়, দেশের প্রতিটি প্রান্তের মানুষ যেন ঘরে বসেই টাঙ্গাইলের আসল পণ্য ও বিশ্বের সাথে সামঞ্জস্যপূর্ণ আধুনিক জিনিসপত্র পেতে পারে।',
+                    'about-p2': 'শুরুটা ছোট আকারে হলেও খুব অল্প সময়ের মধ্যেই আমরা গ্রাহকদের বিশ্বাস অর্জন করতে পেরেছি। আমাদের কাছে গ্রাহক শুধু ক্রেতা নন, বরং একজন পরিবার-সদস্য। তাদের সন্তুষ্টি ও আস্থা অর্জনই আমাদের মূল শক্তি।',
+                    'about-list-title': 'আমরা যা সরবরাহ করি',
+                    'about-list-item1': 'ইলেকট্রনিক্স: দৈনন্দিন জীবনের প্রয়োজনীয় গ্যাজেট থেকে শুরু করে হোম অ্যাপ্লায়েন্স।',
+                    'about-list-item2': 'পোশাক ও শাড়ি: টাঙ্গাইলের বিখ্যাত শাড়ি সহ দেশীয় ও আধুনিক পোশাক।',
+                    'about-list-item3': 'কসমেটিকস ও ফ্যাশন আইটেম: বিশ্বমানের প্রসাধনী ও ফ্যাশন পণ্য।',
+                    'about-list-item4': 'গৃহস্থালীর সামগ্রী: রান্নাঘর, সাজসজ্জা ও পরিবারের প্রয়োজনীয় সব কিছু।',
+                    'about-p3': 'TangailBuzz কেবল একটি ই-কমার্স নয়, এটি টাঙ্গাইলের গর্ব, বাংলাদেশের আস্থার প্রতীক। আমরা বিশ্বাস করি, ঐতিহ্য আর আধুনিকতার মেলবন্ধন ঘটিয়ে TangailBuzz আগামী দিনে দেশের অন্যতম সেরা অনলাইন শপিং প্ল্যাটফর্ম হিসেবে প্রতিষ্ঠিত হবে।',
+                    'founder-title': 'টাঙ্গাইলবাজের প্রতিষ্ঠাতা', 'modal-specs-title': 'বিস্তারিত তথ্য', 'modal-rating-text': 'রেটিং',
                     'footer-desc': 'বাংলাদেশের সেরা ই-কমার্স প্ল্যাটফর্ম। আপনার প্রয়োজনীয় সবকিছু এক জায়গায়।', 'footer-links-title': 'দ্রুত লিঙ্ক',
                     'footer-contact-title': 'যোগাযোগ', 'location': 'টাঙ্গাইল, বাংলাদেশ', 'footer-copyright': '© ২০২৫ TangailBuzz - সকল অধিকার সংরক্ষিত',
                     'auth-login-tab': 'লগইন', 'auth-register-tab': 'রেজিস্টার', 'login-title': 'আপনার একাউন্টে লগইন করুন', 'email-label': 'ইমেইল', 'password-label': 'পাসওয়ার্ড',
@@ -1709,7 +1944,17 @@
                     'delete-account': 'একাউন্ট মুছে ফেলুন', 'account-deleted': 'আপনার একাউন্ট সফলভাবে মুছে ফেলা হয়েছে।',
                     'order-history': 'অর্ডার ইতিহাস', 'order-history-title': 'আমার অর্ডারসমূহ', 'invoice-btn': 'ইনভয়েস ডাউনলোড', 'no-orders': 'এখনও কোনো অর্ডার করা হয়নি।',
                     'confirm-title': 'নিশ্চিত করুন', 'confirm-yes': 'হ্যাঁ', 'confirm-no': 'না', 'confirm-delete': 'আপনি কি নিশ্চিতভাবে আপনার একাউন্ট মুছে ফেলতে চান? এই কাজটি আর ফেরানো যাবে না।',
-                    'processing-btn': 'প্রসেস হচ্ছে...', 'name-not-found': 'নাম পাওয়া যায়নি', 'no-description': 'কোনো বিবরণ নেই',
+                    'processing-btn': 'প্রসেস হচ্ছে...', 'name-not-found': 'নাম পাওয়া যায়নি', 'no-description': 'কোনো বিবরণ নেই',
+                    'showcase-h1-2': 'সেরা ফ্যাশন কালেকশন', 'showcase-p-2': 'আধুনা থেকে ঐতিহ্যবাহী, সবই পাবেন এখানে।',
+                    'showcase-h1-3': 'লেটেস্ট ইলেকট্রনিক্স', 'showcase-p-3': 'আপনার জীবনকে করুন আরও সহজ ও আধুনিক।',
+                    'showcase-h1-4': 'গৃহস্থালীর প্রয়োজনীয় জিনিস', 'showcase-p-4': 'আপনার ঘর সাজাতে প্রয়োজনীয় সবকিছু।',
+                    'showcase-h1-5': 'বিউটি ও কসমেটিকস', 'showcase-p-5': 'Enhance your beauty with our best products.',
+                    'showcase-h1-6': 'বইয়ের বিশাল সংগ্রহ', 'showcase-p-6': 'জ্ঞান ও বিনোদনের সেরা সম্ভার।',
+                    'write-review-title': 'আপনার রিভিউ লিখুন',
+                    'review-placeholder-text': 'আপনার মতামত...',
+                    'review-submit-btn': 'জমা দিন',
+                    'reviews-heading': 'রিভিউ',
+                    'no-reviews': 'কোনো রিভিউ নেই। আপনি প্রথম রিভিউ দিন!'
                 },
                 'en': {
                     'nav-home': 'Home', 'nav-products': 'Products', 'nav-offer': 'Offers', 'nav-about': 'About Us', 'search-placeholder': 'Search products...',
@@ -1717,10 +1962,17 @@
                     'cta-button': 'Start Shopping', 'categories-h2': 'Our Categories', 'cat-all': 'All Products', 'cat-electronics': 'Electronics',
                     'cat-fashion': 'Fashion', 'cat-cosmetics': 'Cosmetics', 'cat-household': 'Household', 'cat-toys': 'Toys', 'cat-books': 'Books',
                     'tag-offer': 'Offer', 'off-text': 'Off', 'tag-available': 'AVAILABLE', 'tag-unofficial': 'UNOFFICIAL', 'brand': 'Brand', 'category': 'Category',
-                     'product-id': 'Product ID', 'btn-details': 'Details', 'btn-add-cart': 'Add to Cart', 'about-h2': 'Our Journey', 
-                    'about-p1': 'TangailBuzz started its journey in 2023. Our goal was to bring the traditional and modern products of Tangail to people all over Bangladesh. In a very short time, we have been able to earn the trust of our customers.',
-                    'about-p2': 'We supply everything from electronics, clothing, sarees, cosmetics to necessary household items. Our main objective is to deliver the best quality products at fair prices to customers and to make their online shopping experience easier and more enjoyable.',
-                    'founder-name': 'MD EOUSUF ALI', 'founder-title': 'Managing Director, TangailBuzz', 'modal-specs-title': 'Specifications', 'modal-rating-text': 'Ratings',
+                    'product-id': 'Product ID', 'btn-details': 'Details', 'btn-add-cart': 'Add to Cart', 
+                    'about-h2': 'Our Journey',
+                    'about-p1': "TangailBuzz officially started its journey in 2025. Tangail is the heart of Bangladesh's heritage, and we initiated this venture by combining that tradition with modernity. Our dream was not just for Tangail, but for people from every corner of the country to get authentic Tangail products and modern goods compatible with the world, right at their doorstep.",
+                    'about-p2': "Although we started small, we have earned our customers' trust in a very short time. To us, a customer is not just a buyer but a family member. Their satisfaction and trust are our main strengths.",
+                    'about-list-title': 'What We Provide',
+                    'about-list-item1': 'Electronics: From daily life gadgets to home appliances.',
+                    'about-list-item2': 'Clothing & Sarees: Including the famous sarees of Tangail, along with local and modern attire.',
+                    'about-list-item3': 'Cosmetics & Fashion Items: World-class beauty and fashion products.',
+                    'about-list-item4': 'Household Items: Everything needed for the kitchen, decoration, and family.',
+                    'about-p3': "TangailBuzz is not just an e-commerce platform; it's the pride of Tangail and a symbol of trust in Bangladesh. We believe that by blending tradition and modernity, TangailBuzz will establish itself as one of the country's leading online shopping platforms in the coming days.",
+                    'founder-title': 'Founder of TangailBuzz', 'modal-specs-title': 'Specifications', 'modal-rating-text': 'Ratings',
                     'footer-desc': 'The best e-commerce platform in Bangladesh. Everything you need in one place.', 'footer-links-title': 'Quick Links',
                     'footer-contact-title': 'Contact', 'location': 'Tangail, Bangladesh', 'footer-copyright': '© 2025 TangailBuzz - All rights reserved',
                     'auth-login-tab': 'Login', 'auth-register-tab': 'Register', 'login-title': 'Login to your account', 'email-label': 'Email', 'password-label': 'Password',
@@ -1739,6 +1991,16 @@
                     'order-history': 'Order History', 'order-history-title': 'My Orders', 'invoice-btn': 'Download Invoice', 'no-orders': 'You have not placed any orders yet.',
                     'confirm-title': 'Confirm Action', 'confirm-yes': 'Yes', 'confirm-no': 'Cancel', 'confirm-delete': 'Are you sure you want to delete your account? This action cannot be undone.',
                     'processing-btn': 'Processing...', 'name-not-found': 'Name Not Found', 'no-description': 'No description available',
+                    'showcase-h1-2': 'Best Fashion Collection', 'showcase-p-2': 'From modern to traditional, find it all here.',
+                    'showcase-h1-3': 'Latest Electronics', 'showcase-p-3': 'Make your life easier and more modern.',
+                    'showcase-h1-4': 'Household Essentials', 'showcase-p-4': 'Everything you need to decorate your home.',
+                    'showcase-h1-5': 'Beauty & Cosmetics', 'showcase-p-5': 'Enhance your beauty with our best products.',
+                    'showcase-h1-6': 'Huge Collection of Books', 'showcase-p-6': 'The best collection of knowledge and entertainment.',
+                    'write-review-title': 'Write a Review',
+                    'review-placeholder-text': 'Your review...',
+                    'review-submit-btn': 'Submit',
+                    'reviews-heading': 'Reviews',
+                    'no-reviews': 'No reviews yet. Be the first to write one!'
                 }
             };
             
@@ -1765,7 +2027,7 @@
                     const key = element.getAttribute('data-lang-key');
                     if (translations[lang] && translations[lang][key]) {
                         if (element.tagName === 'INPUT' && (element.type === 'text' || element.type === 'email' || element.type === 'password' || element.type === 'tel')) {
-                             element.placeholder = translations[lang][key];
+                            element.placeholder = translations[lang][key];
                         } else {
                             element.textContent = translations[lang][key];
                         }
@@ -1814,8 +2076,7 @@
             const footerHome = document.getElementById('footer-home');
             const footerProducts = document.getElementById('footer-products');
             const footerAbout = document.getElementById('footer-about');
-            const ctaButton = document.getElementById('cta-btn');
-
+            
             function showMainContent() {
                 mainContentWrapper.style.display = 'block';
                 aboutUsSection.style.display = 'none';
@@ -1828,16 +2089,21 @@
 
             [logo, footerHome].forEach(el => el.addEventListener('click', showMainContent));
             [navAbout, footerAbout].forEach(el => el.addEventListener('click', showAboutSection));
-            [ctaButton, navProducts, footerProducts].forEach(el => el.addEventListener('click', () => {
-                 showMainContent();
-                 document.querySelector('.filter-btn[data-filter="all"]').click();
-                 const target = document.getElementById('categories');
-                 if(target) window.scrollTo({ top: target.offsetTop - 70, behavior: 'smooth' });
-            }));
+            
+            document.querySelectorAll('.cta-button, #nav-products, #footer-products').forEach(el => {
+                el.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showMainContent();
+                    document.querySelector('.filter-btn[data-filter="all"]').click();
+                    const target = document.getElementById('categories');
+                    if(target) window.scrollTo({ top: target.offsetTop - 70, behavior: 'smooth' });
+                });
+            });
+
             navOffer.addEventListener('click', () => {
                 showMainContent();
                 filterButtons.forEach(btn => btn.classList.remove('active'));
-                const filtered = allProducts.filter(p => (p.offerPrice && p.offerPrice < p.price) || p.hasOffer || p.offerTag);
+                const filtered = allProducts.filter(p => p.isOffer === true);
                 renderProducts(filtered);
 
                 const target = document.getElementById('categories');
@@ -1856,9 +2122,10 @@
                 const currentLang = localStorage.getItem('language') || 'bn';
 
                 const filteredProducts = allProducts.filter(product => {
-                    const nameBN = product.productNameBn || product.productNameBengali || (product.name && product.name.bn) || translations[currentLang]['name-not-found'];
-                    const nameEN = product.productNameEn || product.productNameEnglish || (product.name && product.name.en) || translations[currentLang]['name-not-found'];
-                    const productName = (currentLang === 'bn' ? nameBN : nameEN).toLowerCase();
+                    // Check for multiple name fields
+                    const nameBn = product.productNameBn || product.name?.bn || '';
+                    const nameEn = product.productNameEn || product.name?.en || '';
+                    const productName = (currentLang === 'bn' ? nameBn : nameEn).toLowerCase();
                     
                     const categoryMatch = (activeFilter === 'all' || activeFilter === (product.category || "").toLowerCase());
                     const searchMatch = productName.includes(searchQuery);
@@ -1889,74 +2156,99 @@
                 return `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>`;
             }
 
+            // Centralized function to get product data based on language
+            function getLocalizedProductData(product, lang) {
+                const isBn = lang === 'bn';
+                // Prioritize specific language fields, then generic ones
+                const name = isBn ? product.productNameBn || product.name?.bn || translations[lang]['name-not-found'] : product.productNameEn || product.name?.en || translations[lang]['name-not-found'];
+                const description = isBn ? product.descriptionBengali || product.descriptionBn || translations[lang]['no-description'] : product.descriptionEnglish || product.descriptionEn || translations[lang]['no-description'];
+                const brand = isBn ? product.brandBengali || product.brand?.bn || 'N/A' : product.brandEnglish || product.brand?.en || 'N/A';
+                const category = translations[lang][`cat-${(product.category || "").toLowerCase()}`] || product.category;
+                const price = product.offerPrice || product.price;
+                const oldPrice = product.offerPrice ? product.price : product.oldPrice;
+                const rating = parseFloat(product.rating) || 0;
+                const mainImage = product.mainImageURL || product.imageUrl || (product.img && product.img.main) || 'https://placehold.co/400x400/F0F0F0/333?text=Image+Not+Found';
+                const thumbnails = (product.thumbnails && Array.isArray(product.thumbnails)) ? product.thumbnails : [];
+
+                // Combine different specification fields into a single object
+                let specs = {};
+                // Handle sizes
+                if (product.sizes && Array.isArray(product.sizes) && product.sizes.length > 0) {
+                    const sizesKey = isBn ? 'সাইজ' : 'Sizes';
+                    specs[sizesKey] = product.sizes.join(', ');
+                }
+                // Handle general specifications
+                if (product.specifications) {
+                    for (const key in product.specifications) {
+                        const specValue = product.specifications[key];
+                        const translatedKey = isBn ? translations[lang][key.toLowerCase()] || key : key;
+                        specs[translatedKey] = specValue;
+                    }
+                }
+                
+                return {
+                    name,
+                    description,
+                    brand,
+                    category,
+                    price,
+                    oldPrice,
+                    rating,
+                    mainImage,
+                    thumbnails,
+                    specs
+                };
+            }
+
+
             function openProductModal(productId) {
                 const product = allProducts.find(p => p.id === productId);
                 if (!product) return;
 
                 const currentLang = localStorage.getItem('language') || 'bn';
-                
-                const nameBN = product.productNameBn || product.productNameBengali || (product.name && product.name.bn) || translations[currentLang]['name-not-found'];
-                const nameEN = product.productNameEn || product.productNameEnglish || (product.name && product.name.en) || translations[currentLang]['name-not-found'];
-                const name = currentLang === 'bn' ? nameBN : nameEN;
-
-                const price = formatPrice(product.offerPrice || product.price, currentLang);
-                
-                const brandBN = product.brandBengali || (product.brand && product.brand.bn);
-                const brandEN = product.brandEnglish || (product.brand && product.brand.en);
-                const brand = (currentLang === 'bn' ? brandBN : brandEN) || 'N/A';
-
-                const descBN = product.descriptionBengali || (product.description && product.description.bn);
-                const descEN = product.descriptionEnglish || (product.description && product.description.en);
-                const description = (currentLang === 'bn' ? descBN : descEN) || translations[currentLang]['no-description'];
-                
-                
-                let specs = {};
-                if (product.sizes && Array.isArray(product.sizes)) {
-                    const sizesKey = currentLang === 'bn' ? 'সাইজ' : 'Sizes';
-                    specs[sizesKey] = product.sizes.join(', ');
-                } 
-                
-                const categoryKey = (product.category || "").toLowerCase();
-                const category = translations[currentLang][`cat-${categoryKey}`] || product.category;
-                const rating = parseFloat(product.rating) || 0;
-                const mainImage = product.mainImageURL || (product.img && product.img.main) || 'https://placehold.co/400x400/F0F0F0/333?text=Image+Not+Found';
-                const thumbnails = (product.img) ? [product.img.thumb1, product.img.thumb2, product.img.thumb3].filter(Boolean) : [];
+                const data = getLocalizedProductData(product, currentLang);
                 
                 document.getElementById('modal-product-id').textContent = product.id;
-                document.getElementById('modal-product-name').textContent = name;
-                document.getElementById('modal-product-price').textContent = price;
-                document.getElementById('modal-brand').textContent = brand;
-                document.getElementById('modal-category').textContent = category;
-                document.getElementById('modal-product-description').textContent = description;
+                document.getElementById('modal-product-name').textContent = data.name;
+                document.getElementById('modal-product-price').textContent = formatPrice(data.price, currentLang);
+                document.getElementById('modal-brand').textContent = data.brand;
+                document.getElementById('modal-category').textContent = data.category;
+                document.getElementById('modal-product-description').textContent = data.description;
                 
                 const ratingTextKey = 'modal-rating-text';
-                document.getElementById('modal-rating-text').textContent = `(${rating} ${translations[currentLang][ratingTextKey]})`;
+                document.getElementById('modal-rating-text').textContent = `(${data.rating} ${translations[currentLang][ratingTextKey]})`;
                 
                 const specList = document.getElementById('modal-spec-list');
+                const specsHeading = document.querySelector('.modal-details h3[data-lang-key="modal-specs-title"]');
                 specList.innerHTML = '';
-                for (const key in specs) {
-                    specList.innerHTML += `<li><div class="spec-icon">${getSpecIcon(key)}</div><div class="spec-text"><span class="spec-key">${key}</span><span class="spec-value">${specs[key]}</span></div></li>`;
+                
+                if (Object.keys(data.specs).length > 0) {
+                    if(specsHeading) specsHeading.style.display = 'block';
+                    for (const key in data.specs) {
+                        const value = data.specs[key];
+                        specList.innerHTML += `<li><div class="spec-icon">${getSpecIcon(key)}</div><div class="spec-text"><span class="spec-key">${key}</span><span class="spec-value">${value}</span></div></li>`;
+                    }
+                } else {
+                    if(specsHeading) specsHeading.style.display = 'none';
                 }
 
                 const mainImageEl = document.getElementById('modal-main-image');
-                mainImageEl.src = mainImage;
+                mainImageEl.src = data.mainImage;
                 const thumbnailsContainer = document.getElementById('modal-thumbnails');
                 thumbnailsContainer.innerHTML = '';
                 
-                const allDisplayImages = [mainImage, ...thumbnails];
+                const allDisplayImages = [data.mainImage, ...data.thumbnails].filter(Boolean);
 
                 allDisplayImages.forEach((imgSrc, index) => {
-                    if(imgSrc) {
-                        const img = document.createElement('img');
-                        img.src = imgSrc;
-                        img.addEventListener('click', () => {
-                            mainImageEl.src = imgSrc;
-                            thumbnailsContainer.querySelectorAll('img').forEach(i => i.classList.remove('active'));
-                            img.classList.add('active');
-                        });
-                        if (index === 0) img.classList.add('active');
-                        thumbnailsContainer.appendChild(img);
-                    }
+                    const img = document.createElement('img');
+                    img.src = imgSrc;
+                    img.addEventListener('click', () => {
+                        mainImageEl.src = imgSrc;
+                        thumbnailsContainer.querySelectorAll('img').forEach(i => i.classList.remove('active'));
+                        img.classList.add('active');
+                    });
+                    if (index === 0) img.classList.add('active');
+                    thumbnailsContainer.appendChild(img);
                 });
                 
                 document.getElementById('modal-add-to-cart-btn').dataset.productId = product.id;
@@ -2125,7 +2417,7 @@
             });
 
             confirmNoBtn.addEventListener('click', () => confirmationModal.classList.remove('visible'));
-            confirmationModal.addEventListener('click', e => { if (e.target === confirmationModal) confirmationModal.classList.remove('visible'); });
+            confirmationModal.addEventListener('click', e => { if (e.target === confirmationModal) closeModal('confirmation-modal-overlay'); });
 
             document.getElementById('delete-account-btn').addEventListener('click', () => {
                 const user = auth.currentUser;
@@ -2158,14 +2450,14 @@
             onAuthStateChanged(auth, async (user) => {
                 if (user) {
                     showView('account-view');
-                      const userDocRef = doc(db, "users", user.uid);
-                      const docSnap = await getDoc(userDocRef);
-                      let name = user.email;
-                      if (docSnap.exists() && docSnap.data().name) {
-                          name = docSnap.data().name;
-                      } else if (user.displayName) {
-                          name = user.displayName;
-                      }
+                     const userDocRef = doc(db, "users", user.uid);
+                     const docSnap = await getDoc(userDocRef);
+                     let name = user.email;
+                     if (docSnap.exists() && docSnap.data().name) {
+                         name = docSnap.data().name;
+                     } else if (user.displayName) {
+                         name = user.displayName;
+                     }
                     document.getElementById('user-greeting').textContent = `${translations[localStorage.getItem('language') || 'bn']['user-greeting']} ${name}`;
                     await loadAddress(user.uid);
                     await loadMobile(user.uid);
@@ -2231,12 +2523,12 @@
             async function saveMobile(userId) {
                 const newMobile = document.getElementById('mobile-number').value;
                  try {
-                    const userDocRef = doc(db, "users", userId);
-                    await updateDoc(userDocRef, { mobile: newMobile });
-                    showAuthMessage('Mobile number updated!');
-                } catch (e) {
-                    showAuthMessage('Error updating mobile: ' + e.message, true);
-                }
+                     const userDocRef = doc(db, "users", userId);
+                     await updateDoc(userDocRef, { mobile: newMobile });
+                     showAuthMessage('Mobile number updated!');
+                 } catch (e) {
+                     showAuthMessage('Error updating mobile: ' + e.message, true);
+                 }
             }
 
              async function loadMobile(userId) {
@@ -2286,8 +2578,8 @@
                  const existingItem = cart.find(item => item.id === productId);
                  const imgSrc = product.mainImageURL || (product.img && product.img.main) || 'https://placehold.co/300x200/F0F0F0/333?text=Image+Not+Found';
                  
-                 const nameBN = product.productNameBn || product.productNameBengali || (product.name && product.name.bn) || 'প্রোডাক্ট';
-                 const nameEN = product.productNameEn || product.productNameEnglish || (product.name && product.name.en) || 'Product';
+                 const nameBN = product.productNameBn || product.name?.bn || 'প্রোডাক্ট';
+                 const nameEN = product.productNameEn || product.name?.en || 'Product';
                  const price = parseInt(product.offerPrice || product.price);
 
                  if (existingItem) {
@@ -2300,7 +2592,7 @@
                          price: price, 
                          quantity: 1, 
                          img: imgSrc
-                    });
+                     });
                  }
                  saveCart();
             }
@@ -2345,11 +2637,11 @@
                                 <img src="${item.img}" alt="${name}">
                                 <div class="cart-item-details">
                                     <strong>${name}</strong>
-                                      <div class="cart-item-quantity">
-                                           <button class="quantity-btn" data-id="${item.id}" data-action="decrease">-</button>
-                                           <span>${item.quantity}</span>
-                                           <button class="quantity-btn" data-id="${item.id}" data-action="increase">+</button>
-                                       </div>
+                                     <div class="cart-item-quantity">
+                                         <button class="quantity-btn" data-id="${item.id}" data-action="decrease">-</button>
+                                         <span>${item.quantity}</span>
+                                         <button class="quantity-btn" data-id="${item.id}" data-action="increase">+</button>
+                                     </div>
                                 </div>
                                 <span>${price}</span>
                                 <span class="cart-item-remove" data-id="${item.id}">&times;</span>
@@ -2374,11 +2666,7 @@
                         deliveryCharge = 0; // First order is free
                     } else if (userDocSnap.exists() && userDocSnap.data().address && userDocSnap.data().address.city) {
                         const city = userDocSnap.data().address.city.toLowerCase();
-                        if (city.includes('tangail')) {
-                            deliveryCharge = 100;
-                        } else {
-                            deliveryCharge = 200;
-                        }
+                        deliveryCharge = city.includes('tangail') ? 100 : 200;
                     } else {
                         // Default charge if city is not set
                         deliveryCharge = 200;
@@ -2669,6 +2957,19 @@
 
             const productGrid = document.querySelector('.product-grid');
 
+            function renderStars(rating, maxRating = 5) {
+                const filledStars = Math.round(rating);
+                let starsHtml = '';
+                for (let i = 0; i < maxRating; i++) {
+                    if (i < filledStars) {
+                        starsHtml += `<span style="color: var(--accent-yellow);">★</span>`;
+                    } else {
+                        starsHtml += `<span style="color: var(--text-light);">★</span>`;
+                    }
+                }
+                return starsHtml;
+            }
+
             function renderProducts(productsToRender) {
                 const currentLang = localStorage.getItem('language') || 'bn';
                 if(productsToRender.length === 0) {
@@ -2677,37 +2978,34 @@
                 }
 
                 productGrid.innerHTML = productsToRender.map(p => {
-                    // **PERMANENT NAME FIX** - Checks for multiple possible name fields from the database
-                    const nameBN = p.productNameBn || p.productNameBengali || (p.name && p.name.bn) || translations[currentLang]['name-not-found'];
-                    const nameEN = p.productNameEn || p.productNameEnglish || (p.name && p.name.en) || translations[currentLang]['name-not-found'];
-                    const productName = currentLang === 'bn' ? nameBN : nameEN;
+                    const data = getLocalizedProductData(p, currentLang);
                     
-                    const priceValue = p.offerPrice || p.price;
-                    const oldPriceValue = p.offerPrice ? p.price : p.oldPrice;
-
-                    const price = formatPrice(priceValue, currentLang);
-                    const oldPrice = oldPriceValue ? `<span class="old-price" data-price-old="${oldPriceValue}">${formatPrice(oldPriceValue, currentLang)}</span>` : '';
+                    const price = formatPrice(data.price, currentLang);
+                    let oldPrice = '';
+                    if (p.isOffer && p.price) {
+                        oldPrice = `<span class="old-price" data-price-old="${p.price}">${formatPrice(p.price, currentLang)}</span>`;
+                    }
                     
-                    const hasOffer = !!(p.offerPrice && p.offerPrice < p.price) || p.hasOffer || p.offerTag;
+                    const hasOffer = p.isOffer === true;
                     let offerTagHTML = '';
                     if (hasOffer) {
                         let offerText = translations[currentLang]['tag-offer'];
-                        if (p.offerTag) {
+                        if (p.discount) {
                             const offText = translations[currentLang]['off-text'];
-                            offerText = `${p.offerTag}% ${offText}`;
+                            offerText = `${p.discount}% ${offText}`;
                         }
-                        offerTagHTML = `<div class="offer-tag">${offerText}</div>`;
+                        offerTagHTML = `<div class="offer-tag-right">${offerText}</div>`;
                     }
-                    const imgSrc = p.mainImageURL || (p.img && p.img.main) || 'https://placehold.co/300x200/F0F0F0/333?text=Image+Not+Found';
                     
                     return `
                         <div class="product-card" data-product-id="${p.id}">
                             ${offerTagHTML}
-                            <img src="${imgSrc}" alt="${productName}">
+                            <img src="${data.mainImage}" alt="${data.name}">
                             <div class="product-info">
-                                <h3>${productName}</h3>
+                                <h3>${data.name}</h3>
+                                <div class="rating">${renderStars(data.rating)} (${data.rating.toFixed(1)})</div>
                                 <div class="product-price">
-                                    <span class="current-price" data-price="${priceValue}">${price}</span>
+                                    <span class="current-price" data-price="${data.price}">${price}</span>
                                     ${oldPrice}
                                 </div>
                                 <div class="product-actions">
@@ -2721,6 +3019,12 @@
                 // Re-attach event listeners after rendering
                 productGrid.querySelectorAll('.btn-details').forEach(button => {
                     button.addEventListener('click', function() {
+                        const productId = this.closest('.product-card').dataset.productId;
+                        openProductModal(productId);
+                    });
+                });
+                productGrid.querySelectorAll('.product-card img').forEach(image => {
+                    image.addEventListener('click', function() {
                         const productId = this.closest('.product-card').dataset.productId;
                         openProductModal(productId);
                     });
@@ -2746,15 +3050,211 @@
                 }
             }
 
+            // --- Product Review Logic ---
+            const reviewForm = document.getElementById('review-form');
+            const reviewList = document.getElementById('reviews-list');
+            const starsContainer = document.getElementById('star-rating');
+            let currentRating = 0;
+
+            if (starsContainer) {
+                starsContainer.innerHTML = ''; // Clear existing stars
+                for (let i = 1; i <= 5; i++) {
+                    const star = document.createElement('span');
+                    star.classList.add('star');
+                    star.textContent = '★';
+                    star.dataset.value = i;
+                    star.addEventListener('click', () => {
+                        currentRating = i;
+                        updateStars();
+                    });
+                    starsContainer.appendChild(star);
+                }
+            }
+
+            function updateStars() {
+                if (starsContainer) {
+                    starsContainer.querySelectorAll('.star').forEach(star => {
+                        if (parseInt(star.dataset.value) <= currentRating) {
+                            star.classList.add('filled');
+                        } else {
+                            star.classList.remove('filled');
+                        }
+                    });
+                }
+            }
+
+            async function fetchReviews(productId) {
+                if (!reviewList) return;
+                reviewList.innerHTML = '<p>Loading reviews...</p>';
+                const reviewsRef = collection(db, 'reviews');
+                const q = query(reviewsRef, where('productId', '==', productId), orderBy('createdAt', 'desc'));
+                const querySnapshot = await getDocs(q);
+
+                if (querySnapshot.empty) {
+                    reviewList.innerHTML = `<p>${translations[localStorage.getItem('language') || 'bn']['no-reviews']}</p>`;
+                    return;
+                }
+
+                const reviews = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                reviewList.innerHTML = reviews.map(r => {
+                    const date = r.createdAt?.toDate ? r.createdAt.toDate().toLocaleDateString() : 'N/A';
+                    const stars = renderStars(r.rating);
+                    return `
+                        <div class="review-card">
+                            <div class="review-header">
+                                <strong>${r.userName}</strong>
+                                <span>${stars}</span>
+                            </div>
+                            <p>${r.comment}</p>
+                            <small>${date}</small>
+                        </div>
+                    `;
+                }).join('');
+            }
+            
+            // ----------- Showcase Slider Logic -----------
+            const showcaseSection = document.getElementById('showcase');
+            const slider = document.querySelector('.slider');
+            const sliderNav = document.querySelector('.slider-nav');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            let slideIndex = 0;
+            let slideInterval;
+            let slides = []; // Keep a reference to slide elements
+
+            // Function to render the slider based on images
+            function setupSlider(images) {
+                if (images.length === 0) {
+                    showcaseSection.style.display = 'none';
+                    return;
+                } else {
+                    showcaseSection.style.display = 'block';
+                }
+
+                slider.innerHTML = ''; // Clear existing slides
+                if (sliderNav) sliderNav.innerHTML = ''; // Clear existing dots
+
+                images.forEach(imgData => {
+                    const slide = document.createElement('div');
+                    slide.className = 'slide';
+                    const currentLang = localStorage.getItem('language') || 'bn';
+                    const title = currentLang === 'bn' ? imgData.title?.bn || '' : imgData.title?.en || '';
+                    const subtitle = currentLang === 'bn' ? imgData.subtitle?.bn || '' : imgData.subtitle?.en || '';
+                    const buttonText = translations[currentLang]['cta-button'] || '';
+                    
+                    slide.innerHTML = `
+                        <img src="${imgData.imgUrl}" alt="Slider Image">
+                        <div class="slide-content">
+                            <h1>${title}</h1>
+                            <p>${subtitle}</p>
+                            ${buttonText ? `<a class="cta-button">${buttonText}</a>` : ''}
+                        </div>
+                    `;
+                    slider.appendChild(slide);
+                });
+
+                slides = document.querySelectorAll('.slide');
+                if (slides.length <= 1) {
+                    if (sliderNav) sliderNav.style.display = 'none';
+                    if (prevBtn) prevBtn.style.display = 'none';
+                    if (nextBtn) nextBtn.style.display = 'none';
+                    return;
+                }
+                
+                if (sliderNav) sliderNav.style.display = 'flex';
+                if (prevBtn) prevBtn.style.display = 'flex';
+                if (nextBtn) nextBtn.style.display = 'flex';
+
+                createDots();
+                goToSlide(0);
+                resetInterval();
+            }
+
+            function createDots() {
+                if (!sliderNav) return;
+                slides.forEach((_, i) => {
+                    const dot = document.createElement('div');
+                    dot.classList.add('slider-dot');
+                    if (i === 0) dot.classList.add('active');
+                    dot.addEventListener('click', () => {
+                        goToSlide(i);
+                        resetInterval();
+                    });
+                    sliderNav.appendChild(dot);
+                });
+            }
+
+            function updateDots() {
+                if (slides.length === 0 || !sliderNav) return;
+                const dots = document.querySelectorAll('.slider-dot');
+                dots.forEach(dot => dot.classList.remove('active'));
+                dots[slideIndex].classList.add('active');
+            }
+
+            function goToSlide(index) {
+                if (slides.length === 0 || !slider) return;
+                if (index < 0) {
+                    slideIndex = slides.length - 1;
+                } else if (index >= slides.length) {
+                    slideIndex = 0;
+                } else {
+                    slideIndex = index;
+                }
+                slider.style.transform = `translateX(-${slideIndex * 100}%)`;
+                updateDots();
+            }
+            
+            function nextSlide() { goToSlide(slideIndex + 1); }
+            function prevSlide() { goToSlide(slideIndex - 1); }
+            
+            function resetInterval() {
+                clearInterval(slideInterval);
+                slideInterval = setInterval(nextSlide, 5000); // 5 seconds
+            }
+            
+            if (prevBtn) prevBtn.addEventListener('click', () => { prevSlide(); resetInterval(); });
+            if (nextBtn) nextBtn.addEventListener('click', () => { nextSlide(); resetInterval(); });
+
+            async function fetchAndRenderSlider() {
+                try {
+                    const sliderCol = collection(db, 'banners');
+                    const q = query(sliderCol, orderBy("createdAt", "desc"));
+                    const sliderSnapshot = await getDocs(q);
+                    let sliderImages = sliderSnapshot.docs.map(doc => doc.data());
+                    
+                    if (sliderImages.length === 0) {
+                        // Use default images if the database collection is empty
+                        console.log("No banners found in Firestore. Using default images.");
+                        const defaultImages = [
+                             { imgUrl: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1999&auto=format&fit=crop', title: {bn: 'TangailBuzz এ আপনাকে স্বাগতম', en: 'Welcome to TangailBuzz'}, subtitle: {bn: 'বাংলাদেশের সেরা ই-কমার্স প্ল্যাটফর্ম। আপনার প্রয়োজনীয় সবকিছু এক জায়গায়।', en: 'The best e-commerce platform in Bangladesh. Everything you need in one place.'}, buttonText: 'শপিং শুরু করুন' },
+                            { imgUrl: 'https://images.unsplash.com/photo-1542291026-7eec264c27ab?q=80&w=2070&auto=format&fit=crop', title: {bn: 'সেরা ফ্যাশন কালেকশন', en: 'Best Fashion Collection'}, subtitle: {bn: 'আধুনা থেকে ঐতিহ্যবাহী, সবই পাবেন এখানে।', en: 'From modern to traditional, find it all here.'}, buttonText: 'শপিং শুরু করুন' },
+                            { imgUrl: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=2070&auto=format&fit=crop', title: {bn: 'লেটেস্ট ইলেকট্রনিক্স', en: 'Latest Electronics'}, subtitle: {bn: 'আপনার জীবনকে করুন আরও সহজ ও আধুনিক।', en: 'Make your life easier and more modern.'}, buttonText: 'শপিং শুরু করুন' }
+                        ];
+                        sliderImages = defaultImages;
+                    }
+                    setupSlider(sliderImages);
+
+                } catch (error) {
+                    console.error("Error fetching slider images from Firestore. Using default fallback images.", error);
+                    // This block also uses a default fallback to prevent the app from breaking.
+                    const defaultImages = [
+                        { imgUrl: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1999&auto=format&fit=crop', title: {bn: 'TangailBuzz এ আপনাকে স্বাগতম', en: 'Welcome to TangailBuzz'}, subtitle: {bn: 'বাংলাদেশের সেরা ই-কমার্স প্ল্যাটফর্ম। আপনার প্রয়োজনীয় সবকিছু এক জায়গায়।', en: 'The best e-commerce platform in Bangladesh. Everything you need in one place.'}, buttonText: 'শপিং শুরু করুন' },
+                        { imgUrl: 'https://images.unsplash.com/photo-1542291026-7eec264c27ab?q=80&w=2070&auto=format&fit=crop', title: {bn: 'সেরা ফ্যাশন কালেকশন', en: 'Best Fashion Collection'}, subtitle: {bn: 'আধুনা থেকে ঐতিহ্যবাহী, সবই পাবেন এখানে।', en: 'From modern to traditional, find it all here.'}, buttonText: 'শপিং শুরু করুন' },
+                        { imgUrl: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=2070&auto=format&fit=crop', title: {bn: 'লেটেস্ট ইলেকট্রনিক্স', en: 'Latest Electronics'}, subtitle: {bn: 'আপনার জীবনকে করুন আরও সহজ ও আধুনিক।', en: 'Make your life easier and more modern.'}, buttonText: 'শপিং শুরু করুন' }
+                    ];
+                    setupSlider(defaultImages);
+                }
+            }
+
 
             // Initial Load
             const savedLang = localStorage.getItem('language') || 'bn';
             setLanguage(savedLang);
             updateCartUI();
             fetchProducts();
+            fetchAndRenderSlider();
         });
     </script>
 
 </body>
 </html>
-
