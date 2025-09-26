@@ -1222,8 +1222,8 @@
                 const querySnapshot = await getDocs(collection(db, "products"));
                 productsData = querySnapshot.docs.map(doc => {
                     const data = doc.data();
-                    const hasOffer = data.isOffer === true; // Check for `isOffer`
-                    const mainPrice = Number(data.price) || 0;
+                    const hasOffer = data.isOffer === true;
+                    const mainPrice = Number(data.mainPrice) || 0;
                     const offerPrice = Number(data.offerPrice) || mainPrice;
                     
                     return {
@@ -1241,7 +1241,7 @@
                         fullDescription: data.details || '',
                         category: data.category || 'general',
                         isReturnable: data.isRefundable === true,
-                        specifications: data.specification || {}, // Use `specification` from your screenshot
+                        specifications: data.specification || {},
                         reviews: data.reviews || [],
                         thumbnails: data.thumbnails || [],
                         sizes: data.variants && typeof data.variants.size === 'string' ? data.variants.size.split(',').map(s => s.trim()) : (Array.isArray(data.sizes) ? data.sizes : []),
