@@ -800,6 +800,8 @@
         import { getFirestore, doc, setDoc, getDoc, deleteDoc, onSnapshot, updateDoc, increment, deleteField, collection, addDoc, serverTimestamp, getDocs, writeBatch, query, where, arrayUnion } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
         
+        // Use the global Firebase config and auth token provided by the environment
+        window.appId = typeof __app_id !== 'undefined' ? __app_id.replace(/\//g, '_') : 'default-app-id';
         const firebaseConfig = {
             apiKey: "AIzaSyBQH3wiKS5_5gGg309REabDmJSk1VLIbtw",
             authDomain: "tangail-buzz-project.firebaseapp.com",
@@ -808,6 +810,7 @@
             messagingSenderId: "1080138191394",
             appId: "1:1080138191394:web:0e96b05009820b5dc5b07b"
         };
+        window.initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : '';
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
@@ -833,7 +836,7 @@
             },
             bn: {
                 'deliver-to': 'ডেলিভারি লোকেশন', 'home': 'হোম', 'products': 'পণ্য', 'categories': 'ক্যাটাগরি', 'offers': 'অফার', 'search-placeholder': 'পণ্য খুঁজুন...', 'featured-products': 'বৈশিষ্ট্যযুক্ত পণ্য', 'shop-by-category': 'ক্যাটাগরি অনুসারে কেনাকাটা করুন', 'cat-electronics': 'ইলেকট্রনিক্স', 'cat-fashion': 'ফ্যাশন', 'cat-home-garden': 'হোম অ্যান্ড গার্ডেন', 'cat-health-beauty': 'স্বাস্থ্য ও সৌন্দর্য', 'cat-sports': 'খেলাধুলা ও আউটডোর', 'cat-books': 'বই ও স্টেশনারি', 'cat-kids': 'বাচ্চা ও খেলনা', 'cat-cars': 'গাড়ি ও বাইক', 'why-choose-us': 'আমাদেরকে কেন বেছে নিবেন', 'feature-delivery-title': 'দ্রুত ডেলিভারি', 'feature-delivery-desc': 'আমরা ২-৩ কার্যদিবসের মধ্যে আপনার দোরগোড়ায় পণ্য পৌঁছে দিই।', 'feature-payment-title': 'নিরাপদ পেমেন্ট', 'feature-payment-desc': 'আপনার নিরাপত্তা ও গোপনীয়তার জন্য সকল লেনদেন এনক্রিপ্টেড।', 'feature-return-title': 'সহজ রিটার্ন', 'feature-return-desc': 'পছন্দ না হলে ৩০ দিনের মধ্যে পণ্য ফেরত দিন এবং সম্পূর্ণ মূল্য ফেরত পান।', 'feature-support-title': '২৪/৭ সাপোর্ট', 'feature-support-desc': 'আমাদের গ্রাহক সহায়তা দল দিনরাত আপনার জন্য উপলব্ধ।', 'add-to-cart': 'কার্টে যোগ করুন', 'added-to-cart': 'যোগ হয়েছে!', 'no-products': 'আপনার অনুসন্ধানের সাথে মেলে এমন কোনো পণ্য পাওয়া যায়নি।', 'back-to-products': 'সকল পণ্যে ফিরে যান', 'returnable': '৩০-দিনের মধ্যে ফেরতযোগ্য', 'not-returnable': 'ফেরতযোগ্য নয়', 'secure-payments': 'নিরাপদ পেমেন্ট', 'size': 'সাইজ:', 'storage': 'স্টোরেজ:', 'color': 'রঙ:', 'product-description': 'পণ্যের বিবরণ', 'product-specifications': 'পণ্যের স্পেসিফিকেশন', 'specifications': 'স্পেসিফিকেশন', 'value': 'মান', 'no-specs': 'এই পণ্যের জন্য কোন স্পেসিফিকেশন উপলব্ধ নেই।', 'product-reviews': 'পণ্যের রিভিউ', 'no-reviews': 'এই পণ্যের জন্য এখনো কোনো রিভিউ নেই।', 'cart': 'আপনার কার্ট', 'cart-empty': 'আপনার কার্ট খালি।', 'total': 'মোট মূল্য:', 'checkout': 'চেকআউট করুন', 'your-wishlist': 'আপনার উইশলিস্ট', 'wishlist-empty': 'আপনার উইশলিস্ট খালি। কিছু পণ্য যোগ করুন!', 'your-account': 'আপনার অ্যাকাউন্ট', 'signin-google': 'Google দিয়ে সাইন ইন করুন', 'logout': 'লগআউট', 'toast-cart-added': 'পণ্য কার্টে যোগ করা হয়েছে!', 'toast-wishlist-added': 'পণ্য উইশলিস্টে যোগ করা হয়েছে!', 'toast-wishlist-removed': 'পণ্য উইশলিস্ট থেকে সরানো হয়েছে!', 'toast-login-success': 'সফলভাবে লগইন হয়েছে!', 'toast-logout-success': 'সফলভাবে লগআউট হয়েছে!',
-                 'toast-register-success': 'অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে!', 'login': 'লগইন', 'register': 'অ্যাকাউন্ট রেজিস্টার', 'toast-select-variant': 'অনুগ্রহ করে সব অপশন সিলেক্ট করুন!', 'payment-method': 'পেমেন্ট পদ্ধতি নির্বাচন করুন', 'cod': 'ক্যাশ অন ডেলিভারি', 'online-payment': 'অনলাইন পেমেন্ট', 'confirm-order': 'অর্ডার কনফার্ম করুন', 'order-placed-success': 'আপনার অর্ডারটি সফলভাবে সম্পন্ন হয়েছে!', 'order-placed-fail': 'অর্ডার করতে ব্যর্থ হয়েছে। আবার চেষ্টা করুন।', 'cart-is-empty': 'আপনার কার্ট খালি। চেকআউট করা সম্ভব নয়।', 'mobile-banking': 'মোবাইল ব্যাংকিং', 'payment-instruction-bkash': 'অনুগ্রহ করে আপনার অ্যাপ থেকে এই বিকাশ নম্বরে ৳{amount} পাঠান: +8801863205976।', 'payment-instruction-nagad': 'অনুগ্রহ করে আপনার অ্যাপ থেকে এই নগদ নম্বরে ৳{amount} পাঠান: +8801863205976।', 'payment-instruction-cod': 'আমাদের ডেলিভারি প্রতিনিধি পণ্য পৌঁছানোর সময় আপনার থেকে টাকা সংগ্রহ করবে।', 'profile-updated': 'প্রোফাইল সফলভাবে আপডেট হয়েছে!', 'profile-update-fail': 'প্রোফাইল আপডেট করতে ব্যর্থ হয়েছে।', 'toast-storage-permission-error': 'স্টোরেজ পারমিশন সমস্যা। অনুগ্রহ করে Firebase রুলস চেক করুন।', 'toast-update-profile': 'অর্ডার করার পূর্বে অনুগ্রহ করে আপনার প্রোফাইলে ঠিকানা ও মোবাইল নম্বর আপডেট করুন।', 'emergency-contact': 'জরুরী যোগাযোগ', 'message-sent': 'আপনার বার্তা সফলভাবে পাঠানো হয়েছে!', 'out-of-stock': 'স্টক শেষ', 'toast-out-of-stock': 'দুঃখিত, এই পণ্যটি বর্তমানে স্টক আউট।', 'subtotal': 'মোট', 'delivery-charge': 'ডেলিভারি চার্জ', 'my-orders': 'আমার অর্ডার', 'discount': 'ডিসকাউন্ট', 'coupon-applied': 'কুপন সফলভাবে প্রয়োগ করা হয়েছে!', 'invalid-coupon': 'অবৈধ বা মেয়াদোত্তীর্ণ কুপন।', 'coupon-used': 'কুপনটি ইতিমধ্যে ব্যবহার করা হয়েছে।'
+                'toast-register-success': 'অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে!', 'login': 'লগইন', 'register': 'অ্যাকাউন্ট রেজিস্টার', 'toast-select-variant': 'অনুগ্রহ করে সব অপশন সিলেক্ট করুন!', 'payment-method': 'পেমেন্ট পদ্ধতি নির্বাচন করুন', 'cod': 'ক্যাশ অন ডেলিভারি', 'online-payment': 'অনলাইন পেমেন্ট', 'confirm-order': 'অর্ডার কনফার্ম করুন', 'order-placed-success': 'আপনার অর্ডারটি সফলভাবে সম্পন্ন হয়েছে!', 'order-placed-fail': 'অর্ডার করতে ব্যর্থ হয়েছে। আবার চেষ্টা করুন।', 'cart-is-empty': 'আপনার কার্ট খালি। চেকআউট করা সম্ভব নয়।', 'mobile-banking': 'মোবাইল ব্যাংকিং', 'payment-instruction-bkash': 'অনুগ্রহ করে আপনার অ্যাপ থেকে এই বিকাশ নম্বরে ৳{amount} পাঠান: +8801863205976।', 'payment-instruction-nagad': 'অনুগ্রহ করে আপনার অ্যাপ থেকে এই নগদ নম্বরে ৳{amount} পাঠান: +8801863205976।', 'payment-instruction-cod': 'আমাদের ডেলিভারি প্রতিনিধি পণ্য পৌঁছানোর সময় আপনার থেকে টাকা সংগ্রহ করবে।', 'profile-updated': 'প্রোফাইল সফলভাবে আপডেট হয়েছে!', 'profile-update-fail': 'প্রোফাইল আপডেট করতে ব্যর্থ হয়েছে।', 'toast-storage-permission-error': 'স্টোরেজ পারমিশন সমস্যা। অনুগ্রহ করে Firebase রুলস চেক করুন।', 'toast-update-profile': 'অর্ডার করার পূর্বে অনুগ্রহ করে আপনার প্রোফাইলে ঠিকানা ও মোবাইল নম্বর আপডেট করুন।', 'emergency-contact': 'জরুরী যোগাযোগ', 'message-sent': 'আপনার বার্তা সফলভাবে পাঠানো হয়েছে!', 'out-of-stock': 'স্টক শেষ', 'toast-out-of-stock': 'দুঃখিত, এই পণ্যটি বর্তমানে স্টক আউট।', 'subtotal': 'মোট', 'delivery-charge': 'ডেলিভারি চার্জ', 'my-orders': 'আমার অর্ডার', 'discount': 'ডিসকাউন্ট', 'coupon-applied': 'কুপন সফলভাবে প্রয়োগ করা হয়েছে!', 'invalid-coupon': 'অবৈধ বা মেয়াদোত্তীর্ণ কুপন।', 'coupon-used': 'কুপনটি ইতিমধ্যে ব্যবহার করা হয়েছে।'
             }
         };
 
@@ -933,7 +936,7 @@
             currentDisplayedProducts = productsToRender;
             DOMElements.productList.innerHTML = '';
             if (productsToRender.length === 0) {
-                 DOMElements.productList.innerHTML = `<div class="loader"></div>`;
+                 DOMElements.productList.innerHTML = `<p class="col-span-full text-center text-gray-500">No products found in the database.</p>`;
                 return;
             }
             const fragment = document.createDocumentFragment();
@@ -1012,43 +1015,69 @@
 
             const detailsPage = document.getElementById('product-details-page');
             if(!detailsPage) return;
-
+            
+            // Populate product details
             const isWished = localWishlistCache.has(product.id);
             const heartClass = isWished ? 'fas text-theme-pink' : 'far text-gray-400';
-
-            detailsPage.querySelector('#product-image').src = product.imageUrl || 'https://placehold.co/400x400/f5f7fa/6a0dad?text=Image';
-            detailsPage.querySelector('#product-title-details').textContent = product.name || "Product Name";
-            detailsPage.querySelector('#product-brand-details').textContent = product.brand || "Brand";
-            detailsPage.querySelector('#product-rating-details').textContent = product.rating || 0;
-            detailsPage.querySelector('#product-stars-details').innerHTML = renderStars(product.rating || 0);
-            detailsPage.querySelector('#product-rating-count-details').textContent = `(${product.ratingCount || 0})`;
-            detailsPage.querySelector('#add-to-cart-details').dataset.productId = productId;
-            detailsPage.querySelector('#wishlist-details').dataset.productId = productId;
-            detailsPage.querySelector('#wishlist-details i').className = `${heartClass} fa-heart`;
-            detailsPage.querySelector('#product-full-description').textContent = product.fullDescription || product.description || 'No detailed description available.';
             
-            const isOutOfStock = Number(product.stock) <= 0;
+            const productTitleEl = detailsPage.querySelector('#product-title-details');
+            if (productTitleEl) productTitleEl.textContent = product.name || "Product Name";
+            
+            const productBrandEl = detailsPage.querySelector('#product-brand-details');
+            if (productBrandEl) productBrandEl.textContent = product.brand || "Brand";
+
+            const productImageEl = detailsPage.querySelector('#product-image');
+            if (productImageEl) productImageEl.src = product.imageUrl || 'https://placehold.co/400x400/f5f7fa/6a0dad?text=Image';
+
+            const productRatingEl = detailsPage.querySelector('#product-rating-details');
+            if (productRatingEl) productRatingEl.textContent = product.rating || 0;
+
+            const productStarsEl = detailsPage.querySelector('#product-stars-details');
+            if (productStarsEl) productStarsEl.innerHTML = renderStars(product.rating || 0);
+
+            const productRatingCountEl = detailsPage.querySelector('#product-rating-count-details');
+            if (productRatingCountEl) productRatingCountEl.textContent = `(${product.ratingCount || 0})`;
+            
             const addToCartBtn = detailsPage.querySelector('#add-to-cart-details');
+            if (addToCartBtn) addToCartBtn.dataset.productId = productId;
+            
+            const wishlistBtn = detailsPage.querySelector('#wishlist-details');
+            if (wishlistBtn) wishlistBtn.dataset.productId = productId;
+
+            const wishlistIcon = detailsPage.querySelector('#wishlist-details i');
+            if (wishlistIcon) wishlistIcon.className = `${heartClass} fa-heart`;
+
+            const productDescriptionEl = detailsPage.querySelector('#product-full-description');
+            if (productDescriptionEl) productDescriptionEl.textContent = product.fullDescription || product.description || 'No detailed description available.';
+
+
+            const isOutOfStock = Number(product.stock) <= 0;
             const buyNowBtn = detailsPage.querySelector('.buy-now');
 
             if (isOutOfStock) {
-                addToCartBtn.textContent = translations[currentLanguage]['out-of-stock'];
-                addToCartBtn.disabled = true;
-                addToCartBtn.classList.add('bg-gray-400', 'cursor-not-allowed');
-                addToCartBtn.classList.remove('bg-theme-blue', 'hover:bg-theme-purple');
-
-                buyNowBtn.disabled = true;
-                buyNowBtn.classList.add('bg-gray-200', 'text-gray-400', 'cursor-not-allowed', 'border-gray-300');
-                buyNowBtn.classList.remove('hover:bg-gray-100', 'border-theme-blue', 'text-theme-blue');
+                if (addToCartBtn) {
+                    addToCartBtn.textContent = translations[currentLanguage]['out-of-stock'];
+                    addToCartBtn.disabled = true;
+                    addToCartBtn.classList.add('bg-gray-400', 'cursor-not-allowed');
+                    addToCartBtn.classList.remove('bg-theme-blue', 'hover:bg-theme-purple');
+                }
+                if (buyNowBtn) {
+                    buyNowBtn.disabled = true;
+                    buyNowBtn.classList.add('bg-gray-200', 'text-gray-400', 'cursor-not-allowed', 'border-gray-300');
+                    buyNowBtn.classList.remove('hover:bg-gray-100', 'border-theme-blue', 'text-theme-blue');
+                }
             } else {
-                addToCartBtn.textContent = translations[currentLanguage]['add-to-cart'];
-                addToCartBtn.disabled = false;
-                addToCartBtn.classList.remove('bg-gray-400', 'cursor-not-allowed');
-                addToCartBtn.classList.add('bg-theme-blue', 'hover:bg-theme-purple');
-
-                buyNowBtn.disabled = false;
-                buyNowBtn.classList.remove('bg-gray-200', 'text-gray-400', 'cursor-not-allowed', 'border-gray-300');
-                buyNowBtn.classList.add('hover:bg-gray-100', 'border-theme-blue', 'text-theme-blue');
+                if (addToCartBtn) {
+                    addToCartBtn.textContent = translations[currentLanguage]['add-to-cart'];
+                    addToCartBtn.disabled = false;
+                    addToCartBtn.classList.remove('bg-gray-400', 'cursor-not-allowed');
+                    addToCartBtn.classList.add('bg-theme-blue', 'hover:bg-theme-purple');
+                }
+                if (buyNowBtn) {
+                    buyNowBtn.disabled = false;
+                    buyNowBtn.classList.remove('bg-gray-200', 'text-gray-400', 'cursor-not-allowed', 'border-gray-300');
+                    buyNowBtn.classList.add('hover:bg-gray-100', 'border-theme-blue', 'text-theme-blue');
+                }
             }
 
             renderThumbnails(product.thumbnails || []);
@@ -1071,6 +1100,8 @@
 
         function renderSpecifications(specs) {
             const container = document.getElementById('product-specifications');
+            if (!container) return;
+
             if (!specs || Object.keys(specs).length === 0) {
                 container.innerHTML = `<p class="text-gray-500" data-lang="no-specs">${translations[currentLanguage]['no-specs']}</p>`;
                 return;
@@ -1112,7 +1143,7 @@
             const priceElement = document.getElementById('product-price-details');
             const price = product.price || 0;
             if (product.isOffer && product.originalPrice) {
-                const discountPercent = Math.round(((product.originalPrice - price) / product.originalPrice) * 100);
+                const discountPercent = Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100);
                 priceElement.innerHTML = `
                     <div class="flex items-baseline gap-2 flex-wrap">
                         <span class="text-2xl font-bold text-price-black">৳${price.toFixed(2)}</span>
@@ -1183,17 +1214,17 @@
                 const querySnapshot = await getDocs(collection(db, "products"));
                 productsData = querySnapshot.docs.map(doc => {
                     const data = doc.data();
-                    const hasOffer = data.isOfferProduct === true;
-                    const mainPrice = Number(data.mainPrice) || 0;
-                    const offerPrice = Number(data.offerPrice) || 0;
+                    const hasOffer = data.isOffer === true; // Check for `isOffer`
+                    const mainPrice = Number(data.price) || 0;
+                    const offerPrice = Number(data.offerPrice) || mainPrice;
                     
                     return {
                         id: doc.id,
                         name: data.name || "No Name Provided",
-                        brand: data.company || "No Brand",
-                        price: hasOffer && offerPrice < mainPrice ? offerPrice : mainPrice,
-                        originalPrice: hasOffer && offerPrice < mainPrice ? mainPrice : null,
-                        isOffer: hasOffer && offerPrice < mainPrice,
+                        brand: data.brand || "No Brand",
+                        price: hasOffer ? offerPrice : mainPrice,
+                        originalPrice: hasOffer ? mainPrice : null,
+                        isOffer: hasOffer,
                         rating: data.rating || 0,
                         ratingCount: data.ratingCount || 0,
                         image: data.imageUrl || '',
@@ -1202,7 +1233,7 @@
                         fullDescription: data.details || '',
                         category: data.category || 'general',
                         isReturnable: data.isRefundable === true,
-                        specifications: data.specifics || {},
+                        specifications: data.specification || {}, // Use `specification` from your screenshot
                         reviews: data.reviews || [],
                         thumbnails: data.thumbnails || [],
                         sizes: data.variants && typeof data.variants.size === 'string' ? data.variants.size.split(',').map(s => s.trim()) : (Array.isArray(data.sizes) ? data.sizes : []),
@@ -1296,7 +1327,7 @@
         }
 
         async function addToCartInDb(productId, fromCard = false) {
-            if (!currentUser) { openDrawer('profile-drawer'); return Promise.reject("User not logged in"); }
+            if (!currentUser) { window.openDrawer('profile-drawer'); return Promise.reject("User not logged in"); }
             const product = productsData.find(p => p.id === productId);
             if (!product) return Promise.reject("Product not found");
             
@@ -1382,7 +1413,7 @@
         window.updateQuantity = updateQuantity;
         
         async function toggleWishlistInDb(productId) {
-            if (!currentUser) { openDrawer('profile-drawer'); return; }
+            if (!currentUser) { window.openDrawer('profile-drawer'); return; }
             const userDocRef = doc(db, 'users', currentUser.uid);
             const isWished = localWishlistCache.has(productId);
 
@@ -1918,14 +1949,16 @@
                         ${statuses.map((s, index) => {
                             const isActive = currentStatusIndex >= index;
                             const isLineActive = currentStatusIndex > index;
+                            const statusCircleClass = isActive ? 'bg-green-500 text-white' : 'bg-gray-300 text-gray-600';
+                            const statusLineClass = isLineActive ? 'bg-green-500' : 'bg-gray-300';
                             return `
                                 <div class="flex-1 text-center">
-                                    <div class="w-8 h-8 mx-auto rounded-full flex items-center justify-center ${isActive ? 'bg-green-500 text-white' : 'bg-gray-300 text-gray-600'}">
+                                    <div class="w-8 h-8 mx-auto rounded-full flex items-center justify-center ${statusCircleClass}">
                                         <i class="fas fa-check"></i>
                                     </div>
                                     <p class="text-xs mt-1">${s}</p>
                                 </div>
-                                ${index < statuses.length - 1 ? `<div class="flex-1 h-1 ${isLineActive ? 'bg-green-500' : 'bg-gray-300'}"></div>` : ''}
+                                ${index < statuses.length - 1 ? `<div class="flex-1 h-1 ${statusLineClass}"></div>` : ''}
                             `;
                         }).join('')}
                    </div>`;
@@ -2167,4 +2200,3 @@
     </script>
 </body>
 </html>
-
