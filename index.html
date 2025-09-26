@@ -345,6 +345,7 @@
                     <p id="user-location" class="text-sm text-gray-600"></p>
                     <button id="my-orders-btn-profile" class="mt-4 w-full py-2 bg-theme-blue text-white rounded-full font-bold hover:bg-theme-purple transition-colors" data-lang="my-orders">My Orders</button>
                     <button id="edit-profile-btn" class="mt-2 w-full py-2 bg-gray-200 text-gray-700 rounded-full font-bold hover:bg-gray-300 transition-colors">Edit Profile</button>
+                    <button id="delete-account-btn" class="mt-2 w-full py-2 bg-red-500 text-white rounded-full font-bold hover:bg-red-600 transition-colors">Delete Account</button>
                     <button id="logout-btn" class="mt-2 w-full py-3 px-6 bg-theme-pink text-white rounded-full font-bold hover:bg-theme-purple transition-colors shadow-lg" data-lang="logout">লগআউট</button>
                 </div>
                  <!-- Edit Profile Form -->
@@ -796,9 +797,9 @@
     <!-- Firebase SDK Scripts (Modular v9+) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, deleteUser } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, getDoc, deleteDoc, onSnapshot, updateDoc, increment, deleteField, collection, addDoc, serverTimestamp, getDocs, writeBatch, query, where, arrayUnion } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
         
         // Use the global Firebase config and auth token provided by the environment
         window.appId = typeof __app_id !== 'undefined' ? __app_id.replace(/\//g, '_') : 'default-app-id';
@@ -832,11 +833,17 @@
         const translations = {
             en: {
                 'deliver-to': 'Deliver to', 'home': 'Home', 'products': 'Products', 'categories': 'Categories', 'offers': 'Offers', 'search-placeholder': 'Search for products...', 'featured-products': 'Featured Products', 'shop-by-category': 'Shop by Category', 'cat-electronics': 'Electronics', 'cat-fashion': 'Fashion', 'cat-home-garden': 'Home & Garden', 'cat-health-beauty': 'Health & Beauty', 'cat-sports': 'Sports & Outdoors', 'cat-books': 'Books & Stationery', 'cat-kids': 'Kids & Toys', 'cat-cars': 'Cars & Bikes', 'why-choose-us': 'Why Choose Us', 'feature-delivery-title': 'Fast Delivery', 'feature-delivery-desc': 'We deliver to your doorstep within 2-3 business days.', 'feature-payment-title': 'Secure Payment', 'feature-payment-desc': 'All transactions are encrypted for your security and privacy.', 'feature-return-title': 'Easy Returns', 'feature-return-desc': 'Return products within 30 days for a full refund if you\'re not satisfied.', 'feature-support-title': '24/7 Support', 'feature-support-desc': 'Our customer support team is available for you day and night.', 'add-to-cart': 'Add to Cart', 'added-to-cart': 'Added!', 'no-products': 'No products found matching your criteria.', 'back-to-products': 'Back to All Products', 'returnable': '30-Day Returnable', 'not-returnable': 'Not Returnable', 'secure-payments': 'Secure Payments', 'size': 'Size:', 'storage': 'Storage:', 'color': 'Color:', 'product-description': 'Product Description', 'product-specifications': 'Product Specifications', 'specifications': 'Specification', 'value': 'Value', 'no-specs': 'No specifications available for this product.', 'product-reviews': 'Product Reviews', 'no-reviews': 'There are no reviews for this product yet.', 'cart': 'Your Cart', 'cart-empty': 'Your cart is empty.', 'total': 'Total:', 'checkout': 'Checkout', 'your-wishlist': 'Your Wishlist', 'wishlist-empty': 'Your wishlist is empty. Add some products!', 'your-account': 'Your Account', 'signin-google': 'Sign in with Google', 'logout': 'Logout', 'toast-cart-added': 'Product added to cart!', 'toast-wishlist-added': 'Product added to wishlist!', 'toast-wishlist-removed': 'Product removed from wishlist!', 'toast-login-success': 'Successfully logged in!', 'toast-logout-success': 'Successfully logged out!',
-                'toast-register-success': 'Account created successfully!', 'login': 'Login', 'register': 'Register Account', 'toast-select-variant': 'Please select all required options!', 'payment-method': 'Select Payment Method', 'cod': 'Cash on Delivery', 'online-payment': 'Online Payment', 'confirm-order': 'Confirm Order', 'order-placed-success': 'Your order has been placed successfully!', 'order-placed-fail': 'Failed to place order. Please try again.', 'cart-is-empty': 'Your cart is empty. Cannot checkout.', 'mobile-banking': 'Mobile Banking', 'payment-instruction-bkash': 'Please send {amount} Taka to this Bkash number: +8801863205976 from your app.', 'payment-instruction-nagad': 'Please send {amount} Taka to this Nagad number: +8801863205976 from your app.', 'payment-instruction-cod': 'Our delivery person will collect the payment upon delivery.', 'profile-updated': 'Profile updated successfully!', 'profile-update-fail': 'Failed to update profile.', 'toast-storage-permission-error': 'Storage permission denied. Check Firebase rules.', 'toast-update-profile': 'Please update your location and mobile number in your profile before ordering.', 'emergency-contact': 'Emergency Contact Us', 'message-sent': 'Message sent successfully!', 'out-of-stock': 'Out of Stock', 'toast-out-of-stock': 'Sorry, this product is currently out of stock.', 'subtotal': 'Subtotal', 'delivery-charge': 'Delivery Charge', 'my-orders': 'My Orders', 'discount': 'Discount', 'coupon-applied': 'Coupon applied successfully!', 'invalid-coupon': 'Invalid or expired coupon.', 'coupon-used': 'Coupon already used.'
+                'toast-register-success': 'Account created successfully!', 'login': 'Login', 'register': 'Register Account', 'toast-select-variant': 'Please select all required options!', 'payment-method': 'Select Payment Method', 'cod': 'Cash on Delivery', 'online-payment': 'Online Payment', 'confirm-order': 'Confirm Order', 'order-placed-success': 'Your order has been placed successfully!', 'order-placed-fail': 'Failed to place order. Please try again.', 'cart-is-empty': 'Your cart is empty. Cannot checkout.', 'mobile-banking': 'Mobile Banking', 'payment-instruction-bkash': 'Please send {amount} Taka to this Bkash number: +8801863205976 from your app.', 'payment-instruction-nagad': 'Please send {amount} Taka to this Nagad number: +8801863205976 from your app.', 'payment-instruction-cod': 'Our delivery person will collect the payment upon delivery.', 'profile-updated': 'Profile updated successfully!', 'profile-update-fail': 'Failed to update profile.', 'toast-storage-permission-error': 'Storage permission denied. Check Firebase rules.', 'toast-update-profile': 'Please update your location and mobile number in your profile before ordering.', 'emergency-contact': 'Emergency Contact Us', 'message-sent': 'Message sent successfully!', 'out-of-stock': 'Out of Stock', 'toast-out-of-stock': 'Sorry, this product is currently out of stock.', 'subtotal': 'Subtotal', 'delivery-charge': 'Delivery Charge', 'my-orders': 'My Orders', 'discount': 'Discount', 'coupon-applied': 'Coupon applied successfully!', 'invalid-coupon': 'Invalid or expired coupon.', 'coupon-used': 'Coupon already used.',
+                'delete-account-confirm': 'Are you sure you want to delete your account? This action cannot be undone.',
+                'account-deleted': 'Your account has been successfully deleted.',
+                'delete-account-failed': 'Failed to delete account. Please try again.'
             },
             bn: {
                 'deliver-to': 'ডেলিভারি লোকেশন', 'home': 'হোম', 'products': 'পণ্য', 'categories': 'ক্যাটাগরি', 'offers': 'অফার', 'search-placeholder': 'পণ্য খুঁজুন...', 'featured-products': 'বৈশিষ্ট্যযুক্ত পণ্য', 'shop-by-category': 'ক্যাটাগরি অনুসারে কেনাকাটা করুন', 'cat-electronics': 'ইলেকট্রনিক্স', 'cat-fashion': 'ফ্যাশন', 'cat-home-garden': 'হোম অ্যান্ড গার্ডেন', 'cat-health-beauty': 'স্বাস্থ্য ও সৌন্দর্য', 'cat-sports': 'খেলাধুলা ও আউটডোর', 'cat-books': 'বই ও স্টেশনারি', 'cat-kids': 'বাচ্চা ও খেলনা', 'cat-cars': 'গাড়ি ও বাইক', 'why-choose-us': 'আমাদেরকে কেন বেছে নিবেন', 'feature-delivery-title': 'দ্রুত ডেলিভারি', 'feature-delivery-desc': 'আমরা ২-৩ কার্যদিবসের মধ্যে আপনার দোরগোড়ায় পণ্য পৌঁছে দিই।', 'feature-payment-title': 'নিরাপদ পেমেন্ট', 'feature-payment-desc': 'আপনার নিরাপত্তা ও গোপনীয়তার জন্য সকল লেনদেন এনক্রিপ্টেড।', 'feature-return-title': 'সহজ রিটার্ন', 'feature-return-desc': 'পছন্দ না হলে ৩০ দিনের মধ্যে পণ্য ফেরত দিন এবং সম্পূর্ণ মূল্য ফেরত পান।', 'feature-support-title': '২৪/৭ সাপোর্ট', 'feature-support-desc': 'আমাদের গ্রাহক সহায়তা দল দিনরাত আপনার জন্য উপলব্ধ।', 'add-to-cart': 'কার্টে যোগ করুন', 'added-to-cart': 'যোগ হয়েছে!', 'no-products': 'আপনার অনুসন্ধানের সাথে মেলে এমন কোনো পণ্য পাওয়া যায়নি।', 'back-to-products': 'সকল পণ্যে ফিরে যান', 'returnable': '৩০-দিনের মধ্যে ফেরতযোগ্য', 'not-returnable': 'ফেরতযোগ্য নয়', 'secure-payments': 'নিরাপদ পেমেন্ট', 'size': 'সাইজ:', 'storage': 'স্টোরেজ:', 'color': 'রঙ:', 'product-description': 'পণ্যের বিবরণ', 'product-specifications': 'পণ্যের স্পেসিফিকেশন', 'specifications': 'স্পেসিফিকেশন', 'value': 'মান', 'no-specs': 'এই পণ্যের জন্য কোন স্পেসিফিকেশন উপলব্ধ নেই।', 'product-reviews': 'পণ্যের রিভিউ', 'no-reviews': 'এই পণ্যের জন্য এখনো কোনো রিভিউ নেই।', 'cart': 'আপনার কার্ট', 'cart-empty': 'আপনার কার্ট খালি।', 'total': 'মোট মূল্য:', 'checkout': 'চেকআউট করুন', 'your-wishlist': 'আপনার উইশলিস্ট', 'wishlist-empty': 'আপনার উইশলিস্ট খালি। কিছু পণ্য যোগ করুন!', 'your-account': 'আপনার অ্যাকাউন্ট', 'signin-google': 'Google দিয়ে সাইন ইন করুন', 'logout': 'লগআউট', 'toast-cart-added': 'পণ্য কার্টে যোগ করা হয়েছে!', 'toast-wishlist-added': 'পণ্য উইশলিস্টে যোগ করা হয়েছে!', 'toast-wishlist-removed': 'পণ্য উইশলিস্ট থেকে সরানো হয়েছে!', 'toast-login-success': 'সফলভাবে লগইন হয়েছে!', 'toast-logout-success': 'সফলভাবে লগআউট হয়েছে!',
-                'toast-register-success': 'অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে!', 'login': 'লগইন', 'register': 'অ্যাকাউন্ট রেজিস্টার', 'toast-select-variant': 'অনুগ্রহ করে সব অপশন সিলেক্ট করুন!', 'payment-method': 'পেমেন্ট পদ্ধতি নির্বাচন করুন', 'cod': 'ক্যাশ অন ডেলিভারি', 'online-payment': 'অনলাইন পেমেন্ট', 'confirm-order': 'অর্ডার কনফার্ম করুন', 'order-placed-success': 'আপনার অর্ডারটি সফলভাবে সম্পন্ন হয়েছে!', 'order-placed-fail': 'অর্ডার করতে ব্যর্থ হয়েছে। আবার চেষ্টা করুন।', 'cart-is-empty': 'আপনার কার্ট খালি। চেকআউট করা সম্ভব নয়।', 'mobile-banking': 'মোবাইল ব্যাংকিং', 'payment-instruction-bkash': 'অনুগ্রহ করে আপনার অ্যাপ থেকে এই বিকাশ নম্বরে ৳{amount} পাঠান: +8801863205976।', 'payment-instruction-nagad': 'অনুগ্রহ করে আপনার অ্যাপ থেকে এই নগদ নম্বরে ৳{amount} পাঠান: +8801863205976।', 'payment-instruction-cod': 'আমাদের ডেলিভারি প্রতিনিধি পণ্য পৌঁছানোর সময় আপনার থেকে টাকা সংগ্রহ করবে।', 'profile-updated': 'প্রোফাইল সফলভাবে আপডেট হয়েছে!', 'profile-update-fail': 'প্রোফাইল আপডেট করতে ব্যর্থ হয়েছে।', 'toast-storage-permission-error': 'স্টোরেজ পারমিশন সমস্যা। অনুগ্রহ করে Firebase রুলস চেক করুন।', 'toast-update-profile': 'অর্ডার করার পূর্বে অনুগ্রহ করে আপনার প্রোফাইলে ঠিকানা ও মোবাইল নম্বর আপডেট করুন।', 'emergency-contact': 'জরুরী যোগাযোগ', 'message-sent': 'আপনার বার্তা সফলভাবে পাঠানো হয়েছে!', 'out-of-stock': 'স্টক শেষ', 'toast-out-of-stock': 'দুঃখিত, এই পণ্যটি বর্তমানে স্টক আউট।', 'subtotal': 'মোট', 'delivery-charge': 'ডেলিভারি চার্জ', 'my-orders': 'আমার অর্ডার', 'discount': 'ডিসকাউন্ট', 'coupon-applied': 'কুপন সফলভাবে প্রয়োগ করা হয়েছে!', 'invalid-coupon': 'অবৈধ বা মেয়াদোত্তীর্ণ কুপন।', 'coupon-used': 'কুপনটি ইতিমধ্যে ব্যবহার করা হয়েছে।'
+                'toast-register-success': 'অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে!', 'login': 'লগইন', 'register': 'অ্যাকাউন্ট রেজিস্টার', 'toast-select-variant': 'অনুগ্রহ করে সব অপশন সিলেক্ট করুন!', 'payment-method': 'পেমেন্ট পদ্ধতি নির্বাচন করুন', 'cod': 'ক্যাশ অন ডেলিভারি', 'online-payment': 'অনলাইন পেমেন্ট', 'confirm-order': 'অর্ডার কনফার্ম করুন', 'order-placed-success': 'আপনার অর্ডারটি সফলভাবে সম্পন্ন হয়েছে!', 'order-placed-fail': 'অর্ডার করতে ব্যর্থ হয়েছে। আবার চেষ্টা করুন।', 'cart-is-empty': 'আপনার কার্ট খালি। চেকআউট করা সম্ভব নয়।', 'mobile-banking': 'মোবাইল ব্যাংকিং', 'payment-instruction-bkash': 'অনুগ্রহ করে আপনার অ্যাপ থেকে এই বিকাশ নম্বরে ৳{amount} পাঠান: +8801863205976।', 'payment-instruction-nagad': 'অনুগ্রহ করে আপনার অ্যাপ থেকে এই নগদ নম্বরে ৳{amount} পাঠান: +8801863205976।', 'payment-instruction-cod': 'আমাদের ডেলিভারি প্রতিনিধি পণ্য পৌঁছানোর সময় আপনার থেকে টাকা সংগ্রহ করবে।', 'profile-updated': 'প্রোফাইল সফলভাবে আপডেট হয়েছে!', 'profile-update-fail': 'প্রোফাইল আপডেট করতে ব্যর্থ হয়েছে।', 'toast-storage-permission-error': 'স্টোরেজ পারমিশন সমস্যা। অনুগ্রহ করে Firebase রুলস চেক করুন।', 'toast-update-profile': 'অর্ডার করার পূর্বে অনুগ্রহ করে আপনার প্রোফাইলে ঠিকানা ও মোবাইল নম্বর আপডেট করুন।', 'emergency-contact': 'জরুরী যোগাযোগ', 'message-sent': 'আপনার বার্তা সফলভাবে পাঠানো হয়েছে!', 'out-of-stock': 'স্টক শেষ', 'toast-out-of-stock': 'দুঃখিত, এই পণ্যটি বর্তমানে স্টক আউট।', 'subtotal': 'মোট', 'delivery-charge': 'ডেলিভারি চার্জ', 'my-orders': 'আমার অর্ডার', 'discount': 'ডিসকাউন্ট', 'coupon-applied': 'কুপন সফলভাবে প্রয়োগ করা হয়েছে!', 'invalid-coupon': 'অবৈধ বা মেয়াদোত্তীর্ণ কুপন।', 'coupon-used': 'কুপনটি ইতিমধ্যে ব্যবহার করা হয়েছে।',
+                'delete-account-confirm': 'আপনি কি নিশ্চিত যে আপনি আপনার অ্যাকাউন্টটি মুছে ফেলতে চান? এই কাজটি ফিরিয়ে আনা যাবে না।',
+                'account-deleted': 'আপনার অ্যাকাউন্ট সফলভাবে মুছে ফেলা হয়েছে।',
+                'delete-account-failed': 'অ্যাকাউন্ট মুছে ফেলার চেষ্টা ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।'
             }
         };
 
@@ -858,6 +865,7 @@
             couponMessage: document.getElementById('coupon-message'),
             discountRow: document.getElementById('discount-row'),
             cartDiscount: document.getElementById('cart-discount'),
+            deleteAccountBtn: document.getElementById('delete-account-btn'),
         };
         
         // --- UI & RENDERING ---
@@ -953,7 +961,7 @@
                     const discountPercent = Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100);
                     priceHtml = `
                         <div class="flex items-baseline gap-2 flex-wrap">
-                            <span class="text-xl font-bold text-price-black">৳${product.price.toFixed(2)}</span>
+                            <span class="text-xl font-bold text-price-black">৳${price.toFixed(2)}</span>
                             <span class="text-sm text-gray-400 line-through">৳${product.originalPrice.toFixed(2)}</span>
                              <span class="text-xs font-bold text-red-500">(-${discountPercent}%)</span>
                         </div>`;
@@ -1649,6 +1657,35 @@
                  DOMElements.authError.textContent = error.message;
             }
         }
+
+        async function handleDeleteAccount() {
+            if (!currentUser) return;
+            const user = currentUser;
+
+            const isConfirmed = window.confirm(translations[currentLanguage]['delete-account-confirm']);
+            if (!isConfirmed) return;
+
+            try {
+                // Delete Firestore documents
+                const userDocRef = doc(db, 'users', user.uid);
+                await deleteDoc(userDocRef);
+
+                // Delete profile photo from Storage
+                if (user.photoURL) {
+                    const storageRef = ref(storage, `profileImages/${user.uid}`);
+                    await deleteObject(storageRef);
+                }
+
+                // Delete the user from Firebase Auth
+                await deleteUser(user);
+
+                showToast('account-deleted', true);
+                closeDrawer();
+            } catch (error) {
+                console.error("Error deleting account:", error);
+                showToast('delete-account-failed', false);
+            }
+        }
         
         async function handleProfileUpdate(e) {
             e.preventDefault();
@@ -1938,9 +1975,9 @@
             container.innerHTML = userOrders.map(order => {
                 const orderDate = order.createdAt?.toDate().toLocaleDateString('en-GB');
                 const orderTime = order.createdAt?.toDate().toLocaleTimeString('en-US');
-                const status = order.status || 'N/A';
-                const statuses = ['Pending', 'Confirmed', 'Shipped', 'Out for Delivery', 'Delivered'];
-                const isCancelled = status === 'Cancelled';
+                const status = (order.status || 'N/A').toLowerCase();
+                const statuses = ['pending', 'confirmed', 'shipped', 'out for delivery', 'delivered'];
+                const isCancelled = status === 'cancelled';
                 const currentStatusIndex = statuses.indexOf(status);
                 
                 const statusTracker = isCancelled 
@@ -1951,12 +1988,13 @@
                             const isLineActive = currentStatusIndex > index;
                             const statusCircleClass = isActive ? 'bg-green-500 text-white' : 'bg-gray-300 text-gray-600';
                             const statusLineClass = isLineActive ? 'bg-green-500' : 'bg-gray-300';
+                            const statusLabel = s.charAt(0).toUpperCase() + s.slice(1);
                             return `
                                 <div class="flex-1 text-center">
                                     <div class="w-8 h-8 mx-auto rounded-full flex items-center justify-center ${statusCircleClass}">
                                         <i class="fas fa-check"></i>
                                     </div>
-                                    <p class="text-xs mt-1">${s}</p>
+                                    <p class="text-xs mt-1">${statusLabel}</p>
                                 </div>
                                 ${index < statuses.length - 1 ? `<div class="flex-1 h-1 ${statusLineClass}"></div>` : ''}
                             `;
@@ -1964,7 +2002,7 @@
                    </div>`;
                 
                 let deliveryInfo = '';
-                if(status === 'Out for Delivery' && order.deliveryMan) {
+                if(status === 'out for delivery' && order.deliveryMan) {
                     deliveryInfo = `
                         <div class="mt-4 p-4 bg-blue-100 rounded-lg">
                              <p class="font-semibold">Delivery Person: ${order.deliveryMan.name}</p>
@@ -1977,7 +2015,7 @@
                 }
                 
                  let invoiceButton = '';
-                if(status === 'Delivered') {
+                if(status === 'delivered') {
                     invoiceButton = `<button class="download-invoice-btn mt-4 bg-green-500 text-white py-2 px-4 rounded-full" data-order-id="${order.id}">Download Invoice</button>`;
                 }
 
@@ -1990,8 +2028,8 @@
                             </div>
                             <div class="text-right">
                                 <p class="font-bold text-xl text-theme-blue">৳${order.totalAmount.toFixed(2)}</p>
-                                <span class="text-sm px-3 py-1 rounded-full ${status === 'Delivered' ? 'bg-green-100 text-green-700' : (status === 'Cancelled' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700')}">
-                                    ${status}
+                                <span class="text-sm px-3 py-1 rounded-full ${status === 'delivered' ? 'bg-green-100 text-green-700' : (status === 'cancelled' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700')}">
+                                    ${order.status}
                                 </span>
                             </div>
                         </div>
@@ -2034,6 +2072,7 @@
             DOMElements.confirmOrderBtn.addEventListener('click', handlePlaceOrder);
             if(document.getElementById('my-orders-btn')) document.getElementById('my-orders-btn').addEventListener('click', () => { showPage('my-orders-page'); closeDrawer(); });
             if(DOMElements.myOrdersBtnProfile) DOMElements.myOrdersBtnProfile.addEventListener('click', () => { showPage('my-orders-page'); closeDrawer(); });
+            if(DOMElements.deleteAccountBtn) DOMElements.deleteAccountBtn.addEventListener('click', handleDeleteAccount);
             if(DOMElements.closeSuccessModalBtn) DOMElements.closeSuccessModalBtn.addEventListener('click', () => {
                  DOMElements.orderSuccessModal.classList.add('hidden');
                  DOMElements.orderSuccessModal.classList.remove('flex');
@@ -2140,7 +2179,7 @@
             document.getElementById('product-image-container').addEventListener('mousemove', handleImageZoom);
             
             const detailsPage = document.getElementById('product-details-page');
-            detailsPage.querySelector('#add-to-cart-details').addEventListener('click', (e) => addToCartInDb(e.target.dataset.productId).catch(err => console.log(err)));
+            detailsPage.querySelector('#add-to-cart-details').addEventListener('click', (e) => toggleWishlistInDb(e.target.dataset.productId));
             detailsPage.querySelector('.buy-now').addEventListener('click', (e) => {
                 const productId = detailsPage.querySelector('#add-to-cart-details').dataset.productId;
                 addToCartInDb(productId).then(() => {
