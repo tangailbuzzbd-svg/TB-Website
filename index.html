@@ -283,15 +283,7 @@
                 <span data-lang="total">Total:</span>
                 <span id="cart-total" class="text-theme-blue">৳0.00</span>
             </div>
-            <div class="mt-4">
-                 <label for="coupon-input" class="text-sm font-semibold">Coupon Code:</label>
-                <div class="flex mt-1">
-                    <input type="text" id="coupon-input" class="w-full border rounded-l-md p-2" placeholder="e.g., TB25">
-                    <button id="apply-coupon-btn" class="bg-theme-blue text-white px-4 rounded-r-md">Apply</button>
-                </div>
-                <p id="coupon-message" class="text-sm mt-1 h-5"></p>
-            </div>
-            <button id="checkout-btn" class="w-full bg-theme-pink text-white py-4 rounded-full font-bold hover:bg-theme-purple transition-colors shadow-lg mt-2" data-lang="checkout">চেকআউট করুন</button>
+            <button id="checkout-btn" class="w-full bg-theme-pink text-white py-4 rounded-full font-bold hover:bg-theme-purple transition-colors shadow-lg mt-4" data-lang="checkout">চেকআউট করুন</button>
         </div>
     </div>
     
@@ -770,24 +762,6 @@
                 </div>
             </div>
 
-             <div class="mt-8 pt-8 border-t border-gray-700">
-                <h3 class="text-xl font-bold mb-4 text-center" data-lang="emergency-contact">Emergency Contact Us</h3>
-                <form id="contact-form" class="max-w-xl mx-auto space-y-4">
-                    <div>
-                        <input type="text" id="contact-name" placeholder="Your Name" class="w-full bg-gray-700 text-white px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-theme-pink" required>
-                    </div>
-                    <div>
-                        <input type="email" id="contact-email" placeholder="Your Email" class="w-full bg-gray-700 text-white px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-theme-pink" required>
-                    </div>
-                    <div>
-                        <textarea id="contact-message" placeholder="Your Message" rows="4" class="w-full bg-gray-700 text-white px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-theme-pink" required></textarea>
-                    </div>
-                    <div class="text-center">
-                        <button type="submit" id="send-message-btn" class="bg-theme-pink text-white py-2 px-8 rounded-full font-bold hover:bg-theme-purple transition-colors shadow-lg">Send Message</button>
-                    </div>
-                </form>
-            </div>
-
              <div class="text-center pt-8 border-t border-gray-700 mt-8">
                  <p class="text-gray-400 text-xs">&copy; ২০২৪ TangailBuzz। সর্বস্বত্ব সংরক্ষিত।</p>
              </div>
@@ -833,14 +807,14 @@
         const translations = {
             en: {
                 'deliver-to': 'Deliver to', 'home': 'Home', 'products': 'Products', 'categories': 'Categories', 'offers': 'Offers', 'search-placeholder': 'Search for products...', 'featured-products': 'Featured Products', 'shop-by-category': 'Shop by Category', 'cat-electronics': 'Electronics', 'cat-fashion': 'Fashion', 'cat-home-garden': 'Home & Garden', 'cat-health-beauty': 'Health & Beauty', 'cat-sports': 'Sports & Outdoors', 'cat-books': 'Books & Stationery', 'cat-kids': 'Kids & Toys', 'cat-cars': 'Cars & Bikes', 'why-choose-us': 'Why Choose Us', 'feature-delivery-title': 'Fast Delivery', 'feature-delivery-desc': 'We deliver to your doorstep within 2-3 business days.', 'feature-payment-title': 'Secure Payment', 'feature-payment-desc': 'All transactions are encrypted for your security and privacy.', 'feature-return-title': 'Easy Returns', 'feature-return-desc': 'Return products within 30 days for a full refund if you\'re not satisfied.', 'feature-support-title': '24/7 Support', 'feature-support-desc': 'Our customer support team is available for you day and night.', 'add-to-cart': 'Add to Cart', 'added-to-cart': 'Added!', 'no-products': 'No products found matching your criteria.', 'back-to-products': 'Back to All Products', 'returnable': '30-Day Returnable', 'not-returnable': 'Not Returnable', 'secure-payments': 'Secure Payments', 'size': 'Size:', 'storage': 'Storage:', 'color': 'Color:', 'product-description': 'Product Description', 'product-specifications': 'Product Specifications', 'specifications': 'Specification', 'value': 'Value', 'no-specs': 'No specifications available for this product.', 'product-reviews': 'Product Reviews', 'no-reviews': 'There are no reviews for this product yet.', 'cart': 'Your Cart', 'cart-empty': 'Your cart is empty.', 'total': 'Total:', 'checkout': 'Checkout', 'your-wishlist': 'Your Wishlist', 'wishlist-empty': 'Your wishlist is empty. Add some products!', 'your-account': 'Your Account', 'signin-google': 'Sign in with Google', 'logout': 'Logout', 'toast-cart-added': 'Product added to cart!', 'toast-wishlist-added': 'Product added to wishlist!', 'toast-wishlist-removed': 'Product removed from wishlist!', 'toast-login-success': 'Successfully logged in!', 'toast-logout-success': 'Successfully logged out!',
-                'toast-register-success': 'Account created successfully!', 'login': 'Login', 'register': 'Register Account', 'toast-select-variant': 'Please select all required options!', 'payment-method': 'Select Payment Method', 'cod': 'Cash on Delivery', 'online-payment': 'Online Payment', 'confirm-order': 'Confirm Order', 'order-placed-success': 'Your order has been placed successfully!', 'order-placed-fail': 'Failed to place order. Please try again.', 'cart-is-empty': 'Your cart is empty. Cannot checkout.', 'mobile-banking': 'Mobile Banking', 'payment-instruction-bkash': 'Please send {amount} Taka to this Bkash number: +8801863205976 from your app.', 'payment-instruction-nagad': 'Please send {amount} Taka to this Nagad number: +8801863205976 from your app.', 'payment-instruction-cod': 'Our delivery person will collect the payment upon delivery.', 'profile-updated': 'Profile updated successfully!', 'profile-update-fail': 'Failed to update profile.', 'toast-storage-permission-error': 'Storage permission denied. Check Firebase rules.', 'toast-update-profile': 'Please update your location and mobile number in your profile before ordering.', 'emergency-contact': 'Emergency Contact Us', 'message-sent': 'Message sent successfully!', 'out-of-stock': 'Out of Stock', 'toast-out-of-stock': 'Sorry, this product is currently out of stock.', 'subtotal': 'Subtotal', 'delivery-charge': 'Delivery Charge', 'my-orders': 'My Orders', 'discount': 'Discount', 'coupon-applied': 'Coupon applied successfully!', 'invalid-coupon': 'Invalid or expired coupon.', 'coupon-used': 'Coupon already used.',
+                'toast-register-success': 'Account created successfully!', 'login': 'Login', 'register': 'Register Account', 'toast-select-variant': 'Please select all required options!', 'payment-method': 'Select Payment Method', 'cod': 'Cash on Delivery', 'online-payment': 'Online Payment', 'confirm-order': 'Confirm Order', 'order-placed-success': 'Your order has been placed successfully!', 'order-placed-fail': 'Failed to place order. Please try again.', 'cart-is-empty': 'Your cart is empty. Cannot checkout.', 'mobile-banking': 'Mobile Banking', 'payment-instruction-bkash': 'Please send {amount} Taka to this Bkash number: +8801863205976 from your app.', 'payment-instruction-nagad': 'Please send {amount} Taka to this Nagad number: +8801863205976 from your app.', 'payment-instruction-cod': 'Our delivery person will collect the payment upon delivery.', 'profile-updated': 'Profile updated successfully!', 'profile-update-fail': 'Failed to update profile.', 'toast-storage-permission-error': 'Storage permission denied. Check Firebase rules.', 'toast-update-profile': 'Please update your location and mobile number in your profile before ordering.', 'emergency-contact': 'Emergency Contact Us', 'message-sent': 'Message sent successfully!', 'out-of-stock': 'Out of Stock', 'toast-out-of-stock': 'Sorry, this product is currently out of stock.', 'subtotal': 'Subtotal', 'delivery-charge': 'Delivery Charge', 'my-orders': 'My Orders',
                 'delete-account-confirm': 'Are you sure you want to delete your account? This action cannot be undone.',
                 'account-deleted': 'Your account has been successfully deleted.',
                 'delete-account-failed': 'Failed to delete account. Please try again.'
             },
             bn: {
                 'deliver-to': 'ডেলিভারি লোকেশন', 'home': 'হোম', 'products': 'পণ্য', 'categories': 'ক্যাটাগরি', 'offers': 'অফার', 'search-placeholder': 'পণ্য খুঁজুন...', 'featured-products': 'বৈশিষ্ট্যযুক্ত পণ্য', 'shop-by-category': 'ক্যাটাগরি অনুসারে কেনাকাটা করুন', 'cat-electronics': 'ইলেকট্রনিক্স', 'cat-fashion': 'ফ্যাশন', 'cat-home-garden': 'হোম অ্যান্ড গার্ডেন', 'cat-health-beauty': 'স্বাস্থ্য ও সৌন্দর্য', 'cat-sports': 'খেলাধুলা ও আউটডোর', 'cat-books': 'বই ও স্টেশনারি', 'cat-kids': 'বাচ্চা ও খেলনা', 'cat-cars': 'গাড়ি ও বাইক', 'why-choose-us': 'আমাদেরকে কেন বেছে নিবেন', 'feature-delivery-title': 'দ্রুত ডেলিভারি', 'feature-delivery-desc': 'আমরা ২-৩ কার্যদিবসের মধ্যে আপনার দোরগোড়ায় পণ্য পৌঁছে দিই।', 'feature-payment-title': 'নিরাপদ পেমেন্ট', 'feature-payment-desc': 'আপনার নিরাপত্তা ও গোপনীয়তার জন্য সকল লেনদেন এনক্রিপ্টেড।', 'feature-return-title': 'সহজ রিটার্ন', 'feature-return-desc': 'পছন্দ না হলে ৩০ দিনের মধ্যে পণ্য ফেরত দিন এবং সম্পূর্ণ মূল্য ফেরত পান।', 'feature-support-title': '২৪/৭ সাপোর্ট', 'feature-support-desc': 'আমাদের গ্রাহক সহায়তা দল দিনরাত আপনার জন্য উপলব্ধ।', 'add-to-cart': 'কার্টে যোগ করুন', 'added-to-cart': 'যোগ হয়েছে!', 'no-products': 'আপনার অনুসন্ধানের সাথে মেলে এমন কোনো পণ্য পাওয়া যায়নি।', 'back-to-products': 'সকল পণ্যে ফিরে যান', 'returnable': '৩০-দিনের মধ্যে ফেরতযোগ্য', 'not-returnable': 'ফেরতযোগ্য নয়', 'secure-payments': 'নিরাপদ পেমেন্ট', 'size': 'সাইজ:', 'storage': 'স্টোরেজ:', 'color': 'রঙ:', 'product-description': 'পণ্যের বিবরণ', 'product-specifications': 'পণ্যের স্পেসিফিকেশন', 'specifications': 'স্পেসিফিকেশন', 'value': 'মান', 'no-specs': 'এই পণ্যের জন্য কোন স্পেসিফিকেশন উপলব্ধ নেই।', 'product-reviews': 'পণ্যের রিভিউ', 'no-reviews': 'এই পণ্যের জন্য এখনো কোনো রিভিউ নেই।', 'cart': 'আপনার কার্ট', 'cart-empty': 'আপনার কার্ট খালি।', 'total': 'মোট মূল্য:', 'checkout': 'চেকআউট করুন', 'your-wishlist': 'আপনার উইশলিস্ট', 'wishlist-empty': 'আপনার উইশলিস্ট খালি। কিছু পণ্য যোগ করুন!', 'your-account': 'আপনার অ্যাকাউন্ট', 'signin-google': 'Google দিয়ে সাইন ইন করুন', 'logout': 'লগআউট', 'toast-cart-added': 'পণ্য কার্টে যোগ করা হয়েছে!', 'toast-wishlist-added': 'পণ্য উইশলিস্টে যোগ করা হয়েছে!', 'toast-wishlist-removed': 'পণ্য উইশলিস্ট থেকে সরানো হয়েছে!', 'toast-login-success': 'সফলভাবে লগইন হয়েছে!', 'toast-logout-success': 'সফলভাবে লগআউট হয়েছে!',
-                'toast-register-success': 'অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে!', 'login': 'লগইন', 'register': 'অ্যাকাউন্ট রেজিস্টার', 'toast-select-variant': 'অনুগ্রহ করে সব অপশন সিলেক্ট করুন!', 'payment-method': 'পেমেন্ট পদ্ধতি নির্বাচন করুন', 'cod': 'ক্যাশ অন ডেলিভারি', 'online-payment': 'অনলাইন পেমেন্ট', 'confirm-order': 'অর্ডার কনফার্ম করুন', 'order-placed-success': 'আপনার অর্ডারটি সফলভাবে সম্পন্ন হয়েছে!', 'order-placed-fail': 'অর্ডার করতে ব্যর্থ হয়েছে। আবার চেষ্টা করুন।', 'cart-is-empty': 'আপনার কার্ট খালি। চেকআউট করা সম্ভব নয়।', 'mobile-banking': 'মোবাইল ব্যাংকিং', 'payment-instruction-bkash': 'অনুগ্রহ করে আপনার অ্যাপ থেকে এই বিকাশ নম্বরে ৳{amount} পাঠান: +8801863205976।', 'payment-instruction-nagad': 'অনুগ্রহ করে আপনার অ্যাপ থেকে এই নগদ নম্বরে ৳{amount} পাঠান: +8801863205976।', 'payment-instruction-cod': 'আমাদের ডেলিভারি প্রতিনিধি পণ্য পৌঁছানোর সময় আপনার থেকে টাকা সংগ্রহ করবে।', 'profile-updated': 'প্রোফাইল সফলভাবে আপডেট হয়েছে!', 'profile-update-fail': 'প্রোফাইল আপডেট করতে ব্যর্থ হয়েছে।', 'toast-storage-permission-error': 'স্টোরেজ পারমিশন সমস্যা। অনুগ্রহ করে Firebase রুলস চেক করুন।', 'toast-update-profile': 'অর্ডার করার পূর্বে অনুগ্রহ করে আপনার প্রোফাইলে ঠিকানা ও মোবাইল নম্বর আপডেট করুন।', 'emergency-contact': 'জরুরী যোগাযোগ', 'message-sent': 'আপনার বার্তা সফলভাবে পাঠানো হয়েছে!', 'out-of-stock': 'স্টক শেষ', 'toast-out-of-stock': 'দুঃখিত, এই পণ্যটি বর্তমানে স্টক আউট।', 'subtotal': 'মোট', 'delivery-charge': 'ডেলিভারি চার্জ', 'my-orders': 'আমার অর্ডার', 'discount': 'ডিসকাউন্ট', 'coupon-applied': 'কুপন সফলভাবে প্রয়োগ করা হয়েছে!', 'invalid-coupon': 'অবৈধ বা মেয়াদোত্তীর্ণ কুপন।', 'coupon-used': 'কুপনটি ইতিমধ্যে ব্যবহার করা হয়েছে।',
+                'toast-register-success': 'অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে!', 'login': 'লগইন', 'register': 'অ্যাকাউন্ট রেজিস্টার', 'toast-select-variant': 'অনুগ্রহ করে সব অপশন সিলেক্ট করুন!', 'payment-method': 'পেমেন্ট পদ্ধতি নির্বাচন করুন', 'cod': 'ক্যাশ অন ডেলিভারি', 'online-payment': 'অনলাইন পেমেন্ট', 'confirm-order': 'অর্ডার কনফার্ম করুন', 'order-placed-success': 'আপনার অর্ডারটি সফলভাবে সম্পন্ন হয়েছে!', 'order-placed-fail': 'অর্ডার করতে ব্যর্থ হয়েছে। আবার চেষ্টা করুন।', 'cart-is-empty': 'আপনার কার্ট খালি। চেকআউট করা সম্ভব নয়।', 'mobile-banking': 'মোবাইল ব্যাংকিং', 'payment-instruction-bkash': 'অনুগ্রহ করে আপনার অ্যাপ থেকে এই বিকাশ নম্বরে ৳{amount} পাঠান: +8801863205976।', 'payment-instruction-nagad': 'অনুগ্রহ করে আপনার অ্যাপ থেকে এই নগদ নম্বরে ৳{amount} পাঠান: +8801863205976।', 'payment-instruction-cod': 'আমাদের ডেলিভারি প্রতিনিধি পণ্য পৌঁছানোর সময় আপনার থেকে টাকা সংগ্রহ করবে।', 'profile-updated': 'প্রোফাইল সফলভাবে আপডেট হয়েছে!', 'profile-update-fail': 'প্রোফাইল আপডেট করতে ব্যর্থ হয়েছে।', 'toast-storage-permission-error': 'স্টোরেজ পারমিশন সমস্যা। অনুগ্রহ করে Firebase রুলস চেক করুন।', 'toast-update-profile': 'অর্ডার করার পূর্বে অনুগ্রহ করে আপনার প্রোফাইলে ঠিকানা ও মোবাইল নম্বর আপডেট করুন।', 'emergency-contact': 'জরুরী যোগাযোগ', 'message-sent': 'আপনার বার্তা সফলভাবে পাঠানো হয়েছে!', 'out-of-stock': 'স্টক শেষ', 'toast-out-of-stock': 'দুঃখিত, এই পণ্যটি বর্তমানে স্টক আউট।', 'subtotal': 'মোট', 'delivery-charge': 'ডেলিভারি চার্জ', 'my-orders': 'আমার অর্ডার',
                 'delete-account-confirm': 'আপনি কি নিশ্চিত যে আপনি আপনার অ্যাকাউন্টটি মুছে ফেলতে চান? এই কাজটি ফিরিয়ে আনা যাবে না।',
                 'account-deleted': 'আপনার অ্যাকাউন্ট সফলভাবে মুছে ফেলা হয়েছে।',
                 'delete-account-failed': 'অ্যাকাউন্ট মুছে ফেলার চেষ্টা ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।'
@@ -859,7 +833,6 @@
             loginForm: document.getElementById('login-form'), registerForm: document.getElementById('register-form'), showRegisterLink: document.getElementById('show-register-form'), showLoginLink: document.getElementById('show-login-form'), authError: document.getElementById('auth-error'), profileDrawerTitle: document.getElementById('profile-drawer-title'),
             paymentModal: document.getElementById('payment-modal'), checkoutBtn: document.getElementById('checkout-btn'), confirmOrderBtn: document.getElementById('confirm-order-btn'),
             orderSuccessModal: document.getElementById('order-success-modal'), paymentInstruction: document.getElementById('payment-instruction'), closeSuccessModalBtn: document.getElementById('close-success-modal'),
-            contactForm: document.getElementById('contact-form'),
             couponInput: document.getElementById('coupon-input'),
             applyCouponBtn: document.getElementById('apply-coupon-btn'),
             couponMessage: document.getElementById('coupon-message'),
@@ -957,8 +930,8 @@
                 
                 let priceHtml = `<span class="text-xl font-bold text-price-black">৳${price.toFixed(2)}</span>`;
                 let offerSticker = '';
-                if (product.isOffer) {
-                    const discountPercent = Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100);
+                if (product.isOffer && product.originalPrice) {
+                    const discountPercent = Math.round(((product.originalPrice - price) / product.originalPrice) * 100);
                     priceHtml = `
                         <div class="flex items-baseline gap-2 flex-wrap">
                             <span class="text-xl font-bold text-price-black">৳${price.toFixed(2)}</span>
@@ -980,17 +953,18 @@
                         ${offerSticker}
                         <img src="${imageUrl}" alt="${product.name}" class="w-full h-48 object-cover cursor-pointer" onerror="this.onerror=null;this.src='https://placehold.co/400x400/ccc/000?text=Image';">
                     </div>
-                    <div class="p-6 flex flex-col flex-grow">
-                        <h3 class="product-title text-lg font-semibold cursor-pointer">${product.name}</h3>
-                        <div class="flex items-center text-sm my-1">
-                            <div class="text-sm mr-1">${product.rating || 0}</div>
-                            <div class="flex items-center">${renderStars(product.rating || 0)}</div>
-                            <div class="text-xs text-gray-500 ml-2">(${product.ratingCount || 0})</div>
+                    <div class="p-4 flex flex-col flex-grow">
+                         <h3 class="product-title font-semibold text-lg text-dark mb-2 cursor-pointer h-12 overflow-hidden">${product.name}</h3>
+                         <div class="flex items-center text-sm mb-2">
+                            ${renderStars(product.rating || 0)}
+                            <span class="text-xs text-gray-500 ml-2">(${product.ratingCount || 0})</span>
                         </div>
-                        <div class="mt-2 mb-4">${priceHtml}</div>
-                        <div class="flex items-center justify-between mt-auto">
-                            <button class="add-to-cart text-white py-2 px-4 rounded-full transition-colors shadow-lg ${cartButtonClasses}" ${cartButtonDisabled}>${cartButtonText}</button>
-                            <button class="wishlist text-2xl transition-colors"><i class="${heartClass} fa-heart"></i></button>
+                        <div class="mt-auto">
+                            <div class="mt-2 mb-4">${priceHtml}</div>
+                            <div class="flex items-center justify-between">
+                                <button class="add-to-cart text-white py-2 px-4 rounded-full transition-colors shadow-lg ${cartButtonClasses}" ${cartButtonDisabled}>${cartButtonText}</button>
+                                <button class="wishlist text-2xl transition-colors"><i class="${heartClass} fa-heart"></i></button>
+                            </div>
                         </div>
                     </div>`;
                 fragment.appendChild(productCard);
@@ -1105,53 +1079,55 @@
                 `<img src="${src}" class="w-16 h-16 rounded-lg object-cover cursor-pointer hover:ring-2 hover:ring-theme-pink transition-all" onclick="document.getElementById('product-image').src='${src}'">`
             ).join('');
         }
-
-        function renderSpecifications(specs) {
+        
+        function renderSpecifications(specifications) {
             const container = document.getElementById('product-specifications');
             if (!container) return;
-
-            if (!specs || Object.keys(specs).length === 0) {
+            if (!specifications || Object.keys(specifications).length === 0) {
                 container.innerHTML = `<p class="text-gray-500" data-lang="no-specs">${translations[currentLanguage]['no-specs']}</p>`;
                 return;
             }
-            const tableRows = Object.entries(specs).map(([key, value]) => `
-                <tr class="border-b border-gray-300 last:border-b-0">
-                    <td class="p-4 text-gray-700">${key.charAt(0).toUpperCase() + key.slice(1)}</td>
-                    <td class="p-4 font-medium text-dark">${value}</td>
-                </tr>
-            `).join('');
+
             container.innerHTML = `
-                <table class="w-full text-left table-auto border-collapse">
-                    <thead><tr class="bg-gray-200">
-                        <th class="p-4 rounded-tl-xl font-semibold text-gray-600" data-lang="specifications">${translations[currentLanguage]['specifications']}</th>
-                        <th class="p-4 rounded-tr-xl font-semibold text-gray-600" data-lang="value">${translations[currentLanguage]['value']}</th>
-                    </tr></thead>
-                    <tbody>${tableRows}</tbody>
-                </table>`;
+                <table class="w-full text-left text-sm">
+                    <tbody>
+                        ${Object.entries(specifications).map(([key, value]) => `
+                            <tr class="border-b">
+                                <td class="py-2 pr-4 font-semibold text-gray-700">${key.charAt(0).toUpperCase() + key.slice(1)}</td>
+                                <td class="py-2 text-gray-600">${value}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
         }
-        
+
         function renderReviews(reviews) {
             const container = document.getElementById('product-reviews');
+            if (!container) return;
             if (!reviews || reviews.length === 0) {
                 container.innerHTML = `<p class="text-gray-500" data-lang="no-reviews">${translations[currentLanguage]['no-reviews']}</p>`;
                 return;
             }
+
             container.innerHTML = reviews.map(review => `
-                <div class="bg-gray-100 p-4 rounded-xl shadow-inner">
+                <div class="border-b pb-4">
                     <div class="flex items-center mb-2">
-                        <span class="font-semibold text-theme-purple mr-2">${review.name}</span>
-                        <div class="text-sm">${renderStars(review.rating)}</div>
+                        <div class="flex items-center mr-4">
+                            ${renderStars(review.rating)}
+                        </div>
+                        <p class="font-bold text-gray-800">${review.author || 'Anonymous'}</p>
                     </div>
-                    <p class="text-gray-700 leading-snug">${review.comment}</p>
+                    <p class="text-gray-600">${review.comment || ''}</p>
                 </div>
             `).join('');
         }
-        
+
         function renderPriceDetails(product) {
             const priceElement = document.getElementById('product-price-details');
             const price = product.price || 0;
             if (product.isOffer && product.originalPrice) {
-                const discountPercent = Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100);
+                const discountPercent = Math.round(((product.originalPrice - price) / product.originalPrice) * 100);
                 priceElement.innerHTML = `
                     <div class="flex items-baseline gap-2 flex-wrap">
                         <span class="text-2xl font-bold text-price-black">৳${price.toFixed(2)}</span>
@@ -1442,16 +1418,11 @@
             const subtotal = Array.from(localCartCache.values()).reduce((sum, item) => sum + ((item.price || 0) * (item.quantity || 0)), 0);
             
             const deliveryCharge = await getDeliveryCharge(subtotal);
-            const total = subtotal + deliveryCharge - discountAmount;
+            const total = subtotal + deliveryCharge;
             
             DOMElements.cartSubtotal.textContent = `৳${subtotal.toFixed(2)}`;
             
-            if(discountAmount > 0) {
-                DOMElements.discountRow.classList.remove('hidden');
-                DOMElements.cartDiscount.textContent = `- ৳${discountAmount.toFixed(2)}`;
-            } else {
-                DOMElements.discountRow.classList.add('hidden');
-            }
+            DOMElements.discountRow.classList.add('hidden');
             
             DOMElements.deliveryCharge.textContent = `৳${deliveryCharge.toFixed(2)}`;
             DOMElements.cartTotal.textContent = `৳${total.toFixed(2)}`;
@@ -1850,7 +1821,7 @@
             
             const subtotal = Array.from(localCartCache.values()).reduce((sum, item) => sum + (item.price * item.quantity), 0);
             const deliveryCharge = await getDeliveryCharge(subtotal);
-            const totalAmount = subtotal + deliveryCharge - discountAmount;
+            const totalAmount = subtotal + deliveryCharge;
             
             const orderData = {
                 orderId: generateRandomOrderId(),
@@ -1862,7 +1833,7 @@
                 items: Array.from(localCartCache.values()),
                 subtotal: subtotal,
                 deliveryCharge: deliveryCharge,
-                discount: discountAmount,
+                discount: 0,
                 totalAmount: totalAmount,
                 paymentMethod: finalPaymentMethod,
                 status: "Pending",
@@ -1873,15 +1844,9 @@
                 await addDoc(collection(db, "orders"), orderData);
                 const userDocRef = doc(db, 'users', currentUser.uid);
                 
-                const userUpdateData = { cart: {} };
-                if (discountAmount > 0 && DOMElements.couponInput.value.trim()) {
-                     userUpdateData.usedCoupons = arrayUnion(DOMElements.couponInput.value.trim());
-                }
-                await updateDoc(userDocRef, userUpdateData);
+                await updateDoc(userDocRef, { cart: {} });
                 
                 discountAmount = 0;
-                DOMElements.couponInput.value = '';
-                DOMElements.couponMessage.textContent = '';
 
                 closePaymentModal();
                 closeDrawer();
@@ -2023,7 +1988,7 @@
                     <div class="bg-white p-6 rounded-2xl shadow-lg">
                         <div class="flex justify-between items-start mb-4 border-b pb-4">
                             <div>
-                                <p class="font-bold text-lg">Order ID: <span class="text-theme-purple">${order.orderId}</span></p>
+                                <p class="font-bold text-lg">Order ID: <span class="text-theme-purple">${order.orderId.slice(-6)}</span></p>
                                 <p class="text-sm text-gray-500">Placed on: ${orderDate} at ${orderTime}</p>
                             </div>
                             <div class="text-right">
@@ -2078,57 +2043,7 @@
                  DOMElements.orderSuccessModal.classList.remove('flex');
                  showPage('my-orders-page');
             });
-            if(DOMElements.applyCouponBtn) {
-                DOMElements.applyCouponBtn.addEventListener('click', () => {
-                    const couponCode = DOMElements.couponInput.value.trim();
-                    const usedCoupons = currentUserData?.usedCoupons || [];
-
-                    if (usedCoupons.includes(couponCode)) {
-                        discountAmount = 0;
-                        DOMElements.couponMessage.textContent = translations[currentLanguage]['coupon-used'];
-                        DOMElements.couponMessage.classList.remove('text-green-500');
-                        DOMElements.couponMessage.classList.add('text-red-500');
-                        showToast('coupon-used', false);
-                        updateCartUI();
-                        return;
-                    }
-
-                    if (couponCode === 'tb25') {
-                        discountAmount = 50;
-                        DOMElements.couponMessage.textContent = translations[currentLanguage]['coupon-applied'];
-                        DOMElements.couponMessage.classList.remove('text-red-500');
-                        DOMElements.couponMessage.classList.add('text-green-500');
-                        showToast('coupon-applied');
-                    } else {
-                        discountAmount = 0;
-                        DOMElements.couponMessage.textContent = translations[currentLanguage]['invalid-coupon'];
-                        DOMElements.couponMessage.classList.remove('text-green-500');
-                        DOMElements.couponMessage.classList.add('text-red-500');
-                        showToast('invalid-coupon', false);
-                    }
-                    updateCartUI();
-                });
-            }
              if(DOMElements.editProfileForm) DOMElements.editProfileForm.addEventListener('submit', handleProfileUpdate);
-            if(DOMElements.contactForm) DOMElements.contactForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const name = DOMElements.contactForm.querySelector('#contact-name').value;
-                const email = DOMElements.contactForm.querySelector('#contact-email').value;
-                const message = DOMElements.contactForm.querySelector('#contact-message').value;
-                try {
-                    await addDoc(collection(db, "contactMessages"), {
-                        name,
-                        email,
-                        message,
-                        sentAt: serverTimestamp()
-                    });
-                    showToast('message-sent', true);
-                    DOMElements.contactForm.reset();
-                } catch (error) {
-                    console.error("Error sending message: ", error);
-                    showToast("Failed to send message.", false);
-                }
-            });
 
 
             DOMElements.editProfileBtn.addEventListener('click', () => {
@@ -2179,7 +2094,7 @@
             document.getElementById('product-image-container').addEventListener('mousemove', handleImageZoom);
             
             const detailsPage = document.getElementById('product-details-page');
-            detailsPage.querySelector('#add-to-cart-details').addEventListener('click', (e) => toggleWishlistInDb(e.target.dataset.productId));
+            detailsPage.querySelector('#add-to-cart-details').addEventListener('click', (e) => addToCartInDb(e.target.dataset.productId, false));
             detailsPage.querySelector('.buy-now').addEventListener('click', (e) => {
                 const productId = detailsPage.querySelector('#add-to-cart-details').dataset.productId;
                 addToCartInDb(productId).then(() => {
@@ -2239,3 +2154,6 @@
     </script>
 </body>
 </html>
+
+
+
