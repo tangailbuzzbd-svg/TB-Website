@@ -125,6 +125,52 @@
              transform: translateX(0);
              background-color: #212529; /* Dark switch color in light mode */
         }
+        
+        /* Custom CSS for Progress Tracker (Final Fix for Image Alignment) */
+        /* Core Flex Container */
+        .tracker-step-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 0 10px; /* Small padding inside the card to push start/end points slightly from edge */
+        }
+        /* Style for the space between nodes (which holds the line) */
+        .tracker-connector {
+            flex-grow: 1; /* Takes all remaining space */
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Center the line element */
+            height: 32px; /* Maintain vertical space */
+            margin-top: 12px; /* Align with circle top margin */
+        }
+        .tracker-connector-line {
+            height: 4px;
+            width: 100%; /* Line fills connector space */
+            background-color: #d1d5db; /* Grey line */
+        }
+        .tracker-connector.active .tracker-connector-line {
+            background-color: #34d399; /* Green line */
+        }
+        
+        /* Style for the nodes (circles and text) */
+        .tracker-node {
+            position: relative;
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-shrink: 0;
+            text-align: center;
+            /* Use a fixed, small width for each step to control spacing */
+            width: 70px; 
+            /* Push the text label slightly left/right for first/last node labels to align them under the circle */
+        }
+        .tracker-circle {
+            width: 32px;
+            height: 32px;
+            margin-top: 12px;
+        }
+        
     </style>
 </head>
 <body class="bg-theme-light dark:bg-gray-900 text-dark dark:text-gray-100 font-sans leading-relaxed transition-colors duration-300">
@@ -204,7 +250,7 @@
                 <input type="text" id="search-input-mobile" placeholder="পণ্য খুঁজুন..." class="w-full pl-6 pr-12 py-2 text-dark dark:text-gray-900 outline-none focus:ring-2 focus:ring-theme-pink rounded-full text-sm">
                 <button id="search-button-mobile" class="absolute right-0 top-0 h-full bg-theme-pink text-white px-4 hover:bg-theme-purple transition-colors">
                     <i class="fas fa-search"></i>
-                </button>
+                    </button>
             </div>
         </div>
     </header>
@@ -217,7 +263,7 @@
         <div class="bg-white dark:bg-gray-800 rounded-3xl p-8 max-w-md w-full mx-4 shadow-2xl">
             <div class="flex justify-between items-center mb-6">
                 <h3 class="text-2xl font-bold text-theme-purple" data-lang="payment-method">Select Payment Method</h3>
-                <button onclick="closePaymentModal()" class="text-gray-500 hover:text-gray-800 text-3xl">&times;</button>
+                <button onclick="closePaymentModal()" class="text-gray-500 hover:text-gray-800 dark:hover:text-gray-300 text-3xl">&times;</button>
             </div>
             <div id="payment-options" class="space-y-4">
                 <!-- Main Payment Options -->
@@ -362,15 +408,52 @@
 
                 <!-- Logged IN state -->
                 <div id="user-profile-view" class="hidden">
-                    <img id="user-photo" src="" alt="User Photo" class="w-24 h-24 rounded-full mx-auto shadow-lg object-cover">
-                    <p id="user-name" class="mt-4 text-xl font-semibold"></p>
-                    <p id="user-email" class="text-sm text-gray-500"></p>
-                    <p id="user-mobile" class="text-sm text-gray-600 dark:text-gray-400 mt-2"></p>
-                    <p id="user-location" class="text-sm text-gray-600 dark:text-gray-400"></p>
-                    <button id="my-orders-btn-profile" class="mt-4 w-full py-2 bg-theme-blue text-white rounded-full font-bold hover:bg-theme-purple transition-colors" data-lang="my-orders">My Orders</button>
-                    <button id="edit-profile-btn" class="mt-2 w-full py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-100 rounded-full font-bold hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">Edit Profile</button>
-                    <button id="delete-account-btn" class="mt-2 w-full py-2 bg-red-500 text-white rounded-full font-bold hover:bg-red-600 transition-colors">Delete Account</button>
-                    <button id="logout-btn" class="mt-2 w-full py-3 px-6 bg-theme-pink text-white rounded-full font-bold hover:bg-theme-purple transition-colors shadow-lg" data-lang="logout">লগআউট</button>
+                    <!-- User Info Section -->
+                    <div class="space-y-2 mb-8">
+                        <img id="user-photo" src="" alt="User Photo" class="w-24 h-24 rounded-full mx-auto shadow-xl object-cover border-4 border-theme-purple/30">
+                        <p id="user-name" class="mt-4 text-xl font-bold text-theme-purple"></p>
+                        <p id="user-email" class="text-sm text-gray-500"></p>
+                        <div class="flex items-center justify-center space-x-1 text-sm mt-2">
+                             <p id="user-mobile" class="text-sm text-gray-600 dark:text-gray-400"></p>
+                        </div>
+                        <div class="flex items-center justify-center space-x-1 text-sm">
+                            <p id="user-location" class="text-sm text-gray-600 dark:text-gray-400"></p>
+                        </div>
+                    </div>
+
+                    <!-- Button Actions Group -->
+                    <div class="space-y-4">
+                        
+                        <!-- My Orders (Theme Blue) -->
+                        <button id="my-orders-btn-profile" class="w-full py-3 bg-theme-blue text-white rounded-xl font-semibold hover:bg-theme-purple transition-colors shadow-md flex items-center justify-between px-4" data-lang="my-orders">
+                            <span><i class="fas fa-box-open mr-3"></i> My Orders</span>
+                            <i class="fas fa-chevron-right text-sm"></i>
+                        </button>
+
+                        <!-- Emergency Contact (Theme Pink) -->
+                        <button id="emergency-contact-btn" class="w-full py-3 bg-theme-pink text-white rounded-xl font-semibold hover:bg-theme-purple transition-colors shadow-md flex items-center justify-between px-4" data-lang="emergency-contact">
+                            <span><i class="fas fa-headset mr-3"></i> Emergency Contact</span>
+                            <i class="fas fa-chevron-right text-sm"></i>
+                        </button>
+                        
+                        <!-- Edit Profile (Grey/Secondary) -->
+                        <button id="edit-profile-btn" class="w-full py-3 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-100 rounded-xl font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors shadow-md flex items-center justify-between px-4">
+                            <span><i class="fas fa-user-edit mr-3"></i> Edit Profile</span>
+                            <i class="fas fa-chevron-right text-sm"></i>
+                        </button>
+                        
+                        <!-- Logout (Prominent) -->
+                         <button id="logout-btn" class="w-full py-3 bg-theme-pink text-white rounded-xl font-semibold hover:bg-theme-purple transition-colors shadow-lg mt-8 flex items-center justify-between px-4" data-lang="logout">
+                            <span><i class="fas fa-sign-out-alt mr-3"></i> লগআউট</span>
+                            <i class="fas fa-chevron-right text-sm"></i>
+                        </button>
+
+                        <!-- Delete Account (Danger, Separate) -->
+                        <button id="delete-account-btn" class="w-full py-3 bg-red-500 text-white rounded-xl font-semibold hover:bg-red-600 transition-colors shadow-md flex items-center justify-center mt-4">
+                             <i class="fas fa-trash-alt mr-2"></i> Delete Account
+                        </button>
+
+                    </div>
                 </div>
                  <!-- Edit Profile Form -->
                 <form id="edit-profile-form" class="hidden text-left space-y-4">
@@ -563,11 +646,11 @@
                                 <div id="size-options" class="hidden">
                                     <label class="block text-sm font-semibold mb-2" data-lang="size">সাইজ:</label>
                                     <div class="flex flex-wrap gap-2" id="size-variants-container"></div>
-                                </div>
+                                </d>
                                 <div id="storage-options" class="hidden">
                                     <label class="block text-sm font-semibold mb-2" data-lang="storage">স্টোরেজ:</label>
                                     <div class="flex flex-wrap gap-2" id="storage-variants-container"></div>
-                                </div>
+                                </d>
                                 <div id="color-options" class="hidden">
                                     <label class="block text-sm font-semibold mb-2" data-lang="color">রঙ:</label>
                                     <div class="flex flex-wrap gap-2" id="color-variants-container"></div>
@@ -623,6 +706,35 @@
                 </div>
              </section>
         </div>
+        
+        <!-- Emergency Chat Page -->
+        <div id="emergency-chat-page" class="hidden page">
+            <section class="container mx-auto px-4 py-16">
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-3xl shadow-xl max-w-2xl mx-auto flex flex-col h-[70vh]">
+                    <div class="flex justify-between items-center mb-4 border-b dark:border-gray-700 pb-4">
+                        <h2 class="text-2xl font-bold text-theme-purple" data-lang="emergency-contact">জরুরী যোগাযোগ</h2>
+                        <button onclick="showPage('home-page')" class="text-theme-blue hover:text-theme-pink transition-colors">
+                            <i class="fas fa-times text-xl"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Chat Messages Container -->
+                    <div id="chat-messages" class="flex-grow overflow-y-auto space-y-4 p-4 mb-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                        <p class="text-center text-gray-500 dark:text-gray-400">Loading chat...</p>
+                    </div>
+                    
+                    <!-- Chat Input Form -->
+                    <form id="chat-form" class="flex space-x-3">
+                        <input type="text" id="chat-input" placeholder="আপনার বার্তা লিখুন..." class="flex-grow px-4 py-2 border dark:border-gray-600 rounded-full focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-600" required>
+                        <button type="submit" id="send-chat-btn" class="bg-theme-blue text-white w-12 h-12 rounded-full hover:bg-theme-purple transition-colors shadow-lg">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                    <p id="chat-error" class="text-red-500 text-xs mt-2"></p>
+                </div>
+            </section>
+        </div>
+
 
         <!-- FAQ Page -->
         <div id="faq-page" class="hidden page">
@@ -805,7 +917,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, deleteUser, signInWithCustomToken, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc, deleteDoc, onSnapshot, updateDoc, increment, deleteField, collection, addDoc, serverTimestamp, getDocs, writeBatch, query, where, arrayUnion } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, getDoc, deleteDoc, onSnapshot, updateDoc, increment, deleteField, collection, addDoc, serverTimestamp, getDocs, writeBatch, query, where, arrayUnion, orderBy, limit } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
         
         // Use the global Firebase config and auth token provided by the environment
@@ -837,6 +949,7 @@
         let selectedVariants = {};
         let discountAmount = 0;
         let confirmResolver = null; // Used for the custom confirmation modal
+        let chatUnsubscribe = () => {}; // For real-time chat updates
 
         // --- Logo URL for PDF generation (Not used as requested by user) ---
         // const TANGILBUZZ_LOGO_URL = "https://github.com/tangailbuzzbd-svg/TangailBuzz-Picture-/blob/main/MD%20EOUSUF%20ALI%20BACK-1_upscaled.png?raw=true"; 
@@ -845,11 +958,14 @@
         const translations = {
             en: {
                 'deliver-to': 'Deliver to', 'home': 'Home', 'products': 'Products', 'categories': 'Categories', 'offers': 'Offers', 'search-placeholder': 'Search for products...', 'featured-products': 'Featured Products', 'shop-by-category': 'Shop by Category', 'cat-electronics': 'Electronics', 'cat-fashion': 'Fashion', 'cat-home-garden': 'Home & Garden', 'cat-health-beauty': 'Health & Beauty', 'cat-sports': 'Sports & Outdoors', 'cat-books': 'Books & Stationery', 'cat-kids': 'Kids & Toys', 'cat-cars': 'Cars & Bikes', 'why-choose-us': 'Why Choose Us', 'feature-delivery-title': 'Fast Delivery', 'feature-delivery-desc': 'We deliver to your doorstep within 2-3 business days.', 'feature-payment-title': 'Secure Payment', 'feature-payment-desc': 'All transactions are encrypted for your security and privacy.', 'feature-return-title': 'Easy Returns', 'feature-return-desc': 'Return products within 30 days for a full refund if you\'re not satisfied.', 'feature-support-title': '24/7 Support', 'feature-support-desc': 'Our customer support team is available for you day and night.', 'add-to-cart': 'Add to Cart', 'added-to-cart': 'Added!', 'no-products': 'No products found matching your criteria.', 'back-to-products': 'Back to All Products', 'returnable': '30-Day Returnable', 'not-returnable': 'Not Returnable', 'secure-payments': 'Secure Payments', 'size': 'Size:', 'storage': 'Storage:', 'color': 'Color:', 'product-description': 'Product Description', 'product-specifications': 'Product Specifications', 'specifications': 'Specification', 'value': 'Value', 'no-specs': 'No specifications available for this product.', 'product-reviews': 'Product Reviews', 'no-reviews': 'There are no reviews for this product yet.', 'cart': 'Your Cart', 'cart-empty': 'Your cart is empty.', 'total': 'Total:', 'checkout': 'Checkout', 'your-wishlist': 'Your Wishlist', 'wishlist-empty': 'Your wishlist is empty. Add some products!', 'your-account': 'Your Account', 'signin-google': 'Sign in with Google', 'logout': 'Logout', 'toast-cart-added': 'Product added to cart!', 'toast-wishlist-added': 'Product added to wishlist!', 'toast-wishlist-removed': 'Product removed from wishlist!', 'toast-login-success': 'Successfully logged in!', 'toast-logout-success': 'Successfully logged out!',
-                'toast-register-success': 'Account created successfully!', 'login': 'Login', 'register': 'Register Account', 'toast-select-variant': 'Please select all required options!', 'payment-method': 'Select Payment Method', 'cod': 'Cash on Delivery', 'online-payment': 'Online Payment', 'confirm-order': 'Confirm Order', 'order-placed-success': 'Your order has been placed successfully!', 'order-placed-fail': 'Failed to place order. Please try again.', 'cart-is-empty': 'Your cart is empty. Cannot checkout.', 'mobile-banking': 'Mobile Banking', 'payment-instruction-bkash': 'Please send {amount} Taka to this Bkash number: +8801863205976 from your app.', 'payment-instruction-nagad': 'Please send {amount} Taka to this Nagad number: +8801863205976 from your app.', 'payment-instruction-cod': 'Our delivery person will collect the payment upon delivery.', 'profile-updated': 'Profile updated successfully!', 'profile-update-fail': 'Failed to update profile.', 'toast-storage-permission-error': 'Storage permission denied. Check Firebase rules.', 'toast-update-profile': 'Please update your location and mobile number in your profile before ordering.', 'emergency-contact': 'Emergency Contact Us', 'message-sent': 'Message sent successfully!', 'out-of-stock': 'Out of Stock', 'toast-out-of-stock': 'Sorry, this product is currently out of stock.', 'subtotal': 'Subtotal', 'delivery-charge': 'Delivery Charge', 'my-orders': 'My Orders',
+                'toast-register-success': 'Account created successfully!', 'login': 'Login', 'register': 'Register Account', 'toast-select-variant': 'Please select all required options!', 'payment-method': 'Select Payment Method', 'cod': 'Cash on Delivery', 'online-payment': 'Online Payment', 'confirm-order': 'Confirm Order', 'order-placed-success': 'Your order has been placed successfully!', 'order-placed-fail': 'Failed to place order. Please try again.', 'cart-is-empty': 'Your cart is empty. Cannot checkout.', 'mobile-banking': 'Mobile Banking', 'payment-instruction-bkash': 'Please send {amount} Taka to this Bkash number: +8801863205976 from your app.', 'payment-instruction-nagad': 'Please send {amount} Taka to this Nagad number: +8801863205976 from your app.', 'payment-instruction-cod': 'Our delivery person will collect the payment upon delivery.', 'profile-updated': 'Profile updated successfully!', 'profile-update-fail': 'Failed to update profile.', 'toast-storage-permission-error': 'Storage permission denied. Check Firebase rules.', 'toast-update-profile': 'Please update your location and mobile number in your profile before ordering.', 'emergency-contact': 'Emergency Contact', 'message-sent': 'Message sent successfully!', 'out-of-stock': 'Out of Stock', 'toast-out-of-stock': 'Sorry, this product is currently out of stock.', 'subtotal': 'Subtotal', 'delivery-charge': 'Delivery Charge', 'my-orders': 'My Orders',
                 'delete-account-confirm': 'Are you sure you want to delete your account? This action cannot be undone. All data will be lost.',
                 'account-deleted': 'Your account has been successfully deleted.',
                 'delete-account-failed': 'Failed to delete account. Please try again.',
                 'confirm-delete-title': '⚠️ Permanently Delete Account',
+                'chat-unauthorized': 'Please log in to start a conversation with the admin.',
+                'chat-send': 'Send',
+                'chat-placeholder': 'Type your message...',
             },
             bn: {
                 'deliver-to': 'ডেলিভারি লোকেশন', 'home': 'হোম', 'products': 'পণ্য', 'categories': 'ক্যাটাগরি', 'offers': 'অফার', 'search-placeholder': 'পণ্য খুঁজুন...', 'featured-products': 'বৈশিষ্ট্যযুক্ত পণ্য', 'shop-by-category': 'ক্যাটাগরি অনুসারে কেনাকাটা করুন', 'cat-electronics': 'ইলেকট্রনিক্স', 'cat-fashion': 'ফ্যাশন', 'cat-home-garden': 'হোম অ্যান্ড গার্ডেন', 'cat-health-beauty': 'স্বাস্থ্য ও সৌন্দর্য', 'cat-sports': 'খেলাধুলা ও আউটডোর', 'cat-books': 'বই ও স্টেশনারি', 'cat-kids': 'বাচ্চা ও খেলনা', 'cat-cars': 'গাড়ি ও বাইক', 'why-choose-us': 'আমাদেরকে কেন বেছে নিবেন', 'feature-delivery-title': 'দ্রুত ডেলিভারি', 'feature-delivery-desc': 'আমরা ২-৩ কার্যদিবসের মধ্যে আপনার দোরগোড়ায় পণ্য পৌঁছে দিই।', 'feature-payment-title': 'নিরাপদ পেমেন্ট', 'feature-payment-desc': 'আপনার নিরাপত্তা ও গোপনীয়তার জন্য সকল লেনদেন এনক্রিপ্টেড।', 'feature-return-title': 'সহজ রিটার্ন', 'feature-return-desc': 'পছন্দ না হলে ৩০ দিনের মধ্যে পণ্য ফেরত দিন এবং সম্পূর্ণ মূল্য ফেরত পান।', 'feature-support-title': '২৪/৭ সাপোর্ট', 'feature-support-desc': 'আমাদের গ্রাহক সহায়তা দল দিনরাত আপনার জন্য উপলব্ধ।', 'add-to-cart': 'কার্টে যোগ করুন', 'added-to-cart': 'যোগ হয়েছে!', 'no-products': 'আপনার অনুসন্ধানের সাথে মেলে এমন কোনো পণ্য পাওয়া যায়নি।', 'back-to-products': 'সকল পণ্যে ফিরে যান', 'returnable': '৩০-দিনের মধ্যে ফেরতযোগ্য', 'not-returnable': 'ফেরতযোগ্য নয়', 'secure-payments': 'নিরাপদ পেমেন্ট', 'size': 'সাইজ:', 'storage': 'স্টোরেজ:', 'color': 'রঙ:', 'product-description': 'পণ্যের বিবরণ', 'product-specifications': 'পণ্যের স্পেসিফিকেশন', 'specifications': 'স্পেসিফিকেশন', 'value': 'মান', 'no-specs': 'এই পণ্যের জন্য কোন স্পেসিফিকেশন উপলব্ধ নেই।', 'product-reviews': 'পণ্যের রিভিউ', 'no-reviews': 'এই পণ্যের জন্য এখনো কোনো রিভিউ নেই।', 'cart': 'আপনার কার্ট', 'cart-empty': 'আপনার কার্ট খালি।', 'total': 'মোট মূল্য:', 'checkout': 'চেকআউট করুন', 'your-wishlist': 'আপনার উইশলিস্ট', 'wishlist-empty': 'আপনার উইশলিস্ট খালি। কিছু পণ্য যোগ করুন!', 'your-account': 'আপনার অ্যাকাউন্ট', 'signin-google': 'Google দিয়ে সাইন ইন করুন', 'logout': 'লগআউট', 'toast-cart-added': 'পণ্য কার্টে যোগ করা হয়েছে!', 'toast-wishlist-added': 'পণ্য উইশলিস্টে যোগ করা হয়েছে!', 'toast-wishlist-removed': 'পণ্য উইশলিস্ট থেকে সরানো হয়েছে!', 'toast-login-success': 'সফলভাবে লগইন হয়েছে!', 'toast-logout-success': 'সফলভাবে লগআউট হয়েছে!',
@@ -858,6 +974,9 @@
                 'account-deleted': 'আপনার অ্যাকাউন্ট সফলভাবে মুছে ফেলা হয়েছে।',
                 'delete-account-failed': 'অ্যাকাউন্ট মুছে ফেলার চেষ্টা ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।',
                 'confirm-delete-title': '⚠️ স্থায়ীভাবে অ্যাকাউন্ট মুছুন',
+                'chat-unauthorized': 'অ্যাডমিনের সাথে কথা বলার জন্য দয়া করে লগইন করুন।',
+                'chat-send': 'পাঠান',
+                'chat-placeholder': 'আপনার বার্তা লিখুন...',
             }
         };
 
@@ -889,6 +1008,14 @@
             toggleSwitch: document.getElementById('toggle-switch'),
             moonIcon: document.getElementById('moon-icon'),
             sunIcon: document.getElementById('sun-icon'),
+
+            // Chat Elements
+            emergencyContactBtn: document.getElementById('emergency-contact-btn'),
+            chatMessages: document.getElementById('chat-messages'),
+            chatForm: document.getElementById('chat-form'),
+            chatInput: document.getElementById('chat-input'),
+            sendChatBtn: document.getElementById('send-chat-btn'),
+            chatError: document.getElementById('chat-error'),
         };
         
         // --- UI & RENDERING ---
@@ -916,6 +1043,7 @@
             });
             DOMElements.searchInput.placeholder = translations[currentLanguage]['search-placeholder'];
             DOMElements.searchInputMobile.placeholder = translations[currentLanguage]['search-placeholder'];
+            DOMElements.chatInput.placeholder = translations[currentLanguage]['chat-placeholder'];
         }
 
         function setLanguage(lang) {
@@ -934,6 +1062,14 @@
         window.setLanguage = setLanguage;
 
         function showPage(pageId) {
+            // Stop chat listener when leaving the chat page
+            if (pageId !== 'emergency-chat-page') {
+                chatUnsubscribe(); 
+            } else if (currentUser && !currentUser.isAnonymous) {
+                // Start chat listener when entering chat page
+                handleEmergencyChat();
+            }
+            
             document.querySelectorAll('.page').forEach(page => page.classList.add('hidden'));
             const activePage = document.getElementById(pageId);
             if (activePage) {
@@ -969,7 +1105,7 @@
             currentDisplayedProducts = productsToRender;
             DOMElements.productList.innerHTML = '';
             if (productsToRender.length === 0) {
-                 DOMElements.productList.innerHTML = `<p class="col-span-full text-center text-gray-500">${translations[currentLanguage]['no-products']}</p>`;
+                 DOMElements.productList.innerHTML = `<p class="col-span-full text-center text-gray-500 dark:text-gray-400">${translations[currentLanguage]['no-products']}</p>`;
                  return;
             }
             const fragment = document.createDocumentFragment();
@@ -1811,7 +1947,8 @@
 
         // --- DRAWER & MODAL LOGIC ---
         function openDrawer(drawerId) {
-            closeDrawer(); // Close any open drawer first
+            closeDrawer(); // Stop chat listener when closing drawers
+            
             const drawer = document.getElementById(drawerId);
             if (drawer) {
                 if (drawerId === 'profile-drawer') {
@@ -1834,6 +1971,7 @@
         function closeDrawer() {
             DOMElements.drawerOverlay.classList.add('hidden');
             document.querySelectorAll('.drawer').forEach(d => d.classList.remove('active'));
+            chatUnsubscribe(); // Ensure chat listener stops when drawer closes
         }
         window.closeDrawer = closeDrawer;
 
@@ -2058,45 +2196,43 @@
                 if (status === 'cancelled') return '';
                 
                 const currentStatusIndex = statuses.map(s => s.toLowerCase()).indexOf(status);
+                
                 let html = '';
                 
-                // Outer container for centering and spacing
-                // Removed px-4/12/16 classes from here to allow padding in the parent element
-                html += `<div class="flex justify-between w-full relative pt-6 pb-4">`; 
-                
-                // Background line (Grey)
-                // Use absolute positioning relative to the tracker container width
-                html += `<div class="absolute h-0.5 bg-gray-300 dark:bg-gray-600 top-1/2 left-0 right-0 mx-auto transform -translate-y-1/2 w-[90%]"></div>`; // 90% width centered
+                // Use a standard flex container to lay out nodes and connectors
+                html += `<div class="tracker-step-container w-full pt-4 pb-4">`;
 
+                // Render nodes and connectors
                 statuses.forEach((step, index) => {
                     const isComplete = currentStatusIndex >= index;
-                    const circleClass = isComplete ? 'bg-green-500 border-green-500 text-white' : 'bg-white dark:bg-gray-800 border-gray-400 dark:border-gray-500 text-gray-500 dark:text-gray-400';
+                    const isPreviousComplete = currentStatusIndex >= index - 1;
+                    const isLastStep = index === statuses.length - 1;
                     
-                    // Active line segment (Green) - spans between centers of circles
-                    if (index < statuses.length - 1) {
-                        const isActiveLine = currentStatusIndex > index;
-                        
-                        // Calculated segment position (Needs accurate calculation based on parent width)
-                        // Simple solution: use an absolute green div that covers the appropriate width of the grey line.
-                        if (isComplete && index < currentStatusIndex) {
-                             const lineStart = (index / (statuses.length - 1)) * 100;
-                             const lineWidth = (1 / (statuses.length - 1)) * 100;
-                            // Injecting the green line segment
-                             html += `<div style="left: calc(10% + ${lineStart}%); width: calc(${lineWidth}%); transform: translateX(-0%);" class="absolute h-0.5 top-1/2 bg-green-500 transform -translate-y-1/2 z-10"></div>`;
-                        }
-                    }
-
-                    // Circle and Label Container
+                    const circleClass = isComplete ? 'bg-green-500 border-green-500 text-white' : 'bg-white dark:bg-gray-800 border-gray-400 dark:border-gray-500 text-gray-500 dark:text-gray-400';
+                    const labelColor = isComplete ? 'text-gray-700 dark:text-gray-200' : 'text-gray-500 dark:text-gray-400';
+                    
+                    // Render Node (Circle + Label)
                     html += `
-                        <div class="flex flex-col items-center z-20 w-1/5 min-w-[70px]">
-                            <div class="w-6 h-6 rounded-full border-2 flex items-center justify-center ${circleClass} shadow-md">
+                        <div class="tracker-node">
+                            <div class="tracker-circle rounded-full border-2 flex items-center justify-center ${circleClass} shadow-md relative z-10">
                                 <i class="fas fa-check text-xs"></i>
                             </div>
-                            <p class="text-xs mt-2 text-center text-gray-700 dark:text-gray-300">${step}</p>
+                            <p class="text-xs mt-2 ${labelColor}">${step}</p>
                         </div>`;
+                    
+                    // Render Connector Line (Appears between nodes)
+                    if (!isLastStep) {
+                        const connectorClass = isPreviousComplete ? 'active' : '';
+
+                        // Connector line is rendered in the gap between two fixed-width tracker-node elements
+                        html += `
+                            <div class="tracker-connector ${connectorClass}">
+                                <div class="tracker-connector-line"></div>
+                            </div>`;
+                    }
                 });
                 
-                html += `</div>`;
+                html += `</div>`; // Close tracker-step-container
                 return html;
             }
 
@@ -2110,7 +2246,7 @@
                 let statusBgClass = 'bg-gray-500';
                 if (status === 'delivered') { statusBgClass = 'bg-green-500'; }
                 else if (status === 'cancelled') { statusBgClass = 'bg-red-500'; }
-                else if (status === 'shipped' || status === 'out for delivery') { statusBgClass = 'bg-theme-blue'; }
+                else if (status === 'shipped' || status === 'out for delivery') { statusBgClass = 'bg-theme-blue'; } // FIX: Changed to theme-blue for out-for-delivery
                 else if (status === 'confirmed' || status === 'pending') { statusBgClass = 'bg-yellow-500'; }
                 
                 const statusTextColor = 'text-white';
@@ -2140,7 +2276,6 @@
                     : '';
 
                 // Final Card structure based on user image
-                // Added horizontal padding to the wrapper to fix tracker width issue
                 return `
                     <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border dark:border-gray-700 border-gray-100">
                         <!-- Top Header Row -->
@@ -2179,16 +2314,111 @@
             }).join('');
         }
 
+        // --- Emergency Chat Logic ---
+
+        function handleEmergencyChatClick() {
+            if (!currentUser || currentUser.isAnonymous) {
+                showToast(translations[currentLanguage]['chat-unauthorized'], false);
+                openDrawer('profile-drawer');
+                return;
+            }
+            closeDrawer();
+            showPage('emergency-chat-page');
+            // Starts listening to chat once on the page
+        }
+        
+        async function handleEmergencyChat() {
+            if (!currentUser || currentUser.isAnonymous) return;
+
+            const chatId = currentUser.uid;
+            const chatDocRef = doc(db, 'live_chats', chatId);
+            const messagesCollectionRef = collection(chatDocRef, 'messages');
+            
+            // Initialize chat doc if it doesn't exist
+            const chatDocSnap = await getDoc(chatDocRef);
+            if (!chatDocSnap.exists()) {
+                await setDoc(chatDocRef, {
+                    userId: currentUser.uid,
+                    userName: currentUser.displayName || currentUser.email,
+                    createdAt: serverTimestamp(),
+                    lastActive: serverTimestamp()
+                });
+            } else {
+                await updateDoc(chatDocRef, { lastActive: serverTimestamp() });
+            }
+            
+            DOMElements.chatMessages.innerHTML = `<p class="text-center text-gray-500 dark:text-gray-400">Loading messages...</p>`;
+            
+            // Set up real-time listener for messages
+            const q = query(messagesCollectionRef, orderBy('timestamp', 'asc'));
+
+            chatUnsubscribe = onSnapshot(q, (snapshot) => {
+                let messagesHtml = '';
+                snapshot.forEach(doc => {
+                    const msg = doc.data();
+                    const isUser = msg.senderId === currentUser.uid;
+                    const senderName = isUser ? 'You' : (msg.senderName || 'Admin');
+                    const time = msg.timestamp?.toDate().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) || '';
+                    
+                    messagesHtml += `
+                        <div class="flex ${isUser ? 'justify-end' : 'justify-start'}">
+                            <div class="max-w-xs md:max-w-md p-3 rounded-xl shadow-md ${isUser ? 'bg-theme-blue text-white rounded-br-none' : 'bg-white dark:bg-gray-700 text-dark dark:text-gray-100 rounded-tl-none border dark:border-gray-600'}">
+                                <p class="text-xs font-semibold ${isUser ? 'text-blue-200' : 'text-theme-purple'} mb-1">${senderName}</p>
+                                <p class="text-sm">${msg.text}</p>
+                                <p class="text-right text-xs mt-1 ${isUser ? 'text-blue-300' : 'text-gray-500 dark:text-gray-400'}">${time}</p>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                DOMElements.chatMessages.innerHTML = messagesHtml;
+                // Scroll to bottom
+                DOMElements.chatMessages.scrollTop = DOMElements.chatMessages.scrollHeight;
+            }, (error) => {
+                console.error("Error listening to messages:", error);
+                DOMElements.chatMessages.innerHTML = `<p class="text-center text-red-500">Error loading chat history.</p>`;
+            });
+        }
+        
+        async function sendChatMessage(e) {
+            e.preventDefault();
+            if (!currentUser || currentUser.isAnonymous) return;
+
+            const text = DOMElements.chatInput.value.trim();
+            if (!text) return;
+
+            DOMElements.chatError.textContent = '';
+            
+            const chatId = currentUser.uid;
+            const messagesCollectionRef = collection(db, 'live_chats', chatId, 'messages');
+
+            try {
+                await addDoc(messagesCollectionRef, {
+                    text: text,
+                    senderId: currentUser.uid,
+                    senderName: currentUser.displayName || currentUser.email || 'User',
+                    timestamp: serverTimestamp()
+                });
+                
+                // Update parent chat doc
+                await updateDoc(doc(db, 'live_chats', chatId), { lastActive: serverTimestamp() });
+
+                DOMElements.chatInput.value = ''; // Clear input
+                
+            } catch (error) {
+                console.error("Error sending message:", error);
+                DOMElements.chatError.textContent = "Failed to send message.";
+            }
+        }
+
+        // --- Invoice Generation Logic (jsPDF) ---
+        
         // Helper to convert image URL to Base64 data URI (No longer needed as logo is removed)
         async function imageToBase64(url) {
             return null; // Function kept for compatibility but returns null
         }
 
-        // --- Invoice Generation Logic (jsPDF) ---
-        
         // Helper to format currency for PDF
-        // NOTE: This function is not used for symbol formatting in PDF to avoid Unicode issues, 
-        // but kept for compatibility.
         function formatCurrency(amount) {
             return `৳${Number(amount).toFixed(2)}`;
         }
@@ -2201,7 +2431,6 @@
             }
 
             const { jsPDF } = window.jspdf;
-            // Changed font to 'helvetica' for better Taka symbol rendering support (compared to 'times')
             const doc = new jsPDF('p', 'mm', 'a4'); // 'p' for portrait, 'mm' for units, 'a4' for size
             const pageWidth = doc.internal.pageSize.getWidth(); // 210mm for A4
             let marginX = 20; // Increased margin for smaller frame
@@ -2424,6 +2653,10 @@
             DOMElements.confirmOkBtn.addEventListener('click', handleConfirmClick);
             DOMElements.confirmCancelBtn.addEventListener('click', handleCancelClick);
             
+            // Emergency Contact Button
+            if(DOMElements.emergencyContactBtn) DOMElements.emergencyContactBtn.addEventListener('click', handleEmergencyChatClick);
+            if(DOMElements.chatForm) DOMElements.chatForm.addEventListener('submit', sendChatMessage);
+
             if(document.getElementById('my-orders-btn')) document.getElementById('my-orders-btn').addEventListener('click', () => { showPage('my-orders-page'); closeDrawer(); });
             if(DOMElements.myOrdersBtnProfile) DOMElements.myOrdersBtnProfile.addEventListener('click', () => { showPage('my-orders-page'); closeDrawer(); });
             if(DOMElements.deleteAccountBtn) DOMElements.deleteAccountBtn.addEventListener('click', handleDeleteAccount);
