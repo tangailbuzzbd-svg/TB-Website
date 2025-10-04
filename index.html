@@ -7,7 +7,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght=400;700&family=Poppins:wght=400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -915,12 +915,13 @@
         // Use the global Firebase config and auth token provided by the environment
         window.appId = typeof __app_id !== 'undefined' ? __app_id.replace(/\//g, '_') : 'default-app-id';
         const firebaseConfig = {
-            apiKey: "AIzaSyBQH3wiKS5_5gGg309REabDmJSk1VLIbtw",
-            authDomain: "tangail-buzz-project.firebaseapp.com",
-            projectId: "tangail-buzz-project",
-            storageBucket: "tangail-buzz-project.appspot.com",
-            messagingSenderId: "1080138191394",
-            appId: "1:1080138191394:web:0e96b05009820b5dc5b07b"
+            apiKey: "AIzaSyBIRNr3X-_xOHQ6ITW3pXgqgcjhP2xEEEA",
+            authDomain: "tangailbuzz47.firebaseapp.com",
+            projectId: "tangailbuzz47",
+            storageBucket: "tangailbuzz47.firebasestorage.app",
+            messagingSenderId: "1017968115713",
+            appId: "1:1017968115713:web:967a0e13107d8816b44000",
+            measurementId: "G-7HYDCZTN2H"
         };
         window.initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : '';
 
@@ -1922,7 +1923,7 @@
         async function handleLogin(e) {
             e.preventDefault();
             const email = DOMElements.loginForm.querySelector('#login-email').value;
-            const password = DOMElements.loginForm.querySelector('#login-password').value;
+            const password = DOMEElements.loginForm.querySelector('#login-password').value;
             DOMElements.authError.textContent = '';
 
             try {
@@ -2934,4 +2935,3 @@
     </script>
 </body>
 </html>
-
