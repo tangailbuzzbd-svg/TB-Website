@@ -13,6 +13,8 @@
     <script>
         // Tailwind CSS custom theme configuration
         tailwind.config = {
+            // ENABLE DARK MODE VIA CLASS TOGGLE
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
@@ -163,7 +165,7 @@
         
     </style>
 </head>
-<body class="bg-theme-light text-dark font-sans leading-relaxed transition-colors duration-300">
+<body class="bg-theme-light text-dark font-sans leading-relaxed transition-colors duration-300 dark:bg-gray-900 dark:text-gray-100">
     
     <!-- Blocked User Banner -->
     <div id="blocked-account-banner" class="hidden fixed top-0 left-0 w-full bg-red-600 text-white text-center p-3 z-[9999] font-semibold"></div>
@@ -216,6 +218,11 @@
                     <a href="javascript:void(0);" id="lang-en-btn" onclick="setLanguage('en')" class="hover:text-theme-pink transition-colors">English</a>
                 </div>
                 
+                <!-- Dark Mode Toggle -->
+                <button id="dark-mode-toggle" class="text-white text-xl p-2 rounded-full hover:bg-white hover:text-theme-blue transition-colors" aria-label="Toggle Dark Mode">
+                    <i class="fas fa-sun" id="dark-mode-icon"></i>
+                </button>
+                
                 <div id="profile-icon" class="relative transform hover:scale-110 transition-transform cursor-pointer" onclick="openDrawer('profile-drawer')">
                     <i class="fas fa-user-circle text-white text-2xl"></i>
                 </div>
@@ -245,18 +252,18 @@
     
     <!-- Payment Modal -->
     <div id="payment-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-50 z-[100] hidden items-center justify-center">
-        <div class="bg-white rounded-3xl p-8 max-w-md w-full mx-4 shadow-2xl">
+        <div class="bg-white dark:bg-gray-800 rounded-3xl p-8 max-w-md w-full mx-4 shadow-2xl">
             <div class="flex justify-between items-center mb-6">
                 <h3 class="text-2xl font-bold text-theme-purple" data-lang="payment-method">Select Payment Method</h3>
                 <button onclick="closePaymentModal()" class="text-gray-500 hover:text-gray-800 text-3xl">&times;</button>
             </div>
             <div id="payment-options" class="space-y-4">
                 <!-- Main Payment Options -->
-                 <label class="flex items-center p-4 border rounded-lg cursor-pointer has-[:checked]:bg-blue-50 has-[:checked]:border-theme-blue">
+                 <label class="flex items-center p-4 border rounded-lg cursor-pointer has-[:checked]:bg-blue-50 dark:has-[:checked]:bg-blue-900 has-[:checked]:border-theme-blue">
                     <input type="radio" name="main-payment" value="Mobile Banking" class="w-5 h-5 accent-theme-blue">
                     <span class="ml-4 font-semibold" data-lang="mobile-banking">Mobile Banking</span>
                 </label>
-                 <label class="flex items-center p-4 border rounded-lg cursor-pointer has-[:checked]:bg-blue-50 has-[:checked]:border-theme-blue">
+                 <label class="flex items-center p-4 border rounded-lg cursor-pointer has-[:checked]:bg-blue-50 dark:has-[:checked]:bg-blue-900 has-[:checked]:border-theme-blue">
                     <input type="radio" name="main-payment" value="Cash on Delivery" class="w-5 h-5 accent-theme-blue" checked>
                     <span class="ml-4 font-semibold" data-lang="cod">Cash on Delivery</span>
                 </label>
@@ -281,7 +288,7 @@
     
     <!-- Order Success Modal -->
     <div id="order-success-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-50 z-[110] hidden items-center justify-center">
-        <div class="bg-white rounded-3xl p-8 max-w-md w-full mx-4 shadow-2xl text-center">
+        <div class="bg-white dark:bg-gray-800 rounded-3xl p-8 max-w-md w-full mx-4 shadow-2xl text-center">
              <div class="w-20 h-20 mx-auto bg-green-100 rounded-full flex items-center justify-center">
                 <i class="fas fa-check text-4xl text-green-500"></i>
             </div>
@@ -295,9 +302,9 @@
     
     <!-- Custom Confirmation Modal (Replaces window.confirm) -->
     <div id="confirmation-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-50 z-[120] hidden items-center justify-center">
-        <div class="bg-white rounded-3xl p-8 max-w-sm w-full mx-4 shadow-2xl text-center">
+        <div class="bg-white dark:bg-gray-800 rounded-3xl p-8 max-w-sm w-full mx-4 shadow-2xl text-center">
             <h3 id="confirm-title" class="text-2xl font-bold text-red-600 mb-4">Confirm Action</h3>
-            <p id="confirm-message" class="text-gray-600 mb-6">Are you sure you want to proceed?</p>
+            <p id="confirm-message" class="text-gray-600">Are you sure you want to proceed?</p>
             <div class="flex justify-center space-x-4">
                 <button id="confirm-cancel-btn" class="px-6 py-2 bg-gray-300 text-gray-800 rounded-full font-semibold hover:bg-gray-400 transition-colors">Cancel</button>
                 <button id="confirm-ok-btn" class="px-6 py-2 bg-red-600 text-white rounded-full font-semibold hover:bg-red-700 transition-colors">Confirm</button>
@@ -307,7 +314,7 @@
 
 
     <!-- Mobile Navigation Drawer (Left) -->
-    <div id="nav-drawer" class="drawer left fixed top-0 left-0 h-full w-64 bg-white shadow-lg z-50 p-6">
+    <div id="nav-drawer" class="drawer left fixed top-0 left-0 h-full w-64 bg-white dark:bg-gray-800 shadow-lg z-50 p-6">
         <button onclick="closeDrawer()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl">&times;</button>
         <h3 class="text-2xl font-bold text-theme-purple mb-8">Menu</h3>
         <nav>
@@ -321,15 +328,28 @@
     </div>
 
     <!-- Cart Drawer (Right) -->
-    <div id="cart-drawer" class="drawer fixed top-0 right-0 h-full w-full max-w-sm bg-white shadow-lg z-50 flex flex-col">
+    <div id="cart-drawer" class="drawer fixed top-0 right-0 h-full w-full max-w-sm bg-white dark:bg-gray-800 shadow-lg z-50 flex flex-col">
         <div class="p-6 border-b flex justify-between items-center">
             <h3 class="text-2xl font-bold text-theme-purple" data-lang="cart">আপনার কার্ট</h3>
-            <button onclick="closeDrawer()" class="text-gray-500 hover:text-gray-800 text-3xl">&times;</button>
+            <button onclick="closeDrawer()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-3xl">&times;</button>
         </div>
         <div id="cart-items" class="p-6 space-y-6 flex-grow overflow-y-auto">
             <!-- Cart items will be dynamically inserted here -->
         </div>
         <div id="cart-summary" class="p-6 border-t space-y-2">
+            
+            <!-- Available Coupons Section moved inside cart drawer -->
+            <div id="coupon-details-container">
+                <h4 class="text-lg font-bold text-theme-purple mb-3" data-lang="available-coupons">উপলব্ধ কুপন</h4>
+                <div id="coupons-list" class="space-y-3 mb-4">
+                    <!-- Coupons will be dynamically loaded here -->
+                    <div class="col-span-full text-center py-4">
+                        <div class="loader mx-auto"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Summary -->
              <div class="flex justify-between items-center text-md font-medium">
                 <span data-lang="subtotal">Subtotal:</span>
                 <span id="cart-subtotal" class="text-dark">৳0.00</span>
@@ -358,7 +378,7 @@
     </div>
     
     <!-- Profile Drawer (Right) -->
-    <div id="profile-drawer" class="drawer fixed top-0 right-0 h-full w-full max-w-sm bg-white shadow-lg z-50 overflow-y-auto">
+    <div id="profile-drawer" class="drawer fixed top-0 right-0 h-full w-full max-w-sm bg-white dark:bg-gray-800 shadow-lg z-50 overflow-y-auto">
         <div class="p-6 text-center relative">
             <button onclick="closeDrawer()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl">&times;</button>
             <h3 id="profile-drawer-title" class="text-3xl font-bold text-theme-purple mb-8" data-lang="your-account">আপনার অ্যাকাউন্ট</h3>
@@ -368,19 +388,19 @@
                 <div id="auth-options">
                     <!-- Login Form -->
                     <form id="login-form" class="space-y-4 text-left">
-                        <input type="email" id="login-email" placeholder="Email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white">
-                        <input type="password" id="login-password" placeholder="Password" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white">
+                        <input type="email" id="login-email" placeholder="Email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-700">
+                        <input type="password" id="login-password" placeholder="Password" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-700">
                         <button type="submit" class="w-full py-3 bg-theme-blue text-white rounded-full font-bold hover:bg-theme-purple transition-colors">Login</button>
                         <p class="text-center text-sm">Don't have an account? <a href="#" id="show-register-form" class="text-theme-blue hover:underline">Register</a></p>
                     </form>
 
                     <!-- Register Form (hidden by default) -->
                     <form id="register-form" class="hidden space-y-4 text-left">
-                        <input type="text" id="register-name" placeholder="Full Name" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white">
-                        <input type="tel" id="register-mobile" placeholder="Mobile Number" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white">
-                        <input type="text" id="register-location" placeholder="Location" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white">
-                        <input type="email" id="register-email" placeholder="Email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white">
-                        <input type="password" id="register-password" placeholder="Password" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white">
+                        <input type="text" id="register-name" placeholder="Full Name" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-700">
+                        <input type="tel" id="register-mobile" placeholder="Mobile Number" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-700">
+                        <input type="text" id="register-location" placeholder="Location" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-700">
+                        <input type="email" id="register-email" placeholder="Email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-700">
+                        <input type="password" id="register-password" placeholder="Password" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-700">
                         <button type="submit" class="w-full py-3 bg-theme-blue text-white rounded-full font-bold hover:bg-theme-purple transition-colors">Register</button>
                         <p class="text-center text-sm">Already have an account? <a href="#" id="show-login-form" class="text-theme-blue hover:underline">Login</a></p>
                     </form>
@@ -429,7 +449,7 @@
                         </button>
                         
                         <!-- Edit Profile (Grey/Secondary) -->
-                        <button id="edit-profile-btn" class="w-full py-3 bg-gray-200 text-gray-700 rounded-xl font-semibold hover:bg-gray-300 transition-colors shadow-md flex items-center justify-between px-4">
+                        <button id="edit-profile-btn" class="w-full py-3 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-xl font-semibold hover:bg-gray-300 transition-colors shadow-md flex items-center justify-between px-4">
                             <span><i class="fas fa-user-edit mr-3"></i> Edit Profile</span>
                             <i class="fas fa-chevron-right text-sm"></i>
                         </button>
@@ -455,18 +475,18 @@
                     </div>
                     <div>
                         <label for="edit-name-input" class="block text-sm font-medium text-gray-700">Name</label>
-                        <input type="text" id="edit-name-input" class="w-full mt-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white">
+                        <input type="text" id="edit-name-input" class="w-full mt-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-700">
                     </div>
                     <div>
                         <label for="edit-mobile-input" class="block text-sm font-medium text-gray-700">Mobile Number</label>
-                        <input type="text" id="edit-mobile-input" placeholder="e.g., 01xxxxxxxxx" class="w-full mt-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white">
+                        <input type="text" id="edit-mobile-input" placeholder="e.g., 01xxxxxxxxx" class="w-full mt-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-700">
                     </div>
                      <div>
                         <label for="edit-location-input" class="block text-sm font-medium text-gray-700">Location</label>
-                        <input type="text" id="edit-location-input" placeholder="e.g., Dhaka, Bangladesh" class="w-full mt-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white">
+                        <input type="text" id="edit-location-input" placeholder="e.g., Dhaka, Bangladesh" class="w-full mt-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-700">
                     </div>
                     <div class="flex gap-4 pt-4">
-                        <button type="button" id="cancel-edit-btn" class="w-full py-2 bg-gray-200 text-gray-700 rounded-full font-bold hover:bg-gray-300 transition-colors">Cancel</button>
+                        <button type="button" id="cancel-edit-btn" class="w-full py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-full font-bold hover:bg-gray-300 transition-colors">Cancel</button>
                         <button type="submit" id="save-profile-btn" class="w-full py-2 bg-theme-blue text-white rounded-full font-bold hover:bg-theme-purple transition-colors flex items-center justify-center">
                             <span class="btn-text">Save Changes</span>
                             <div class="loader-small hidden"></div>
@@ -518,35 +538,35 @@
             <section id="categories" class="container mx-auto px-4 py-16">
                 <h2 class="text-3xl md:text-4xl font-bold text-center mb-10 relative after:content-[''] after:absolute after:bottom-[-10px] after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-1 after:bg-theme-pink after:rounded-full" data-lang="shop-by-category">ক্যাটাগরি অনুসারে কেনাকাটা করুন</h2>
                 <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-8">
-                    <div class="bg-white p-8 rounded-3xl shadow-xl text-center transition-transform hover:-translate-y-2 hover:shadow-2xl cursor-pointer" onclick="filterProducts('electronics')">
+                    <div class="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-xl text-center transition-transform hover:-translate-y-2 hover:shadow-2xl cursor-pointer" onclick="filterProducts('electronics')">
                         <div class="text-5xl text-theme-blue mb-4"><i class="fas fa-mobile-alt"></i></div>
                         <h3 class="text-xl font-semibold" data-lang="cat-electronics">ইলেকট্রনিক্স</h3>
                     </div>
-                    <div class="bg-white p-8 rounded-3xl shadow-xl text-center transition-transform hover:-translate-y-2 hover:shadow-2xl cursor-pointer" onclick="filterProducts('fashion')">
+                    <div class="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-xl text-center transition-transform hover:-translate-y-2 hover:shadow-2xl cursor-pointer" onclick="filterProducts('fashion')">
                         <div class="text-5xl text-theme-blue mb-4"><i class="fas fa-tshirt"></i></div>
                         <h3 class="text-xl font-semibold" data-lang="cat-fashion">ফ্যাশন</h3>
                     </div>
-                    <div class="bg-white p-8 rounded-3xl shadow-xl text-center transition-transform hover:-translate-y-2 hover:shadow-2xl cursor-pointer" onclick="filterProducts('home-garden')">
+                    <div class="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-xl text-center transition-transform hover:-translate-y-2 hover:shadow-2xl cursor-pointer" onclick="filterProducts('home-garden')">
                         <div class="text-5xl text-theme-blue mb-4"><i class="fas fa-home"></i></div>
                         <h3 class="text-xl font-semibold" data-lang="cat-home-garden">হোম অ্যান্ড গার্ডেন</h3>
                     </div>
-                    <div class="bg-white p-8 rounded-3xl shadow-xl text-center transition-transform hover:-translate-y-2 hover:shadow-2xl cursor-pointer" onclick="filterProducts('health-beauty')">
+                    <div class="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-xl text-center transition-transform hover:-translate-y-2 hover:shadow-2xl cursor-pointer" onclick="filterProducts('health-beauty')">
                         <div class="text-5xl text-theme-blue mb-4"><i class="fas fa-heartbeat"></i></div>
                         <h3 class="text-xl font-semibold" data-lang="cat-health-beauty">স্বাস্থ্য ও সৌন্দর্য</h3>
                     </div>
-                    <div class="bg-white p-8 rounded-3xl shadow-xl text-center transition-transform hover:-translate-y-2 hover:shadow-2xl cursor-pointer" onclick="filterProducts('sports')">
+                    <div class="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-xl text-center transition-transform hover:-translate-y-2 hover:shadow-2xl cursor-pointer" onclick="filterProducts('sports')">
                         <div class="text-5xl text-theme-blue mb-4"><i class="fas fa-dumbbell"></i></div>
                         <h3 class="text-xl font-semibold" data-lang="cat-sports">খেলাধুলা ও আউটডোর</h3>
                     </div>
-                    <div class="bg-white p-8 rounded-3xl shadow-xl text-center transition-transform hover:-translate-y-2 hover:shadow-2xl cursor-pointer" onclick="filterProducts('books')">
+                    <div class="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-xl text-center transition-transform hover:-translate-y-2 hover:shadow-2xl cursor-pointer" onclick="filterProducts('books')">
                         <div class="text-5xl text-theme-blue mb-4"><i class="fas fa-book-open"></i></div>
                         <h3 class="text-xl font-semibold" data-lang="cat-books">বই ও স্টেশনারি</h3>
                     </div>
-                    <div class="bg-white p-8 rounded-3xl shadow-xl text-center transition-transform hover:-translate-y-2 hover:shadow-2xl cursor-pointer" onclick="filterProducts('kids')">
+                    <div class="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-xl text-center transition-transform hover:-translate-y-2 hover:shadow-2xl cursor-pointer" onclick="filterProducts('kids')">
                         <div class="text-5xl text-theme-blue mb-4"><i class="fas fa-baby"></i></div>
                         <h3 class="text-xl font-semibold" data-lang="cat-kids">বাচ্চা ও খেলনা</h3>
                     </div>
-                    <div class="bg-white p-8 rounded-3xl shadow-xl text-center transition-transform hover:-translate-y-2 hover:shadow-2xl cursor-pointer" onclick="filterProducts('cars')">
+                    <div class="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-xl text-center transition-transform hover:-translate-y-2 hover:shadow-2xl cursor-pointer" onclick="filterProducts('cars')">
                         <div class="text-5xl text-theme-blue mb-4"><i class="fas fa-car-side"></i></div>
                         <h3 class="text-xl font-semibold" data-lang="cat-cars">গাড়ি ও বাইক</h3>
                     </div>
@@ -554,7 +574,7 @@
             </section>
 
             <!-- Features Section -->
-            <section class="bg-gray-200 py-16">
+            <section class="bg-gray-200 dark:bg-gray-800 py-16">
                 <div class="container mx-auto px-4">
                     <h2 class="text-3xl md:text-4xl font-bold text-center mb-10 relative after:content-[''] after:absolute after:bottom-[-10px] after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-1 after:bg-theme-pink after:rounded-full" data-lang="why-choose-us">আমাদেরকে কেন বেছে নিবেন</h2>
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -587,15 +607,15 @@
         <div id="about-us-page" class="hidden page">
              <section id="about-us" class="container mx-auto px-4 py-16">
                 <h2 class="text-3xl md:text-4xl font-bold text-center mb-10 relative after:content-[''] after:absolute after:bottom-[-10px] after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-1 after:bg-theme-pink after:rounded-full">আমাদের সম্পর্কে</h2>
-                <div class="bg-white p-8 md:p-12 rounded-3xl shadow-xl space-y-8">
-                    <p class="text-lg leading-relaxed text-gray-700">
+                <div class="bg-white dark:bg-gray-800 p-8 md:p-12 rounded-3xl shadow-xl space-y-8">
+                    <p class="text-lg leading-relaxed text-gray-700 dark:text-gray-300">
                         TangailBuzz একটি বিশ্বস্ত অনলাইন শপিং প্ল্যাটফর্ম যা সাশ্রয়ী মূল্যে মানসম্মত পণ্য সরবরাহ করতে প্রতিশ্রুতিবদ্ধ। আমরা গ্রাহকদের একটি সহজ এবং আনন্দদায়ক কেনাকাটার অভিজ্ঞতা দিতে বদ্ধপরিকর। আমাদের লক্ষ্য হল সকলের কাছে সেরা পণ্য পৌঁছে দেওয়া, যাতে তারা ঘরে বসেই তাদের পছন্দের জিনিস কিনতে পারেন।
                     </p>
-                    <div class="flex flex-col md:flex-row items-center md:items-start gap-8 md:gap-12 p-6 bg-gray-100 rounded-2xl shadow-inner">
+                    <div class="flex flex-col md:flex-row items-center md:items-start gap-8 md:gap-12 p-6 bg-gray-100 dark:bg-gray-700 rounded-2xl shadow-inner">
                         <img src="https://github.com/tangailbuzzbd-svg/TangailBuzz-Picture-/blob/main/WhatsApp%20Image%202025-07-30%20at%2019.29.33_9f8c7d06.jpg?raw=true" alt="Md Eousuf Ali" class="w-32 h-32 rounded-full object-cover shadow-lg">
                         <div>
                             <h3 class="text-2xl font-bold text-theme-purple mb-2">প্রতিষ্ঠাতা: MD EOUSUF ALI</h3>
-                            <p class="text-gray-600 leading-relaxed">
+                            <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
                                 Md Eousuf Ali, TangailBuzz-এর স্বপ্নদ্রষ্টা এবং প্রতিষ্ঠাতা। ডিজিটাল প্ল্যাটফর্মের মাধ্যমে বাংলাদেশের মানুষের কাছে উন্নত মানের পণ্য পৌঁছে দেওয়ার লক্ষ্য নিয়ে তিনি এই যাত্রা শুরু করেন। তাঁর দূরদর্শিতা এবং কঠোর পরিশ্রম TangailBuzz-কে আজকের অবস্থানে এনেছে।
                             </p>
                         </div>
@@ -607,8 +627,8 @@
         <!-- Product Details Page -->
         <div id="product-details-page" class="hidden page">
             <section class="container mx-auto px-4 py-16">
-                <div class="bg-white p-8 md:p-12 rounded-3xl shadow-xl">
-                    <button onclick="renderAllProducts()" class="mb-6 px-4 py-2 bg-gray-200 rounded-full hover:bg-gray-300 transition-colors">
+                <div class="bg-white dark:bg-gray-800 p-8 md:p-12 rounded-3xl shadow-xl">
+                    <button onclick="renderAllProducts()" class="mb-6 px-4 py-2 bg-gray-200 dark:bg-gray-700 dark:text-gray-200 rounded-full hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
                         <i class="fas fa-arrow-left mr-2"></i> <span data-lang="back-to-products">সকল পণ্যে ফিরে যান</span>
                     </button>
                     <div class="flex flex-col lg:flex-row gap-8 items-center lg:items-start">
@@ -626,6 +646,13 @@
                         <div class="w-full lg:w-1/2 space-y-4">
                             <h2 id="product-title-details" class="text-3xl md:text-4xl font-bold text-theme-purple"></h2>
                             <p id="product-brand-details" class="text-sm text-gray-500"></p>
+                            <!-- NEW: Warranty Display below Brand -->
+                            <p id="product-warranty-details" class="text-sm text-green-600 font-semibold flex items-center">
+                                <!-- Icon and Text updated via JS -->
+                                <i class="fas fa-shield-alt mr-2"></i> 
+                                <span id="warranty-text"></span>
+                            </p>
+                            <!-- END NEW: Warranty Display -->
                             <div class="flex items-center text-sm my-1">
                                 <div id="product-rating-details" class="text-sm mr-1"></div>
                                 <div id="product-stars-details" class="flex items-center"></div>
@@ -646,11 +673,11 @@
                                 <div id="color-options" class="hidden">
                                     <label class="block text-sm font-semibold mb-2" data-lang="color">রঙ:</label>
                                     <div class="flex flex-wrap gap-2" id="color-variants-container"></div>
-                                </div>
+                                </d>
                             </div>
                             
                             <!-- Return policy and secure payments -->
-                            <div id="product-info-details" class="space-y-2 text-gray-600 pt-4">
+                            <div id="product-info-details" class="space-y-2 text-gray-600">
                                 <!-- Details will be rendered here dynamically -->
                             </div>
 
@@ -663,12 +690,12 @@
                     </div>
                     <div class="mt-16">
                         <h3 class="text-2xl md:text-3xl font-bold mb-4 border-b-2 border-theme-pink pb-2 inline-block" data-lang="product-description">পণ্যের বিবরণ</h3>
-                        <p id="product-full-description" class="text-gray-700 leading-relaxed mt-4"></p>
+                        <p id="product-full-description" class="text-gray-700 dark:text-gray-300 leading-relaxed mt-4"></p>
                     </div>
                     
                     <div class="mt-16">
                         <h3 class="text-2xl md:text-3xl font-bold mb-4 border-b-2 border-theme-pink pb-2 inline-block" data-lang="product-specifications">পণ্যের স্পেসিফিকেশন</h3>
-                        <div id="product-specifications" class="bg-gray-100 p-6 rounded-xl mt-4"></div>
+                        <div id="product-specifications" class="bg-gray-100 dark:bg-gray-700 p-6 rounded-xl mt-4"></div>
                     </div>
 
                     <div class="mt-16">
@@ -702,22 +729,22 @@
         <!-- Emergency Chat Page -->
         <div id="emergency-chat-page" class="hidden page">
             <section class="container mx-auto px-4 py-16">
-                <div class="bg-white p-6 rounded-3xl shadow-xl max-w-2xl mx-auto flex flex-col h-[70vh]">
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-3xl shadow-xl max-w-2xl mx-auto flex flex-col h-[70vh]">
                     <div class="flex justify-between items-center mb-4 border-b pb-4">
-                        <h2 class="text-2xl font-bold text-theme-purple" data-lang="emergency-contact">জরুরী যোগাযোগ</h2>
+                        <h2 class="text-2xl font-bold text-theme-purple">জরুরী যোগাযোগ</h2>
                         <button onclick="showPage('home-page')" class="text-theme-blue hover:text-theme-pink transition-colors">
                             <i class="fas fa-times text-xl"></i>
                         </button>
                     </div>
                     
                     <!-- Chat Messages Container -->
-                    <div id="chat-messages" class="flex-grow overflow-y-auto space-y-4 p-4 mb-4 bg-gray-100 rounded-lg">
+                    <div id="chat-messages" class="flex-grow overflow-y-auto space-y-4 p-4 mb-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
                         <p class="text-center text-gray-500">Loading chat...</p>
                     </div>
                     
                     <!-- Chat Input Form -->
                     <form id="chat-form" class="flex space-x-3">
-                        <input type="text" id="chat-input" placeholder="আপনার বার্তা লিখুন..." class="flex-grow px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white" required>
+                        <input type="text" id="chat-input" placeholder="আপনার বার্তা লিখুন..." class="flex-grow px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-700" required>
                         <button type="submit" id="send-chat-btn" class="bg-theme-blue text-white w-12 h-12 rounded-full hover:bg-theme-purple transition-colors shadow-lg">
                             <i class="fas fa-paper-plane"></i>
                         </button>
@@ -732,22 +759,22 @@
         <div id="faq-page" class="hidden page">
             <section class="container mx-auto px-4 py-16">
                 <h2 class="text-3xl md:text-4xl font-bold text-center mb-10 relative after:content-[''] after:absolute after:bottom-[-10px] after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-1 after:bg-theme-pink after:rounded-full">সচরাচর জিজ্ঞাসিত প্রশ্নাবলী (FAQ)</h2>
-                <div class="bg-white p-8 md:p-12 rounded-3xl shadow-xl space-y-6">
+                <div class="bg-white dark:bg-gray-800 p-8 md:p-12 rounded-3xl shadow-xl space-y-6">
                     <div class="border-b pb-4">
                         <h3 class="text-xl font-semibold text-theme-blue mb-2">আমি কীভাবে অর্ডার করব?</h3>
-                        <p class="text-gray-700">আপনার পছন্দের পণ্যটি নির্বাচন করুন, 'কার্টে যোগ করুন' বাটনে ক্লিক করুন এবং আপনার অর্ডারটি সম্পন্ন করতে চেকআউট প্রক্রিয়া অনুসরণ করুন।</p>
+                        <p class="text-gray-700 dark:text-gray-300">আপনার পছন্দের পণ্যটি নির্বাচন করুন, 'কার্টে যোগ করুন' বাটনে ক্লিক করুন এবং আপনার অর্ডারটি সম্পন্ন করতে চেকআউট প্রক্রিয়া অনুসরণ করুন।</p>
                     </div>
                     <div class="border-b pb-4">
                         <h3 class="text-xl font-semibold text-theme-blue mb-2">ডেলিভারি হতে কত সময় লাগে?</h3>
-                        <p class="text-gray-700">সাধারণত আমরা ২-৩ কার্যদিবসের মধ্যে ডেলিভারি সম্পন্ন করি। তবে, নির্দিষ্ট এলাকার উপর ভিত্তি করে কিছুটা সময় বেশিও লাগতে পারে।</p>
+                        <p class="text-gray-700 dark:text-gray-300">সাধারণত আমরা ২-৩ কার্যদিবসের মধ্যে ডেলিভারি সম্পন্ন করি। তবে, নির্দিষ্ট এলাকার উপর ভিত্তি করে কিছুটা সময় বেশিও লাগতে পারে।</p>
                     </div>
                     <div class="border-b pb-4">
                         <h3 class="text-xl font-semibold text-theme-blue mb-2">আমি কি ক্যাশ অন ডেলিভারি (COD) পেমেন্ট করতে পারব?</h3>
-                        <p class="text-gray-700">হ্যাঁ, আমরা ক্যাশ অন ডেলিভারি (COD) এবং অনলাইন পেমেন্ট উভয়ই গ্রহণ করি।</p>
+                        <p class="text-gray-700 dark:text-gray-300">হ্যাঁ, আমরা ক্যাশ অন ডেলিভারি (COD) এবং অনলাইন পেমেন্ট উভয়ই গ্রহণ করি।</p>
                     </div>
                     <div>
                         <h3 class="text-xl font-semibold text-theme-blue mb-2">আমার অর্ডার ট্র্যাক করার উপায় কী?</h3>
-                        <p class="text-gray-700">আপনার অর্ডার নিশ্চিত হলে, আমরা আপনাকে একটি ট্র্যাকিং নম্বর সহ একটি ইমেল পাঠাব। আপনি আমাদের ওয়েবসাইটে সেই ট্র্যাকিং নম্বর ব্যবহার করে আপনার অর্ডার ট্র্যাক করতে পারবেন।</p>
+                        <p class="text-gray-700 dark:text-gray-300">আপনার অর্ডার নিশ্চিত হলে, আমরা আপনাকে একটি ট্র্যাকিং নম্বর সহ একটি ইমেল পাঠাব। আপনি আমাদের ওয়েবসাইটে সেই ট্র্যাকিং নম্বর ব্যবহার করে আপনার অর্ডার ট্র্যাক করতে পারবেন।</p>
                     </div>
                 </div>
             </section>
@@ -757,12 +784,12 @@
         <div id="return-policy-page" class="hidden page">
             <section class="container mx-auto px-4 py-16">
                 <h2 class="text-3xl md:text-4xl font-bold text-center mb-10 relative after:content-[''] after:absolute after:bottom-[-10px] after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-1 after:bg-theme-pink after:rounded-full">রিটার্ন নীতি</h2>
-                <div class="bg-white p-8 md:p-12 rounded-3xl shadow-xl space-y-6">
-                    <p class="text-lg leading-relaxed text-gray-700">
+                <div class="bg-white dark:bg-gray-800 p-8 md:p-12 rounded-3xl shadow-xl space-y-6">
+                    <p class="text-lg leading-relaxed text-gray-700 dark:text-gray-300">
                         যদি আপনি আপনার কেনা পণ্যে অসন্তুষ্ট হন, তবে আপনি ডেলিভারির ৩০ দিনের মধ্যে এটি ফেরত দিতে পারবেন। পণ্যটি অব্যবহৃত এবং এর মূল প্যাকেজিংয়ে থাকতে হবে।
                     </p>
                     <h3 class="text-xl font-bold text-theme-purple">ফেরতের প্রক্রিয়া:</h3>
-                    <ol class="list-decimal list-inside text-gray-700 space-y-2">
+                    <ol class="list-decimal list-inside text-gray-700 dark:text-gray-300 space-y-2">
                         <li>গ্রাহক সেবার সাথে যোগাযোগ করুন এবং ফেরতের কারণ জানান।</li>
                         <li>আমাদের দল আপনার অনুরোধ পর্যালোচনা করবে এবং একটি রিটার্ন নম্বর প্রদান করবে।</li>
                         <li>নির্ধারিত ঠিকানায় পণ্যটি সঠিকভাবে প্যাকিং করে ফেরত পাঠান।</li>
@@ -776,14 +803,14 @@
         <div id="shipping-info-page" class="hidden page">
             <section class="container mx-auto px-4 py-16">
                 <h2 class="text-3xl md:text-4xl font-bold text-center mb-10 relative after:content-[''] after:absolute after:bottom-[-10px] after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-1 after:bg-theme-pink after:rounded-full">শিপিং তথ্য</h2>
-                <div class="bg-white p-8 md:p-12 rounded-3xl shadow-xl space-y-6">
+                <div class="bg-white dark:bg-gray-800 p-8 md:p-12 rounded-3xl shadow-xl space-y-6">
                     <h3 class="text-xl font-bold text-theme-purple">ডেলিভারি সময়:</h3>
-                    <p class="text-gray-700">
+                    <p class="text-gray-700 dark:text-gray-300">
                         শহরের মধ্যে: ২-৩ কার্যদিবস <br>
                         শহরের বাইরে: ৫-৭ কার্যদিবস
                     </p>
                     <h3 class="text-xl font-bold text-theme-purple">শিপিং খরচ:</h3>
-                    <p class="text-gray-700">
+                    <p class="text-gray-700 dark:text-gray-300">
                         ডেলিভারি খরচ আপনার এলাকার উপর নির্ভর করে ভিন্ন হতে পারে। অর্ডার করার সময় চেকআউট পেজে সঠিক খরচ দেখতে পাবেন।
                     </p>
                 </div>
@@ -794,12 +821,12 @@
         <div id="privacy-policy-page" class="hidden page">
             <section class="container mx-auto px-4 py-16">
                 <h2 class="text-3xl md:text-4xl font-bold text-center mb-10 relative after:content-[''] after:absolute after:bottom-[-10px] after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-1 after:bg-theme-pink after:rounded-full">গোপনীয়তা নীতি</h2>
-                <div class="bg-white p-8 md:p-12 rounded-3xl shadow-xl space-y-6">
-                    <p class="text-lg leading-relaxed text-gray-700">
+                <div class="bg-white dark:bg-gray-800 p-8 md:p-12 rounded-3xl shadow-xl space-y-6">
+                    <p class="text-lg leading-relaxed text-gray-700 dark:text-gray-300">
                         TangailBuzz আপনার ব্যক্তিগত তথ্যের গোপনীয়তা রক্ষা করতে প্রতিশ্রুতিবদ্ধ। আমরা আপনার ব্যক্তিগত তথ্য শুধুমাত্র আপনার অর্ডার প্রক্রিয়া করা এবং আমাদের পরিষেবা উন্নত করার জন্য ব্যবহার করি।
                     </p>
                     <h3 class="text-xl font-bold text-theme-purple">তথ্য সংগ্রহ:</h3>
-                    <p class="text-gray-700">
+                    <p class="text-gray-700 dark:text-gray-300">
                         আমরা আপনার নাম, ঠিকানা, ইমেল এবং ফোন নম্বর সংগ্রহ করি যখন আপনি একটি অ্যাকাউন্ট তৈরি করেন বা একটি অর্ডার দেন।
                     </p>
                 </div>
@@ -810,16 +837,16 @@
         <div id="terms-page" class="hidden page">
             <section class="container mx-auto px-4 py-16">
                 <h2 class="text-3xl md:text-4xl font-bold text-center mb-10 relative after:content-[''] after:absolute after:bottom-[-10px] after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-1 after:bg-theme-pink after:rounded-full">শর্তাবলী</h2>
-                <div class="bg-white p-8 md:p-12 rounded-3xl shadow-xl space-y-6">
-                    <p class="text-lg leading-relaxed text-gray-700">
+                <div class="bg-white dark:bg-gray-800 p-8 md:p-12 rounded-3xl shadow-xl space-y-6">
+                    <p class="text-lg leading-relaxed text-gray-700 dark:text-gray-300">
                         TangailBuzz ব্যবহার করে, আপনি নিম্নলিখিত শর্তাবলীতে সম্মত হন।
                     </p>
                     <h3 class="text-xl font-bold text-theme-purple">অ্যাকাউন্ট ব্যবহার:</h3>
-                    <p class="text-gray-700">
+                    <p class="text-gray-700 dark:text-gray-300">
                         আপনার অ্যাকাউন্টের তথ্যের গোপনীয়তা রক্ষা করার জন্য আপনি সম্পূর্ণরূপে দায়ী।
                     </p>
                     <h3 class="text-xl font-bold text-theme-purple">পণ্যের বিবরণ:</h3>
-                    <p class="text-gray-700">
+                    <p class="text-gray-700 dark:text-gray-300">
                         আমরা ওয়েবসাইটে পণ্যের সঠিক বিবরণ সরবরাহ করার চেষ্টা করি। তবে, কোনো ভুল বা অমিল হলে আমরা তার জন্য দায়ী থাকব না।
                     </p>
                 </div>
@@ -944,6 +971,7 @@
         let appliedCouponCode = null;
         let confirmResolver = null; // Used for the custom confirmation modal
         let chatUnsubscribe = () => {}; // For real-time chat updates
+        let allCoupons = []; // Stores all active coupon data
         
         // --- User Blocking Logic ---
         let isCurrentUserBlocked = false;
@@ -966,7 +994,9 @@
                 'toast-account-blocked-action': 'Action failed: Your account is blocked.',
                 'coupon-placeholder': 'Enter Coupon Code', 'apply-coupon': 'Apply', 'discount': 'Discount',
                 'toast-coupon-applied': 'Coupon applied successfully!', 'toast-coupon-invalid': 'Invalid or expired coupon code.',
-                'toast-coupon-used': 'You have already used this coupon.', 'toast-coupon-min-purchase': 'Minimum purchase of ৳{amount} required.'
+                'toast-coupon-used': 'You have already used this coupon.', 'toast-coupon-min-purchase': 'Minimum purchase of ৳{amount} required.',
+                'warranty': '{text} Warranty', // Updated key for text string
+                'no-warranty': 'No Warranty' // Updated key
             },
             bn: {
                 'deliver-to': 'ডেলিভারি লোকেশন', 'home': 'হোম', 'products': 'পণ্য', 'categories': 'ক্যাটাগরি', 'offers': 'অফার', 'search-placeholder': 'পণ্য খুঁজুন...', 'featured-products': 'বৈশিষ্ট্যযুক্ত পণ্য', 'shop-by-category': 'ক্যাটাগরি অনুসারে কেনাকাটা করুন', 'cat-electronics': 'ইলেকট্রনিক্স', 'cat-fashion': 'ফ্যাশন', 'cat-home-garden': 'হোম অ্যান্ড গার্ডেন', 'cat-health-beauty': 'স্বাস্থ্য ও সৌন্দর্য', 'cat-sports': 'খেলাধুলা ও আউটডোর', 'cat-books': 'বই ও স্টেশনারি', 'cat-kids': 'বাচ্চা ও খেলনা', 'cat-cars': 'গাড়ি ও বাইক', 'why-choose-us': 'আমাদেরকে কেন বেছে নিবেন', 'feature-delivery-title': 'দ্রুত ডেলিভারি', 'feature-delivery-desc': 'আমরা ২-৩ কার্যদিবসের মধ্যে আপনার দোরগোড়ায় পণ্য পৌঁছে দিই।', 'feature-payment-title': 'নিরাপদ পেমেন্ট', 'feature-payment-desc': 'আপনার নিরাপত্তা ও গোপনীয়তার জন্য সকল লেনদেন এনক্রিপ্টেড।', 'feature-return-title': 'সহজ রিটার্ন', 'feature-return-desc': 'পছন্দ না হলে ৩০ দিনের মধ্যে পণ্য ফেরত দিন এবং সম্পূর্ণ মূল্য ফেরত পান।', 'feature-support-title': '২৪/৭ সাপোর্ট', 'feature-support-desc': 'আমাদের গ্রাহক সহায়তা দল দিনরাত আপনার জন্য উপলব্ধ।', 'add-to-cart': 'কার্টে যোগ করুন', 'added-to-cart': 'যোগ হয়েছে!', 'no-products': 'আপনার অনুসন্ধানের সাথে মেলে এমন কোনো পণ্য পাওয়া যায়নি।', 'back-to-products': 'সকল পণ্যে ফিরে যান', 'returnable': '৩০-দিনের মধ্যে ফেরতযোগ্য', 'not-returnable': 'ফেরতযোগ্য নয়', 'secure-payments': 'নিরাপদ পেমেন্ট', 'size': 'সাইজ:', 'storage': 'স্টোরেজ:', 'color': 'রঙ:', 'product-description': 'পণ্যের বিবরণ', 'product-specifications': 'পণ্যের স্পেসিফিকেশন', 'specifications': 'স্পেসিফিকেশন', 'value': 'মান', 'no-specs': 'এই পণ্যের জন্য কোন স্পেসিফিকেশন উপলব্ধ নেই।', 'product-reviews': 'পণ্যের রিভিউ', 'no-reviews': 'এই পণ্যের জন্য এখনো কোনো রিভিউ নেই।', 'cart': 'আপনার কার্ট', 'cart-empty': 'আপনার কার্ট খালি।', 'total': 'মোট মূল্য:', 'checkout': 'চেকআউট করুন', 'your-wishlist': 'আপনার উইশলিস্ট', 'wishlist-empty': 'আপনার উইশলিস্ট খালি। কিছু পণ্য যোগ করুন!', 'your-account': 'আপনার অ্যাকাউন্ট', 'signin-google': 'Google দিয়ে সাইন ইন করুন', 'logout': 'লগআউট', 'toast-cart-added': 'পণ্য কার্টে যোগ করা হয়েছে!', 'toast-wishlist-added': 'পণ্য উইশলিস্টে যোগ করা হয়েছে!', 'toast-wishlist-removed': 'পণ্য উইশলিস্ট থেকে সরানো হয়েছে!', 'toast-login-success': 'সফলভাবে লগইন হয়েছে!', 'toast-logout-success': 'সফলভাবে লগআউট হয়েছে!',
@@ -981,10 +1011,12 @@
                 'toast-abusive-language': 'আপত্তিকর ভাষা ব্যবহার করা যাবে না।',
                 'account-blocked': 'আপনার অ্যাকাউন্ট ব্লক করা হয়েছে। আপনি অর্ডার বা মেসেজ করতে পারবেন না।',
                 'account-blocked-banner': 'আপনার অ্যাকাউন্টটি একজন অ্যাডমিনিস্ট্রেটর দ্বারা ব্লক করা হয়েছে। অনুগ্রহ করে সাপোর্টে যোগাযোগ করুন।',
-                'toast-account-blocked-action': 'פעולה נכשלה: החשבון שלך חסום.',
+                'toast-account-blocked-action': 'פעולה נכשלה: החשাবন שלך חסום.',
                 'coupon-placeholder': 'কুপন কোড লিখুন', 'apply-coupon': 'প্রয়োগ', 'discount': 'ডিসকাউন্ট',
                 'toast-coupon-applied': 'কুপন সফলভাবে প্রয়োগ করা হয়েছে!', 'toast-coupon-invalid': 'অবৈধ বা মেয়াদোত্তীর্ণ কুপন কোড।',
-                'toast-coupon-used': 'আপনি ইতিমধ্যে এই কুপন ব্যবহার করেছেন।', 'toast-coupon-min-purchase': 'এই কুপনটি ব্যবহার করতে সর্বনিম্ন ৳{amount} কেনাকাটা করতে হবে।'
+                'toast-coupon-used': 'আপনি ইতিমধ্যে এই কুপন ব্যবহার করেছেন।', 'toast-coupon-min-purchase': 'এই কুপনটি ব্যবহার করতে সর্বনিম্ন ৳{amount} কেনাকাটা করতে হবে।',
+                'warranty': '{text} ওয়ারেন্টি', // Updated key for text string
+                'no-warranty': 'কোনো ওয়ারেন্টি নেই' // Updated key
             }
         };
 
@@ -1026,7 +1058,35 @@
             couponForm: document.getElementById('coupon-form'),
             couponInput: document.getElementById('coupon-input'),
             applyCouponBtn: document.getElementById('apply-coupon-btn'),
+            
+            // Dark Mode Elements
+            darkModeToggle: document.getElementById('dark-mode-toggle'),
+            darkModeIcon: document.getElementById('dark-mode-icon'),
         };
+        
+        // --- Dark Mode Logic ---
+
+        function applyDarkMode(mode) {
+            const html = document.documentElement;
+            const isDark = mode === 'dark';
+            
+            if (isDark) {
+                html.classList.add('dark');
+                DOMElements.darkModeIcon.className = 'fas fa-moon';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                html.classList.remove('dark');
+                DOMElements.darkModeIcon.className = 'fas fa-sun';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        function toggleDarkMode() {
+            const currentTheme = localStorage.getItem('theme') || 'light';
+            applyDarkMode(currentTheme === 'light' ? 'dark' : 'light');
+        }
+        window.toggleDarkMode = toggleDarkMode;
+
         
         // --- UI & RENDERING ---
 
@@ -1178,7 +1238,7 @@
                 const cartButtonClasses = isOutOfStock ? 'bg-gray-400 cursor-not-allowed' : 'bg-theme-blue hover:bg-theme-purple';
                 const cartButtonDisabled = isOutOfStock ? 'disabled' : '';
 
-                productCard.className = 'product-card relative bg-white rounded-3xl shadow-xl overflow-hidden transform transition-transform hover:-translate-y-2 hover:shadow-2xl flex flex-col';
+                productCard.className = 'product-card relative bg-white dark:bg-gray-800 rounded-3xl shadow-xl overflow-hidden transform transition-transform hover:-translate-y-2 hover:shadow-2xl flex flex-col';
                 productCard.dataset.productId = product.id;
                 productCard.innerHTML = `
                     <div class="relative">
@@ -1239,6 +1299,33 @@
             
             const productBrandEl = detailsPage.querySelector('#product-brand-details');
             if (productBrandEl) productBrandEl.textContent = product.brand || "Brand";
+
+            // --- NEW: Warranty Logic ---
+            const productWarrantyEl = detailsPage.querySelector('#product-warranty-details');
+            const warrantyTextFromDB = product.warrantyText || null; // Use the fetched string field
+
+            if (productWarrantyEl) {
+                let displayWarranty = translations[currentLanguage]['no-warranty'];
+                let isWarrantyPresent = false;
+                
+                if (warrantyTextFromDB && warrantyTextFromDB.trim() !== '') {
+                    displayWarranty = translations[currentLanguage]['warranty'].replace('{text}', warrantyTextFromDB);
+                    isWarrantyPresent = true;
+                }
+                
+                productWarrantyEl.querySelector('#warranty-text').textContent = displayWarranty;
+                
+                // Set color based on whether a warranty text is present
+                if (isWarrantyPresent) {
+                    productWarrantyEl.classList.add('text-green-600');
+                    productWarrantyEl.classList.remove('text-red-500');
+                } else {
+                    productWarrantyEl.classList.add('text-red-500');
+                    productWarrantyEl.classList.remove('text-green-600');
+                }
+            }
+            // --- END NEW: Warranty Logic ---
+
 
             const productImageEl = detailsPage.querySelector('#product-image');
             if (productImageEl) productImageEl.src = product.imageUrl || 'https://placehold.co/400x400/f5f7fa/6a0dad?text=Image';
@@ -1325,8 +1412,8 @@
                     <tbody>
                         ${Object.entries(specifications).map(([key, value]) => `
                             <tr class="border-b">
-                                <td class="py-2 pr-4 font-semibold text-gray-700">${key.charAt(0).toUpperCase() + key.slice(1)}</td>
-                                <td class="py-2 text-gray-600">${value}</td>
+                                <td class="py-2 pr-4 font-semibold text-gray-700 dark:text-gray-200">${key.charAt(0).toUpperCase() + key.slice(1)}</td>
+                                <td class="py-2 text-gray-600 dark:text-gray-300">${value}</td>
                             </tr>
                         `).join('')}
                     </tbody>
@@ -1378,11 +1465,11 @@
             infoDetails.innerHTML = `
                 <div class="flex items-center space-x-2">
                     <i class="${returnableIcon}"></i>
-                    <span class="text-sm text-gray-600">${returnableText}</span>
+                    <span class="text-sm text-gray-600 dark:text-gray-300">${returnableText}</span>
                 </div>
                 <div class="flex items-center space-x-2">
                     <i class="fas fa-lock text-green-500"></i>
-                    <span class="text-sm text-gray-600" data-lang="secure-payments">${translations[currentLanguage]['secure-payments']}</span>
+                    <span class="text-sm text-gray-600 dark:text-gray-300" data-lang="secure-payments">${translations[currentLanguage]['secure-payments']}</span>
                 </div>`;
         }
 
@@ -1460,7 +1547,8 @@
                         sizes: data.variants && typeof data.variants.size === 'string' ? data.variants.size.split(',').map(s => s.trim()) : (Array.isArray(data.sizes) ? data.sizes : []),
                         storage: data.storage || [],
                         colors: data.variants && typeof data.variants.color === 'string' ? data.variants.color.split(',').map(c => c.trim()) : (Array.isArray(data.colors) ? data.colors : []),
-                        stock: data.stock !== undefined ? Number(data.stock) : 1
+                        stock: data.stock !== undefined ? Number(data.stock) : 1,
+                        warrantyText: data.warranty || null // UPDATED: Fetch 'warranty' as a string/text
                     };
                 });
                 if (productsData.length === 0) {
@@ -1735,17 +1823,17 @@
                     variantsHtml += '</div>';
 
                     cartHtml += `
-                        <div class="flex items-center space-x-4 bg-gray-100 p-4 rounded-xl shadow-inner">
+                        <div class="flex items-center space-x-4 bg-gray-100 dark:bg-gray-700 p-4 rounded-xl shadow-inner">
                             <img src="${item.image || 'https://placehold.co/80x80/ccc/000?text=Image'}" alt="${item.name}" class="w-20 h-20 rounded-xl object-cover" onerror="this.onerror=null;this.src='https://placehold.co/80x80/ccc/000?text=Image';">
                             <div class="flex-grow">
                                 <h4 class="text-lg font-semibold text-theme-purple">${item.name}</h4>
                                 ${variantsHtml}
-                                <p class="text-md font-bold text-price-black mt-1">৳${(item.price || 0).toFixed(2)}</p>
+                                <p class="text-md font-bold text-price-black">৳${(item.price || 0).toFixed(2)}</p>
                             </div>
                             <div class="flex items-center space-x-2">
-                                <button onclick="updateQuantity('${cartItemId}', -1)" class="w-8 h-8 rounded-full bg-gray-300 hover:bg-gray-400 transition-colors text-dark">-</button>
+                                <button onclick="updateQuantity('${cartItemId}', -1)" class="w-8 h-8 rounded-full bg-gray-300 hover:bg-gray-400 transition-colors text-dark dark:bg-gray-600 dark:text-gray-200">-</button>
                                 <span class="w-8 text-center text-dark">${item.quantity}</span>
-                                <button onclick="updateQuantity('${cartItemId}', 1)" class="w-8 h-8 rounded-full bg-gray-300 hover:bg-gray-400 transition-colors text-dark">+</button>
+                                <button onclick="updateQuantity('${cartItemId}', 1)" class="w-8 h-8 rounded-full bg-gray-300 hover:bg-gray-400 transition-colors text-dark dark:bg-gray-600 dark:text-gray-200">+</button>
                                 <button onclick="removeFromCart('${cartItemId}')" class="text-red-500 hover:text-red-700 ml-4"><i class="fas fa-trash"></i></button>
                             </div>
                         </div>
@@ -1923,7 +2011,7 @@
         async function handleLogin(e) {
             e.preventDefault();
             const email = DOMElements.loginForm.querySelector('#login-email').value;
-            const password = DOMEElements.loginForm.querySelector('#login-password').value;
+            const password = DOMElements.loginForm.querySelector('#login-password').value;
             DOMElements.authError.textContent = '';
 
             try {
@@ -2362,8 +2450,8 @@
                     const isPreviousComplete = currentStatusIndex >= index - 1;
                     const isLastStep = index === statuses.length - 1;
                     
-                    const circleClass = isComplete ? 'bg-green-500 border-green-500 text-white' : 'bg-white border-gray-400 text-gray-500';
-                    const labelColor = isComplete ? 'text-gray-700' : 'text-gray-500';
+                    const circleClass = isComplete ? 'bg-green-500 border-green-500 text-white' : 'bg-white dark:bg-gray-700 border-gray-400 text-gray-500';
+                    const labelColor = isComplete ? 'text-gray-700 dark:text-gray-100' : 'text-gray-500';
                     
                     // Render Node (Circle + Label)
                     html += `
@@ -2419,8 +2507,8 @@
                 
                     return `
                         <div class="flex justify-between items-center py-2">
-                            <p class="text-base text-gray-800">${itemName}</p>
-                            <p class="font-semibold text-base text-price-black">৳${(item.price * item.quantity).toFixed(2)}</p>
+                            <p class="text-base text-gray-800 dark:text-gray-200">${itemName}</p>
+                            <p class="font-semibold text-base text-price-black dark:text-gray-100">৳${(item.price * item.quantity).toFixed(2)}</p>
                         </div>
                     `;
                 }).join('');
@@ -2431,7 +2519,7 @@
 
                 // Final Card structure based on user image
                 return `
-                    <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-100">
                         <!-- Top Header Row -->
                         <div class="flex justify-between items-start">
                             <div>
@@ -2452,7 +2540,7 @@
                         }
 
                         <!-- Items List -->
-                        <div class="mt-4 pt-4 border-t border-gray-200">
+                        <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
                             <h4 class="font-bold text-base mb-2">Items:</h4>
                             <div class="space-y-1">
                                 ${itemRows}
@@ -2557,7 +2645,7 @@
 
                     messagesHtml += `
                         <div class="flex ${isUser ? 'justify-end' : 'justify-start'}">
-                            <div class="max-w-xs md:max-w-md p-3 rounded-xl shadow-md ${isUser ? 'bg-theme-blue text-white rounded-br-none' : 'bg-white text-dark rounded-tl-none border'}">
+                            <div class="max-w-xs md:max-w-md p-3 rounded-xl shadow-md ${isUser ? 'bg-theme-blue text-white rounded-br-none' : 'bg-white dark:bg-gray-700 text-dark rounded-tl-none border'}">
                                 <p class="text-xs font-semibold ${isUser ? 'text-blue-200' : 'text-theme-purple'} mb-1">${senderName}</p>
                                 <p class="text-sm">${msg.text}</p>
                                 <div class="text-right text-xs mt-1 ${isUser ? 'text-blue-300' : 'text-gray-500'}">
@@ -2783,6 +2871,10 @@
             // 1. Initial Firebase Authentication Bootstrap
             await initialAuthBootstrap();
             
+            // 1.5 Apply Theme Preference
+            const storedTheme = localStorage.getItem('theme');
+            applyDarkMode(storedTheme || 'light');
+            
             // 2. Load Product/Banner Data
             setLanguage('bn');
             DOMElements.productList.innerHTML = `<div class="loader"></div>`;
@@ -2797,6 +2889,11 @@
             DOMElements.checkoutBtn.addEventListener('click', openPaymentModal);
             DOMElements.confirmOrderBtn.addEventListener('click', handlePlaceOrder);
             DOMElements.couponForm.addEventListener('submit', handleApplyCoupon);
+            
+            // Dark Mode Toggle Listener
+            if (DOMElements.darkModeToggle) {
+                DOMElements.darkModeToggle.addEventListener('click', toggleDarkMode);
+            }
             
             // Confirmation Modal Listeners
             DOMElements.confirmOkBtn.addEventListener('click', handleConfirmClick);
@@ -2859,8 +2956,7 @@
             
             document.getElementById('hamburger-btn').addEventListener('click', () => openDrawer('nav-drawer'));
             
-            DOMElements.productList.addEventListener('click', handleProductCardClick);
-            document.getElementById('wishlist-items').addEventListener('click', handleProductCardClick);
+            document.addEventListener('click', handleProductCardClick); // Delegated click handler
             document.getElementById('product-options').addEventListener('click', handleVariantSelection);
             document.getElementById('product-image-container').addEventListener('mousemove', handleImageZoom);
 
