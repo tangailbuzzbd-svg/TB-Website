@@ -646,7 +646,13 @@
                         <div class="w-full lg:w-1/2 space-y-4">
                             <h2 id="product-title-details" class="text-3xl md:text-4xl font-bold text-theme-purple"></h2>
                             <p id="product-brand-details" class="text-sm text-gray-500"></p>
-                            <!-- NEW: Warranty Display below Brand -->
+                            <!-- NEW: Product Model ID Display -->
+                            <p id="product-model-details" class="text-sm text-gray-600 font-medium flex items-center">
+                                <i class="fas fa-tag mr-2"></i> 
+                                <span id="model-text"></span>
+                            </p>
+                            <!-- END NEW: Product Model ID Display -->
+                            <!-- NEW: Warranty Display below Brand/Model -->
                             <p id="product-warranty-details" class="text-sm text-green-600 font-semibold flex items-center">
                                 <!-- Icon and Text updated via JS -->
                                 <i class="fas fa-shield-alt mr-2"></i> 
@@ -996,7 +1002,8 @@
                 'toast-coupon-applied': 'Coupon applied successfully!', 'toast-coupon-invalid': 'Invalid or expired coupon code.',
                 'toast-coupon-used': 'You have already used this coupon.', 'toast-coupon-min-purchase': 'Minimum purchase of ৳{amount} required.',
                 'warranty': '{text} Warranty', // Updated key for text string
-                'no-warranty': 'No Warranty' // Updated key
+                'no-warranty': 'No Warranty', // Updated key
+                'model-id': 'Model: {id}' // New Translation Key
             },
             bn: {
                 'deliver-to': 'ডেলিভারি লোকেশন', 'home': 'হোম', 'products': 'পণ্য', 'categories': 'ক্যাটাগরি', 'offers': 'অফার', 'search-placeholder': 'পণ্য খুঁজুন...', 'featured-products': 'বৈশিষ্ট্যযুক্ত পণ্য', 'shop-by-category': 'ক্যাটাগরি অনুসারে কেনাকাটা করুন', 'cat-electronics': 'ইলেকট্রনিক্স', 'cat-fashion': 'ফ্যাশন', 'cat-home-garden': 'হোম অ্যান্ড গার্ডেন', 'cat-health-beauty': 'স্বাস্থ্য ও সৌন্দর্য', 'cat-sports': 'খেলাধুলা ও আউটডোর', 'cat-books': 'বই ও স্টেশনারি', 'cat-kids': 'বাচ্চা ও খেলনা', 'cat-cars': 'গাড়ি ও বাইক', 'why-choose-us': 'আমাদেরকে কেন বেছে নিবেন', 'feature-delivery-title': 'দ্রুত ডেলিভারি', 'feature-delivery-desc': 'আমরা ২-৩ কার্যদিবসের মধ্যে আপনার দোরগোড়ায় পণ্য পৌঁছে দিই।', 'feature-payment-title': 'নিরাপদ পেমেন্ট', 'feature-payment-desc': 'আপনার নিরাপত্তা ও গোপনীয়তার জন্য সকল লেনদেন এনক্রিপ্টেড।', 'feature-return-title': 'সহজ রিটার্ন', 'feature-return-desc': 'পছন্দ না হলে ৩০ দিনের মধ্যে পণ্য ফেরত দিন এবং সম্পূর্ণ মূল্য ফেরত পান।', 'feature-support-title': '২৪/৭ সাপোর্ট', 'feature-support-desc': 'আমাদের গ্রাহক সহায়তা দল দিনরাত আপনার জন্য উপলব্ধ।', 'add-to-cart': 'কার্টে যোগ করুন', 'added-to-cart': 'যোগ হয়েছে!', 'no-products': 'আপনার অনুসন্ধানের সাথে মেলে এমন কোনো পণ্য পাওয়া যায়নি।', 'back-to-products': 'সকল পণ্যে ফিরে যান', 'returnable': '৩০-দিনের মধ্যে ফেরতযোগ্য', 'not-returnable': 'ফেরতযোগ্য নয়', 'secure-payments': 'নিরাপদ পেমেন্ট', 'size': 'সাইজ:', 'storage': 'স্টোরেজ:', 'color': 'রঙ:', 'product-description': 'পণ্যের বিবরণ', 'product-specifications': 'পণ্যের স্পেসিফিকেশন', 'specifications': 'স্পেসিফিকেশন', 'value': 'মান', 'no-specs': 'এই পণ্যের জন্য কোন স্পেসিফিকেশন উপলব্ধ নেই।', 'product-reviews': 'পণ্যের রিভিউ', 'no-reviews': 'এই পণ্যের জন্য এখনো কোনো রিভিউ নেই।', 'cart': 'আপনার কার্ট', 'cart-empty': 'আপনার কার্ট খালি।', 'total': 'মোট মূল্য:', 'checkout': 'চেকআউট করুন', 'your-wishlist': 'আপনার উইশলিস্ট', 'wishlist-empty': 'আপনার উইশলিস্ট খালি। কিছু পণ্য যোগ করুন!', 'your-account': 'আপনার অ্যাকাউন্ট', 'signin-google': 'Google দিয়ে সাইন ইন করুন', 'logout': 'লগআউট', 'toast-cart-added': 'পণ্য কার্টে যোগ করা হয়েছে!', 'toast-wishlist-added': 'পণ্য উইশলিস্টে যোগ করা হয়েছে!', 'toast-wishlist-removed': 'পণ্য উইশলিস্ট থেকে সরানো হয়েছে!', 'toast-login-success': 'সফলভাবে লগইন হয়েছে!', 'toast-logout-success': 'সফলভাবে লগআউট হয়েছে!',
@@ -1016,7 +1023,8 @@
                 'toast-coupon-applied': 'কুপন সফলভাবে প্রয়োগ করা হয়েছে!', 'toast-coupon-invalid': 'অবৈধ বা মেয়াদোত্তীর্ণ কুপন কোড।',
                 'toast-coupon-used': 'আপনি ইতিমধ্যে এই কুপন ব্যবহার করেছেন।', 'toast-coupon-min-purchase': 'এই কুপনটি ব্যবহার করতে সর্বনিম্ন ৳{amount} কেনাকাটা করতে হবে।',
                 'warranty': '{text} ওয়ারেন্টি', // Updated key for text string
-                'no-warranty': 'কোনো ওয়ারেন্টি নেই' // Updated key
+                'no-warranty': 'কোনো ওয়ারেন্টি নেই', // Updated key
+                'model-id': 'মডেল আইডি: {id}' // New Translation Key
             }
         };
 
@@ -1188,7 +1196,7 @@
             }
             window.scrollTo(0, 0);
         }
-        window.showPage = showPage;
+        window.showPage = showPage; // Exported to global scope
 
         function scrollToElement(elementId) {
             document.getElementById(elementId)?.scrollIntoView({ behavior: 'smooth' });
@@ -1300,9 +1308,26 @@
             const productBrandEl = detailsPage.querySelector('#product-brand-details');
             if (productBrandEl) productBrandEl.textContent = product.brand || "Brand";
 
-            // --- NEW: Warranty Logic ---
+            // --- Model ID Logic ---
+            const productModelEl = detailsPage.querySelector('#product-model-details');
+            const modelID = product.modelID || null; 
+
+            if (productModelEl) {
+                let displayModelID = '';
+                if (modelID && modelID.trim() !== '') {
+                    displayModelID = translations[currentLanguage]['model-id'].replace('{id}', modelID);
+                    productModelEl.classList.remove('hidden');
+                } else {
+                    productModelEl.classList.add('hidden');
+                }
+                // FIX: Use translation key string and replace {id} with modelID
+                productModelEl.querySelector('#model-text').textContent = translations[currentLanguage]['model-id'].replace('{id}', modelID);
+            }
+            // --- END Model ID Logic ---
+
+            // --- Warranty Logic (remains as string fetch) ---
             const productWarrantyEl = detailsPage.querySelector('#product-warranty-details');
-            const warrantyTextFromDB = product.warrantyText || null; // Use the fetched string field
+            const warrantyTextFromDB = product.warrantyText || null; 
 
             if (productWarrantyEl) {
                 let displayWarranty = translations[currentLanguage]['no-warranty'];
@@ -1315,7 +1340,6 @@
                 
                 productWarrantyEl.querySelector('#warranty-text').textContent = displayWarranty;
                 
-                // Set color based on whether a warranty text is present
                 if (isWarrantyPresent) {
                     productWarrantyEl.classList.add('text-green-600');
                     productWarrantyEl.classList.remove('text-red-500');
@@ -1324,7 +1348,7 @@
                     productWarrantyEl.classList.remove('text-green-600');
                 }
             }
-            // --- END NEW: Warranty Logic ---
+            // --- END Warranty Logic ---
 
 
             const productImageEl = detailsPage.querySelector('#product-image');
@@ -1526,8 +1550,12 @@
                     // An offer is valid only if the flag is set, prices are positive, and the offer is a discount.
                     const isValidOffer = hasOffer && mainPrice > 0 && offerPrice > 0 && offerPrice < mainPrice;
                     
+                    // NEW LOGIC: Use model1 if present, otherwise try model, otherwise use the Firestore document ID
+                    const modelID = data.model1 || data.model || doc.id; 
+
                     return {
                         id: doc.id,
+                        modelID: modelID, // NEW: Fetch Model ID
                         name: data.name || "No Name Provided",
                         brand: data.brand || "No Brand",
                         price: isValidOffer ? offerPrice : mainPrice,
@@ -1548,7 +1576,7 @@
                         storage: data.storage || [],
                         colors: data.variants && typeof data.variants.color === 'string' ? data.variants.color.split(',').map(c => c.trim()) : (Array.isArray(data.colors) ? data.colors : []),
                         stock: data.stock !== undefined ? Number(data.stock) : 1,
-                        warrantyText: data.warranty || null // UPDATED: Fetch 'warranty' as a string/text
+                        warrantyText: data.warranty || null // Use the fetched string field
                     };
                 });
                 if (productsData.length === 0) {
@@ -1790,6 +1818,7 @@
             if (!currentUser || !currentUserData) return 0;
             
             const ordersRef = collection(db, "orders");
+            // NOTE: We rely on client-side sorting instead of Firestore orderBy for simplicity/index avoidance
             const q = query(ordersRef, where("userId", "==", currentUser.uid));
             const querySnapshot = await getDocs(q);
             const isFirstOrder = querySnapshot.empty;
@@ -2011,7 +2040,7 @@
         async function handleLogin(e) {
             e.preventDefault();
             const email = DOMElements.loginForm.querySelector('#login-email').value;
-            const password = DOMElements.loginForm.querySelector('#login-password').value;
+            const password = DOMEElements.loginForm.querySelector('#login-password').value;
             DOMElements.authError.textContent = '';
 
             try {
