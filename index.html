@@ -162,6 +162,9 @@
             height: 32px;
             margin-top: 12px;
         }
+        .rating-star:hover, .rating-star.selected {
+            color: #fca311; /* Amber/Yellow for selection/hover */
+        }
         
     </style>
 </head>
@@ -320,8 +323,8 @@
         <nav>
             <ul class="space-y-4">
                 <li><a href="javascript:void(0);" onclick="renderAllProducts(); closeDrawer();" class="text-lg font-semibold text-gray-700 hover:text-theme-blue" data-lang="home">হোম</a></li>
-                <li><a href="#products" onclick="showPage('home-page'); scrollToElement('products'); closeDrawer();" class="text-lg font-semibold text-gray-700 hover:text-theme-blue" data-lang="products">পণ্য</a></li>
-                <li><a href="#categories" onclick="showPage('home-page'); scrollToElement('categories'); closeDrawer();" class="text-lg font-semibold text-gray-700 hover:text-theme-blue" data-lang="categories">ক্যাটাগরি</a></li>
+                <li><a href="#products" onclick="showPage('home-page'); scrollToElement('products')" class="text-lg font-semibold text-gray-700 hover:text-theme-blue" data-lang="products">পণ্য</a></li>
+                <li><a href="#categories" onclick="showPage('home-page'); scrollToElement('categories')" class="text-lg font-semibold text-gray-700 hover:text-theme-blue" data-lang="categories">ক্যাটাগরি</a></li>
                 <li><a href="javascript:void(0);" onclick="showOffers(); closeDrawer();" class="text-lg font-semibold text-gray-700 hover:text-theme-blue" data-lang="offers">অফার</a></li>
             </ul>
         </nav>
@@ -528,7 +531,19 @@
         
             <!-- Featured Products Section -->
             <section id="products" class="container mx-auto px-4 py-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-center mb-10 relative after:content-[''] after:absolute after:bottom-[-10px] after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-1 after:bg-theme-pink after:rounded-full" data-lang="featured-products">বৈশিষ্ট্যযুক্ত পণ্য</h2>
+                <!-- NEW: Breadcrumb and Sub-Category Header -->
+                <div id="category-header" class="mb-8 p-4 bg-white dark:bg-gray-800 rounded-xl shadow-md border dark:border-gray-700">
+                    <div id="breadcrumb" class="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                        <a href="javascript:void(0);" onclick="renderAllProducts()" class="text-theme-blue hover:underline" data-lang="all-products">সকল পণ্য</a>
+                        <span id="category-path"></span>
+                    </div>
+                    <h2 id="current-category-title" class="text-3xl md:text-4xl font-bold mb-4 text-theme-purple text-center" data-lang="featured-products">বৈশিষ্ট্যযুক্ত পণ্য</h2>
+                    <div id="subcategory-buttons" class="flex flex-wrap gap-3 justify-center">
+                        <!-- Sub-category buttons will appear here -->
+                    </div>
+                </div>
+                <!-- END NEW: Breadcrumb and Sub-Category Header -->
+
                 <div id="product-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 min-h-[300px] flex justify-center items-center">
                     <div class="loader"></div>
                 </div>
@@ -707,6 +722,36 @@
                     <div class="mt-16">
                         <h3 class="text-2xl md:text-3xl font-bold mb-4 border-b-2 border-theme-pink pb-2 inline-block" data-lang="product-reviews">পণ্যের রিভিউ</h3>
                         <div id="product-reviews" class="space-y-4 mt-4"></div>
+                        
+                        <!-- NEW: Review Submission Form -->
+                        <div class="mt-8 p-6 bg-gray-100 dark:bg-gray-700 rounded-xl shadow-inner">
+                            <h4 class="text-xl font-bold text-theme-blue mb-4" data-lang="write-a-review">একটি রিভিউ দিন</h4>
+                            <form id="review-form">
+                                <input type="hidden" id="review-product-id" name="productId">
+                                <div id="review-login-prompt" class="text-center p-4 border border-red-300 bg-red-50 text-red-700 rounded-lg hidden">
+                                    <p data-lang="review-login-prompt">অনুগ্রহ করে লগইন করুন রিভিউ দেওয়ার জন্য।</p>
+                                </div>
+                                <div id="review-controls">
+                                    <div class="mb-4">
+                                        <label class="block text-sm font-semibold mb-2" data-lang="your-rating">আপনার রেটিং:</label>
+                                        <div id="rating-stars" class="flex text-2xl space-x-1">
+                                            <i class="far fa-star text-gray-400 cursor-pointer rating-star" data-rating="1"></i>
+                                            <i class="far fa-star text-gray-400 cursor-pointer rating-star" data-rating="2"></i>
+                                            <i class="far fa-star text-gray-400 cursor-pointer rating-star" data-rating="3"></i>
+                                            <i class="far fa-star text-gray-400 cursor-pointer rating-star" data-rating="4"></i>
+                                            <i class="far fa-star text-gray-400 cursor-pointer rating-star" data-rating="5"></i>
+                                            <input type="hidden" id="review-rating" name="rating" required value="0">
+                                        </div>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="review-comment" class="block text-sm font-semibold mb-2" data-lang="your-comment">আপনার মন্তব্য:</label>
+                                        <textarea id="review-comment" name="comment" rows="3" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-800" required></textarea>
+                                    </div>
+                                    <button type="submit" id="submit-review-btn" class="bg-theme-pink text-white py-2 px-6 rounded-full font-bold hover:bg-theme-purple transition-colors" data-lang="submit-review">রিভিউ জমা দিন</button>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- END NEW: Review Submission Form -->
                     </div>
                 </div>
             </section>
@@ -979,6 +1024,11 @@
         let chatUnsubscribe = () => {}; // For real-time chat updates
         let allCoupons = []; // Stores all active coupon data
         
+        // --- Category Tracking State ---
+        let currentCategory = null; // Tracks current main category filter
+        let currentSubCategory = null; // Tracks current sub category filter
+        // --- End Category Tracking State ---
+        
         // --- User Blocking Logic ---
         let isCurrentUserBlocked = false;
         let unsubscribeUserStatus = () => {};
@@ -1003,7 +1053,18 @@
                 'toast-coupon-used': 'You have already used this coupon.', 'toast-coupon-min-purchase': 'Minimum purchase of ৳{amount} required.',
                 'warranty': '{text} Warranty', // Updated key for text string
                 'no-warranty': 'No Warranty', // Updated key
-                'model-id': 'Product ID: {id}' // FIX: Changed 'Model:' to 'Product ID:'
+                'model-id': 'Product ID: {id}', // FIX: Changed 'Model:' to 'Product ID:'
+                'available-coupons': 'Available Coupons', 'min-spend': 'Min Spend', 'discount-value': 'Discount', 'tap-to-copy': 'Tap to Copy', 'copied': 'Copied!',
+                'all-products': 'All Products',
+                'current-category-title': '{category}',
+                'sub-category-filter': 'Filter by Sub-Category:',
+                'write-a-review': 'Write a Review',
+                'your-rating': 'Your Rating:',
+                'your-comment': 'Your Comment:',
+                'submit-review': 'Submit Review',
+                'review-login-prompt': 'Please log in to submit a review.',
+                'review-success': 'Review submitted successfully! Thank you.',
+                'review-failed': 'Failed to submit review. Please try again.',
             },
             bn: {
                 'deliver-to': 'ডেলিভারি লোকেশন', 'home': 'হোম', 'products': 'পণ্য', 'categories': 'ক্যাটাগরি', 'offers': 'অফার', 'search-placeholder': 'পণ্য খুঁজুন...', 'featured-products': 'বৈশিষ্ট্যযুক্ত পণ্য', 'shop-by-category': 'ক্যাটাগরি অনুসারে কেনাকাটা করুন', 'cat-electronics': 'ইলেকট্রনিক্স', 'cat-fashion': 'ফ্যাশন', 'cat-home-garden': 'হোম অ্যান্ড গার্ডেন', 'cat-health-beauty': 'স্বাস্থ্য ও সৌন্দর্য', 'cat-sports': 'খেলাধুলা ও আউটডোর', 'cat-books': 'বই ও স্টেশনারি', 'cat-kids': 'বাচ্চা ও খেলনা', 'cat-cars': 'গাড়ি ও বাইক', 'why-choose-us': 'আমাদেরকে কেন বেছে নিবেন', 'feature-delivery-title': 'দ্রুত ডেলিভারি', 'feature-delivery-desc': 'আমরা ২-৩ কার্যদিবসের মধ্যে আপনার দোরগোড়ায় পণ্য পৌঁছে দিই।', 'feature-payment-title': 'নিরাপদ পেমেন্ট', 'feature-payment-desc': 'আপনার নিরাপত্তা ও গোপনীয়তার জন্য সকল লেনদেন এনক্রিপ্টেড।', 'feature-return-title': 'সহজ রিটার্ন', 'feature-return-desc': 'পছন্দ না হলে ৩০ দিনের মধ্যে পণ্য ফেরত দিন এবং সম্পূর্ণ মূল্য ফেরত পান।', 'feature-support-title': '২৪/৭ সাপোর্ট', 'feature-support-desc': 'আমাদের গ্রাহক সহায়তা দল দিনরাত আপনার জন্য উপলব্ধ।', 'add-to-cart': 'কার্টে যোগ করুন', 'added-to-cart': 'যোগ হয়েছে!', 'no-products': 'আপনার অনুসন্ধানের সাথে মেলে এমন কোনো পণ্য পাওয়া যায়নি।', 'back-to-products': 'সকল পণ্যে ফিরে যান', 'returnable': '৩০-দিনের মধ্যে ফেরতযোগ্য', 'not-returnable': 'ফেরতযোগ্য নয়', 'secure-payments': 'নিরাপদ পেমেন্ট', 'size': 'সাইজ:', 'storage': 'স্টোরেজ:', 'color': 'রঙ:', 'product-description': 'পণ্যের বিবরণ', 'product-specifications': 'পণ্যের স্পেসিফিকেশন', 'specifications': 'স্পেসিফিকেশন', 'value': 'মান', 'no-specs': 'এই পণ্যের জন্য কোন স্পেসিফিকেশন উপলব্ধ নেই।', 'product-reviews': 'পণ্যের রিভিউ', 'no-reviews': 'এই পণ্যের জন্য এখনো কোনো রিভিউ নেই।', 'cart': 'আপনার কার্ট', 'cart-empty': 'আপনার কার্ট খালি।', 'total': 'মোট মূল্য:', 'checkout': 'চেকআউট করুন', 'your-wishlist': 'আপনার উইশলিস্ট', 'wishlist-empty': 'আপনার উইশলিস্ট খালি। কিছু পণ্য যোগ করুন!', 'your-account': 'আপনার অ্যাকাউন্ট', 'signin-google': 'Google দিয়ে সাইন ইন করুন', 'logout': 'লগআউট', 'toast-cart-added': 'পণ্য কার্টে যোগ করা হয়েছে!', 'toast-wishlist-added': 'পণ্য উইশলিস্টে যোগ করা হয়েছে!', 'toast-wishlist-removed': 'পণ্য উইশলিস্ট থেকে সরানো হয়েছে!', 'toast-login-success': 'সফলভাবে লগইন হয়েছে!', 'toast-logout-success': 'সফলভাবে লগআউট হয়েছে!',
@@ -1017,14 +1078,24 @@
                 'chat-placeholder': 'আপনার বার্তা লিখুন...',
                 'toast-abusive-language': 'আপত্তিকর ভাষা ব্যবহার করা যাবে না।',
                 'account-blocked': 'আপনার অ্যাকাউন্ট ব্লক করা হয়েছে। আপনি অর্ডার বা মেসেজ করতে পারবেন না।',
-                'account-blocked-banner': 'আপনার অ্যাকাউন্টটি একজন অ্যাডমিনিস্ট্রেটর দ্বারা ব্লক করা হয়েছে। অনুগ্রহ করে সাপোর্টে যোগাযোগ করুন।',
-                'toast-account-blocked-action': 'פעולה נכשלה: החשাবন שלך חסום.',
+                'toast-account-blocked-action': 'Action failed: Your account is blocked.',
                 'coupon-placeholder': 'কুপন কোড লিখুন', 'apply-coupon': 'প্রয়োগ', 'discount': 'ডিসকাউন্ট',
                 'toast-coupon-applied': 'কুপন সফলভাবে প্রয়োগ করা হয়েছে!', 'toast-coupon-invalid': 'অবৈধ বা মেয়াদোত্তীর্ণ কুপন কোড।',
                 'toast-coupon-used': 'আপনি ইতিমধ্যে এই কুপন ব্যবহার করেছেন।', 'toast-coupon-min-purchase': 'এই কুপনটি ব্যবহার করতে সর্বনিম্ন ৳{amount} কেনাকাটা করতে হবে।',
                 'warranty': '{text} ওয়ারেন্টি', // Updated key for text string
                 'no-warranty': 'কোনো ওয়ারেন্টি নেই', // Updated key
-                'model-id': 'প্রোডাক্ট আইডি: {id}' // FIX: Changed 'মডেল আইডি:' to 'প্রোডাক্ট আইডি:'
+                'model-id': 'প্রোডাক্ট আইডি: {id}', // FIX: Changed 'মডেল আইডি:' to 'প্রোডাক্ট আইডি:'
+                'available-coupons': 'উপলব্ধ কুপন', 'min-spend': 'সর্বনিম্ন খরচ', 'discount-value': 'ডিসকাউন্ট', 'tap-to-copy': 'কপি করুন', 'copied': 'কপি হয়েছে!',
+                'all-products': 'সকল পণ্য',
+                'current-category-title': '{category} ক্যাটাগরি',
+                'sub-category-filter': 'সাব-ক্যাটাগরি অনুযায়ী ফিল্টার করুন:',
+                'write-a-review': 'একটি রিভিউ দিন',
+                'your-rating': 'আপনার রেটিং:',
+                'your-comment': 'আপনার মন্তব্য:',
+                'submit-review': 'রিভিউ জমা দিন',
+                'review-login-prompt': 'অনুগ্রহ করে রিভিউ দেওয়ার জন্য লগইন করুন।',
+                'review-success': 'রিভিউ সফলভাবে জমা দেওয়া হয়েছে! ধন্যবাদ।',
+                'review-failed': 'রিভিউ জমা দিতে ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।',
             }
         };
 
@@ -1070,6 +1141,13 @@
             // Dark Mode Elements
             darkModeToggle: document.getElementById('dark-mode-toggle'),
             darkModeIcon: document.getElementById('dark-mode-icon'),
+
+            // New Category Elements
+            categoryHeader: document.getElementById('category-header'),
+            breadcrumb: document.getElementById('breadcrumb'),
+            categoryPath: document.getElementById('category-path'),
+            currentCategoryTitle: document.getElementById('current-category-title'),
+            subcategoryButtons: document.getElementById('subcategory-buttons'),
         };
         
         // --- Dark Mode Logic ---
@@ -1228,13 +1306,15 @@
                 const imageUrl = product.imageUrl || 'https://placehold.co/400x400/f5f7fa/6a0dad?text=Image';
                 const price = product.price || 0;
                 
-                let priceHtml = `<span class="text-xl font-bold text-price-black">৳${price.toFixed(2)}</span>`;
+                let priceHtml = `<span class="text-xl font-bold text-price-black">৳${product.price.toFixed(2)}</span>`;
                 let offerSticker = '';
-                if (product.isOffer && product.originalPrice > 0) {
-                    const discountPercent = Math.round(((product.originalPrice - price) / product.originalPrice) * 100);
+                
+                // CHECK if the product is on offer
+                if (product.isOffer && product.originalPrice > product.price) {
+                    const discountPercent = Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100);
                     priceHtml = `
                         <div class="flex items-baseline gap-2 flex-wrap">
-                            <span class="text-xl font-bold text-price-black">৳${price.toFixed(2)}</span>
+                            <span class="text-xl font-bold text-price-black">৳${product.price.toFixed(2)}</span>
                             <span class="text-sm text-gray-400 line-through">৳${product.originalPrice.toFixed(2)}</span>
                              <span class="text-xs font-bold text-red-500">(-${discountPercent}%)</span>
                         </div>`;
@@ -1270,9 +1350,225 @@
                 fragment.appendChild(productCard);
             });
             DOMElements.productList.appendChild(fragment);
+            // If viewing all products, show the featured header
+            if (currentCategory === null && currentSubCategory === null) {
+                DOMElements.currentCategoryTitle.dataset.lang = 'featured-products';
+                DOMElements.currentCategoryTitle.textContent = translations[currentLanguage]['featured-products'];
+            }
+            // Removed redundant updateCategoryHeader call, which caused the error when dataset was accessed from null.
         }
 
-        // --- EVENT HANDLERS & LOGIC ---
+        // --- CATEGORY & SUB-CATEGORY LOGIC ---
+
+        function updateCategoryHeader(category, subCategory = null) {
+            const categoryName = category ? translations[currentLanguage][`cat-${category}`] || category.charAt(0).toUpperCase() + category.slice(1) : '';
+            const subCategoryName = subCategory ? subCategory.charAt(0).toUpperCase() + subCategory.slice(1) : '';
+            
+            currentCategory = category;
+            currentSubCategory = subCategory;
+            
+            let title = translations[currentLanguage]['featured-products'];
+            
+            if (category) {
+                title = subCategoryName ? subCategoryName : categoryName;
+            }
+
+            DOMElements.currentCategoryTitle.textContent = title;
+            DOMElements.currentCategoryTitle.dataset.lang = category ? (subCategory ? 'N/A' : 'current-category-title') : 'featured-products';
+
+            // Update Breadcrumb
+            let breadcrumbHtml = `<a href="javascript:void(0);" onclick="renderAllProducts()" class="text-theme-blue hover:underline">${translations[currentLanguage]['all-products']}</a>`;
+            
+            if (category) {
+                breadcrumbHtml += ` <span class="mx-1">/</span> <a href="javascript:void(0);" onclick="filterProducts('${category}')" class="text-theme-blue hover:underline">${categoryName}</a>`;
+            }
+            if (subCategory) {
+                breadcrumbHtml += ` <span class="mx-1">/</span> <span class="font-semibold text-dark dark:text-gray-100">${subCategoryName}</span>`;
+            }
+            DOMElements.categoryPath.innerHTML = breadcrumbHtml;
+            
+            // Render subcategory buttons if a main category is selected
+            if (category && !subCategory) {
+                renderSubCategories(category);
+            } else {
+                DOMElements.subcategoryButtons.innerHTML = '';
+            }
+        }
+        
+        function renderSubCategories(category) {
+            // Get all unique subcategories for the current category
+            const subCategories = productsData
+                .filter(p => p.category === category && p.subCategory)
+                .map(p => p.subCategory)
+                .filter((value, index, self) => self.indexOf(value) === index) // Unique values
+                .sort();
+
+            let buttonsHtml = '';
+
+            if (subCategories.length > 0) {
+                 buttonsHtml = subCategories.map(subCat => {
+                    const subCatName = subCat.charAt(0).toUpperCase() + subCat.slice(1);
+                    const isActive = currentSubCategory === subCat ? 'variant-btn-active bg-theme-blue/30' : '';
+                    return `<button class="px-4 py-2 text-sm bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 font-semibold rounded-full hover:bg-gray-300 transition-colors ${isActive}" onclick="filterSubCategory('${category}', '${subCat}')">
+                        ${subCatName}
+                    </button>`;
+                 }).join('');
+                 
+                 // Add an 'All' button for the current category
+                 const allActive = currentSubCategory === null ? 'variant-btn-active bg-theme-blue/30' : '';
+                 const categoryName = translations[currentLanguage][`cat-${category}`] || category.charAt(0).toUpperCase() + category.slice(1);
+                 buttonsHtml = `<button class="px-4 py-2 text-sm bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 font-semibold rounded-full hover:bg-gray-300 transition-colors ${allActive}" onclick="filterProducts('${category}')" data-lang="all-in-category">${categoryName} (সকল)</button>` + buttonsHtml;
+            } 
+
+            DOMElements.subcategoryButtons.innerHTML = buttonsHtml;
+            // Ensure language is updated for the new 'All' button
+            updateTextContent();
+        }
+
+        // Action when clicking a main category (e.g., Electronics)
+        window.filterProducts = (category) => {
+            const filtered = productsData.filter(p => p.category === category);
+            
+            updateCategoryHeader(category, null); // Set only main category
+            renderProducts(filtered); 
+            
+            showPage('home-page');
+            scrollToElement('products');
+        };
+
+        // Action when clicking a sub-category button (e.g., Mobile)
+        window.filterSubCategory = (category, subCategory) => {
+            const filtered = productsData.filter(p => p.category === category && p.subCategory === subCategory);
+            
+            updateCategoryHeader(category, subCategory); // Set main and sub category
+            renderProducts(filtered); 
+            
+            showPage('home-page');
+            scrollToElement('products');
+        };
+        
+        // --- END CATEGORY & SUB-CATEGORY LOGIC ---
+        
+        // --- REVIEW LOGIC ---
+        
+        // Global state to track selected rating
+        let currentRating = 0;
+        
+        function setupReviewForm(productId) {
+            const form = document.getElementById('review-form');
+            const loginPrompt = document.getElementById('review-login-prompt');
+            const reviewControls = document.getElementById('review-controls');
+            const ratingStars = document.getElementById('rating-stars');
+            const ratingInput = document.getElementById('review-rating');
+
+            if (!currentUser || currentUser.isAnonymous) {
+                loginPrompt.classList.remove('hidden');
+                reviewControls.classList.add('hidden');
+                return;
+            }
+
+            loginPrompt.classList.add('hidden');
+            reviewControls.classList.remove('hidden');
+            
+            document.getElementById('review-product-id').value = productId;
+            currentRating = 0;
+            ratingInput.value = 0;
+            updateStarDisplay(ratingStars, 0);
+
+            // Clear previous comment if any
+            document.getElementById('review-comment').value = '';
+        }
+
+        function handleStarClick(e) {
+            const star = e.target.closest('.rating-star');
+            if (!star) return;
+
+            const rating = parseInt(star.dataset.rating);
+            currentRating = rating;
+            document.getElementById('review-rating').value = rating;
+            updateStarDisplay(star.parentElement, rating);
+        }
+
+        function updateStarDisplay(container, rating) {
+            Array.from(container.children).forEach(star => {
+                if (star.classList.contains('rating-star')) {
+                    const starRating = parseInt(star.dataset.rating);
+                    if (starRating <= rating) {
+                        star.classList.remove('far', 'text-gray-400');
+                        star.classList.add('fas', 'selected');
+                    } else {
+                        star.classList.remove('fas', 'selected');
+                        star.classList.add('far', 'text-gray-400');
+                    }
+                }
+            });
+        }
+        
+        async function submitReview(e) {
+            e.preventDefault();
+            if (!currentUser || currentUser.isAnonymous) return;
+
+            const productId = document.getElementById('review-product-id').value;
+            const rating = parseInt(document.getElementById('review-rating').value);
+            const comment = document.getElementById('review-comment').value.trim();
+
+            if (rating === 0 || comment.length < 5) {
+                showToast('Please provide a rating and a valid comment (min 5 chars).', false);
+                return;
+            }
+
+            const productDocRef = doc(db, 'products', productId);
+            const productSnap = await getDoc(productDocRef);
+            
+            if (!productSnap.exists()) {
+                showToast('Product not found in database.', false);
+                return;
+            }
+
+            const productData = productSnap.data();
+            const existingReviews = productData.reviews || [];
+            const currentRatingCount = productData.ratingCount || 0;
+            const currentTotalRating = (productData.rating * currentRatingCount) || 0; // rating is already average
+
+            const newReview = {
+                author: currentUser.displayName || currentUser.email || 'Anonymous',
+                rating: rating,
+                comment: comment,
+                // FIX: Changed serverTimestamp() to new Date() as it's inside arrayUnion
+                timestamp: new Date() 
+            };
+
+            const newRatingCount = currentRatingCount + 1;
+            const newTotalRating = currentTotalRating + rating;
+            const newAverageRating = newTotalRating / newRatingCount;
+
+            try {
+                await updateDoc(productDocRef, {
+                    reviews: arrayUnion(newReview),
+                    rating: parseFloat(newAverageRating.toFixed(1)), // Keep 1 decimal place
+                    ratingCount: newRatingCount
+                });
+                
+                // Manually update the local product data (in productsData array) for immediate UI refresh
+                const productIndex = productsData.findIndex(p => p.id === productId);
+                if (productIndex !== -1) {
+                    productsData[productIndex].reviews = [...existingReviews, newReview];
+                    productsData[productIndex].rating = parseFloat(newAverageRating.toFixed(1));
+                    productsData[productIndex].ratingCount = newRatingCount;
+                }
+                
+                // Re-render product details with new data
+                showProductDetails(productId);
+                showToast('review-success', true);
+                
+            } catch (error) {
+                console.error("Error submitting review:", error);
+                showToast('review-failed', false);
+            }
+        }
+        
+        // --- END REVIEW LOGIC ---
+
 
         function handleProductCardClick(e) {
             const target = e.target;
@@ -1411,6 +1707,7 @@
             renderPriceDetails(product);
             renderInfoDetails(product);
             renderAllVariants(product);
+            setupReviewForm(productId); // Setup review form
 
             showPage('product-details-page');
             updateTextContent();
@@ -1453,24 +1750,37 @@
                 return;
             }
 
-            container.innerHTML = reviews.map(review => `
-                <div class="border-b pb-4">
-                    <div class="flex items-center mb-2">
-                        <div class="flex items-center mr-4">
-                            ${renderStars(review.rating)}
+            container.innerHTML = reviews.map(review => {
+                // Check if timestamp is a Firestore Timestamp object (has toDate()) or a native Date object
+                let dateString = 'N/A';
+                if (review.timestamp?.toDate) {
+                     dateString = review.timestamp.toDate().toLocaleDateString('en-GB');
+                } else if (review.timestamp instanceof Date) {
+                    dateString = review.timestamp.toLocaleDateString('en-GB');
+                }
+
+                return `
+                    <div class="border-b pb-4">
+                        <div class="flex items-center mb-2">
+                            <div class="flex items-center mr-4">
+                                ${renderStars(review.rating)}
+                            </div>
+                            <p class="font-bold text-gray-800">${review.author || 'Anonymous'}</p>
+                            <span class="text-xs text-gray-500 ml-auto">${dateString}</span>
                         </div>
-                        <p class="font-bold text-gray-800">${review.author || 'Anonymous'}</p>
+                        <p class="text-gray-600 dark:text-gray-300">${review.comment || ''}</p>
                     </div>
-                    <p class="text-gray-600">${review.comment || ''}</p>
-                </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
         function renderPriceDetails(product) {
             const priceElement = document.getElementById('product-price-details');
             const price = product.price || 0;
-            if (product.isOffer && product.originalPrice > 0) {
-                const discountPercent = Math.round(((product.originalPrice - price) / product.originalPrice) * 100);
+            
+            // CHECK if the product is on offer (same logic as renderProducts)
+            if (product.isOffer && product.originalPrice > product.price) {
+                const discountPercent = Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100);
                 priceElement.innerHTML = `
                     <div class="flex items-baseline gap-2 flex-wrap">
                         <span class="text-2xl font-bold text-price-black">৳${price.toFixed(2)}</span>
@@ -1478,6 +1788,7 @@
                         <span class="text-sm font-bold text-red-500">(-${discountPercent}%)</span>
                     </div>`;
             } else {
+                // If not on offer, only show the main price (which is stored in product.price in this case)
                 priceElement.innerHTML = `<span class="text-2xl font-bold text-price-black">৳${price.toFixed(2)}</span>`;
             }
         }
@@ -1568,6 +1879,7 @@
                         description: data.details || '',
                         fullDescription: data.details || '',
                         category: data.category || 'general',
+                        subCategory: data.subCategory || null, // NEW: Fetch subCategory
                         isReturnable: data.isRefundable === true,
                         specifications: data.specification || {},
                         reviews: data.reviews || [],
@@ -2039,8 +2351,9 @@
 
         async function handleLogin(e) {
             e.preventDefault();
+            // FIX: Corrected DOMEElements to DOMElements
             const email = DOMElements.loginForm.querySelector('#login-email').value;
-            const password = DOMEElements.loginForm.querySelector('#login-password').value;
+            const password = DOMElements.loginForm.querySelector('#login-password').value;
             DOMElements.authError.textContent = '';
 
             try {
@@ -2174,7 +2487,10 @@
                 }
                 DOMElements.drawerOverlay.classList.remove('hidden');
                 drawer.classList.add('active');
-                if(drawerId === 'cart-drawer') updateCartUI();
+                if(drawerId === 'cart-drawer') {
+                    updateCartUI();
+                    fetchAndRenderCoupons(); // Load coupons when cart is opened
+                }
             }
         }
         window.openDrawer = openDrawer;
@@ -2348,6 +2664,94 @@
         }
         
         // --- COUPON LOGIC ---
+        async function fetchAndRenderCoupons() {
+            const couponListEl = document.getElementById('coupons-list');
+            if (!couponListEl) return;
+
+            couponListEl.innerHTML = `<div class="col-span-full text-center py-4"><div class="loader mx-auto"></div></div>`;
+            
+            if (!currentUser || currentUser.isAnonymous) {
+                couponListEl.innerHTML = `<p class="text-center text-gray-500">Please log in to see available coupons.</p>`;
+                return;
+            }
+
+            try {
+                const couponsRef = collection(db, "coupons");
+                // Fetch all coupons without filtering by 'isActive' since it might not be present, relying on client-side expiry check
+                const querySnapshot = await getDocs(couponsRef); 
+                allCoupons = querySnapshot.docs.map(doc => ({ 
+                    id: doc.id, 
+                    ...doc.data(), 
+                    code: doc.data().code || doc.id // Ensure code field exists
+                }));
+
+                const now = new Date();
+                const usableCoupons = allCoupons.filter(coupon => {
+                    const expiryDate = coupon.expiryDate ? new Date(coupon.expiryDate) : null;
+                    const hasExpired = expiryDate && expiryDate < now;
+                    // Check if coupon is active/not expired (assuming if isActive isn't present, it's considered active if not expired)
+                    const isActive = coupon.isActive === undefined ? true : coupon.isActive; 
+                    
+                    return isActive && !hasExpired;
+                });
+
+                if (usableCoupons.length === 0) {
+                    couponListEl.innerHTML = `<p class="text-center text-gray-500">No active coupons available right now.</p>`;
+                    return;
+                }
+
+                let couponsHtml = usableCoupons.map(coupon => {
+                    // Use 'value' for fixed discount amount, as seen in the firebase screenshot
+                    const discountValue = coupon.type === 'fixed' ? (coupon.value || 0) : (coupon.discountValue || 0);
+                    
+                    const discountText = coupon.type === 'percentage' 
+                        ? `${coupon.value}% OFF` 
+                        : `৳${discountValue.toFixed(0)} Fixed Discount`;
+                    
+                    return `
+                        <div class="p-3 bg-gray-100 dark:bg-gray-700 rounded-lg border border-dashed border-theme-pink/50">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-xs font-semibold text-gray-600 dark:text-gray-300" data-lang="discount-value">${translations[currentLanguage]['discount-value']}: ${discountText}</p>
+                                    <p class="text-xs text-gray-500" data-lang="min-spend">${translations[currentLanguage]['min-spend']}: ৳${(coupon.minSpend || 0).toFixed(0)}</p>
+                                </div>
+                                <button onclick="copyToClipboard(this, '${coupon.code}')" class="text-xs font-bold bg-theme-blue text-white px-2 py-1 rounded-full hover:bg-theme-purple transition-colors ml-2" data-lang="tap-to-copy">
+                                    ${coupon.code}
+                                </button>
+                            </div>
+                            <p class="text-xs text-red-500 mt-2">Expires: ${coupon.expiryDate || 'N/A'}</p>
+                        </div>
+                    `;
+                }).join('');
+
+                couponListEl.innerHTML = couponsHtml;
+
+            } catch (error) {
+                console.error("Error fetching coupons:", error);
+                couponListEl.innerHTML = `<p class="text-center text-red-500">Error loading coupons.</p>`;
+            }
+        }
+
+        function copyToClipboard(button, text) {
+            if (!text || navigator.clipboard === undefined) {
+                 // Fallback for older browsers
+                 showToast("Could not copy. Browser unsupported.", false);
+                 return;
+            }
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = translations[currentLanguage]['copied'];
+                showToast('Coupon copied!', true);
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 1500);
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+                showToast("Copy failed.", false);
+            });
+        }
+        window.copyToClipboard = copyToClipboard;
+        
         async function handleApplyCoupon(e) {
             e.preventDefault();
             const couponCode = DOMElements.couponInput.value.trim().toUpperCase();
@@ -2361,7 +2765,7 @@
             const couponRef = doc(db, 'coupons', couponCode);
             const couponSnap = await getDoc(couponRef);
 
-            if (!couponSnap.exists() || !couponSnap.data().isActive) {
+            if (!couponSnap.exists()) {
                 showToast('toast-coupon-invalid', false);
                 return;
             }
@@ -2369,8 +2773,8 @@
             const couponData = couponSnap.data();
             const subtotal = Array.from(localCartCache.values()).reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
-            if (subtotal < (couponData.minPurchase || 0)) {
-                const message = translations[currentLanguage]['toast-coupon-min-purchase'].replace('{amount}', couponData.minPurchase);
+            if (subtotal < (couponData.minSpend || 0)) {
+                const message = translations[currentLanguage]['toast-coupon-min-purchase'].replace('{amount}', couponData.minSpend);
                 showToast(message, false);
                 return;
             }
@@ -2379,11 +2783,25 @@
                 showToast('toast-coupon-used', false);
                 return;
             }
+            
+            // Check expiry date (Client-side validation as Firebase doesn't support complex queries in rules)
+            const expiryDate = couponData.expiryDate ? new Date(couponData.expiryDate) : null;
+            const now = new Date();
+            if (expiryDate && expiryDate < now) {
+                showToast('toast-coupon-invalid', false); // Invalid/expired coupon message
+                return;
+            }
+            
+            // Check isActive (if present)
+            if (couponData.isActive === false) {
+                 showToast('toast-coupon-invalid', false); // Inactive coupon message
+                 return;
+            }
 
-            if (couponData.discountType === 'percentage') {
-                discountAmount = (subtotal * couponData.discountValue) / 100;
-            } else if (couponData.discountType === 'fixed') {
-                discountAmount = couponData.discountValue;
+            if (couponData.type === 'percentage') {
+                discountAmount = (subtotal * couponData.value) / 100;
+            } else if (couponData.type === 'fixed') {
+                discountAmount = couponData.value;
             } else {
                 discountAmount = 0;
             }
@@ -2395,17 +2813,27 @@
 
         // --- GLOBAL FUNCTIONS for onclick ---
         window.renderAllProducts = () => {
+            updateCategoryHeader(null, null); // Reset header to All Products
             renderProducts(productsData);
             showPage('home-page');
         };
         window.filterProducts = (category) => {
             const filtered = productsData.filter(p => p.category === category);
+            updateCategoryHeader(category, null);
+            renderProducts(filtered);
+            showPage('home-page');
+            scrollToElement('products');
+        };
+        window.filterSubCategory = (category, subCategory) => {
+            const filtered = productsData.filter(p => p.category === category && p.subCategory === subCategory);
+            updateCategoryHeader(category, subCategory);
             renderProducts(filtered);
             showPage('home-page');
             scrollToElement('products');
         };
         window.showOffers = () => {
             const offers = productsData.filter(p => p.isOffer);
+            updateCategoryHeader('Offers', null); // Use 'Offers' as a temporary category name
             renderProducts(offers);
             showPage('home-page');
             scrollToElement('products');
@@ -2988,6 +3416,10 @@
             document.addEventListener('click', handleProductCardClick); // Delegated click handler
             document.getElementById('product-options').addEventListener('click', handleVariantSelection);
             document.getElementById('product-image-container').addEventListener('mousemove', handleImageZoom);
+            
+            // Review Form Listeners
+            document.getElementById('rating-stars').addEventListener('click', handleStarClick);
+            document.getElementById('review-form').addEventListener('submit', submitReview);
 
             // --- Invoice Button Delegation ---
             document.addEventListener('click', (e) => {
