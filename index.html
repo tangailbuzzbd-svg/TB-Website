@@ -1964,7 +1964,16 @@
                 banners.forEach(banner => {
                     const slide = document.createElement('div');
                     slide.className = 'w-full flex-shrink-0 aspect-[3/1]';
-                    slide.innerHTML = `<img src="${banner.imageUrl}" alt="${banner.alt || 'Banner Image'}" class="w-full h-full object-cover">`;
+                    const link = banner.url || banner.link || banner.href || '';
+                    if (link) {
+                        const isExternal = /^https?:\/\//i.test(link);
+                        slide.innerHTML = `
+                            <a href="${link}" ${isExternal ? 'target="_blank" rel="noopener"' : ''} class="block w-full h-full">
+                                <img src="${banner.imageUrl}" alt="${banner.alt || 'Banner Image'}" class="w-full h-full object-cover" />
+                            </a>`;
+                    } else {
+                        slide.innerHTML = `<img src="${banner.imageUrl}" alt="${banner.alt || 'Banner Image'}" class="w-full h-full object-cover">`;
+                    }
                     DOMElements.slidesContainer.appendChild(slide);
                 });
 
