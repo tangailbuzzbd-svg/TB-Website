@@ -165,6 +165,40 @@
         .rating-star:hover, .rating-star.selected {
             color: #fca311; /* Amber/Yellow for selection/hover */
         }
+        /* Mobile-friendly vertical tracker layout */
+        @media (max-width: 640px) {
+            .tracker-step-container {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 0 6px;
+            }
+            .tracker-node {
+                width: auto;
+                flex-direction: row;
+                align-items: center;
+                gap: 8px;
+                text-align: left;
+            }
+            .tracker-circle {
+                width: 28px;
+                height: 28px;
+                margin-top: 4px;
+            }
+            .tracker-node p {
+                margin: 0;
+                font-size: 11px;
+            }
+            .tracker-connector {
+                width: 4px;
+                height: 32px;
+                margin: 4px 0 4px 14px; /* align under the circle */
+                justify-content: flex-start;
+            }
+            .tracker-connector-line {
+                width: 4px;
+                height: 100%;
+            }
+        }
         
     </style>
 </head>
@@ -394,7 +428,19 @@
                         <input type="email" id="login-email" placeholder="Email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-700">
                         <input type="password" id="login-password" placeholder="Password" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-700">
                         <button type="submit" class="w-full py-3 bg-theme-blue text-white rounded-full font-bold hover:bg-theme-purple transition-colors">Login</button>
+                        <div class="flex justify-between text-sm">
+                            <a href="#" id="show-reset-form" class="text-theme-blue hover:underline">Forgot password?</a>
+                            <span></span>
+                        </div>
                         <p class="text-center text-sm">Don't have an account? <a href="#" id="show-register-form" class="text-theme-blue hover:underline">Register</a></p>
+                    </form>
+
+                    <!-- Reset Password Form (hidden by default) -->
+                    <form id="reset-form" class="hidden space-y-4 text-left">
+                        <p class="text-sm text-gray-600">Enter your account email. We'll send a link to reset your password.</p>
+                        <input type="email" id="reset-email" placeholder="Email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-700">
+                        <button type="submit" class="w-full py-3 bg-theme-blue text-white rounded-full font-bold hover:bg-theme-purple transition-colors">Send reset link</button>
+                        <p class="text-center text-sm">Remembered it? <a href="#" id="show-login-from-reset" class="text-theme-blue hover:underline">Back to login</a></p>
                     </form>
 
                     <!-- Register Form (hidden by default) -->
@@ -417,6 +463,10 @@
                     <button id="login-google-btn" class="w-full py-3 px-6 bg-white border border-gray-300 text-gray-700 rounded-full font-bold hover:bg-gray-100 transition-colors shadow-lg flex items-center justify-center">
                         <i class="fab fa-google mr-2 text-xl"></i>
                         <span data-lang="signin-google">Sign in with Google</span>
+                    </button>
+                    <button id="login-facebook-btn" class="mt-3 w-full py-3 px-6 bg-[#1877F2] text-white rounded-full font-bold hover:bg-[#165FDB] transition-colors shadow-lg flex items-center justify-center">
+                        <i class="fab fa-facebook mr-2 text-xl"></i>
+                        <span>Continue with Facebook</span>
                     </button>
                      <p id="auth-error" class="text-red-500 text-sm mt-2 h-4"></p>
                 </div>
@@ -474,7 +524,8 @@
                 <form id="edit-profile-form" class="hidden text-left space-y-4">
                     <div class="text-center">
                          <img id="edit-photo-preview" src="" alt="Profile Photo Preview" class="w-24 h-24 rounded-full mx-auto shadow-lg object-cover mb-2">
-                         <input type="file" id="edit-photo-input" class="text-sm w-full">
+                         <input type="file" id="edit-photo-input" accept="image/*" class="text-sm w-full">
+                         <button type="button" id="remove-photo-btn" class="mt-2 px-4 py-2 text-sm rounded-full border border-red-400 text-red-600 hover:bg-red-50 transition-colors">Remove Photo</button>
                     </div>
                     <div>
                         <label for="edit-name-input" class="block text-sm font-medium text-gray-700">Name</label>
@@ -986,7 +1037,7 @@
     <!-- Firebase SDK Scripts (Modular v9+) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, deleteUser, signInWithCustomToken, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getAuth, onAuthStateChanged, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, deleteUser, signInWithCustomToken, signInAnonymously, sendPasswordResetEmail, reauthenticateWithCredential, EmailAuthProvider, reauthenticateWithPopup, fetchSignInMethodsForEmail } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, getDoc, deleteDoc, onSnapshot, updateDoc, increment, deleteField, collection, addDoc, serverTimestamp, getDocs, writeBatch, query, where, arrayUnion, orderBy, limit } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
         
@@ -1102,13 +1153,14 @@
         const DOMElements = {
             toast: document.getElementById('toast-notification'), toastMessage: document.getElementById('toast-message'), productList: document.getElementById('product-list'), cartCount: document.getElementById('cart-count'), cartItems: document.getElementById('cart-items'), cartSubtotal: document.getElementById('cart-subtotal'), deliveryCharge: document.getElementById('delivery-charge'), cartTotal: document.getElementById('cart-total'), wishlistItems: document.getElementById('wishlist-items'), authOptions: document.getElementById('auth-options'), 
             userProfileView: document.getElementById('user-profile-view'), userPhoto: document.getElementById('user-photo'), userName: document.getElementById('user-name'), userEmail: document.getElementById('user-email'), userMobile: document.getElementById('user-mobile'), userLocation: document.getElementById('user-location'),
-            loginBtn: document.getElementById('login-google-btn'), logoutBtn: document.getElementById('logout-btn'), 
+            loginBtn: document.getElementById('login-google-btn'), loginFacebookBtn: document.getElementById('login-facebook-btn'), logoutBtn: document.getElementById('logout-btn'), 
             editProfileBtn: document.getElementById('edit-profile-btn'), editProfileForm: document.getElementById('edit-profile-form'), saveProfileBtn: document.getElementById('save-profile-btn'), cancelEditBtn: document.getElementById('cancel-edit-btn'),
             myOrdersBtnProfile: document.getElementById('my-orders-btn-profile'), 
             ordersList: document.getElementById('orders-list'),
             editPhotoPreview: document.getElementById('edit-photo-preview'), editPhotoInput: document.getElementById('edit-photo-input'), editNameInput: document.getElementById('edit-name-input'), editMobileInput: document.getElementById('edit-mobile-input'), editLocationInput: document.getElementById('edit-location-input'),
             searchInput: document.getElementById('search-input'), searchButton: document.getElementById('search-button'), searchInputMobile: document.getElementById('search-input-mobile'), searchButtonMobile: document.getElementById('search-button-mobile'), slidesContainer: document.getElementById('slides-container'), prevBtn: document.getElementById('prev-btn'), nextBtn: document.getElementById('next-btn'), indicatorContainer: document.getElementById('slider-indicators'), drawerOverlay: document.getElementById('drawer-overlay'),
             loginForm: document.getElementById('login-form'), registerForm: document.getElementById('register-form'), showRegisterLink: document.getElementById('show-register-form'), showLoginLink: document.getElementById('show-login-form'), authError: document.getElementById('auth-error'), profileDrawerTitle: document.getElementById('profile-drawer-title'),
+            resetForm: document.getElementById('reset-form'), resetEmail: document.getElementById('reset-email'), showResetLink: document.getElementById('show-reset-form'), showLoginFromResetLink: document.getElementById('show-login-from-reset'),
             paymentModal: document.getElementById('payment-modal'), checkoutBtn: document.getElementById('checkout-btn'), confirmOrderBtn: document.getElementById('confirm-order-btn'),
             orderSuccessModal: document.getElementById('order-success-modal'), paymentInstruction: document.getElementById('payment-instruction'), closeSuccessModalBtn: document.getElementById('close-success-modal'),
             discountRow: document.getElementById('discount-row'),
@@ -2229,6 +2281,12 @@
             if (user && !user.isAnonymous) {
                 currentUser = user;
                 const userRef = doc(db, 'users', user.uid);
+                // Backfill createdAt if missing
+                getDoc(userRef).then(snap => {
+                    if (snap.exists() && !snap.data()?.createdAt) {
+                        updateDoc(userRef, { createdAt: serverTimestamp() }).catch(() => {});
+                    }
+                }).catch(() => {});
                 
                 // Listen for real-time changes to the user's block status
                 unsubscribeUserStatus = onSnapshot(userRef, (docSnap) => {
@@ -2284,15 +2342,45 @@
                 const user = result.user;
                 const userDocRef = doc(db, 'users', user.uid);
                 const docSnap = await getDoc(userDocRef);
-                if (!docSnap.exists()) {
-                     await setDoc(userDocRef, { email: user.email, name: user.displayName, photoURL: user.photoURL, cart: {}, wishlist: {}, usedCoupons: [], mobile: '', location: '', isBlocked: false });
-                }
+             if (!docSnap.exists()) {
+                 await setDoc(userDocRef, { email: user.email, name: user.displayName, photoURL: user.photoURL, cart: {}, wishlist: {}, usedCoupons: [], mobile: '', location: '', isBlocked: false, createdAt: serverTimestamp() });
+             } else if (!docSnap.data()?.createdAt) {
+                 await updateDoc(userDocRef, { createdAt: serverTimestamp() });
+             }
                 closeDrawer();
                 showToast('toast-login-success');
             } catch (error) {
                 console.error("Google sign-in error", error);
                 if (error.code === 'auth/unauthorized-domain') {
                     DOMElements.authError.textContent = "This domain is not authorized. Please add it in your Firebase console.";
+                } else {
+                    DOMElements.authError.textContent = error.message;
+                }
+            }
+        }
+
+        async function handleFacebookLogin() {
+            const provider = new FacebookAuthProvider();
+            // Optional: request additional scopes
+            // provider.addScope('public_profile');
+            try {
+                const result = await signInWithPopup(auth, provider);
+                const user = result.user;
+                const userDocRef = doc(db, 'users', user.uid);
+                const docSnap = await getDoc(userDocRef);
+                if (!docSnap.exists()) {
+                    await setDoc(userDocRef, { email: user.email || '', name: user.displayName || 'Facebook User', photoURL: user.photoURL || '', cart: {}, wishlist: {}, usedCoupons: [], mobile: '', location: '', isBlocked: false, createdAt: serverTimestamp() });
+                } else if (!docSnap.data()?.createdAt) {
+                    await updateDoc(userDocRef, { createdAt: serverTimestamp() });
+                }
+                closeDrawer();
+                showToast('toast-login-success');
+            } catch (error) {
+                console.error('Facebook sign-in error', error);
+                if (error.code === 'auth/account-exists-with-different-credential') {
+                    DOMElements.authError.textContent = 'An account already exists with the same email. Please sign in with the provider you used previously.';
+                } else if (error.code === 'auth/unauthorized-domain') {
+                    DOMElements.authError.textContent = 'This domain is not authorized for Facebook login. Add it in your Firebase console Auth settings.';
                 } else {
                     DOMElements.authError.textContent = error.message;
                 }
@@ -2312,16 +2400,30 @@
         }
 
         function toggleAuthForms(formToShow) {
-            DOMElements.authError.textContent = ''; // Clear previous errors
-            if (formToShow === 'register') {
-                DOMElements.loginForm.classList.add('hidden');
-                DOMElements.registerForm.classList.remove('hidden');
-                DOMElements.profileDrawerTitle.textContent = translations[currentLanguage]['register'];
+            DOMElements.authError.textContent = '';
+            // Hide all
+            DOMElements.loginForm.classList.add('hidden');
+            DOMElements.registerForm.classList.add('hidden');
+            if (DOMElements.resetForm) DOMElements.resetForm.classList.add('hidden');
 
+            if (formToShow === 'register') {
+                DOMElements.registerForm.classList.remove('hidden');
+                DOMElements.profileDrawerTitle.textContent = translations[currentLanguage]['register'] || 'Register';
+            } else if (formToShow === 'reset') {
+                if (DOMElements.resetForm) {
+                    // Prefill email from login form if present
+                    const loginEmail = document.getElementById('login-email')?.value || '';
+                    if (loginEmail) DOMElements.resetEmail.value = loginEmail;
+                    DOMElements.resetForm.classList.remove('hidden');
+                    DOMElements.profileDrawerTitle.textContent = 'Reset Password';
+                } else {
+                    // fallback to login
+                    DOMElements.loginForm.classList.remove('hidden');
+                    DOMElements.profileDrawerTitle.textContent = translations[currentLanguage]['login'] || 'Login';
+                }
             } else {
-                DOMElements.registerForm.classList.add('hidden');
                 DOMElements.loginForm.classList.remove('hidden');
-                DOMElements.profileDrawerTitle.textContent = translations[currentLanguage]['login'];
+                DOMElements.profileDrawerTitle.textContent = translations[currentLanguage]['login'] || 'Login';
             }
         }
 
@@ -2340,7 +2442,7 @@
                     displayName: name
                 });
                 const userDocRef = doc(db, 'users', userCredential.user.uid);
-                await setDoc(userDocRef, { email: userCredential.user.email, name, mobile, location, cart: {}, wishlist: {}, usedCoupons: [], isBlocked: false });
+                await setDoc(userDocRef, { email: userCredential.user.email, name, mobile, location, cart: {}, wishlist: {}, usedCoupons: [], isBlocked: false, createdAt: serverTimestamp() });
 
                 closeDrawer();
                 showToast('toast-register-success', true); 
@@ -2361,7 +2463,102 @@
                 closeDrawer();
                 showToast('toast-login-success');
             } catch (error) {
-                 DOMElements.authError.textContent = error.message;
+                 // Better messaging for common cases
+                 if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') {
+                     try {
+                         const methods = await fetchSignInMethodsForEmail(auth, email);
+                         if (!methods || methods.length === 0) {
+                             // No account exists for this email
+                             DOMElements.authError.textContent = currentLanguage === 'bn'
+                                 ? "আপনার কোন অ্যাকাউন্ট নেই। অনুগ্রহ করে একটি অ্যাকাউন্ট তৈরি করুন।"
+                                 : "You don't have an account. Please create one.";
+                         } else {
+                             // Account exists but password is wrong or signed up with provider
+                             if (methods.includes('password')) {
+                                 DOMElements.authError.textContent = currentLanguage === 'bn'
+                                     ? "পাসওয়ার্ড সঠিক নয়। অনুগ্রহ করে আবার চেষ্টা করুন।"
+                                     : "Incorrect password. Please try again.";
+                             } else if (methods.includes('google.com') || methods.includes('facebook.com')) {
+                                 DOMElements.authError.textContent = currentLanguage === 'bn'
+                                     ? "আপনি সোশ্যাল লগইন দিয়ে সাইন আপ করেছেন। অনুগ্রহ করে সেই প্রোভাইডার দিয়ে লগইন করুন।"
+                                     : "This email is registered via social login. Please sign in with that provider.";
+                             } else {
+                                 DOMElements.authError.textContent = error.message;
+                             }
+                         }
+                     } catch (e2) {
+                         DOMElements.authError.textContent = currentLanguage === 'bn'
+                             ? "লগইন করতে ব্যর্থ হয়েছে। অনুগ্রহ করে তথ্যগুলো যাচাই করুন।"
+                             : "Login failed. Please verify your details.";
+                     }
+                 } else if (error.code === 'auth/user-not-found') {
+                     DOMElements.authError.textContent = currentLanguage === 'bn'
+                         ? "আপনার কোন অ্যাকাউন্ট নেই। অনুগ্রহ করে একটি অ্যাকাউন্ট তৈরি করুন।"
+                         : "You don't have an account. Please create one.";
+                 } else if (error.code === 'auth/invalid-email') {
+                     DOMElements.authError.textContent = currentLanguage === 'bn'
+                         ? "ইমেইল ঠিকানা সঠিক নয়।"
+                         : "Invalid email address.";
+                 } else {
+                     DOMElements.authError.textContent = error.message;
+                 }
+            }
+        }
+
+        async function handlePasswordReset(e) {
+            e.preventDefault();
+            try {
+                const email = DOMElements.resetEmail.value.trim();
+                DOMElements.authError.textContent = '';
+                if (!email) {
+                    DOMElements.authError.textContent = 'Please enter your email.';
+                    return;
+                }
+                await sendPasswordResetEmail(auth, email);
+                showToast('Password reset email sent! Check your inbox.');
+                // Navigate back to login
+                toggleAuthForms('login');
+            } catch (error) {
+                console.error('Password reset error', error);
+                if (error.code === 'auth/invalid-email') {
+                    DOMElements.authError.textContent = 'Invalid email address.';
+                } else if (error.code === 'auth/user-not-found') {
+                    DOMElements.authError.textContent = 'No user found with this email.';
+                } else {
+                    DOMElements.authError.textContent = error.message;
+                }
+            }
+        }
+
+        async function reauthenticateForSensitiveAction() {
+            // Try to reauthenticate depending on the provider
+            const user = auth.currentUser;
+            if (!user) throw new Error('No authenticated user');
+            const providerId = user.providerData?.[0]?.providerId;
+
+            try {
+                if (providerId === 'google.com') {
+                    const provider = new GoogleAuthProvider();
+                    await reauthenticateWithPopup(user, provider);
+                } else if (providerId === 'facebook.com') {
+                    const provider = new FacebookAuthProvider();
+                    await reauthenticateWithPopup(user, provider);
+                } else if (providerId === 'password') {
+                    // Prompt the user for their password
+                    const email = user.email;
+                    const password = prompt('Please re-enter your password to confirm deletion:');
+                    if (!password) throw new Error('Reauthentication cancelled.');
+                    const credential = EmailAuthProvider.credential(email, password);
+                    await reauthenticateWithCredential(user, credential);
+                } else {
+                    // Default: try Google popup if available, else fail
+                    const provider = new GoogleAuthProvider();
+                    await reauthenticateWithPopup(user, provider);
+                }
+                return true;
+            } catch (e) {
+                console.error('Reauthentication failed:', e);
+                return false;
             }
         }
 
@@ -2369,10 +2566,10 @@
             if (!currentUser) return;
             const user = currentUser;
 
-            try {
+            const attemptDelete = async () => {
                 // 1. Delete Firestore user document
                 const userDocRef = doc(db, 'users', user.uid);
-                await deleteDoc(userDocRef);
+                await deleteDoc(userDocRef).catch(() => {}); // tolerate if already missing
 
                 // 2. Delete profile photo from Storage (if exists)
                 if (user.photoURL) {
@@ -2382,15 +2579,31 @@
 
                 // 3. Delete the user from Firebase Auth
                 await deleteUser(user);
+            };
 
-                // 4. Re-authenticate anonymously after deletion
-                await signInAnonymously(auth);
-
+            try {
+                await attemptDelete();
+                // Show success immediately if delete succeeded, regardless of anon sign-in
                 showToast('account-deleted', true);
                 closeDrawer();
+                // Best-effort: sign in anonymously (do not impact success)
+                signInAnonymously(auth).catch(e => console.warn('Anonymous sign-in failed after delete (non-fatal):', e));
             } catch (error) {
                 console.error("Error deleting account:", error);
-                // Auth users may need to re-log in recently before deleting.
+                if (error.code === 'auth/requires-recent-login') {
+                    const ok = await reauthenticateForSensitiveAction();
+                    if (ok) {
+                        try {
+                            await attemptDelete();
+                            showToast('account-deleted', true);
+                            closeDrawer();
+                            signInAnonymously(auth).catch(e => console.warn('Anonymous sign-in failed after delete (non-fatal):', e));
+                            return;
+                        } catch (e2) {
+                            console.error('Delete after reauth failed:', e2);
+                        }
+                    }
+                }
                 showToast('delete-account-failed', false);
             }
         }
@@ -2418,6 +2631,7 @@
             const newMobile = DOMElements.editMobileInput.value;
             const newLocation = DOMElements.editLocationInput.value;
             const photoFile = DOMElements.editPhotoInput.files[0];
+            const wantRemovePhoto = DOMElements.editPhotoInput.dataset.remove === 'true';
 
             const authUpdateData = {};
             const firestoreUpdateData = {};
@@ -2440,6 +2654,16 @@
                     const downloadURL = await getDownloadURL(storageRef);
                     authUpdateData.photoURL = downloadURL;
                     firestoreUpdateData.photoURL = downloadURL;
+                } else if (wantRemovePhoto) {
+                    // Remove profile image from Storage and clear URLs
+                    try {
+                        const storageRef = ref(storage, `profileImages/${currentUser.uid}`);
+                        await deleteObject(storageRef);
+                    } catch (e) {
+                        console.log('No profile image to delete or permission denied.', e);
+                    }
+                    authUpdateData.photoURL = null;
+                    firestoreUpdateData.photoURL = deleteField();
                 }
 
                 if (Object.keys(authUpdateData).length > 0) {
@@ -2451,6 +2675,15 @@
                     await updateDoc(userDocRef, firestoreUpdateData);
                 }
                 
+                // Reset file input and remove flag, update profile avatar preview
+                DOMElements.editPhotoInput.value = '';
+                delete DOMElements.editPhotoInput.dataset.remove;
+                if (authUpdateData.photoURL === null) {
+                    // Removed photo
+                    DOMElements.userPhoto.src = 'https://placehold.co/96x96/6a0dad/white?text=User';
+                } else if (authUpdateData.photoURL) {
+                    DOMElements.userPhoto.src = authUpdateData.photoURL;
+                }
                 showToast('profile-updated');
                 DOMElements.editProfileForm.classList.add('hidden');
                 DOMElements.userProfileView.classList.remove('hidden');
@@ -2762,15 +2995,16 @@
                 return;
             }
 
-            const couponRef = doc(db, 'coupons', couponCode);
-            const couponSnap = await getDoc(couponRef);
+            // Query coupon by 'code' field to support arbitrary document IDs
+            const couponQuery = query(collection(db, 'coupons'), where('code', '==', couponCode));
+            const couponQuerySnap = await getDocs(couponQuery);
 
-            if (!couponSnap.exists()) {
+            if (couponQuerySnap.empty) {
                 showToast('toast-coupon-invalid', false);
                 return;
             }
 
-            const couponData = couponSnap.data();
+            const couponData = couponQuerySnap.docs[0].data();
             const subtotal = Array.from(localCartCache.values()).reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
             if (subtotal < (couponData.minSpend || 0)) {
@@ -2799,9 +3033,11 @@
             }
 
             if (couponData.type === 'percentage') {
-                discountAmount = (subtotal * couponData.value) / 100;
+                const percent = Number(couponData.value) || 0;
+                discountAmount = Math.max(0, (subtotal * percent) / 100);
             } else if (couponData.type === 'fixed') {
-                discountAmount = couponData.value;
+                const fixed = Number(couponData.value ?? couponData.discountValue) || 0;
+                discountAmount = Math.min(fixed, subtotal);
             } else {
                 discountAmount = 0;
             }
@@ -2889,12 +3125,20 @@
             }
 
             const statuses = ['Pending', 'Confirmed', 'Shipped', 'Out for delivery', 'Delivered'];
+            // Helper to normalize status strings (handles case, hyphens, underscores, extra spaces)
+            const normalizeStatus = (str) => (str || '')
+                .toString()
+                .trim()
+                .toLowerCase()
+                .replace(/[-_]/g, ' ')
+                .replace(/\s+/g, ' ');
+            const normalizedStatuses = statuses.map(s => normalizeStatus(s));
             
             const renderTrackerSteps = (orderStatus) => {
-                const status = (orderStatus || 'N/A').toLowerCase();
+                const status = normalizeStatus(orderStatus || 'N/A');
                 if (status === 'cancelled') return '';
                 
-                const currentStatusIndex = statuses.map(s => s.toLowerCase()).indexOf(status);
+                const currentStatusIndex = normalizedStatuses.indexOf(status);
                 
                 let html = '';
                 
@@ -2903,12 +3147,12 @@
 
                 // Render nodes and connectors
                 statuses.forEach((step, index) => {
-                    const isComplete = currentStatusIndex >= index;
-                    const isPreviousComplete = currentStatusIndex >= index - 1;
+                    const isStepComplete = currentStatusIndex >= index;
+                    const connectorActive = currentStatusIndex > index; // Connector between this step and next is active only if we've progressed past this step
                     const isLastStep = index === statuses.length - 1;
                     
-                    const circleClass = isComplete ? 'bg-green-500 border-green-500 text-white' : 'bg-white dark:bg-gray-700 border-gray-400 text-gray-500';
-                    const labelColor = isComplete ? 'text-gray-700 dark:text-gray-100' : 'text-gray-500';
+                    const circleClass = isStepComplete ? 'bg-green-500 border-green-500 text-white' : 'bg-white dark:bg-gray-700 border-gray-400 text-gray-500';
+                    const labelColor = isStepComplete ? 'text-gray-700 dark:text-gray-100' : 'text-gray-500';
                     
                     // Render Node (Circle + Label)
                     html += `
@@ -2921,7 +3165,7 @@
                     
                     // Render Connector Line (Appears between nodes)
                     if (!isLastStep) {
-                        const connectorClass = isPreviousComplete ? 'active' : '';
+                        const connectorClass = connectorActive ? 'active' : '';
 
                         // Connector line is rendered in the gap between two fixed-width tracker-node elements
                         html += `
@@ -2936,7 +3180,8 @@
             }
 
             container.innerHTML = userOrders.map(order => {
-                const status = (order.status || 'N/A').toLowerCase();
+                const rawStatus = order.status || 'N/A';
+                const status = normalizeStatus(rawStatus);
                 const orderDate = order.createdAt?.toDate().toLocaleDateString('en-GB');
                 const orderTime = order.createdAt?.toDate().toLocaleTimeString('en-US');
                 const isCancelled = status === 'cancelled';
@@ -2945,12 +3190,13 @@
                 let statusBgClass = 'bg-gray-500';
                 if (status === 'delivered') { statusBgClass = 'bg-green-500'; }
                 else if (status === 'cancelled') { statusBgClass = 'bg-red-500'; }
-                else if (status === 'shipped' || status === 'out for delivery') { statusBgClass = 'bg-theme-blue'; } // FIX: Changed to theme-blue for out-for-delivery
+                else if (status === 'shipped' || status === 'out for delivery') { statusBgClass = 'bg-theme-blue'; }
                 else if (status === 'confirmed' || status === 'pending') { statusBgClass = 'bg-yellow-500'; }
                 
                 const statusTextColor = 'text-white';
                 
                 const itemRows = (order.items || []).map(item => {
+                    // Variants text
                     let variants = '';
                     if (item.size || item.color || item.storage) {
                         const parts = [];
@@ -2959,13 +3205,29 @@
                         if (item.storage) parts.push(`Storage: ${item.storage}`);
                         variants = ` [${parts.join(', ')}]`;
                     }
-                    
-                    const itemName = `${item.name}${variants} (x${item.quantity})`;
-                
+
+                    const title = `${item.name || 'Product'}${variants} (x${item.quantity || 1})`;
+                    const imgSrc = item.image || 'https://placehold.co/80x80/ccc/000?text=Image';
+                    const hasProduct = !!item.productId;
+                    const priceText = `৳${((item.price || 0) * (item.quantity || 0)).toFixed(2)}`;
+
+                    const titleHtml = hasProduct
+                        ? `<button class="text-left text-base text-gray-800 dark:text-gray-200 hover:underline" onclick="showProductDetails('${item.productId}')">${title}</button>`
+                        : `<span class="text-base text-gray-800 dark:text-gray-200">${title}</span>`;
+
+                    const imageHtml = hasProduct
+                        ? `<img src="${imgSrc}" alt="${item.name || 'Product'}" class="w-14 h-14 rounded-lg object-cover cursor-pointer" onerror="this.onerror=null;this.src='https://placehold.co/80x80/ccc/000?text=Image';" onclick="showProductDetails('${item.productId}')">`
+                        : `<img src="${imgSrc}" alt="${item.name || 'Product'}" class="w-14 h-14 rounded-lg object-cover" onerror="this.onerror=null;this.src='https://placehold.co/80x80/ccc/000?text=Image';">`;
+
                     return `
-                        <div class="flex justify-between items-center py-2">
-                            <p class="text-base text-gray-800 dark:text-gray-200">${itemName}</p>
-                            <p class="font-semibold text-base text-price-black dark:text-gray-100">৳${(item.price * item.quantity).toFixed(2)}</p>
+                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 py-3">
+                            <div class="flex items-center gap-3 min-w-0">
+                                ${imageHtml}
+                                <div class="flex flex-col min-w-0">
+                                    <div class="break-words">${titleHtml}</div>
+                                </div>
+                            </div>
+                            <p class="font-semibold text-sm sm:text-base text-price-black dark:text-gray-100">${priceText}</p>
                         </div>
                     `;
                 }).join('');
@@ -2978,15 +3240,15 @@
                 return `
                     <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-100">
                         <!-- Top Header Row -->
-                        <div class="flex justify-between items-start">
+                        <div class="flex flex-col md:flex-row md:justify-between md:items-start gap-3">
                             <div>
                                 <p class="font-bold text-lg text-theme-purple">Order ID: <span class="text-purple-600">${order.orderId}</span></p>
                                 <p class="text-xs text-gray-500 mt-1">Placed on: ${orderDate} at ${orderTime}</p>
                             </div>
-                            <div class="flex flex-col items-end">
+                            <div class="flex flex-col md:items-end">
                                  <p class="font-bold text-xl text-theme-blue mb-1">৳${order.totalAmount.toFixed(2)}</p>
                                  <span class="text-xs font-semibold px-3 py-1 rounded-full ${statusBgClass} ${statusTextColor} uppercase">
-                                    ${order.status}
+                                    ${rawStatus}
                                  </span>
                             </div>
                         </div>
@@ -3340,9 +3602,11 @@
             
             // 3. Attach Event Listeners
             DOMElements.loginBtn.addEventListener('click', handleGoogleLogin);
+            if (DOMElements.loginFacebookBtn) DOMElements.loginFacebookBtn.addEventListener('click', handleFacebookLogin);
             DOMElements.logoutBtn.addEventListener('click', handleLogout); 
             DOMElements.loginForm.addEventListener('submit', handleLogin);
             DOMElements.registerForm.addEventListener('submit', handleRegister);
+            if (DOMElements.resetForm) DOMElements.resetForm.addEventListener('submit', handlePasswordReset);
             DOMElements.checkoutBtn.addEventListener('click', openPaymentModal);
             DOMElements.confirmOrderBtn.addEventListener('click', handlePlaceOrder);
             DOMElements.couponForm.addEventListener('submit', handleApplyCoupon);
@@ -3378,12 +3642,24 @@
                 DOMElements.editNameInput.value = currentUser.displayName || '';
                 DOMElements.editMobileInput.value = currentUserData?.mobile || '';
                 DOMElements.editLocationInput.value = currentUserData?.location || '';
+                // Clear any previous remove flag
+                delete DOMElements.editPhotoInput.dataset.remove;
             });
 
             DOMElements.cancelEditBtn.addEventListener('click', () => {
                 DOMElements.editProfileForm.classList.add('hidden');
                 DOMElements.userProfileView.classList.remove('hidden');
             });
+
+            // Remove Photo handler
+            const removeBtn = document.getElementById('remove-photo-btn');
+            if (removeBtn) {
+                removeBtn.addEventListener('click', () => {
+                    DOMElements.editPhotoInput.value = '';
+                    DOMElements.editPhotoInput.dataset.remove = 'true';
+                    DOMElements.editPhotoPreview.src = 'https://placehold.co/96x96/6a0dad/white?text=User';
+                });
+            }
 
             DOMElements.showRegisterLink.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -3393,6 +3669,8 @@
                 e.preventDefault();
                 toggleAuthForms('login');
             });
+            if (DOMElements.showResetLink) DOMElements.showResetLink.addEventListener('click', (e) => { e.preventDefault(); toggleAuthForms('reset'); });
+            if (DOMElements.showLoginFromResetLink) DOMElements.showLoginFromResetLink.addEventListener('click', (e) => { e.preventDefault(); toggleAuthForms('login'); });
 
             document.querySelectorAll('input[name="main-payment"]').forEach(radio => {
                 radio.addEventListener('change', (e) => {
