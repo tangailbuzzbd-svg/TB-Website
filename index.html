@@ -2209,27 +2209,49 @@
                 DOMElements.cartItems.innerHTML = `<p data-lang="cart-empty" class="text-center text-gray-500">${translations[currentLanguage]['cart-empty']}</p>`;
             } else {
                 for (const [cartItemId, item] of localCartCache.entries()) {
-                    let variantsHtml = '<div class="text-xs text-gray-500 mt-1">';
+                    // Build variants text
+                    let variantsHtml = '<div class="text-[11px] text-gray-500 mt-0.5">';
                     if (item.size) variantsHtml += `Size: ${item.size} `;
                     if (item.color) variantsHtml += `Color: ${item.color} `;
                     if (item.storage) variantsHtml += `Storage: ${item.storage} `;
                     variantsHtml += '</div>';
 
+                    // Try to enrich with product data for discount/original price
+                    const productRef = productsData?.find(p => p.id === item.productId);
+                    const hasDiscount = !!(productRef && productRef.isOffer && productRef.originalPrice && productRef.originalPrice > (productRef.price || item.price || 0));
+                    const discountPercent = hasDiscount ? Math.round(((productRef.originalPrice - (productRef.price || item.price || 0)) / productRef.originalPrice) * 100) : 0;
+
+                    let priceHtml = '';
+                    if (hasDiscount) {
+                        priceHtml = `
+                            <div class="flex items-baseline gap-2 flex-wrap mt-1">
+                                <span class="text-base sm:text-md font-bold text-price-black">৳${(item.price || 0).toFixed(2)}</span>
+                                <span class="text-xs text-gray-400 line-through">৳${Number(productRef.originalPrice).toFixed(2)}</span>
+                                <span class="text-[10px] font-bold text-red-600 bg-red-50 px-1.5 py-0.5 rounded">-${discountPercent}%</span>
+                            </div>`;
+                    } else {
+                        priceHtml = `<div class="mt-1"><span class="text-base sm:text-md font-bold text-price-black">৳${(item.price || 0).toFixed(2)}</span></div>`;
+                    }
+
+                    // Compose each cart row (mobile-first, Temu-like compact)
                     cartHtml += `
-                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-gray-100 dark:bg-gray-700 p-3 sm:p-4 rounded-xl shadow-inner">
-                            <div class="flex items-center gap-3 min-w-0">
+                        <div class="rounded-2xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 p-3 sm:p-4 shadow-sm">
+                            <div class="flex gap-3">
                                 <img src="${item.image || 'https://placehold.co/80x80/ccc/000?text=Image'}" alt="${item.name}" class="w-16 h-16 sm:w-20 sm:h-20 rounded-xl object-cover flex-shrink-0" onerror="this.onerror=null;this.src='https://placehold.co/80x80/ccc/000?text=Image';">
-                                <div class="min-w-0">
-                                    <h4 class="text-base sm:text-lg font-semibold text-theme-purple break-words">${item.name}</h4>
+                                <div class="flex-1 min-w-0">
+                                    <h4 class="text-[15px] sm:text-base font-semibold text-theme-purple leading-tight break-words">${item.name}</h4>
                                     ${variantsHtml}
-                                    <p class="text-sm sm:text-md font-bold text-price-black mt-1">৳${(item.price || 0).toFixed(2)}</p>
+                                    ${priceHtml}
                                 </div>
+                                <button onclick="removeFromCart('${cartItemId}')" class="text-red-500 hover:text-red-600 ml-1 self-start"><i class="fas fa-trash"></i></button>
                             </div>
-                            <div class="flex items-center gap-2 sm:gap-3">
-                                <button onclick="updateQuantity('${cartItemId}', -1)" class="w-8 h-8 rounded-full bg-gray-300 hover:bg-gray-400 transition-colors text-dark dark:bg-gray-600 dark:text-gray-200">-</button>
-                                <span class="w-8 text-center text-dark">${item.quantity}</span>
-                                <button onclick="updateQuantity('${cartItemId}', 1)" class="w-8 h-8 rounded-full bg-gray-300 hover:bg-gray-400 transition-colors text-dark dark:bg-gray-600 dark:text-gray-200">+</button>
-                                <button onclick="removeFromCart('${cartItemId}')" class="text-red-500 hover:text-red-700 sm:ml-2"><i class="fas fa-trash"></i></button>
+                            <div class="mt-2 flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <button onclick="updateQuantity('${cartItemId}', -1)" class="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-600 text-dark dark:text-gray-200 hover:bg-gray-300 transition-colors">-</button>
+                                    <span class="w-8 text-center text-dark">${item.quantity}</span>
+                                    <button onclick="updateQuantity('${cartItemId}', 1)" class="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-600 text-dark dark:text-gray-200 hover:bg-gray-300 transition-colors">+</button>
+                                </div>
+                                <div class="text-[12px] text-gray-500">৳${((item.price || 0) * (item.quantity || 0)).toFixed(2)}</div>
                             </div>
                         </div>
                     `;
