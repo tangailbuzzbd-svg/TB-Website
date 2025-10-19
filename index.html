@@ -583,7 +583,7 @@
             <!-- Featured Products Section -->
             <section id="products" class="container mx-auto px-4 py-16">
                 <!-- NEW: Breadcrumb and Sub-Category Header -->
-                <div id="category-header" class="mb-8 p-4 bg-white dark:bg-gray-800 rounded-xl shadow-md border dark:border-gray-700">
+                <div id="category-header" class="hidden mb-8 p-4 bg-white dark:bg-gray-800 rounded-xl shadow-md border dark:border-gray-700">
                     <div id="breadcrumb" class="text-sm text-gray-500 dark:text-gray-400 mb-4">
                         <a href="javascript:void(0);" onclick="renderAllProducts()" class="text-theme-blue hover:underline" data-lang="all-products">সকল পণ্য</a>
                         <span id="category-path"></span>
@@ -3218,6 +3218,29 @@
                 const orderDate = order.createdAt?.toDate().toLocaleDateString('en-GB');
                 const orderTime = order.createdAt?.toDate().toLocaleTimeString('en-US');
                 const isCancelled = status === 'cancelled';
+                const canCancel = status === 'pending';
+
+                // Derive expected/estimated delivery time from multiple possible fields
+                const deliveryValue = order.expectedDelivery || order.deliveryTime || order.delivery_date || order.deliveryDate || order.eta;
+                let expectedDeliveryHtml = '';
+                if (deliveryValue) {
+                    let dStr = '';
+                    try {
+                        if (typeof deliveryValue?.toDate === 'function') {
+                            dStr = deliveryValue.toDate().toLocaleString();
+                        } else if (typeof deliveryValue === 'number') {
+                            const ms = deliveryValue < 1e12 ? deliveryValue * 1000 : deliveryValue;
+                            dStr = new Date(ms).toLocaleString();
+                        } else if (typeof deliveryValue === 'object' && typeof deliveryValue.seconds === 'number') {
+                            dStr = new Date(deliveryValue.seconds * 1000).toLocaleString();
+                        } else if (typeof deliveryValue === 'string') {
+                            dStr = deliveryValue;
+                        }
+                    } catch {}
+                    if (dStr) {
+                        expectedDeliveryHtml = `<p class="text-xs text-gray-600 mt-1">Estimated Delivery: ${dStr}</p>`;
+                    }
+                }
 
                 // Use theme colors for status badges
                 let statusBgClass = 'bg-gray-500';
@@ -3277,6 +3300,7 @@
                             <div>
                                 <p class="font-bold text-lg text-theme-purple">Order ID: <span class="text-purple-600">${order.orderId}</span></p>
                                 <p class="text-xs text-gray-500 mt-1">Placed on: ${orderDate} at ${orderTime}</p>
+                                ${expectedDeliveryHtml}
                             </div>
                             <div class="flex flex-col md:items-end">
                                  <p class="font-bold text-xl text-theme-blue mb-1">৳${order.totalAmount.toFixed(2)}</p>
@@ -3299,13 +3323,45 @@
                             </div>
                         </div>
 
-                        <!-- Footer: Invoice Button -->
-                        <div class="mt-4 flex justify-end">
-                            ${invoiceButton}
+                        <!-- Footer: Actions -->
+                        <div class="mt-4 flex flex-col sm:flex-row gap-3 sm:justify-between sm:items-center">
+                            <div></div>
+                            <div class="flex gap-3 justify-end">
+                                ${canCancel ? `<button class="cancel-order-btn bg-red-500 text-white py-2 px-4 rounded-lg font-semibold hover:bg-red-600 transition-colors" data-order-id="${order.id}">Cancel Order</button>` : ''}
+                                ${invoiceButton}
+                            </div>
                         </div>
                     </div>
                 `;
             }).join('');
+
+            // Wire up cancel buttons
+            container.querySelectorAll('.cancel-order-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const orderId = e.currentTarget.getAttribute('data-order-id');
+                    showConfirmModal('Are you sure you want to cancel this order?', 'Cancel Order', async () => {
+                        try {
+                            const orderRef = doc(db, 'orders', orderId);
+                            const snap = await getDoc(orderRef);
+                            if (!snap.exists()) {
+                                showToast('Order not found', false);
+                                return;
+                            }
+                            const normalize = (s) => (s || '').toString().trim().toLowerCase().replace(/[-_]/g, ' ').replace(/\s+/g, ' ');
+                            const currentStatus = normalize(snap.data().status);
+                            if (currentStatus !== 'pending') {
+                                showToast('Order can no longer be cancelled', false);
+                                return;
+                            }
+                            await updateDoc(orderRef, { status: 'Cancelled' });
+                            showToast('Order cancelled successfully');
+                        } catch (err) {
+                            console.error('Cancel order failed:', err);
+                            showToast('Failed to cancel order', false);
+                        }
+                    });
+                });
+            });
         }
 
         // --- Emergency Chat Logic ---
