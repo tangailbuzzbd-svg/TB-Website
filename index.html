@@ -1881,10 +1881,75 @@
             }
         }
         
-        function showProductDetails(productId) {
-            selectedVariants = {};
-            const product = productsData.find(p => p.id === productId);
-            if (!product) return;
+        async function showProductDetails(productId, skuEnc = '', modelEnc = '', nameEnc = '') {
+            try {
+                selectedVariants = {};
+                const fallbackSku = skuEnc ? decodeURIComponent(skuEnc) : '';
+                const fallbackModel = modelEnc ? decodeURIComponent(modelEnc) : '';
+                const fallbackName = nameEnc ? decodeURIComponent(nameEnc) : '';
+
+                let product = Array.isArray(productsData) ? productsData.find(p => p.id === productId) : null;
+                if (!product && window.db && typeof window.db === 'object') {
+                    try {
+                        const ref = doc(db, 'products', String(productId));
+                        const snap = await getDoc(ref);
+                        if (snap && snap.exists()) {
+                            product = { id: snap.id, ...snap.data() };
+                            // Cache it for later to speed up next visit
+                            if (Array.isArray(productsData)) {
+                                productsData.push(product);
+                            }
+                        }
+                    } catch (e) {
+                        console.warn('Fallback fetch product failed', e);
+                    }
+                    // If still not found, try queries by SKU / modelID / name
+                    if (!product) {
+                        try {
+                            if (fallbackSku) {
+                                const q1 = query(collection(db, 'products'), where('sku', '==', fallbackSku));
+                                const qs1 = await getDocs(q1);
+                                if (!qs1.empty) {
+                                    const d = qs1.docs[0];
+                                    product = { id: d.id, ...d.data() };
+                                }
+                            }
+                            if (!product && fallbackSku) {
+                                const q1b = query(collection(db, 'products'), where('SKU', '==', fallbackSku));
+                                const qs1b = await getDocs(q1b);
+                                if (!qs1b.empty) {
+                                    const d = qs1b.docs[0];
+                                    product = { id: d.id, ...d.data() };
+                                }
+                            }
+                            if (!product && fallbackModel) {
+                                const q2 = query(collection(db, 'products'), where('modelID', '==', fallbackModel));
+                                const qs2 = await getDocs(q2);
+                                if (!qs2.empty) {
+                                    const d = qs2.docs[0];
+                                    product = { id: d.id, ...d.data() };
+                                }
+                            }
+                            if (!product && fallbackName) {
+                                const q3 = query(collection(db, 'products'), where('name', '==', fallbackName));
+                                const qs3 = await getDocs(q3);
+                                if (!qs3.empty) {
+                                    const d = qs3.docs[0];
+                                    product = { id: d.id, ...d.data() };
+                                }
+                            }
+                            if (product && Array.isArray(productsData)) {
+                                productsData.push(product);
+                            }
+                        } catch (e) {
+                            console.warn('Fallback query by fields failed', e);
+                        }
+                    }
+                }
+                if (!product) {
+                    if (typeof showToast === 'function') showToast('Product not found', false);
+                    return;
+                }
 
             const detailsPage = document.getElementById('product-details-page');
             if(!detailsPage) return;
@@ -2006,6 +2071,10 @@
 
             showPage('product-details-page');
             updateTextContent();
+            } catch (err) {
+                console.error('showProductDetails failed', err);
+                if (typeof showToast === 'function') showToast('Failed to open product', false);
+            }
         }
 
         function renderThumbnails(thumbnails) {
@@ -3570,8 +3639,8 @@
                 .replace(/\s+/g, ' ');
             const normalizedStatuses = statuses.map(s => normalizeStatus(s));
             
-            const renderTrackerSteps = (orderStatus) => {
-                const status = normalizeStatus(orderStatus || 'N/A');
+            const renderTrackerSteps = (order) => {
+                const status = normalizeStatus(order?.status || 'N/A');
                 if (status === 'cancelled') return '';
                 
                 const currentStatusIndex = normalizedStatuses.indexOf(status);
@@ -3582,6 +3651,62 @@
                 html += `<div class="tracker-step-container w-full pt-4 pb-4">`;
 
                 // Render nodes and connectors
+                // Helper: parse various timestamp shapes into a Date
+                const parseToDate = (val) => {
+                    try {
+                        if (!val) return null;
+                        if (typeof val?.toDate === 'function') return val.toDate();
+                        if (typeof val === 'number') { const ms = val < 1e12 ? val * 1000 : val; return new Date(ms); }
+                        if (typeof val === 'object' && typeof val.seconds === 'number') return new Date(val.seconds * 1000);
+                        if (typeof val === 'string') { const d = new Date(val); return isNaN(d.getTime()) ? null : d; }
+                    } catch {}
+                    return null;
+                };
+                // Helper: resolve timestamp for a given step name from multiple fields
+                const resolveStepDate = (o, stepName) => {
+                    if (!o) return null;
+                    const norm = normalizeStatus(stepName); // e.g., 'out for delivery'
+                    const camel = norm.replace(/\s+(.)/g, (m, g1) => g1.toUpperCase()); // 'outForDelivery'
+                    const pascal = camel.charAt(0).toUpperCase() + camel.slice(1);
+                    const upper = stepName.toUpperCase();
+                    // Common direct fields
+                    const candidates = [
+                        o?.statusTimestamps?.[norm], o?.statusTimestamps?.[stepName], o?.statusTimestamps?.[camel], o?.statusTimestamps?.[pascal],
+                        o?.[`${camel}At`], o?.[`${pascal}At`], o?.[`${norm}At`], o?.[`${stepName}At`],
+                        o?.[norm], o?.[camel], o?.[pascal], o?.[stepName], o?.[upper],
+                    ];
+                    // Special-case aliases
+                    if (norm === 'pending') candidates.push(o?.createdAt);
+                    if (norm === 'delivered') candidates.push(
+                        o?.deliveredAt, o?.deliveredTime, o?.deliveredOn, o?.deliveredDate, o?.deliveryCompletedAt, o?.completedAt,
+                        o?.delivered_at, o?.deliveredTimestamp, o?.deliveredDateTime
+                    );
+                    // Nested common containers
+                    candidates.push(
+                        o?.delivery?.[`${camel}At`], o?.delivery?.[camel], o?.delivery?.deliveredAt,
+                        o?.timeline?.[`${camel}At`], o?.timeline?.[camel], o?.timeline?.deliveredAt
+                    );
+                    // History arrays
+                    const findInHistory = (arr) => {
+                        if (!Array.isArray(arr)) return null;
+                        for (const e of arr) {
+                            const st = normalizeStatus(e?.status || e?.state || e?.label);
+                            if (st === norm) return e.timestamp || e.time || e.at || e.date || e.when;
+                        }
+                        return null;
+                    };
+                    candidates.push(findInHistory(o?.statusHistory));
+                    candidates.push(findInHistory(o?.statusLogs));
+                    candidates.push(findInHistory(o?.logs));
+
+                    // Pick first truthy and parse
+                    for (const c of candidates) {
+                        const d = parseToDate(c);
+                        if (d instanceof Date && !isNaN(d.getTime())) return d;
+                    }
+                    return null;
+                };
+
                 statuses.forEach((step, index) => {
                     const isStepComplete = currentStatusIndex >= index;
                     const connectorActive = currentStatusIndex > index; // Connector between this step and next is active only if we've progressed past this step
@@ -3589,6 +3714,8 @@
                     
                     const circleClass = isStepComplete ? 'bg-green-500 border-green-500 text-white' : 'bg-white dark:bg-gray-700 border-gray-400 text-gray-500';
                     const labelColor = isStepComplete ? 'text-gray-700 dark:text-gray-100' : 'text-gray-500';
+                    const stepDate = isStepComplete ? resolveStepDate(order, step) : null;
+                    const stepDateHtml = stepDate ? `<p class="text-[10px] mt-1 ${isLastStep ? 'text-green-700' : 'text-gray-500'}">${stepDate.toLocaleDateString('en-GB')} at ${stepDate.toLocaleTimeString('en-US')}</p>` : '';
                     
                     // Render Node (Circle + Label)
                     html += `
@@ -3597,6 +3724,7 @@
                                 <i class="fas fa-check text-xs"></i>
                             </div>
                             <p class="text-xs mt-2 ${labelColor}">${step}</p>
+                            ${stepDateHtml}
                         </div>`;
                     
                     // Render Connector Line (Appears between nodes)
@@ -3645,6 +3773,72 @@
                     }
                 }
 
+                // Show actual delivered timestamp when status is delivered
+                let deliveredTimeHtml = '';
+                if (status === 'delivered') {
+                    // Helper to parse various timestamp shapes into a Date
+                    const parseToDate = (val) => {
+                        try {
+                            if (!val) return null;
+                            if (typeof val?.toDate === 'function') return val.toDate(); // Firestore Timestamp
+                            if (typeof val === 'number') {
+                                const ms = val < 1e12 ? val * 1000 : val;
+                                return new Date(ms);
+                            }
+                            if (typeof val === 'object' && typeof val.seconds === 'number') {
+                                return new Date(val.seconds * 1000);
+                            }
+                            if (typeof val === 'string') {
+                                const d = new Date(val);
+                                return isNaN(d.getTime()) ? null : d;
+                            }
+                        } catch {}
+                        return null;
+                    };
+
+                    // Resolve delivered timestamp from many possible shapes/fields
+                    const resolveDeliveredTs = (o) => {
+                        let v = (
+                            o.deliveredAt || o.deliveredTime || o.deliveredOn || o.deliveredDate ||
+                            o.deliveryCompletedAt || o.completedAt ||
+                            (o.statusTimestamps && (o.statusTimestamps.delivered || o.statusTimestamps.Delivered || o.statusTimestamps.deliveredAt || o.statusTimestamps.DeliveredAt)) ||
+                            o.delivery_date_delivered || o.deliveryAt || o.delivery_time ||
+                            o.delivered_at || o.deliveredTimestamp || o.deliveredDateTime
+                        );
+                        if (!v && o.delivery) {
+                            v = o.delivery.deliveredAt || o.delivery.deliveredTime || o.delivery.delivered_on || o.delivery.delivered;
+                        }
+                        if (!v && o.timeline) {
+                            v = o.timeline.deliveredAt || o.timeline.delivered || o.timeline.delivered_on;
+                        }
+                        const findInHistory = (arr) => {
+                            if (!Array.isArray(arr)) return null;
+                            for (const e of arr) {
+                                const st = (e?.status || e?.state || e?.label || '').toString().trim().toLowerCase().replace(/[-_]/g, ' ').replace(/\s+/g, ' ');
+                                if (st === 'delivered') {
+                                    return e.timestamp || e.time || e.at || e.date || e.when;
+                                }
+                            }
+                            return null;
+                        };
+                        if (!v) v = findInHistory(o.statusHistory);
+                        if (!v) v = findInHistory(o.statusLogs);
+                        if (!v) v = findInHistory(o.logs);
+                        if (!v && o.updatedAt) v = o.updatedAt; // last resort fallback when marked delivered
+                        const dObj = parseToDate(v);
+                        return dObj ? dObj : (typeof v === 'string' ? v : null);
+                    };
+
+                    const resolved = resolveDeliveredTs(order);
+                    if (resolved instanceof Date) {
+                        const dDate = resolved.toLocaleDateString('en-GB');
+                        const dTime = resolved.toLocaleTimeString('en-US');
+                        deliveredTimeHtml = `<p class=\"text-xs text-green-700 mt-1 text-right self-end\">Delivered on: ${dDate} at ${dTime}</p>`;
+                    } else if (typeof resolved === 'string' && resolved) {
+                        deliveredTimeHtml = `<p class=\"text-xs text-green-700 mt-1 text-right self-end\">Delivered on: ${resolved}</p>`;
+                    }
+                }
+
                 // Use theme colors for status badges
                 let statusBgClass = 'bg-gray-500';
                 if (status === 'delivered') { statusBgClass = 'bg-green-500'; }
@@ -3654,6 +3848,38 @@
                 
                 const statusTextColor = 'text-white';
                 
+                // Helper to resolve a productId from various possible item shapes
+                const resolveProductId = (it) => {
+                    try {
+                        const candidates = [
+                            it.productId, it.productID, it.product_id, it.id, it.pid, it._id, it.docId, it.productDocId
+                        ].filter(Boolean);
+                        if (Array.isArray(productsData) && productsData.length) {
+                            for (const cand of candidates) {
+                                if (productsData.some(p => p.id === cand)) return cand;
+                            }
+                            // Match by SKU if present
+                            if (it.sku) {
+                                const pSku = productsData.find(p => (p.sku || p.SKU) && ((p.sku || p.SKU) === it.sku));
+                                if (pSku) return pSku.id;
+                            }
+                            // Match by modelID if present
+                            if (it.modelID) {
+                                const modelNorm = String(it.modelID).trim().toLowerCase();
+                                const pModel = productsData.find(p => String(p.modelID || '').trim().toLowerCase() === modelNorm);
+                                if (pModel) return pModel.id;
+                            }
+                            // Last resort: match by exact name
+                            if (it.name) {
+                                const nameNorm = String(it.name).trim().toLowerCase();
+                                const matches = productsData.filter(p => String(p.name || '').trim().toLowerCase() === nameNorm);
+                                if (matches.length === 1) return matches[0].id;
+                            }
+                        }
+                    } catch {}
+                    return it?.productId || null;
+                };
+
                 const itemRows = (order.items || []).map(item => {
                     // Variants text
                     let variants = '';
@@ -3667,16 +3893,15 @@
 
                     const title = `${item.name || 'Product'}${variants} (x${item.quantity || 1})`;
                     const imgSrc = item.image || 'https://placehold.co/80x80/ccc/000?text=Image';
-                    const hasProduct = !!item.productId;
+                    const resolvedProductId = resolveProductId(item);
+                    const fallbackSkuEnc = encodeURIComponent(item.sku || '');
+                    const fallbackModelEnc = encodeURIComponent(item.modelID || item.modelId || '');
+                    const fallbackNameEnc = encodeURIComponent(item.name || '');
                     const priceText = `৳${((item.price || 0) * (item.quantity || 0)).toFixed(2)}`;
 
-                    const titleHtml = hasProduct
-                        ? `<button class="text-left text-base text-gray-800 dark:text-gray-200 hover:underline" onclick="showProductDetails('${item.productId}')">${title}</button>`
-                        : `<span class="text-base text-gray-800 dark:text-gray-200">${title}</span>`;
+                    const titleHtml = `<button class="order-item-open text-left text-base text-gray-800 dark:text-gray-200 hover:underline" data-product-id="${resolvedProductId || ''}" data-sku="${item.sku || ''}" data-model="${item.modelID || item.modelId || ''}" data-name="${item.name || ''}">${title}</button>`;
 
-                    const imageHtml = hasProduct
-                        ? `<img src="${imgSrc}" alt="${item.name || 'Product'}" class="w-14 h-14 rounded-lg object-cover cursor-pointer" onerror="this.onerror=null;this.src='https://placehold.co/80x80/ccc/000?text=Image';" onclick="showProductDetails('${item.productId}')">`
-                        : `<img src="${imgSrc}" alt="${item.name || 'Product'}" class="w-14 h-14 rounded-lg object-cover" onerror="this.onerror=null;this.src='https://placehold.co/80x80/ccc/000?text=Image';">`;
+                    const imageHtml = `<img src="${imgSrc}" alt="${item.name || 'Product'}" class="order-item-open w-14 h-14 rounded-lg object-cover cursor-pointer" onerror="this.onerror=null;this.src='https://placehold.co/80x80/ccc/000?text=Image';" data-product-id="${resolvedProductId || ''}" data-sku="${item.sku || ''}" data-model="${item.modelID || item.modelId || ''}" data-name="${item.name || ''}">`;
 
                     return `
                         <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 py-3">
@@ -3703,19 +3928,20 @@
                             <div>
                                 <p class="font-bold text-lg text-theme-purple">Order ID: <span class="text-purple-600">${order.orderId}</span></p>
                                 <p class="text-xs text-gray-500 mt-1">Placed on: ${orderDate} at ${orderTime}</p>
-                                ${expectedDeliveryHtml}
+                                ${status === 'delivered' ? '' : expectedDeliveryHtml}
                             </div>
-                            <div class="flex flex-col md:items-end">
-                                 <p class="font-bold text-xl text-theme-blue mb-1">৳${order.totalAmount.toFixed(2)}</p>
-                                 <span class="text-xs font-semibold px-3 py-1 rounded-full ${statusBgClass} ${statusTextColor} uppercase">
+                            <div class="flex flex-col items-end w-full md:w-auto">
+                                 <p class="font-bold text-xl text-theme-blue mb-1 text-right self-end">৳${order.totalAmount.toFixed(2)}</p>
+                                 <span class="text-xs font-semibold px-3 py-1 rounded-full ${statusBgClass} ${statusTextColor} uppercase self-end">
                                     ${rawStatus}
                                  </span>
+                                 ${deliveredTimeHtml}
                             </div>
                         </div>
 
                         ${isCancelled ? 
                             `<div class="text-center text-red-500 font-bold p-4 bg-red-100 rounded-lg mt-4">Order Cancelled</div>`
-                            : renderTrackerSteps(order.status)
+                            : renderTrackerSteps(order)
                         }
 
                         <!-- Items List -->
@@ -3764,6 +3990,17 @@
                         }
                     });
                 });
+            });
+
+            // Delegated handler for opening product from order list
+            container.addEventListener('click', async (e) => {
+                const trigger = e.target.closest('.order-item-open');
+                if (!trigger) return;
+                const pid = trigger.getAttribute('data-product-id') || '';
+                const sku = trigger.getAttribute('data-sku') || '';
+                const model = trigger.getAttribute('data-model') || '';
+                const name = trigger.getAttribute('data-name') || '';
+                await showProductDetails(pid, encodeURIComponent(sku), encodeURIComponent(model), encodeURIComponent(name));
             });
         }
 
