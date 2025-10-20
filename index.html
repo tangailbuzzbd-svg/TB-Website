@@ -248,28 +248,48 @@
                     </button>
                 </div>
 
-                <!-- Language change option -->
-                <div class="flex items-center space-x-2 text-white font-semibold text-sm">
-                    <a href="javascript:void(0);" id="lang-bn-btn" onclick="setLanguage('bn')" class="hover:text-theme-pink transition-colors">বাংলা</a>
-                    <span class="text-gray-400">|</span>
-                    <a href="javascript:void(0);" id="lang-en-btn" onclick="setLanguage('en')" class="hover:text-theme-pink transition-colors">English</a>
+                <!-- Language Selector (Professional Dropdown) -->
+                <div class="relative" id="lang-selector">
+                    <button id="lang-button" class="flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/40 bg-white/10 hover:bg-white/20 text-white text-sm font-semibold backdrop-blur transition-colors" aria-haspopup="true" aria-expanded="false" title="Language" aria-label="Language" data-lang-title="language" data-lang-aria-label="language">
+                        <i class="fas fa-globe"></i>
+                        <span id="lang-current">বাংলা</span>
+                        <i class="fas fa-chevron-down text-xs opacity-80"></i>
+                    </button>
+                    <div id="lang-menu" class="hidden absolute right-0 mt-2 w-44 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl overflow-hidden z-50">
+                        <button class="lang-option w-full text-left px-3 py-2 text-sm flex items-center gap-2 hover:bg-gray-100 dark:hover:bg-gray-700" data-lang-value="bn">
+                            <span>🇧🇩</span><span>বাংলা</span>
+                        </button>
+                        <button class="lang-option w-full text-left px-3 py-2 text-sm flex items-center gap-2 hover:bg-gray-100 dark:hover:bg-gray-700" data-lang-value="en">
+                            <span>🇬🇧</span><span>English</span>
+                        </button>
+                    </div>
                 </div>
                 
                 <!-- Dark Mode Toggle -->
-                <button id="dark-mode-toggle" class="text-white text-xl p-2 rounded-full hover:bg-white hover:text-theme-blue transition-colors" aria-label="Toggle Dark Mode">
+                <button id="dark-mode-toggle" class="text-white text-xl p-2 rounded-full hover:bg-white hover:text-theme-blue transition-colors flex flex-col items-center" aria-label="Toggle Dark Mode" title="Dark Mode" data-lang-title="dark-mode" data-lang-aria-label="dark-mode">
                     <i class="fas fa-sun" id="dark-mode-icon"></i>
+                    <span class="hidden md:block text-[10px] leading-3 mt-1 text-white/90" data-lang="dark-mode">Dark Mode</span>
                 </button>
                 
-                <div id="profile-icon" class="relative transform hover:scale-110 transition-transform cursor-pointer" onclick="openDrawer('profile-drawer')">
-                    <i class="fas fa-user-circle text-white text-2xl"></i>
+                <!-- Support (Header) -->
+                <div id="emergency-contact-header" class="relative transform hover:scale-110 transition-transform cursor-pointer flex flex-col items-center" title="Support" aria-label="Support" data-lang-title="emergency-contact" data-lang-aria-label="emergency-contact">
+                    <i class="fas fa-headset text-white text-2xl"></i>
+                    <span class="hidden md:block text-[10px] leading-3 mt-1 text-white/90" data-lang="emergency-contact">Support</span>
                 </div>
-                <div class="relative transform hover:scale-110 transition-transform cursor-pointer" onclick="showPage('wishlist-page')">
+                
+                <div id="profile-icon" class="relative transform hover:scale-110 transition-transform cursor-pointer flex flex-col items-center" onclick="openDrawer('profile-drawer')" title="Profile" aria-label="Profile" data-lang-title="profile" data-lang-aria-label="profile">
+                    <i class="fas fa-user-circle text-white text-2xl"></i>
+                    <span class="hidden md:block text-[10px] leading-3 mt-1 text-white/90" data-lang="profile">Profile</span>
+                </div>
+                <div class="relative transform hover:scale-110 transition-transform cursor-pointer flex flex-col items-center" onclick="showPage('wishlist-page')" title="Wishlist" aria-label="Wishlist" data-lang-title="wishlist" data-lang-aria-label="wishlist">
                     <i class="fas fa-heart text-white text-2xl"></i>
                     <span id="wishlist-count-badge" class="absolute -top-2 -right-2 bg-theme-pink text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center hidden">0</span>
+                    <span class="hidden md:block text-[10px] leading-3 mt-1 text-white/90" data-lang="wishlist">Wishlist</span>
                 </div>
-                <div class="relative transform hover:scale-110 transition-transform cursor-pointer" onclick="openDrawer('cart-drawer')">
+                <div class="relative transform hover:scale-110 transition-transform cursor-pointer flex flex-col items-center" onclick="showPage('cart-page')" title="Cart" aria-label="Cart" data-lang-title="cart-short" data-lang-aria-label="cart-short">
                     <i class="fas fa-shopping-cart text-white text-2xl"></i>
                     <span id="cart-count" class="absolute -top-2 -right-2 bg-theme-pink text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">0</span>
+                    <span class="hidden md:block text-[10px] leading-3 mt-1 text-white/90" data-lang="cart-short">Cart</span>
                 </div>
             </div>
         </div>
@@ -495,11 +515,7 @@
                             <i class="fas fa-chevron-right text-sm"></i>
                         </button>
 
-                        <!-- Emergency Contact (Theme Pink) -->
-                        <button id="emergency-contact-btn" class="w-full py-3 bg-theme-pink text-white rounded-xl font-semibold hover:bg-theme-purple transition-colors shadow-md flex items-center justify-between px-4" data-lang="emergency-contact">
-                            <span><i class="fas fa-headset mr-3"></i> Emergency Contact</span>
-                            <i class="fas fa-chevron-right text-sm"></i>
-                        </button>
+                        <!-- Emergency Contact moved to header -->
                         
                         <!-- Edit Profile (Grey/Secondary) -->
                         <button id="edit-profile-btn" class="w-full py-3 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-xl font-semibold hover:bg-gray-300 transition-colors shadow-md flex items-center justify-between px-4">
@@ -551,12 +567,65 @@
         </div>
     </div>
 
+    <!-- Full Page: Cart -->
+    <section id="cart-page" class="page hidden max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl sm:text-3xl font-bold text-theme-purple" data-lang="cart">আপনার কার্ট</h2>
+            <button onclick="showPage('home-page')" class="text-theme-blue hover:text-theme-pink transition-colors text-sm sm:text-base" data-lang="back-to-products">Back to All Products</button>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Items -->
+            <div class="lg:col-span-2 space-y-4" id="cart-page-items">
+                <!-- Will mirror cart items rendering -->
+            </div>
+            <!-- Summary -->
+            <aside class="lg:col-span-1">
+                <div class="p-5 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm space-y-4">
+                    <h3 class="text-xl font-bold text-theme-purple" data-lang="cart">আপনার কার্ট</h3>
+                    <div id="cart-page-coupons">
+                        <h4 class="text-base font-bold text-theme-purple mb-2" data-lang="available-coupons">উপলব্ধ কুপন</h4>
+                        <div id="cart-page-coupons-list" class="space-y-3"></div>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span data-lang="subtotal">Subtotal:</span>
+                        <span id="cart-page-subtotal" class="text-dark">৳0.00</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span data-lang="delivery-charge">Delivery Charge:</span>
+                        <span id="cart-page-delivery" class="text-dark">৳0.00</span>
+                    </div>
+                    <div id="cart-page-discount-row" class="hidden flex justify-between text-sm text-green-600">
+                        <span data-lang="discount">Discount:</span>
+                        <span id="cart-page-discount">- ৳0.00</span>
+                    </div>
+                    <div class="flex justify-between text-lg font-semibold border-t pt-2 mt-2">
+                        <span data-lang="total">Total:</span>
+                        <span id="cart-page-total" class="text-theme-blue">৳0.00</span>
+                    </div>
+                    <form id="cart-page-coupon-form" class="flex flex-col sm:flex-row gap-2">
+                        <input type="text" id="cart-page-coupon-input" class="flex-grow px-3 py-2 text-sm sm:text-base border rounded-full focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white" data-lang-placeholder="coupon-placeholder" placeholder="Enter Coupon Code">
+                        <button type="submit" class="bg-theme-blue text-white px-4 py-2 text-sm sm:text-base rounded-full font-semibold hover:bg-theme-purple transition-colors" data-lang="apply-coupon">Apply</button>
+                    </form>
+                    <button id="cart-page-checkout-btn" class="w-full bg-theme-pink text-white py-3 rounded-full font-bold hover:bg-theme-purple transition-colors shadow-lg" data-lang="checkout">চেকআউট করুন</button>
+                </div>
+            </aside>
+        </div>
+    </section>
+
 
     <!-- Main Content Container -->
     <main id="main-content-container">
 
         <!-- Home Page -->
         <div id="home-page" class="page">
+            <!-- Top Category Strip (Under Header, Above Banner) -->
+            <section id="top-category-strip" class="container mx-auto px-4 pt-4">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-md border border-gray-100 dark:border-gray-700">
+                    <div id="top-category-strip-list" class="flex gap-2 sm:gap-3 px-4 py-3 overflow-x-auto items-center">
+                        <!-- Dynamic category chips and inline dropdown will render here -->
+                    </div>
+                </div>
+            </section>
             <!-- Banner Section -->
             <section class="container mx-auto px-4 py-8">
                 <div id="banner-slider" class="relative overflow-hidden w-full rounded-2xl shadow-xl">
@@ -979,28 +1048,28 @@
                     <h3 class="text-xl font-bold mb-4 border-b-2 border-theme-pink pb-2 inline-block">গুরুত্বপূর্ণ লিঙ্ক</h3>
                     <ul class="list-none text-gray-400 text-sm space-y-2">
                         <li><a href="javascript:void(0);" onclick="renderAllProducts()" class="hover:text-theme-pink transition-colors">হোম</a></li>
-                        <li><a href="javascript:void(0);" onclick="showPage('home-page'); scrollToElement('products')" class="hover:text-theme-pink transition-colors">পণ্য</a></li>
-                        <li><a href="javascript:void(0);" onclick="showPage('home-page'); scrollToElement('categories')" class="hover:text-theme-pink transition-colors">ক্যাটাগরি</a></li>
-                        <li><a href="javascript:void(0);" onclick="showOffers()" class="hover:text-theme-pink transition-colors">অফার</a></li>
-                        <li><a href="javascript:void(0);" onclick="showPage('about-us-page')" class="hover:text-theme-pink transition-colors">আমাদের সম্পর্কে</a></li>
+                        <li><a href="javascript:void(0);" onclick="showPage('home-page'); scrollToElement('products')" class="hover:text-theme-pink transition-colors" data-lang="footer-nav-products">Products</a></li>
+                        <li><a href="javascript:void(0);" onclick="showPage('home-page'); scrollToElement('categories')" class="hover:text-theme-pink transition-colors" data-lang="footer-nav-categories">Categories</a></li>
+                        <li><a href="javascript:void(0);" onclick="showOffers()" class="hover:text-theme-pink transition-colors" data-lang="footer-nav-offers">Offers</a></li>
+                        <li><a href="javascript:void(0);" onclick="showPage('about-us-page')" class="hover:text-theme-pink transition-colors" data-lang="footer-nav-about">About Us</a></li>
                     </ul>
                 </div>
 
                 <!-- Column 3 -->
                 <div>
-                    <h3 class="text-xl font-bold mb-4 border-b-2 border-theme-pink pb-2 inline-block">গ্রাহক সেবা</h3>
+                    <h3 class="text-xl font-bold mb-4 border-b-2 border-theme-pink pb-2 inline-block" data-lang="footer-col-customer-service">Customer Service</h3>
                     <ul class="list-none text-gray-400 text-sm space-y-2">
-                        <li><a href="javascript:void(0);" onclick="showPage('faq-page')" class="hover:text-theme-pink transition-colors">FAQ</a></li>
-                        <li><a href="javascript:void(0);" onclick="showPage('return-policy-page')" class="hover:text-theme-pink transition-colors">রিটার্ন নীতি</a></li>
-                        <li><a href="javascript:void(0);" onclick="showPage('shipping-info-page')" class="hover:text-theme-pink transition-colors">শিপিং তথ্য</a></li>
-                        <li><a href="javascript:void(0);" onclick="showPage('privacy-policy-page')" class="hover:text-theme-pink transition-colors">গোপনীয়তা নীতি</a></li>
-                        <li><a href="javascript:void(0);" onclick="showPage('terms-page')" class="hover:text-theme-pink transition-colors">শর্তাবলী</a></li>
+                        <li><a href="javascript:void(0);" onclick="showPage('faq-page')" class="hover:text-theme-pink transition-colors" data-lang="footer-faq">FAQ</a></li>
+                        <li><a href="javascript:void(0);" onclick="showPage('return-policy-page')" class="hover:text-theme-pink transition-colors" data-lang="footer-return-policy">Return Policy</a></li>
+                        <li><a href="javascript:void(0);" onclick="showPage('shipping-info-page')" class="hover:text-theme-pink transition-colors" data-lang="footer-shipping-info">Shipping Info</a></li>
+                        <li><a href="javascript:void(0);" onclick="showPage('privacy-policy-page')" class="hover:text-theme-pink transition-colors" data-lang="footer-privacy-policy">Privacy Policy</a></li>
+                        <li><a href="javascript:void(0);" onclick="showPage('terms-page')" class="hover:text-theme-pink transition-colors" data-lang="footer-terms">Terms & Conditions</a></li>
                     </ul>
                 </div>
 
                 <!-- Column 4 -->
                 <div>
-                    <h3 class="text-xl font-bold mb-4 border-b-2 border-theme-pink pb-2 inline-block">যোগাযোগ করুন</h3>
+                    <h3 class="text-xl font-bold mb-4 border-b-2 border-theme-pink pb-2 inline-block" data-lang="footer-col-contact">Contact Us</h3>
                     <ul class="list-none text-gray-400 text-sm space-y-2">
                          <li class="flex items-center">
                             <i class="fas fa-map-marker-alt mr-2 text-theme-pink"></i>
@@ -1019,7 +1088,7 @@
             </div>
 
              <div class="mt-8 pt-8 border-t border-gray-700">
-                <h3 class="text-xl font-bold mb-4 text-center">We Accept</h3>
+                <h3 class="text-xl font-bold mb-4 text-center" data-lang="footer-we-accept">We Accept</h3>
                 <div class="flex flex-wrap justify-center items-center gap-4">
                     <img src="https://github.com/tangailbuzzbd-svg/TangailBuzz-Picture-/blob/main/unnamed.webp?raw=true" alt="bKash" class="h-8 object-contain">
                     <img src="https://github.com/tangailbuzzbd-svg/TangailBuzz-Picture-/blob/main/nagad.jpg?raw=true" alt="Nagad" class="h-8 object-contain">
@@ -1029,7 +1098,7 @@
             </div>
 
              <div class="text-center pt-8 border-t border-gray-700 mt-8">
-                <p class="text-gray-400 text-xs">&copy; ২০২৪ TangailBuzz। সর্বস্বত্ব সংরক্ষিত।</p>
+                <p class="text-gray-400 text-xs" data-lang="footer-copyright">© 2024 TangailBuzz. All rights reserved.</p>
              </div>
         </div>
     </footer>
@@ -1087,7 +1156,7 @@
         const translations = {
             en: {
                 'deliver-to': 'Deliver to', 'home': 'Home', 'products': 'Products', 'categories': 'Categories', 'offers': 'Offers', 'search-placeholder': 'Search for products...', 'featured-products': 'Featured Products', 'shop-by-category': 'Shop by Category', 'cat-electronics': 'Electronics', 'cat-fashion': 'Fashion', 'cat-home-garden': 'Home & Garden', 'cat-health-beauty': 'Health & Beauty', 'cat-sports': 'Sports & Outdoors', 'cat-books': 'Books & Stationery', 'cat-kids': 'Kids & Toys', 'cat-cars': 'Cars & Bikes', 'why-choose-us': 'Why Choose Us', 'feature-delivery-title': 'Fast Delivery', 'feature-delivery-desc': 'We deliver to your doorstep within 2-3 business days.', 'feature-payment-title': 'Secure Payment', 'feature-payment-desc': 'All transactions are encrypted for your security and privacy.', 'feature-return-title': 'Easy Returns', 'feature-return-desc': 'Return products within 30 days for a full refund if you\'re not satisfied.', 'feature-support-title': '24/7 Support', 'feature-support-desc': 'Our customer support team is available for you day and night.', 'add-to-cart': 'Add to Cart', 'added-to-cart': 'Added!', 'no-products': 'No products found matching your criteria.', 'back-to-products': 'Back to All Products', 'returnable': '30-Day Returnable', 'not-returnable': 'Not Returnable', 'secure-payments': 'Secure Payments', 'size': 'Size:', 'storage': 'Storage:', 'color': 'Color:', 'product-description': 'Product Description', 'product-specifications': 'Product Specifications', 'specifications': 'Specification', 'value': 'Value', 'no-specs': 'No specifications available for this product.', 'product-reviews': 'Product Reviews', 'no-reviews': 'There are no reviews for this product yet.', 'cart': 'Your Cart', 'cart-empty': 'Your cart is empty.', 'total': 'Total:', 'checkout': 'Checkout', 'your-wishlist': 'Your Wishlist', 'wishlist-empty': 'Your wishlist is empty. Add some products!', 'your-account': 'Your Account', 'signin-google': 'Sign in with Google', 'logout': 'Logout', 'toast-cart-added': 'Product added to cart!', 'toast-wishlist-added': 'Product added to wishlist!', 'toast-wishlist-removed': 'Product removed from wishlist!', 'toast-login-success': 'Successfully logged in!', 'toast-logout-success': 'Successfully logged out!',
-                'toast-register-success': 'Account created successfully!', 'login': 'Login', 'register': 'Register Account', 'toast-select-variant': 'Please select all required options!', 'payment-method': 'Select Payment Method', 'cod': 'Cash on Delivery', 'online-payment': 'Online Payment', 'confirm-order': 'Confirm Order', 'order-placed-success': 'Your order has been placed successfully!', 'order-placed-fail': 'Failed to place order. Please try again.', 'cart-is-empty': 'Your cart is empty. Cannot checkout.', 'mobile-banking': 'Mobile Banking', 'payment-instruction-bkash': 'Please send {amount} Taka to this Bkash number: +8801863205976 from your app.', 'payment-instruction-nagad': 'Please send {amount} Taka to this Nagad number: +8801863205976 from your app.', 'payment-instruction-cod': 'Our delivery person will collect the payment upon delivery.', 'profile-updated': 'Profile updated successfully!', 'profile-update-fail': 'Failed to update profile.', 'toast-storage-permission-error': 'Storage permission denied. Check Firebase rules.', 'toast-update-profile': 'Please update your location and mobile number in your profile before ordering.', 'emergency-contact': 'Emergency Contact', 'message-sent': 'Message sent successfully!', 'out-of-stock': 'Out of Stock', 'toast-out-of-stock': 'Sorry, this product is currently out of stock.', 'subtotal': 'Subtotal', 'delivery-charge': 'Delivery Charge', 'my-orders': 'My Orders',
+                'toast-register-success': 'Account created successfully!', 'login': 'Login', 'register': 'Register Account', 'toast-select-variant': 'Please select all required options!', 'payment-method': 'Select Payment Method', 'cod': 'Cash on Delivery', 'online-payment': 'Online Payment', 'confirm-order': 'Confirm Order', 'order-placed-success': 'Your order has been placed successfully!', 'order-placed-fail': 'Failed to place order. Please try again.', 'cart-is-empty': 'Your cart is empty. Cannot checkout.', 'mobile-banking': 'Mobile Banking', 'payment-instruction-bkash': 'Please send {amount} Taka to this Bkash number: +8801863205976 from your app.', 'payment-instruction-nagad': 'Please send {amount} Taka to this Nagad number: +8801863205976 from your app.', 'payment-instruction-cod': 'Our delivery person will collect the payment upon delivery.', 'profile-updated': 'Profile updated successfully!', 'profile-update-fail': 'Failed to update profile.', 'toast-storage-permission-error': 'Storage permission denied. Check Firebase rules.', 'toast-update-profile': 'Please update your location and mobile number in your profile before ordering.', 'emergency-contact': 'Support', 'message-sent': 'Message sent successfully!', 'out-of-stock': 'Out of Stock', 'toast-out-of-stock': 'Sorry, this product is currently out of stock.', 'subtotal': 'Subtotal', 'delivery-charge': 'Delivery Charge', 'my-orders': 'My Orders',
                 'delete-account-confirm': 'Are you sure you want to delete your account? This action cannot be undone. All data will be lost.',
                 'account-deleted': 'Your account has been successfully deleted.',
                 'delete-account-failed': 'Failed to delete account. Please try again.',
@@ -1116,10 +1185,32 @@
                 'review-login-prompt': 'Please log in to submit a review.',
                 'review-success': 'Review submitted successfully! Thank you.',
                 'review-failed': 'Failed to submit review. Please try again.',
+                // Category helpers
+                'all-in-category': 'All in',
+                // Footer
+                'footer-nav-home': 'Home',
+                'footer-nav-products': 'Products',
+                'footer-nav-categories': 'Categories',
+                'footer-nav-offers': 'Offers',
+                'footer-nav-about': 'About Us',
+                'footer-col-customer-service': 'Customer Service',
+                'footer-faq': 'FAQ',
+                'footer-return-policy': 'Return Policy',
+                'footer-shipping-info': 'Shipping Info',
+                'footer-privacy-policy': 'Privacy Policy',
+                'footer-terms': 'Terms & Conditions',
+                'footer-col-contact': 'Contact Us',
+                'footer-we-accept': 'We Accept',
+                'footer-copyright': '© 2024 TangailBuzz. All rights reserved.',
+                // Header short labels
+                'dark-mode': 'Dark Mode',
+                'profile': 'Profile',
+                'wishlist': 'Wishlist',
+                'cart-short': 'Cart',
             },
             bn: {
                 'deliver-to': 'ডেলিভারি লোকেশন', 'home': 'হোম', 'products': 'পণ্য', 'categories': 'ক্যাটাগরি', 'offers': 'অফার', 'search-placeholder': 'পণ্য খুঁজুন...', 'featured-products': 'বৈশিষ্ট্যযুক্ত পণ্য', 'shop-by-category': 'ক্যাটাগরি অনুসারে কেনাকাটা করুন', 'cat-electronics': 'ইলেকট্রনিক্স', 'cat-fashion': 'ফ্যাশন', 'cat-home-garden': 'হোম অ্যান্ড গার্ডেন', 'cat-health-beauty': 'স্বাস্থ্য ও সৌন্দর্য', 'cat-sports': 'খেলাধুলা ও আউটডোর', 'cat-books': 'বই ও স্টেশনারি', 'cat-kids': 'বাচ্চা ও খেলনা', 'cat-cars': 'গাড়ি ও বাইক', 'why-choose-us': 'আমাদেরকে কেন বেছে নিবেন', 'feature-delivery-title': 'দ্রুত ডেলিভারি', 'feature-delivery-desc': 'আমরা ২-৩ কার্যদিবসের মধ্যে আপনার দোরগোড়ায় পণ্য পৌঁছে দিই।', 'feature-payment-title': 'নিরাপদ পেমেন্ট', 'feature-payment-desc': 'আপনার নিরাপত্তা ও গোপনীয়তার জন্য সকল লেনদেন এনক্রিপ্টেড।', 'feature-return-title': 'সহজ রিটার্ন', 'feature-return-desc': 'পছন্দ না হলে ৩০ দিনের মধ্যে পণ্য ফেরত দিন এবং সম্পূর্ণ মূল্য ফেরত পান।', 'feature-support-title': '২৪/৭ সাপোর্ট', 'feature-support-desc': 'আমাদের গ্রাহক সহায়তা দল দিনরাত আপনার জন্য উপলব্ধ।', 'add-to-cart': 'কার্টে যোগ করুন', 'added-to-cart': 'যোগ হয়েছে!', 'no-products': 'আপনার অনুসন্ধানের সাথে মেলে এমন কোনো পণ্য পাওয়া যায়নি।', 'back-to-products': 'সকল পণ্যে ফিরে যান', 'returnable': '৩০-দিনের মধ্যে ফেরতযোগ্য', 'not-returnable': 'ফেরতযোগ্য নয়', 'secure-payments': 'নিরাপদ পেমেন্ট', 'size': 'সাইজ:', 'storage': 'স্টোরেজ:', 'color': 'রঙ:', 'product-description': 'পণ্যের বিবরণ', 'product-specifications': 'পণ্যের স্পেসিফিকেশন', 'specifications': 'স্পেসিফিকেশন', 'value': 'মান', 'no-specs': 'এই পণ্যের জন্য কোন স্পেসিফিকেশন উপলব্ধ নেই।', 'product-reviews': 'পণ্যের রিভিউ', 'no-reviews': 'এই পণ্যের জন্য এখনো কোনো রিভিউ নেই।', 'cart': 'আপনার কার্ট', 'cart-empty': 'আপনার কার্ট খালি।', 'total': 'মোট মূল্য:', 'checkout': 'চেকআউট করুন', 'your-wishlist': 'আপনার উইশলিস্ট', 'wishlist-empty': 'আপনার উইশলিস্ট খালি। কিছু পণ্য যোগ করুন!', 'your-account': 'আপনার অ্যাকাউন্ট', 'signin-google': 'Google দিয়ে সাইন ইন করুন', 'logout': 'লগআউট', 'toast-cart-added': 'পণ্য কার্টে যোগ করা হয়েছে!', 'toast-wishlist-added': 'পণ্য উইশলিস্টে যোগ করা হয়েছে!', 'toast-wishlist-removed': 'পণ্য উইশলিস্ট থেকে সরানো হয়েছে!', 'toast-login-success': 'সফলভাবে লগইন হয়েছে!', 'toast-logout-success': 'সফলভাবে লগআউট হয়েছে!',
-                'toast-register-success': 'অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে!', 'login': 'লগইন', 'register': 'অ্যাকাউন্ট রেজিস্টার', 'toast-select-variant': 'অনুগ্রহ করে সব অপশন সিলেক্ট করুন!', 'payment-method': 'পেমেন্ট পদ্ধতি নির্বাচন করুন', 'cod': 'ক্যাশ অন ডেলিভারি', 'online-payment': 'অনলাইন পেমেন্ট', 'confirm-order': 'অর্ডার কনফার্ম করুন', 'order-placed-success': 'আপনার অর্ডারটি সফলভাবে সম্পন্ন হয়েছে!', 'order-placed-fail': 'অর্ডার করতে ব্যর্থ হয়েছে। আবার চেষ্টা করুন।', 'cart-is-empty': 'আপনার কার্ট খালি। চেকআউট করা সম্ভব নয়।', 'mobile-banking': 'মোবাইল ব্যাংকিং', 'payment-instruction-bkash': 'অনুগ্রহ করে আপনার অ্যাপ থেকে এই বিকাশ নম্বরে ৳{amount} পাঠান: +8801863205976।', 'payment-instruction-nagad': 'অনুগ্রহ করে আপনার অ্যাপ থেকে এই নগদ নম্বরে ৳{amount} পাঠান: +8801863205976।', 'payment-instruction-cod': 'আমাদের ডেলিভারি প্রতিনিধি পণ্য পৌঁছানোর সময় আপনার থেকে টাকা সংগ্রহ করবে।', 'profile-updated': 'প্রোফাইল সফলভাবে আপডেট হয়েছে!', 'profile-update-fail': 'প্রোফাইল আপডেট করতে ব্যর্থ হয়েছে।', 'toast-storage-permission-error': 'স্টোরেজ পারমিশন সমস্যা। অনুগ্রহ করে Firebase রুলস চেক করুন।', 'toast-update-profile': 'অর্ডার করার পূর্বে অনুগ্রহ করে আপনার প্রোফাইলে ঠিকানা ও মোবাইল নম্বর আপডেট করুন।', 'emergency-contact': 'জরুরী যোগাযোগ', 'message-sent': 'আপনার বার্তা সফলভাবে পাঠানো হয়েছে!', 'out-of-stock': 'স্টক শেষ', 'toast-out-of-stock': 'দুঃখিত, এই পণ্যটি বর্তমানে স্টক আউট।', 'subtotal': 'মোট', 'delivery-charge': 'ডেলিভারি চার্জ', 'my-orders': 'আমার অর্ডার',
+                'toast-register-success': 'অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে!', 'login': 'লগইন', 'register': 'অ্যাকাউন্ট রেজিস্টার', 'toast-select-variant': 'অনুগ্রহ করে সব অপশন সিলেক্ট করুন!', 'payment-method': 'পেমেন্ট পদ্ধতি নির্বাচন করুন', 'cod': 'ক্যাশ অন ডেলিভারি', 'online-payment': 'অনলাইন পেমেন্ট', 'confirm-order': 'অর্ডার কনফার্ম করুন', 'order-placed-success': 'আপনার অর্ডারটি সফলভাবে সম্পন্ন হয়েছে!', 'order-placed-fail': 'অর্ডার করতে ব্যর্থ হয়েছে। আবার চেষ্টা করুন।', 'cart-is-empty': 'আপনার কার্ট খালি। চেকআউট করা সম্ভব নয়।', 'mobile-banking': 'মোবাইল ব্যাংকিং', 'payment-instruction-bkash': 'অনুগ্রহ করে আপনার অ্যাপ থেকে এই বিকাশ নম্বরে ৳{amount} পাঠান: +8801863205976।', 'payment-instruction-nagad': 'অনুগ্রহ করে আপনার অ্যাপ থেকে এই নগদ নম্বরে ৳{amount} পাঠান: +8801863205976।', 'payment-instruction-cod': 'আমাদের ডেলিভারি প্রতিনিধি পণ্য পৌঁছানোর সময় আপনার থেকে টাকা সংগ্রহ করবে।', 'profile-updated': 'প্রোফাইল সফলভাবে আপডেট হয়েছে!', 'profile-update-fail': 'প্রোফাইল আপডেট করতে ব্যর্থ হয়েছে।', 'toast-storage-permission-error': 'স্টোরেজ পারমিশন সমস্যা। অনুগ্রহ করে Firebase রুলস চেক করুন।', 'toast-update-profile': 'অর্ডার করার পূর্বে অনুগ্রহ করে আপনার প্রোফাইলে ঠিকানা ও মোবাইল নম্বর আপডেট করুন।', 'emergency-contact': 'সাপোর্ট', 'message-sent': 'আপনার বার্তা সফলভাবে পাঠানো হয়েছে!', 'out-of-stock': 'স্টক শেষ', 'toast-out-of-stock': 'দুঃখিত, এই পণ্যটি বর্তমানে স্টক আউট।', 'subtotal': 'মোট', 'delivery-charge': 'ডেলিভারি চার্জ', 'my-orders': 'আমার অর্ডার',
                 'delete-account-confirm': 'আপনি কি নিশ্চিত যে আপনি আপনার অ্যাকাউন্টটি মুছে ফেলতে চান? এই কাজটি ফিরিয়ে আনা যাবে না। আপনার সমস্ত ডেটা হারানো হবে।',
                 'account-deleted': 'আপনার অ্যাকাউন্ট সফলভাবে মুছে ফেলা হয়েছে।',
                 'delete-account-failed': 'অ্যাকাউন্ট মুছে ফেলার চেষ্টা ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।',
@@ -1147,6 +1238,28 @@
                 'review-login-prompt': 'অনুগ্রহ করে রিভিউ দেওয়ার জন্য লগইন করুন।',
                 'review-success': 'রিভিউ সফলভাবে জমা দেওয়া হয়েছে! ধন্যবাদ।',
                 'review-failed': 'রিভিউ জমা দিতে ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।',
+                // Category helpers
+                'all-in-category': 'সকল',
+                // Footer
+                'footer-nav-home': 'হোম',
+                'footer-nav-products': 'পণ্য',
+                'footer-nav-categories': 'ক্যাটাগরি',
+                'footer-nav-offers': 'অফার',
+                'footer-nav-about': 'আমাদের সম্পর্কে',
+                'footer-col-customer-service': 'গ্রাহক সেবা',
+                'footer-faq': 'FAQ',
+                'footer-return-policy': 'রিটার্ন নীতি',
+                'footer-shipping-info': 'শিপিং তথ্য',
+                'footer-privacy-policy': 'গোপনীয়তা নীতি',
+                'footer-terms': 'শর্তাবলী',
+                'footer-col-contact': 'যোগাযোগ করুন',
+                'footer-we-accept': 'আমরা গ্রহণ করি',
+                'footer-copyright': '© ২০২৪ TangailBuzz। সর্বস্বত্ব সংরক্ষিত।',
+                // Header short labels
+                'dark-mode': 'ডার্ক মোড',
+                'profile': 'প্রোফাইল',
+                'wishlist': 'উইশলিস্ট',
+                'cart-short': 'কার্ট',
             }
         };
 
@@ -1273,15 +1386,37 @@
         function updateTextContent() {
             document.querySelectorAll('[data-lang]').forEach(el => {
                 const key = el.dataset.lang;
-                if (translations[currentLanguage][key]) {
-                    el.textContent = translations[currentLanguage][key];
-                }
+                const cur = (translations[currentLanguage] || {});
+                const en = (translations['en'] || {});
+                const bn = (translations['bn'] || {});
+                const value = (cur[key] !== undefined ? cur[key] : (en[key] !== undefined ? en[key] : bn[key]));
+                if (value !== undefined) el.textContent = value;
+            });
+            // Update title/tooltips
+            document.querySelectorAll('[data-lang-title]').forEach(el => {
+                const key = el.dataset.langTitle;
+                const cur = (translations[currentLanguage] || {});
+                const en = (translations['en'] || {});
+                const bn = (translations['bn'] || {});
+                const value = (cur[key] !== undefined ? cur[key] : (en[key] !== undefined ? en[key] : bn[key]));
+                if (value !== undefined) el.title = value;
+            });
+            // Update aria-labels
+            document.querySelectorAll('[data-lang-aria-label]').forEach(el => {
+                const key = el.dataset.langAriaLabel;
+                const cur = (translations[currentLanguage] || {});
+                const en = (translations['en'] || {});
+                const bn = (translations['bn'] || {});
+                const value = (cur[key] !== undefined ? cur[key] : (en[key] !== undefined ? en[key] : bn[key]));
+                if (value !== undefined) el.setAttribute('aria-label', value);
             });
             document.querySelectorAll('[data-lang-placeholder]').forEach(el => {
                 const key = el.dataset.langPlaceholder;
-                if (translations[currentLanguage][key]) {
-                    el.placeholder = translations[currentLanguage][key];
-                }
+                const cur = (translations[currentLanguage] || {});
+                const en = (translations['en'] || {});
+                const bn = (translations['bn'] || {});
+                const value = (cur[key] !== undefined ? cur[key] : (en[key] !== undefined ? en[key] : bn[key]));
+                if (value !== undefined) el.placeholder = value;
             });
             DOMElements.searchInput.placeholder = translations[currentLanguage]['search-placeholder'];
             DOMElements.searchInputMobile.placeholder = translations[currentLanguage]['search-placeholder'];
@@ -1289,17 +1424,29 @@
         }
 
         function setLanguage(lang) {
-            currentLanguage = lang;
-            document.getElementById('lang-bn-btn').classList.toggle('active-lang', lang === 'bn');
-            document.getElementById('lang-en-btn').classList.toggle('active-lang', lang === 'en');
+            const resolved = (lang === 'en' || lang === 'bn') ? lang : 'bn';
+            currentLanguage = resolved;
+            try { localStorage.setItem('lang', resolved); } catch (e) {}
+
+            // Update current label on the button if present
+            const langCurrent = document.getElementById('lang-current');
+            if (langCurrent) langCurrent.textContent = resolved === 'bn' ? 'বাংলা' : 'English';
+
             updateTextContent();
             renderProducts(currentDisplayedProducts); // Re-render products with new language
+            if (typeof renderTopCategoryStrip === 'function') {
+                try { renderTopCategoryStrip(); } catch (e) {}
+            }
             const detailsPage = document.getElementById('product-details-page');
-            if(!detailsPage.classList.contains('hidden')) {
+            if(detailsPage && !detailsPage.classList.contains('hidden')) {
                 const addToCartBtn = document.getElementById('add-to-cart-details');
                 const productId = addToCartBtn ? addToCartBtn.dataset.productId : null;
                 if(productId) showProductDetails(productId);
             }
+
+            // Close menu if open
+            const langMenu = document.getElementById('lang-menu');
+            if (langMenu) langMenu.classList.add('hidden');
         }
         window.setLanguage = setLanguage;
 
@@ -1320,9 +1467,14 @@
                     renderWishlistItems();
                 } else if (pageId === 'my-orders-page'){
                     fetchUserOrders();
+                } else if (pageId === 'cart-page') {
+                    // Ensure coupons load on full cart page
+                    fetchAndRenderCoupons();
                 } else if (pageId === 'home-page' && currentDisplayedProducts.length === 0) {
                      renderProducts(productsData);
                 }
+                // Re-apply translations on newly visible page
+                updateTextContent();
             }
             window.scrollTo(0, 0);
         }
@@ -1407,13 +1559,37 @@
                 DOMElements.currentCategoryTitle.dataset.lang = 'featured-products';
                 DOMElements.currentCategoryTitle.textContent = translations[currentLanguage]['featured-products'];
             }
+            // Keep the top category strip synced whenever products render
+            if (typeof renderTopCategoryStrip === 'function') {
+                try { renderTopCategoryStrip(); } catch (e) {}
+            }
             // Removed redundant updateCategoryHeader call, which caused the error when dataset was accessed from null.
         }
 
         // --- CATEGORY & SUB-CATEGORY LOGIC ---
 
+        function getCategoryLabel(cat) {
+            if (!cat) return '';
+            const slug = String(cat).toLowerCase();
+            // Map common slugs to existing translation keys
+            const keyMap = {
+                'books-stationery': 'cat-books',
+                'sports-outdoors': 'cat-sports',
+                'kids-toys': 'cat-kids',
+                'home-garden': 'cat-home-garden',
+                'health-beauty': 'cat-health-beauty',
+                'cars-bikes': 'cat-cars', // in case data uses combined slug
+                'cars': 'cat-cars'
+            };
+            const transKey = keyMap[slug] || `cat-${slug}`;
+            const cur = translations[currentLanguage] || {};
+            if (cur[transKey]) return cur[transKey];
+            // Humanize slug fallback
+            return slug.split(/[-_]/g).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+        }
+
         function updateCategoryHeader(category, subCategory = null) {
-            const categoryName = category ? translations[currentLanguage][`cat-${category}`] || category.charAt(0).toUpperCase() + category.slice(1) : '';
+            const categoryName = category ? getCategoryLabel(category) : '';
             const subCategoryName = subCategory ? subCategory.charAt(0).toUpperCase() + subCategory.slice(1) : '';
             
             currentCategory = category;
@@ -1445,6 +1621,10 @@
             } else {
                 DOMElements.subcategoryButtons.innerHTML = '';
             }
+            // Refresh the top category strip active state
+            if (typeof renderTopCategoryStrip === 'function') {
+                try { renderTopCategoryStrip(); } catch (e) {}
+            }
         }
         
         function renderSubCategories(category) {
@@ -1457,8 +1637,8 @@
 
             let buttonsHtml = '';
 
-            if (subCategories.length > 0) {
-                 buttonsHtml = subCategories.map(subCat => {
+          if (subCategories.length > 0) {
+              buttonsHtml = subCategories.map(subCat => {
                     const subCatName = subCat.charAt(0).toUpperCase() + subCat.slice(1);
                     const isActive = currentSubCategory === subCat ? 'variant-btn-active bg-theme-blue/30' : '';
                     return `<button class="px-4 py-2 text-sm bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 font-semibold rounded-full hover:bg-gray-300 transition-colors ${isActive}" onclick="filterSubCategory('${category}', '${subCat}')">
@@ -1468,8 +1648,10 @@
                  
                  // Add an 'All' button for the current category
                  const allActive = currentSubCategory === null ? 'variant-btn-active bg-theme-blue/30' : '';
-                 const categoryName = translations[currentLanguage][`cat-${category}`] || category.charAt(0).toUpperCase() + category.slice(1);
-                 buttonsHtml = `<button class="px-4 py-2 text-sm bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 font-semibold rounded-full hover:bg-gray-300 transition-colors ${allActive}" onclick="filterProducts('${category}')" data-lang="all-in-category">${categoryName} (সকল)</button>` + buttonsHtml;
+              const categoryName = getCategoryLabel(category);
+              const allWord = translations[currentLanguage]['all-in-category'] || (currentLanguage==='bn'?'সকল':'All in');
+              const allLabel = `${allWord} ${categoryName}`;
+              buttonsHtml = `<button class="px-4 py-2 text-sm bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 font-semibold rounded-full hover:bg-gray-300 transition-colors ${allActive}" onclick="filterProducts('${category}')">${allLabel}</button>` + buttonsHtml;
             } 
 
             DOMElements.subcategoryButtons.innerHTML = buttonsHtml;
@@ -1485,7 +1667,8 @@
             renderProducts(filtered); 
             
             showPage('home-page');
-            scrollToElement('products');
+            // Scroll to the top category strip so the subcategory dropdown is visible
+            scrollToElement('top-category-strip');
         };
 
         // Action when clicking a sub-category button (e.g., Mobile)
@@ -1500,6 +1683,66 @@
         };
         
         // --- END CATEGORY & SUB-CATEGORY LOGIC ---
+        
+        // --- TOP CATEGORY STRIP (DYNAMIC) ---
+        function renderTopCategoryStrip() {
+            const listEl = document.getElementById('top-category-strip-list');
+            if (!listEl) return;
+
+            // Derive unique categories from loaded products
+            const uniqueCategories = Array.from(new Set((productsData || []).map(p => p.category).filter(Boolean)));
+
+            // Chip classes
+            const chipBase = 'shrink-0 inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium border transition-colors';
+            const activeCls = 'bg-theme-pink text-white border-transparent';
+            const idleCls = 'bg-white text-gray-700 dark:bg-gray-900 dark:text-gray-200 border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800';
+
+            // Build HTML
+            const isAllActive = !currentCategory;
+            let html = '';
+            html += `<button class="${chipBase} ${isAllActive ? activeCls : idleCls}" onclick="renderAllProducts()" data-lang="all-products">${translations[currentLanguage]['all-products'] || 'All Products'}</button>`;
+
+            uniqueCategories.forEach(cat => {
+                const isActive = currentCategory === cat;
+                const label = getCategoryLabel(cat);
+                const safeCat = String(cat).replace(/'/g, "\\'");
+                html += `<button class="${chipBase} ${isActive ? activeCls : idleCls}" onclick="filterProducts('${safeCat}')">${label}</button>`;
+            });
+
+            // Append subcategory dropdown inline if a category is active
+            if (currentCategory) {
+                const subs = Array.from(new Set((productsData || [])
+                    .filter(p => p.category === currentCategory && p.subCategory)
+                    .map(p => p.subCategory))).sort();
+                if (subs.length > 0) {
+                    const selected = currentSubCategory || '';
+                    const allLabel = `${translations[currentLanguage]['all-in-category'] || (currentLanguage==='bn'?'সকল':'All in')} ${getCategoryLabel(currentCategory)}`;
+                    const options = [`<option value="" ${selected === '' ? 'selected' : ''}>${allLabel}</option>`]
+                        .concat(subs.map(s => {
+                            const label = s.charAt(0).toUpperCase() + s.slice(1);
+                            return `<option value="${s}" ${selected === s ? 'selected' : ''}>${label}</option>`;
+                        })).join('');
+                    html += `<select id="top-subcategory-select" class="shrink-0 px-3 py-1.5 rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-sm text-gray-700 dark:text-gray-200">${options}</select>`;
+                }
+            }
+
+            listEl.innerHTML = html;
+
+            const selectEl = document.getElementById('top-subcategory-select');
+            if (selectEl) {
+                // Auto-focus so users see and can use it immediately
+                try { selectEl.focus(); } catch (e) {}
+                selectEl.onchange = (e) => {
+                    const val = e.target.value;
+                    if (!val) {
+                        window.filterProducts(currentCategory);
+                    } else {
+                        window.filterSubCategory(currentCategory, val);
+                    }
+                };
+            }
+        }
+        // --- END TOP CATEGORY STRIP ---
         
         // --- REVIEW LOGIC ---
         
@@ -1916,6 +2159,21 @@
                     // NEW LOGIC: Use model1 if present, otherwise try model, otherwise use the Firestore document ID
                     const modelID = data.model1 || data.model || doc.id; 
 
+                    // Normalize category and subcategory across different schemas
+                    let categoryValue = data.category ?? data.Category ?? data.cat ?? data.categoryName ?? 'general';
+                    if (typeof categoryValue === 'string') categoryValue = categoryValue.trim().toLowerCase();
+
+                    let rawSub = data.subCategory ?? data.subcategory ?? data.sub_category ?? data.subCat ?? data.subcat ?? data.sub ?? null;
+                    let normalizedSub = null;
+                    if (Array.isArray(rawSub)) {
+                        normalizedSub = rawSub.length ? String(rawSub[0]).trim().toLowerCase() : null;
+                    } else if (typeof rawSub === 'string') {
+                        const first = rawSub.split(',')[0];
+                        normalizedSub = first ? first.trim().toLowerCase() : null;
+                    } else if (rawSub && typeof rawSub === 'object' && rawSub.name) {
+                        normalizedSub = String(rawSub.name).trim().toLowerCase();
+                    }
+
                     return {
                         id: doc.id,
                         modelID: modelID, // NEW: Fetch Model ID
@@ -1930,8 +2188,8 @@
                         imageUrl: data.imageUrl || '',
                         description: data.details || '',
                         fullDescription: data.details || '',
-                        category: data.category || 'general',
-                        subCategory: data.subCategory || null, // NEW: Fetch subCategory
+                        category: categoryValue,
+                        subCategory: normalizedSub, // normalized subcategory
                         isReturnable: data.isRefundable === true,
                         specifications: data.specification || {},
                         reviews: data.reviews || [],
@@ -2090,6 +2348,11 @@
             try {
                 const currentItem = localCartCache.get(cartItemId);
                 if (currentItem) {
+                    // Optimistic increment
+                    const backupQty = currentItem.quantity || 0;
+                    currentItem.quantity = backupQty + 1;
+                    localCartCache.set(cartItemId, currentItem);
+                    updateCartUI();
                     await updateDoc(userDocRef, { [`cart.${cartItemId}.quantity`]: increment(1) });
                 } else {
                     const newItemData = {
@@ -2100,44 +2363,95 @@
                         quantity: 1,
                         ...selectedVariants
                     };
+                    // Optimistic add
+                    localCartCache.set(cartItemId, newItemData);
+                    updateCartUI();
                     await setDoc(userDocRef, { cart: { [cartItemId]: newItemData } }, { merge: true });
                 }
                 showToast('toast-cart-added');
                 return Promise.resolve();
             } catch (error) {
                  console.error("Error adding to cart: ", error);
+                 // Rollback optimistic update for add/increment
+                 const existing = localCartCache.get(cartItemId);
+                 if (existing) {
+                    if ((existing.quantity || 0) > 1) {
+                        existing.quantity = (existing.quantity || 1) - 1;
+                        localCartCache.set(cartItemId, existing);
+                    } else {
+                        localCartCache.delete(cartItemId);
+                    }
+                    updateCartUI();
+                 }
                  showToast("Error: Could not add to cart", false);
                  return Promise.reject(error);
             }
         }
+        window.addToCartInDb = addToCartInDb;
         
         async function removeFromCart(cartItemId) {
-            if (!currentUser || currentUser.isAnonymous) return;
+            if (!currentUser || currentUser.isAnonymous) {
+                showToast("Please log in to manage your cart.", false);
+                openDrawer('profile-drawer');
+                return;
+            }
             const userDocRef = doc(db, 'users', currentUser.uid);
+            // Optimistic update
+            const backup = localCartCache.get(cartItemId);
+            if (backup) {
+                localCartCache.delete(cartItemId);
+                updateCartUI();
+            }
             try {
                 await updateDoc(userDocRef, {
                     [`cart.${cartItemId}`]: deleteField()
                 });
             } catch (error) {
+                // Rollback on error
+                if (backup) {
+                    localCartCache.set(cartItemId, backup);
+                    updateCartUI();
+                }
                 console.error("Error removing from cart: ", error);
+                showToast("Error: Could not remove item", false);
             }
         }
         window.removeFromCart = removeFromCart;
 
         async function updateQuantity(cartItemId, change) {
-            if (!currentUser || currentUser.isAnonymous) return;
-            const currentQuantity = localCartCache.get(cartItemId)?.quantity || 0;
+            if (!currentUser || currentUser.isAnonymous) {
+                showToast("Please log in to manage your cart.", false);
+                openDrawer('profile-drawer');
+                return;
+            }
+            const currentItem = localCartCache.get(cartItemId);
+            const currentQuantity = currentItem?.quantity || 0;
             if (currentQuantity + change <= 0) {
+                // Optimistic remove when quantity would go to 0 or less
                 await removeFromCart(cartItemId);
-            } else {
-                const userDocRef = doc(db, 'users', currentUser.uid);
-                try {
-                    await updateDoc(userDocRef, {
-                        [`cart.${cartItemId}.quantity`]: increment(change)
-                    });
-                } catch (error) {
-                     console.error("Error updating quantity: ", error);
+                return;
+            }
+            // Optimistic quantity update
+            const userDocRef = doc(db, 'users', currentUser.uid);
+            const backupQty = currentQuantity;
+            if (currentItem) {
+                currentItem.quantity = currentQuantity + change;
+                localCartCache.set(cartItemId, currentItem);
+                updateCartUI();
+            }
+            try {
+                await updateDoc(userDocRef, {
+                    [`cart.${cartItemId}.quantity`]: increment(change)
+                });
+            } catch (error) {
+                // Rollback on error
+                if (currentItem) {
+                    currentItem.quantity = backupQty;
+                    localCartCache.set(cartItemId, currentItem);
+                    updateCartUI();
                 }
+                console.error("Error updating quantity: ", error);
+                showToast("Error: Could not update quantity", false);
             }
         }
         window.updateQuantity = updateQuantity;
@@ -2182,6 +2496,24 @@
             DOMElements.deliveryCharge.textContent = `৳${deliveryCharge.toFixed(2)}`;
             DOMElements.cartTotal.textContent = `৳${total.toFixed(2)}`;
 
+            // Mirror values to full-page cart if present
+            const pageSubtotal = document.getElementById('cart-page-subtotal');
+            const pageDelivery = document.getElementById('cart-page-delivery');
+            const pageTotal = document.getElementById('cart-page-total');
+            const pageDiscountRow = document.getElementById('cart-page-discount-row');
+            const pageDiscount = document.getElementById('cart-page-discount');
+            if (pageSubtotal) pageSubtotal.textContent = `৳${subtotal.toFixed(2)}`;
+            if (pageDelivery) pageDelivery.textContent = `৳${deliveryCharge.toFixed(2)}`;
+            if (pageTotal) pageTotal.textContent = `৳${total.toFixed(2)}`;
+            if (pageDiscountRow && pageDiscount) {
+                if (discountAmount > 0) {
+                    pageDiscountRow.classList.remove('hidden');
+                    pageDiscount.textContent = `- ৳${discountAmount.toFixed(2)}`;
+                } else {
+                    pageDiscountRow.classList.add('hidden');
+                }
+            }
+
             const totalItems = Array.from(localCartCache.values()).reduce((sum, item) => sum + (item.quantity || 0), 0);
             DOMElements.cartCount.textContent = totalItems;
             renderCartItems();
@@ -2209,6 +2541,8 @@
         function renderCartItems() {
             if (!currentUser || currentUser.isAnonymous) {
                 DOMElements.cartItems.innerHTML = `<p class="text-center text-gray-500">Please log in to see your cart.</p>`;
+                const pageItems = document.getElementById('cart-page-items');
+                if (pageItems) pageItems.innerHTML = `<p class="text-center text-gray-500">Please log in to see your cart.</p>`;
                 return;
             }
             
@@ -2266,6 +2600,8 @@
                     `;
                 }
                 DOMElements.cartItems.innerHTML = cartHtml;
+                const pageItems = document.getElementById('cart-page-items');
+                if (pageItems) pageItems.innerHTML = cartHtml;
             }
         }
         
@@ -2932,12 +3268,17 @@
         // --- COUPON LOGIC ---
         async function fetchAndRenderCoupons() {
             const couponListEl = document.getElementById('coupons-list');
-            if (!couponListEl) return;
+            const couponListElPage = document.getElementById('cart-page-coupons-list');
+            if (!couponListEl && !couponListElPage) return;
 
-            couponListEl.innerHTML = `<div class="col-span-full text-center py-4"><div class="loader mx-auto"></div></div>`;
-            
+            const loaderHtml = `<div class="col-span-full text-center py-4"><div class="loader mx-auto"></div></div>`;
+            if (couponListEl) couponListEl.innerHTML = loaderHtml;
+            if (couponListElPage) couponListElPage.innerHTML = loaderHtml;
+
             if (!currentUser || currentUser.isAnonymous) {
-                couponListEl.innerHTML = `<p class="text-center text-gray-500">Please log in to see available coupons.</p>`;
+                const loginHtml = `<p class="text-center text-gray-500">Please log in to see available coupons.</p>`;
+                if (couponListEl) couponListEl.innerHTML = loginHtml;
+                if (couponListElPage) couponListElPage.innerHTML = loginHtml;
                 return;
             }
 
@@ -2962,7 +3303,9 @@
                 });
 
                 if (usableCoupons.length === 0) {
-                    couponListEl.innerHTML = `<p class="text-center text-gray-500">No active coupons available right now.</p>`;
+                    const emptyHtml = `<p class="text-center text-gray-500">No active coupons available right now.</p>`;
+                    if (couponListEl) couponListEl.innerHTML = emptyHtml;
+                    if (couponListElPage) couponListElPage.innerHTML = emptyHtml;
                     return;
                 }
 
@@ -2990,11 +3333,14 @@
                     `;
                 }).join('');
 
-                couponListEl.innerHTML = couponsHtml;
+                if (couponListEl) couponListEl.innerHTML = couponsHtml;
+                if (couponListElPage) couponListElPage.innerHTML = couponsHtml;
 
             } catch (error) {
                 console.error("Error fetching coupons:", error);
-                couponListEl.innerHTML = `<p class="text-center text-red-500">Error loading coupons.</p>`;
+                const errHtml = `<p class="text-center text-red-500">Error loading coupons.</p>`;
+                if (couponListEl) couponListEl.innerHTML = errHtml;
+                if (couponListElPage) couponListElPage.innerHTML = errHtml;
             }
         }
 
@@ -3020,7 +3366,10 @@
         
         async function handleApplyCoupon(e) {
             e.preventDefault();
-            const couponCode = DOMElements.couponInput.value.trim().toUpperCase();
+            const drawerInput = DOMElements.couponInput;
+            const pageInput = document.getElementById('cart-page-coupon-input');
+            const raw = (pageInput && pageInput.value ? pageInput.value : (drawerInput ? drawerInput.value : '')) || '';
+            const couponCode = raw.trim().toUpperCase();
             if (!couponCode) return;
 
             if (!currentUser || currentUser.isAnonymous) {
@@ -3076,6 +3425,9 @@
             }
             
             appliedCouponCode = couponCode;
+            // Clear inputs for better UX
+            if (drawerInput) drawerInput.value = '';
+            if (pageInput) pageInput.value = '';
             showToast('toast-coupon-applied');
             await updateCartUI();
         }
@@ -3684,7 +4036,9 @@
             applyDarkMode(storedTheme || 'light');
             
             // 2. Load Product/Banner Data
-            setLanguage('bn');
+            // Initialize language from storage
+            const storedLang = (() => { try { return localStorage.getItem('lang'); } catch (e) { return null; } })();
+            setLanguage(storedLang || 'bn');
             DOMElements.productList.innerHTML = `<div class="loader"></div>`;
             await fetchProductsFromFirestore();
             await fetchBannersFromFirestore();
@@ -3712,6 +4066,8 @@
             // Emergency Contact Button
             if(DOMElements.emergencyContactBtn) DOMElements.emergencyContactBtn.addEventListener('click', handleEmergencyChatClick);
             if(DOMElements.chatForm) DOMElements.chatForm.addEventListener('submit', sendChatMessage);
+            const headerEmergencyBtn = document.getElementById('emergency-contact-header');
+            if (headerEmergencyBtn) headerEmergencyBtn.addEventListener('click', handleEmergencyChatClick);
 
             if(document.getElementById('my-orders-btn')) document.getElementById('my-orders-btn').addEventListener('click', () => { showPage('my-orders-page'); closeDrawer(); });
             if(DOMElements.myOrdersBtnProfile) DOMElements.myOrdersBtnProfile.addEventListener('click', () => { showPage('my-orders-page'); closeDrawer(); });
@@ -3754,6 +4110,12 @@
                 e.preventDefault();
                 toggleAuthForms('register');
             });
+
+            // Cart page: coupon + checkout wiring
+            const cartPageCouponForm = document.getElementById('cart-page-coupon-form');
+            if (cartPageCouponForm) cartPageCouponForm.addEventListener('submit', handleApplyCoupon);
+            const cartPageCheckoutBtn = document.getElementById('cart-page-checkout-btn');
+            if (cartPageCheckoutBtn) cartPageCheckoutBtn.addEventListener('click', openPaymentModal);
             DOMElements.showLoginLink.addEventListener('click', (e) => {
                 e.preventDefault();
                 toggleAuthForms('login');
@@ -3787,6 +4149,35 @@
             // Review Form Listeners
             document.getElementById('rating-stars').addEventListener('click', handleStarClick);
             document.getElementById('review-form').addEventListener('submit', submitReview);
+
+            // Language selector interactions
+            const langButton = document.getElementById('lang-button');
+            const langMenu = document.getElementById('lang-menu');
+            const langCurrent = document.getElementById('lang-current');
+            if (langButton && langMenu) {
+                // Set initial label from stored language
+                const currentLang = (() => { try { return localStorage.getItem('lang'); } catch (e) { return null; } })() || 'bn';
+                if (langCurrent) langCurrent.textContent = currentLang === 'bn' ? 'বাংলা' : 'English';
+
+                langButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    langMenu.classList.toggle('hidden');
+                });
+
+                document.querySelectorAll('#lang-menu .lang-option').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const value = e.currentTarget.getAttribute('data-lang-value');
+                        setLanguage(value);
+                    });
+                });
+
+                // Close on outside click
+                document.addEventListener('click', (e) => {
+                    if (!e.target.closest('#lang-selector')) {
+                        langMenu.classList.add('hidden');
+                    }
+                });
+            }
 
             // --- Invoice Button Delegation ---
             document.addEventListener('click', (e) => {
