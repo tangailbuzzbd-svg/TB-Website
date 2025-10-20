@@ -252,14 +252,14 @@
                 <div class="relative" id="lang-selector">
                     <button id="lang-button" class="flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/40 bg-white/10 hover:bg-white/20 text-white text-sm font-semibold backdrop-blur transition-colors" aria-haspopup="true" aria-expanded="false" title="Language" aria-label="Language" data-lang-title="language" data-lang-aria-label="language">
                         <i class="fas fa-globe"></i>
-                        <span id="lang-current">বাংলা</span>
+                        <span id="lang-current" class="text-white dark:text-white">বাংলা</span>
                         <i class="fas fa-chevron-down text-xs opacity-80"></i>
                     </button>
-                    <div id="lang-menu" class="hidden absolute right-0 mt-2 w-44 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl overflow-hidden z-50">
-                        <button class="lang-option w-full text-left px-3 py-2 text-sm flex items-center gap-2 hover:bg-gray-100 dark:hover:bg-gray-700" data-lang-value="bn">
+                    <div id="lang-menu" class="hidden absolute right-0 mt-2 w-44 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl overflow-hidden z-50 text-gray-800 dark:text-gray-200">
+                        <button class="lang-option w-full text-left px-3 py-2 text-sm flex items-center gap-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200" data-lang-value="bn">
                             <span>🇧🇩</span><span>বাংলা</span>
                         </button>
-                        <button class="lang-option w-full text-left px-3 py-2 text-sm flex items-center gap-2 hover:bg-gray-100 dark:hover:bg-gray-700" data-lang-value="en">
+                        <button class="lang-option w-full text-left px-3 py-2 text-sm flex items-center gap-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200" data-lang-value="en">
                             <span>🇬🇧</span><span>English</span>
                         </button>
                     </div>
@@ -664,7 +664,7 @@
                 </div>
                 <!-- END NEW: Breadcrumb and Sub-Category Header -->
 
-                <div id="product-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 min-h-[300px] flex justify-center items-center">
+                <div id="product-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 min-h-[300px]">
                     <div class="loader"></div>
                 </div>
             </section>
@@ -712,7 +712,7 @@
             <section class="bg-gray-200 dark:bg-gray-800 py-16">
                 <div class="container mx-auto px-4">
                     <h2 class="text-3xl md:text-4xl font-bold text-center mb-10 relative after:content-[''] after:absolute after:bottom-[-10px] after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-1 after:bg-theme-pink after:rounded-full" data-lang="why-choose-us">আমাদেরকে কেন বেছে নিবেন</h2>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
                         <div class="p-6 text-center animate-slide-in-up">
                             <div class="text-5xl text-theme-pink mb-4"><i class="fas fa-truck"></i></div>
                             <h3 class="text-xl font-semibold mb-2" data-lang="feature-delivery-title">দ্রুত ডেলিভারি</h3>
@@ -806,15 +806,15 @@
                                 <div id="size-options" class="hidden">
                                     <label class="block text-sm font-semibold mb-2" data-lang="size">সাইজ:</label>
                                     <div class="flex flex-wrap gap-2" id="size-variants-container"></div>
-                                </d>
+                                </div>
                                 <div id="storage-options" class="hidden">
                                     <label class="block text-sm font-semibold mb-2" data-lang="storage">স্টোরেজ:</label>
                                     <div class="flex flex-wrap gap-2" id="storage-variants-container"></div>
-                                </d>
+                                </div>
                                 <div id="color-options" class="hidden">
                                     <label class="block text-sm font-semibold mb-2" data-lang="color">রঙ:</label>
                                     <div class="flex flex-wrap gap-2" id="color-variants-container"></div>
-                                </d>
+                                </div>
                             </div>
                             
                             <!-- Return policy and secure payments -->
@@ -822,9 +822,11 @@
                                 <!-- Details will be rendered here dynamically -->
                             </div>
 
-                            <div class="flex flex-col space-y-4 mt-6">
-                                <button id="add-to-cart-details" class="add-to-cart bg-theme-blue text-white py-3 px-6 rounded-full hover:bg-theme-purple transition-colors shadow-lg" data-lang="add-to-cart">কার্টে যোগ করুন</button>
-                                <button class="buy-now bg-white border border-theme-blue text-theme-blue py-3 px-6 rounded-full hover:bg-gray-100 transition-colors shadow-lg" data-lang="buy-now">এখনই কিনুন</button>
+                            <div class="mt-6 space-y-2">
+                                <div class="grid grid-cols-2 gap-2">
+                                    <button id="add-to-cart-details" class="add-to-cart w-full bg-theme-blue text-white text-xs md:text-sm py-1.5 px-3 md:py-2 md:px-4 rounded-full hover:bg-theme-purple transition-colors shadow" data-lang="add-to-cart">কার্টে যোগ করুন</button>
+                                    <button class="buy-now w-full bg-white border border-theme-blue text-theme-blue text-xs md:text-sm py-1.5 px-3 md:py-2 md:px-4 rounded-full hover:bg-gray-100 transition-colors shadow" data-lang="buy-now">এখনই কিনুন</button>
+                                </div>
                                 <button id="wishlist-details" class="wishlist text-gray-400 hover:text-theme-pink text-3xl transition-colors self-start"><i class="far fa-heart"></i></button>
                             </div>
                         </div>
@@ -881,7 +883,7 @@
         <div id="wishlist-page" class="hidden page">
             <section class="container mx-auto px-4 py-16">
                 <h2 class="text-3xl md:text-4xl font-bold text-center mb-10 relative after:content-[''] after:absolute after:bottom-[-10px] after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-1 after:bg-theme-pink after:rounded-full" data-lang="your-wishlist">আপনার উইশলিস্ট</h2>
-                <div id="wishlist-items" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div id="wishlist-items" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
                     <!-- Wishlist items will be dynamically inserted here -->
                 </div>
             </section>
@@ -1135,7 +1137,8 @@
         let currentLanguage = 'bn';
         let localCartCache = new Map();
         let localWishlistCache = new Set();
-        let productsData = []; // Will be populated from Firestore
+    let productsData = []; // Will be populated from Firestore
+    let renderContext = null; // Controls render behavior for specific pages (e.g., 'wishlist')
         let currentDisplayedProducts = [];
         let selectedVariants = {};
         let discountAmount = 0;
@@ -1207,6 +1210,7 @@
                 'profile': 'Profile',
                 'wishlist': 'Wishlist',
                 'cart-short': 'Cart',
+                'remove': 'Remove',
             },
             bn: {
                 'deliver-to': 'ডেলিভারি লোকেশন', 'home': 'হোম', 'products': 'পণ্য', 'categories': 'ক্যাটাগরি', 'offers': 'অফার', 'search-placeholder': 'পণ্য খুঁজুন...', 'featured-products': 'বৈশিষ্ট্যযুক্ত পণ্য', 'shop-by-category': 'ক্যাটাগরি অনুসারে কেনাকাটা করুন', 'cat-electronics': 'ইলেকট্রনিক্স', 'cat-fashion': 'ফ্যাশন', 'cat-home-garden': 'হোম অ্যান্ড গার্ডেন', 'cat-health-beauty': 'স্বাস্থ্য ও সৌন্দর্য', 'cat-sports': 'খেলাধুলা ও আউটডোর', 'cat-books': 'বই ও স্টেশনারি', 'cat-kids': 'বাচ্চা ও খেলনা', 'cat-cars': 'গাড়ি ও বাইক', 'why-choose-us': 'আমাদেরকে কেন বেছে নিবেন', 'feature-delivery-title': 'দ্রুত ডেলিভারি', 'feature-delivery-desc': 'আমরা ২-৩ কার্যদিবসের মধ্যে আপনার দোরগোড়ায় পণ্য পৌঁছে দিই।', 'feature-payment-title': 'নিরাপদ পেমেন্ট', 'feature-payment-desc': 'আপনার নিরাপত্তা ও গোপনীয়তার জন্য সকল লেনদেন এনক্রিপ্টেড।', 'feature-return-title': 'সহজ রিটার্ন', 'feature-return-desc': 'পছন্দ না হলে ৩০ দিনের মধ্যে পণ্য ফেরত দিন এবং সম্পূর্ণ মূল্য ফেরত পান।', 'feature-support-title': '২৪/৭ সাপোর্ট', 'feature-support-desc': 'আমাদের গ্রাহক সহায়তা দল দিনরাত আপনার জন্য উপলব্ধ।', 'add-to-cart': 'কার্টে যোগ করুন', 'added-to-cart': 'যোগ হয়েছে!', 'no-products': 'আপনার অনুসন্ধানের সাথে মেলে এমন কোনো পণ্য পাওয়া যায়নি।', 'back-to-products': 'সকল পণ্যে ফিরে যান', 'returnable': '৩০-দিনের মধ্যে ফেরতযোগ্য', 'not-returnable': 'ফেরতযোগ্য নয়', 'secure-payments': 'নিরাপদ পেমেন্ট', 'size': 'সাইজ:', 'storage': 'স্টোরেজ:', 'color': 'রঙ:', 'product-description': 'পণ্যের বিবরণ', 'product-specifications': 'পণ্যের স্পেসিফিকেশন', 'specifications': 'স্পেসিফিকেশন', 'value': 'মান', 'no-specs': 'এই পণ্যের জন্য কোন স্পেসিফিকেশন উপলব্ধ নেই।', 'product-reviews': 'পণ্যের রিভিউ', 'no-reviews': 'এই পণ্যের জন্য এখনো কোনো রিভিউ নেই।', 'cart': 'আপনার কার্ট', 'cart-empty': 'আপনার কার্ট খালি।', 'total': 'মোট মূল্য:', 'checkout': 'চেকআউট করুন', 'your-wishlist': 'আপনার উইশলিস্ট', 'wishlist-empty': 'আপনার উইশলিস্ট খালি। কিছু পণ্য যোগ করুন!', 'your-account': 'আপনার অ্যাকাউন্ট', 'signin-google': 'Google দিয়ে সাইন ইন করুন', 'logout': 'লগআউট', 'toast-cart-added': 'পণ্য কার্টে যোগ করা হয়েছে!', 'toast-wishlist-added': 'পণ্য উইশলিস্টে যোগ করা হয়েছে!', 'toast-wishlist-removed': 'পণ্য উইশলিস্ট থেকে সরানো হয়েছে!', 'toast-login-success': 'সফলভাবে লগইন হয়েছে!', 'toast-logout-success': 'সফলভাবে লগআউট হয়েছে!',
@@ -1260,6 +1264,7 @@
                 'profile': 'প্রোফাইল',
                 'wishlist': 'উইশলিস্ট',
                 'cart-short': 'কার্ট',
+                'remove': 'সরান',
             }
         };
 
@@ -2207,6 +2212,24 @@
             button.classList.add(variantType === 'color' ? 'color-variant-active' : 'variant-btn-active');
             
             selectedVariants[variantType] = value;
+
+            // Clear missing highlight when user selects a variant
+            const labelEl = document.querySelector(`#${variantType}-options label`);
+            if (labelEl) labelEl.classList.remove('text-red-600', 'animate-pulse');
+        }
+
+        // Helper: highlight missing variant fields and scroll to options
+        function highlightMissingVariantUI(missingTypes = []) {
+            try {
+                missingTypes.forEach(type => {
+                    const labelEl = document.querySelector(`#${type}-options label`);
+                    const wrapper = document.getElementById(`${type}-options`);
+                    if (wrapper) wrapper.classList.remove('hidden');
+                    if (labelEl) labelEl.classList.add('text-red-600', 'animate-pulse');
+                });
+                const opts = document.getElementById('product-options');
+                if (opts) opts.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } catch (err) { console.log('Variant highlight failed:', err); }
         }
 
         // --- Firestore Database Logic ---
@@ -2725,9 +2748,25 @@
             // Temporarily re-assign productList to render into our temp container
             const originalProductList = DOMElements.productList;
             DOMElements.productList = tempContainer;
+            renderContext = 'wishlist';
             renderProducts(wishedProducts);
-            DOMElements.wishlistItems.innerHTML = tempContainer.innerHTML;
+            // Inject Remove buttons in place of the wishlist heart
+            const tmp = document.createElement('div');
+            tmp.innerHTML = tempContainer.innerHTML;
+            tmp.querySelectorAll('.product-card').forEach(card => {
+                const wishBtn = card.querySelector('.wishlist');
+                if (wishBtn) {
+                    const pid = wishBtn.getAttribute('data-product-id') || (card.dataset.productId || '');
+                    const removeBtn = document.createElement('button');
+                    removeBtn.className = 'remove-from-wishlist bg-red-500 text-white py-2 px-4 rounded-full font-semibold hover:bg-red-600 transition-colors';
+                    removeBtn.setAttribute('data-product-id', pid);
+                    removeBtn.textContent = translations[currentLanguage]['remove'] || 'Remove';
+                    wishBtn.replaceWith(removeBtn);
+                }
+            });
+            DOMElements.wishlistItems.innerHTML = tmp.innerHTML;
             DOMElements.productList = originalProductList; // Reset to original
+            renderContext = null;
         }
 
         // --- CART HELPERS ---
@@ -4478,14 +4517,37 @@
                 }
             });
             // --- END Invoice Button Delegation ---
+
+            // --- Wishlist Remove Delegation ---
+            document.addEventListener('click', async (e) => {
+                const removeBtn = e.target.closest('.remove-from-wishlist');
+                if (!removeBtn) return;
+                const pid = removeBtn.getAttribute('data-product-id');
+                await toggleWishlistInDb(pid);
+                updateWishlistUI();
+            });
+            // --- END Wishlist Remove Delegation ---
             
             const detailsPage = document.getElementById('product-details-page');
             detailsPage.querySelector('#add-to-cart-details').addEventListener('click', (e) => addToCartInDb(e.target.dataset.productId, false));
             detailsPage.querySelector('.buy-now').addEventListener('click', (e) => {
                 const productId = detailsPage.querySelector('#add-to-cart-details').dataset.productId;
+                // Pre-check variants and guide the user if any required option is missing
+                const product = (productsData || []).find(p => p.id === productId);
+                const required = product ? getRequiredVariants(product) : [];
+                const missing = required.filter(t => !selectedVariants[t]);
+                if (missing.length > 0) {
+                    showToast('toast-select-variant', false);
+                    highlightMissingVariantUI(missing);
+                    return;
+                }
                 addToCartInDb(productId).then(() => {
                    openPaymentModal();
                 }).catch(err => {
+                   if (String(err || '').toLowerCase().includes('variant')) {
+                       showToast('toast-select-variant', false);
+                       highlightMissingVariantUI(required);
+                   }
                    console.log("Could not proceed to buy now:", err);
                 });
             });
