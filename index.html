@@ -1107,7 +1107,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
     import { getAuth, onAuthStateChanged, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, deleteUser, signInWithCustomToken, signInAnonymously, sendPasswordResetEmail, reauthenticateWithCredential, EmailAuthProvider, reauthenticateWithPopup, fetchSignInMethodsForEmail } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc, deleteDoc, onSnapshot, updateDoc, increment, deleteField, collection, addDoc, serverTimestamp, getDocs, writeBatch, query, where, arrayUnion, orderBy, limit } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    import { getFirestore, doc, setDoc, getDoc, deleteDoc, onSnapshot, updateDoc, increment, deleteField, collection, addDoc, serverTimestamp, getDocs, writeBatch, query, where, arrayUnion, orderBy, limit, FieldPath } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
         
         // Use the global Firebase config and auth token provided by the environment
@@ -2306,7 +2306,7 @@
             return required;
         }
 
-        async function addToCartInDb(productId, fromCard = false) {
+    async function addToCartInDb(productId, fromCard = false) {
             if (isCurrentUserBlocked) {
                 showToast('account-blocked', false);
                 return Promise.reject("User is blocked");
@@ -2339,8 +2339,21 @@
                 }
             }
 
-            const sortedVariantKeys = Object.keys(selectedVariants).sort();
-            const variantString = sortedVariantKeys.map(key => `_${key.charAt(0).toUpperCase()}:${selectedVariants[key]}`).join('');
+            // Only include variant keys that are actually applicable to this product
+            const variantFieldMap = { size: 'sizes', storage: 'storage', color: 'colors' };
+            const applicableVariantKeys = ['size','storage','color'].filter(k => {
+                const fieldName = variantFieldMap[k];
+                const val = product[fieldName];
+                return Array.isArray(val) ? val.length > 0 : !!val;
+            });
+            const selectedForProduct = {};
+            for (const key of applicableVariantKeys) {
+                if (selectedVariants[key]) selectedForProduct[key] = selectedVariants[key];
+            }
+            // Use distinct codes for variants to avoid collisions (legacy used _S: for both size and storage)
+            const codeMap = { size: 'SZ', storage: 'ST', color: 'C' };
+            const sortedVariantKeys = Object.keys(selectedForProduct).sort();
+            const variantString = sortedVariantKeys.map(key => `_${codeMap[key]}:${selectedForProduct[key]}`).join('');
             const cartItemId = productId + variantString;
             
             const userDocRef = doc(db, 'users', currentUser.uid);
@@ -2353,7 +2366,7 @@
                     currentItem.quantity = backupQty + 1;
                     localCartCache.set(cartItemId, currentItem);
                     updateCartUI();
-                    await updateDoc(userDocRef, { [`cart.${cartItemId}.quantity`]: increment(1) });
+                    await updateDoc(userDocRef, new FieldPath('cart', cartItemId, 'quantity'), increment(1));
                 } else {
                     const newItemData = {
                         productId: product.id || '',
@@ -2361,7 +2374,7 @@
                         price: product.price || 0,
                         image: product.imageUrl || product.image || 'https://placehold.co/80x80/ccc/000?text=Image',
                         quantity: 1,
-                        ...selectedVariants
+                        ...selectedForProduct
                     };
                     // Optimistic add
                     localCartCache.set(cartItemId, newItemData);
@@ -2403,9 +2416,18 @@
                 updateCartUI();
             }
             try {
-                await updateDoc(userDocRef, {
-                    [`cart.${cartItemId}`]: deleteField()
-                });
+                await updateDoc(userDocRef, new FieldPath('cart', cartItemId), deleteField());
+                // Remove DOM row immediately as a visual confirmation
+                const rowSelector = `[data-cart-item-id="${cartItemId}"]`;
+                document.querySelectorAll(rowSelector).forEach(el => el.remove());
+                // If cache is empty now, show empty state
+                if (localCartCache.size === 0) {
+                    const emptyHtml = `<p data-lang="cart-empty" class="text-center text-gray-500">${translations[currentLanguage]['cart-empty']}</p>`;
+                    const cartEl = DOMElements.cartItems;
+                    const pageItems = document.getElementById('cart-page-items');
+                    if (cartEl && !cartEl.innerHTML.trim()) cartEl.innerHTML = emptyHtml;
+                    if (pageItems && !pageItems.innerHTML.trim()) pageItems.innerHTML = emptyHtml;
+                }
             } catch (error) {
                 // Rollback on error
                 if (backup) {
@@ -2440,9 +2462,7 @@
                 updateCartUI();
             }
             try {
-                await updateDoc(userDocRef, {
-                    [`cart.${cartItemId}.quantity`]: increment(change)
-                });
+                await updateDoc(userDocRef, new FieldPath('cart', cartItemId, 'quantity'), increment(change));
             } catch (error) {
                 // Rollback on error
                 if (currentItem) {
@@ -2479,22 +2499,28 @@
         }
         
         async function updateCartUI() {
-            const subtotal = Array.from(localCartCache.values()).reduce((sum, item) => sum + ((item.price || 0) * (item.quantity || 0)), 0);
+            // Use effective price: prefer item.price, fall back to product price from productsData
+            const subtotal = Array.from(localCartCache.entries()).reduce((sum, [cartItemId, item]) => {
+                const productRef = getProductRefForCartItem(cartItemId, item);
+                const unitPrice = Number(item?.price ?? productRef?.price ?? 0);
+                const qty = Number(item?.quantity ?? 0);
+                return sum + (unitPrice * qty);
+            }, 0);
             
             const deliveryCharge = await getDeliveryCharge(subtotal);
             const total = subtotal + deliveryCharge - discountAmount;
             
-            DOMElements.cartSubtotal.textContent = `৳${subtotal.toFixed(2)}`;
+            if (DOMElements.cartSubtotal) DOMElements.cartSubtotal.textContent = `৳${subtotal.toFixed(2)}`;
             
             if (discountAmount > 0) {
-                DOMElements.discountRow.classList.remove('hidden');
-                DOMElements.cartDiscount.textContent = `- ৳${discountAmount.toFixed(2)}`;
+             if (DOMElements.discountRow) DOMElements.discountRow.classList.remove('hidden');
+             if (DOMElements.cartDiscount) DOMElements.cartDiscount.textContent = `- ৳${discountAmount.toFixed(2)}`;
             } else {
-                 DOMElements.discountRow.classList.add('hidden');
+              if (DOMElements.discountRow) DOMElements.discountRow.classList.add('hidden');
             }
             
-            DOMElements.deliveryCharge.textContent = `৳${deliveryCharge.toFixed(2)}`;
-            DOMElements.cartTotal.textContent = `৳${total.toFixed(2)}`;
+          if (DOMElements.deliveryCharge) DOMElements.deliveryCharge.textContent = `৳${deliveryCharge.toFixed(2)}`;
+          if (DOMElements.cartTotal) DOMElements.cartTotal.textContent = `৳${total.toFixed(2)}`;
 
             // Mirror values to full-page cart if present
             const pageSubtotal = document.getElementById('cart-page-subtotal');
@@ -2515,12 +2541,13 @@
             }
 
             const totalItems = Array.from(localCartCache.values()).reduce((sum, item) => sum + (item.quantity || 0), 0);
-            DOMElements.cartCount.textContent = totalItems;
+            if (DOMElements.cartCount) DOMElements.cartCount.textContent = totalItems;
             renderCartItems();
         }
 
-       async function getDeliveryCharge(subtotal) {
-            if (!currentUser || !currentUserData) return 0;
+      async function getDeliveryCharge(subtotal) {
+          if (!currentUser || !currentUserData) return 0;
+          if (subtotal <= 0) return 0;
             
             const ordersRef = collection(db, "orders");
             // NOTE: We rely on client-side sorting instead of Firestore orderBy for simplicity/index avoidance
@@ -2528,7 +2555,7 @@
             const querySnapshot = await getDocs(q);
             const isFirstOrder = querySnapshot.empty;
             
-            const location = (currentUserData.location || "").toLowerCase();
+            const location = (currentUserData?.location || "").toLowerCase();
             const isInTangail = location.includes("tangail");
 
             if (isInTangail) {
@@ -2539,9 +2566,10 @@
         }
 
         function renderCartItems() {
+            const cartEl = DOMElements.cartItems;
+            const pageItems = document.getElementById('cart-page-items');
             if (!currentUser || currentUser.isAnonymous) {
-                DOMElements.cartItems.innerHTML = `<p class="text-center text-gray-500">Please log in to see your cart.</p>`;
-                const pageItems = document.getElementById('cart-page-items');
+                if (cartEl) cartEl.innerHTML = `<p class="text-center text-gray-500">Please log in to see your cart.</p>`;
                 if (pageItems) pageItems.innerHTML = `<p class="text-center text-gray-500">Please log in to see your cart.</p>`;
                 return;
             }
@@ -2549,7 +2577,9 @@
             let cartHtml = '';
             
             if(localCartCache.size === 0){
-                DOMElements.cartItems.innerHTML = `<p data-lang="cart-empty" class="text-center text-gray-500">${translations[currentLanguage]['cart-empty']}</p>`;
+                const emptyHtml = `<p data-lang="cart-empty" class="text-center text-gray-500">${translations[currentLanguage]['cart-empty']}</p>`;
+                if (cartEl) cartEl.innerHTML = emptyHtml;
+                if (pageItems) pageItems.innerHTML = emptyHtml;
             } else {
                 for (const [cartItemId, item] of localCartCache.entries()) {
                     // Build variants text
@@ -2559,30 +2589,33 @@
                     if (item.storage) variantsHtml += `Storage: ${item.storage} `;
                     variantsHtml += '</div>';
 
-                    // Try to enrich with product data for discount/original price
-                    const productRef = productsData?.find(p => p.id === item.productId);
-                    const hasDiscount = !!(productRef && productRef.isOffer && productRef.originalPrice && productRef.originalPrice > (productRef.price || item.price || 0));
-                    const discountPercent = hasDiscount ? Math.round(((productRef.originalPrice - (productRef.price || item.price || 0)) / productRef.originalPrice) * 100) : 0;
+                    // Enrich with product data for missing fields and discount/original price
+                    const productRef = getProductRefForCartItem(cartItemId, item);
+                    const displayName = item?.name || productRef?.name || 'Unknown Product';
+                    const displayImage = item?.image || productRef?.imageUrl || productRef?.image || 'https://placehold.co/80x80/ccc/000?text=Image';
+                    const unitPrice = Number(item?.price ?? productRef?.price ?? 0);
+                    const hasDiscount = !!(productRef && productRef.isOffer && productRef.originalPrice && productRef.originalPrice > unitPrice);
+                    const discountPercent = hasDiscount ? Math.round(((Number(productRef.originalPrice) - unitPrice) / Number(productRef.originalPrice)) * 100) : 0;
 
                     let priceHtml = '';
                     if (hasDiscount) {
                         priceHtml = `
                             <div class="flex items-baseline gap-2 flex-wrap mt-1">
-                                <span class="text-base sm:text-md font-bold text-price-black">৳${(item.price || 0).toFixed(2)}</span>
+                                <span class="text-base sm:text-md font-bold text-price-black">৳${unitPrice.toFixed(2)}</span>
                                 <span class="text-xs text-gray-400 line-through">৳${Number(productRef.originalPrice).toFixed(2)}</span>
                                 <span class="text-[10px] font-bold text-red-600 bg-red-50 px-1.5 py-0.5 rounded">-${discountPercent}%</span>
                             </div>`;
                     } else {
-                        priceHtml = `<div class="mt-1"><span class="text-base sm:text-md font-bold text-price-black">৳${(item.price || 0).toFixed(2)}</span></div>`;
+                        priceHtml = `<div class="mt-1"><span class="text-base sm:text-md font-bold text-price-black">৳${unitPrice.toFixed(2)}</span></div>`;
                     }
 
                     // Compose each cart row (mobile-first, Temu-like compact)
                     cartHtml += `
-                        <div class="rounded-2xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 p-3 sm:p-4 shadow-sm">
+                        <div class="rounded-2xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 p-3 sm:p-4 shadow-sm" data-cart-item-id="${cartItemId}">
                             <div class="flex gap-3">
-                                <img src="${item.image || 'https://placehold.co/80x80/ccc/000?text=Image'}" alt="${item.name}" class="w-16 h-16 sm:w-20 sm:h-20 rounded-xl object-cover flex-shrink-0" onerror="this.onerror=null;this.src='https://placehold.co/80x80/ccc/000?text=Image';">
+                                <img src="${displayImage}" alt="${displayName}" class="w-16 h-16 sm:w-20 sm:h-20 rounded-xl object-cover flex-shrink-0" onerror="this.onerror=null;this.src='https://placehold.co/80x80/ccc/000?text=Image';">
                                 <div class="flex-1 min-w-0">
-                                    <h4 class="text-[15px] sm:text-base font-semibold text-theme-purple leading-tight break-words">${item.name}</h4>
+                                    <h4 class="text-[15px] sm:text-base font-semibold text-theme-purple leading-tight break-words">${displayName}</h4>
                                     ${variantsHtml}
                                     ${priceHtml}
                                 </div>
@@ -2594,13 +2627,12 @@
                                     <span class="w-8 text-center text-dark">${item.quantity}</span>
                                     <button onclick="updateQuantity('${cartItemId}', 1)" class="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-600 text-dark dark:text-gray-200 hover:bg-gray-300 transition-colors">+</button>
                                 </div>
-                                <div class="text-[12px] text-gray-500">৳${((item.price || 0) * (item.quantity || 0)).toFixed(2)}</div>
+                                <div class="text-[12px] text-gray-500">৳${(unitPrice * (item.quantity || 0)).toFixed(2)}</div>
                             </div>
                         </div>
                     `;
                 }
-                DOMElements.cartItems.innerHTML = cartHtml;
-                const pageItems = document.getElementById('cart-page-items');
+                if (cartEl) cartEl.innerHTML = cartHtml;
                 if (pageItems) pageItems.innerHTML = cartHtml;
             }
         }
@@ -2628,6 +2660,25 @@
             DOMElements.wishlistItems.innerHTML = tempContainer.innerHTML;
             DOMElements.productList = originalProductList; // Reset to original
         }
+
+        // --- CART HELPERS ---
+        function getBaseProductId(cartItemId) {
+            if (!cartItemId) return '';
+            // Find start of variant segment like _S: or _C:
+            const idxS = cartItemId.indexOf('_S:'); // size or storage (both S due to legacy key)
+            const idxC = cartItemId.indexOf('_C:'); // color
+            const idxList = [idxS, idxC].filter(i => i >= 0);
+            if (idxList.length === 0) return cartItemId;
+            const minIdx = Math.min(...idxList);
+            return cartItemId.slice(0, minIdx);
+        }
+
+        function getProductRefForCartItem(cartItemId, item) {
+            const pid = item?.productId || getBaseProductId(cartItemId);
+            if (!pid) return null;
+            return (productsData || []).find(p => p.id === pid) || null;
+        }
+        // --- END CART HELPERS ---
 
         // --- AUTHENTICATION ---
         
@@ -4042,6 +4093,8 @@
             DOMElements.productList.innerHTML = `<div class="loader"></div>`;
             await fetchProductsFromFirestore();
             await fetchBannersFromFirestore();
+            // Recompute cart totals and mirror UI now that product data is available
+            try { await updateCartUI(); } catch (_) {}
             
             // 3. Attach Event Listeners
             DOMElements.loginBtn.addEventListener('click', handleGoogleLogin);
