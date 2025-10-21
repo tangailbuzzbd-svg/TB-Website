@@ -626,28 +626,47 @@
                     </div>
                 </div>
             </section>
-            <!-- Banner Section -->
-            <section class="container mx-auto px-4 py-8">
-                <div id="banner-slider" class="relative overflow-hidden w-full rounded-2xl shadow-xl">
-                    <!-- Slides Container -->
-                    <div id="slides-container" class="flex transition-transform duration-500 ease-in-out">
-                       <!-- Banners will be loaded from Firebase here -->
+            <!-- Hero/Banner Composite (2-part layout) -->
+            <section class="container mx-auto px-4 py-4">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                    <!-- Left: Main Banner Slider -->
+                    <div class="lg:col-span-2">
+                        <div id="banner-slider" class="relative overflow-hidden w-full rounded-2xl shadow-xl h-[220px] sm:h-[260px]">
+                            <!-- Slides Container -->
+                            <div id="slides-container" class="flex transition-transform duration-500 ease-in-out h-full">
+                                <!-- Banners will be loaded from Firebase here -->
+                            </div>
+
+                            <!-- Slider Navigation Buttons -->
+                            <button id="prev-btn" class="absolute left-4 top-1/2 -translate-y-1/2 bg-white bg-opacity-50 text-dark p-2 rounded-full hover:bg-opacity-80 transition-colors">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button id="next-btn" class="absolute right-4 top-1/2 -translate-y-1/2 bg-white bg-opacity-50 text-dark p-2 rounded-full hover:bg-opacity-80 transition-colors">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+
+                            <!-- Slider Indicators -->
+                            <div id="slider-indicators" class="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
+                                <!-- Indicators are dynamically generated -->
+                            </div>
+                        </div>
                     </div>
-                    
-                    <!-- Slider Navigation Buttons -->
-                    <button id="prev-btn" class="absolute left-4 top-1/2 -translate-y-1/2 bg-white bg-opacity-50 text-dark p-2 rounded-full hover:bg-opacity-80 transition-colors">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <button id="next-btn" class="absolute right-4 top-1/2 -translate-y-1/2 bg-white bg-opacity-50 text-dark p-2 rounded-full hover:bg-opacity-80 transition-colors">
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
-                    
-                    <!-- Slider Indicators -->
-                    <div id="slider-indicators" class="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
-                        <!-- Indicators are dynamically generated -->
-                    </div>
+
+                    <!-- Right: Promo Tile (tall) -->
+                    <aside class="lg:col-span-1">
+                        <a id="right-promo-link" href="javascript:void(0)" onclick="scrollToElement('categories')" class="group block relative overflow-hidden rounded-2xl shadow-xl h-[220px] sm:h-[260px]">
+                            <img id="right-promo-img" src="https://images.unsplash.com/photo-1524594081293-190a2fe0baae?q=80&w=1200&auto=format&fit=crop" alt="Promo: Smart prices on accessories" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/ddd/000?text=Promo';">
+                            <div class="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors"></div>
+                            <div class="absolute bottom-4 left-4 right-4 text-white drop-shadow">
+                                <h3 id="right-promo-title" class="text-xl sm:text-2xl font-extrabold">SHARP LOOKS, SMART PRICES</h3>
+                                <p id="right-promo-subtitle" class="text-sm sm:text-base font-semibold">Up to 70% off</p>
+                            </div>
+                        </a>
+                    </aside>
                 </div>
             </section>
+            
+            <!-- Hero Section removed: merged into composite above to match design -->
         
             <!-- Featured Products Section -->
             <section id="products" class="container mx-auto px-4 py-16">
@@ -1211,6 +1230,12 @@
                 'wishlist': 'Wishlist',
                 'cart-short': 'Cart',
                 'remove': 'Remove',
+                // Hero
+                'hero-title': 'Find your style. Shop the buzz.',
+                'hero-subtitle': 'Exclusive deals, fast delivery, and trusted products across electronics, fashion, and more.',
+                'hero-cta-shop': 'Shop Now',
+                'hero-cta-browse': 'Browse Categories',
+                'hero-badge': 'Fresh arrivals daily',
             },
             bn: {
                 'deliver-to': 'ডেলিভারি লোকেশন', 'home': 'হোম', 'products': 'পণ্য', 'categories': 'ক্যাটাগরি', 'offers': 'অফার', 'search-placeholder': 'পণ্য খুঁজুন...', 'featured-products': 'বৈশিষ্ট্যযুক্ত পণ্য', 'shop-by-category': 'ক্যাটাগরি অনুসারে কেনাকাটা করুন', 'cat-electronics': 'ইলেকট্রনিক্স', 'cat-fashion': 'ফ্যাশন', 'cat-home-garden': 'হোম অ্যান্ড গার্ডেন', 'cat-health-beauty': 'স্বাস্থ্য ও সৌন্দর্য', 'cat-sports': 'খেলাধুলা ও আউটডোর', 'cat-books': 'বই ও স্টেশনারি', 'cat-kids': 'বাচ্চা ও খেলনা', 'cat-cars': 'গাড়ি ও বাইক', 'why-choose-us': 'আমাদেরকে কেন বেছে নিবেন', 'feature-delivery-title': 'দ্রুত ডেলিভারি', 'feature-delivery-desc': 'আমরা ২-৩ কার্যদিবসের মধ্যে আপনার দোরগোড়ায় পণ্য পৌঁছে দিই।', 'feature-payment-title': 'নিরাপদ পেমেন্ট', 'feature-payment-desc': 'আপনার নিরাপত্তা ও গোপনীয়তার জন্য সকল লেনদেন এনক্রিপ্টেড।', 'feature-return-title': 'সহজ রিটার্ন', 'feature-return-desc': 'পছন্দ না হলে ৩০ দিনের মধ্যে পণ্য ফেরত দিন এবং সম্পূর্ণ মূল্য ফেরত পান।', 'feature-support-title': '২৪/৭ সাপোর্ট', 'feature-support-desc': 'আমাদের গ্রাহক সহায়তা দল দিনরাত আপনার জন্য উপলব্ধ।', 'add-to-cart': 'কার্টে যোগ করুন', 'added-to-cart': 'যোগ হয়েছে!', 'no-products': 'আপনার অনুসন্ধানের সাথে মেলে এমন কোনো পণ্য পাওয়া যায়নি।', 'back-to-products': 'সকল পণ্যে ফিরে যান', 'returnable': '৩০-দিনের মধ্যে ফেরতযোগ্য', 'not-returnable': 'ফেরতযোগ্য নয়', 'secure-payments': 'নিরাপদ পেমেন্ট', 'size': 'সাইজ:', 'storage': 'স্টোরেজ:', 'color': 'রঙ:', 'product-description': 'পণ্যের বিবরণ', 'product-specifications': 'পণ্যের স্পেসিফিকেশন', 'specifications': 'স্পেসিফিকেশন', 'value': 'মান', 'no-specs': 'এই পণ্যের জন্য কোন স্পেসিফিকেশন উপলব্ধ নেই।', 'product-reviews': 'পণ্যের রিভিউ', 'no-reviews': 'এই পণ্যের জন্য এখনো কোনো রিভিউ নেই।', 'cart': 'আপনার কার্ট', 'cart-empty': 'আপনার কার্ট খালি।', 'total': 'মোট মূল্য:', 'checkout': 'চেকআউট করুন', 'your-wishlist': 'আপনার উইশলিস্ট', 'wishlist-empty': 'আপনার উইশলিস্ট খালি। কিছু পণ্য যোগ করুন!', 'your-account': 'আপনার অ্যাকাউন্ট', 'signin-google': 'Google দিয়ে সাইন ইন করুন', 'logout': 'লগআউট', 'toast-cart-added': 'পণ্য কার্টে যোগ করা হয়েছে!', 'toast-wishlist-added': 'পণ্য উইশলিস্টে যোগ করা হয়েছে!', 'toast-wishlist-removed': 'পণ্য উইশলিস্ট থেকে সরানো হয়েছে!', 'toast-login-success': 'সফলভাবে লগইন হয়েছে!', 'toast-logout-success': 'সফলভাবে লগআউট হয়েছে!',
@@ -1233,6 +1258,12 @@
                 'model-id': 'প্রোডাক্ট আইডি: {id}', // FIX: Changed 'মডেল আইডি:' to 'প্রোডাক্ট আইডি:'
                 'available-coupons': 'উপলব্ধ কুপন', 'min-spend': 'সর্বনিম্ন খরচ', 'discount-value': 'ডিসকাউন্ট', 'tap-to-copy': 'কপি করুন', 'copied': 'কপি হয়েছে!',
                 'all-products': 'সকল পণ্য',
+                // Hero
+                'hero-title': 'আপনার স্টাইল খুঁজুন। শপ করুন বাজ়ে।',
+                'hero-subtitle': 'ইলেকট্রনিক্স, ফ্যাশনসহ নানা ক্যাটাগরিতে বিশেষ অফার, দ্রুত ডেলিভারি ও বিশ্বস্ত পণ্য।',
+                'hero-cta-shop': 'এখনই কেনাকাটা',
+                'hero-cta-browse': 'ক্যাটাগরি দেখুন',
+                'hero-badge': 'প্রতিদিন নতুন কালেকশন',
                 'current-category-title': '{category} ক্যাটাগরি',
                 'sub-category-filter': 'সাব-ক্যাটাগরি অনুযায়ী ফিল্টার করুন:',
                 'write-a-review': 'একটি রিভিউ দিন',
@@ -1276,7 +1307,7 @@
             myOrdersBtnProfile: document.getElementById('my-orders-btn-profile'), 
             ordersList: document.getElementById('orders-list'),
             editPhotoPreview: document.getElementById('edit-photo-preview'), editPhotoInput: document.getElementById('edit-photo-input'), editNameInput: document.getElementById('edit-name-input'), editMobileInput: document.getElementById('edit-mobile-input'), editLocationInput: document.getElementById('edit-location-input'),
-            searchInput: document.getElementById('search-input'), searchButton: document.getElementById('search-button'), searchInputMobile: document.getElementById('search-input-mobile'), searchButtonMobile: document.getElementById('search-button-mobile'), slidesContainer: document.getElementById('slides-container'), prevBtn: document.getElementById('prev-btn'), nextBtn: document.getElementById('next-btn'), indicatorContainer: document.getElementById('slider-indicators'), drawerOverlay: document.getElementById('drawer-overlay'),
+            searchInput: document.getElementById('search-input'), searchButton: document.getElementById('search-button'), searchInputMobile: document.getElementById('search-input-mobile'), searchButtonMobile: document.getElementById('search-button-mobile'), slidesContainer: document.getElementById('slides-container'), prevBtn: document.getElementById('prev-btn'), nextBtn: document.getElementById('next-btn'), indicatorContainer: document.getElementById('slider-indicators'), drawerOverlay: document.getElementById('drawer-overlay'), rightPromoImg: document.getElementById('right-promo-img'), rightPromoTitle: document.getElementById('right-promo-title'), rightPromoSubtitle: document.getElementById('right-promo-subtitle'), rightPromoLink: document.getElementById('right-promo-link'),
             loginForm: document.getElementById('login-form'), registerForm: document.getElementById('register-form'), showRegisterLink: document.getElementById('show-register-form'), showLoginLink: document.getElementById('show-login-form'), authError: document.getElementById('auth-error'), profileDrawerTitle: document.getElementById('profile-drawer-title'),
             resetForm: document.getElementById('reset-form'), resetEmail: document.getElementById('reset-email'), showResetLink: document.getElementById('show-reset-form'), showLoginFromResetLink: document.getElementById('show-login-from-reset'),
             paymentModal: document.getElementById('payment-modal'), checkoutBtn: document.getElementById('checkout-btn'), confirmOrderBtn: document.getElementById('confirm-order-btn'),
@@ -1593,6 +1624,51 @@
             return slug.split(/[-_]/g).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
         }
 
+        // Curated top categories to always show (merged with categories found in products)
+        const TOP_CATEGORIES = [
+            'electronics',
+            'fashion',
+            'groceries',
+            'beauty',
+            'home-garden',
+            'kids-toys',
+            'sports-outdoors',
+            'books-stationery',
+            'automotive',
+            'health-beauty',
+            'accessories',
+            'footwear',
+            'watches',
+            'jewelry',
+            'bags',
+            'appliances'
+        ];
+
+        // Font Awesome icon mapping for categories (use small icon size)
+        function getCategoryIconClass(cat) {
+            const slug = String(cat || '').toLowerCase();
+            const map = {
+                'electronics': 'fa-tv',
+                'fashion': 'fa-tshirt',
+                'groceries': 'fa-shopping-basket',
+                'beauty': 'fa-spa',
+                'home-garden': 'fa-home',
+                'kids-toys': 'fa-puzzle-piece',
+                'sports-outdoors': 'fa-football-ball',
+                'books-stationery': 'fa-book',
+                'automotive': 'fa-car',
+                'cars': 'fa-car',
+                'health-beauty': 'fa-heartbeat',
+                'accessories': 'fa-star',
+                'footwear': 'fa-shoe-prints',
+                'watches': 'fa-clock',
+                'jewelry': 'fa-gem',
+                'bags': 'fa-shopping-bag',
+                'appliances': 'fa-plug'
+            };
+            return map[slug] || 'fa-tags';
+        }
+
         function updateCategoryHeader(category, subCategory = null) {
             const categoryName = category ? getCategoryLabel(category) : '';
             const subCategoryName = subCategory ? subCategory.charAt(0).toUpperCase() + subCategory.slice(1) : '';
@@ -1695,7 +1771,12 @@
             if (!listEl) return;
 
             // Derive unique categories from loaded products
-            const uniqueCategories = Array.from(new Set((productsData || []).map(p => p.category).filter(Boolean)));
+            const productCats = Array.from(new Set((productsData || []).map(p => p.category).filter(Boolean)));
+            // Merge curated + product categories, preserve order and uniqueness
+            const uniqueCategories = Array.from(new Set([...
+                TOP_CATEGORIES,
+                ...productCats
+            ]));
 
             // Chip classes
             const chipBase = 'shrink-0 inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium border transition-colors';
@@ -1711,7 +1792,11 @@
                 const isActive = currentCategory === cat;
                 const label = getCategoryLabel(cat);
                 const safeCat = String(cat).replace(/'/g, "\\'");
-                html += `<button class="${chipBase} ${isActive ? activeCls : idleCls}" onclick="filterProducts('${safeCat}')">${label}</button>`;
+                const iconClass = getCategoryIconClass(cat);
+                html += `<button class="${chipBase} ${isActive ? activeCls : idleCls}" onclick="filterProducts('${safeCat}')">
+                    <i class="fas ${iconClass} mr-2 text-xs sm:text-sm"></i>
+                    <span>${label}</span>
+                </button>`;
             });
 
             // Append subcategory dropdown inline if a category is active
@@ -2331,6 +2416,63 @@
             } catch (error) {
                 console.error("Error fetching banners:", error);
                 initializeSlider(); // Initialize slider even if fetch fails to handle static/empty state
+            }
+        }
+
+        // Load Right Promo Tile from Firestore
+    async function fetchRightPromoFromFirestore() {
+            try {
+                // Expect a collection 'sidePromos' with fields: imageUrl, title, subtitle, link(url), alt, active(bool), order(number)
+                const snap = await getDocs(collection(db, 'sidePromos'));
+                let promos = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+                // Filter active first if present
+                promos = promos.filter(p => p.active !== false);
+                // Sort by order if provided
+                promos.sort((a, b) => (a.order || 0) - (b.order || 0));
+                const promo = promos[0];
+                if (!promo) return; // keep defaults
+
+                const img = DOMElements.rightPromoImg;
+                const titleEl = DOMElements.rightPromoTitle;
+                const subEl = DOMElements.rightPromoSubtitle;
+                const linkEl = DOMElements.rightPromoLink;
+                if (!img || !titleEl || !subEl || !linkEl) return;
+
+                if (promo.imageUrl) {
+                    img.src = promo.imageUrl;
+                }
+                img.alt = promo.alt || promo.title || 'Promo';
+
+                // Language-aware fields (use bn-specific if available)
+                const isBn = (typeof currentLanguage !== 'undefined' && currentLanguage === 'bn');
+                const titleBn = promo.title_bn || promo.titleBn || promo.titleBangla;
+                const subtitleBn = promo.subtitle_bn || promo.subtitleBn || promo.subtitleBangla;
+                const title = (isBn && titleBn) ? titleBn : (promo.title || titleBn || titleEl.textContent);
+                const subtitle = (isBn && subtitleBn) ? subtitleBn : (promo.subtitle || subtitleBn || subEl.textContent);
+                if (title) titleEl.textContent = title;
+                if (subtitle) subEl.textContent = subtitle;
+
+                const link = promo.url || promo.link || promo.href;
+                if (link) {
+                    const isExternal = /^https?:\/\//i.test(link);
+                    linkEl.setAttribute('href', link);
+                    // Remove default scroll onclick when we have a real link
+                    linkEl.onclick = null;
+                    if (isExternal) {
+                        linkEl.setAttribute('target', '_blank');
+                        linkEl.setAttribute('rel', 'noopener');
+                    } else {
+                        linkEl.removeAttribute('target');
+                        linkEl.removeAttribute('rel');
+                    }
+                } else {
+                    // Keep internal scroll behavior if no link was provided
+                    linkEl.setAttribute('href', 'javascript:void(0)');
+                    linkEl.onclick = () => scrollToElement('categories');
+                }
+            } catch (err) {
+                console.error('Error fetching right promo:', err);
+                // Keep defaults silently
             }
         }
 
@@ -4369,6 +4511,7 @@
             DOMElements.productList.innerHTML = `<div class="loader"></div>`;
             await fetchProductsFromFirestore();
             await fetchBannersFromFirestore();
+            await fetchRightPromoFromFirestore();
             // Recompute cart totals and mirror UI now that product data is available
             try { await updateCartUI(); } catch (_) {}
             
