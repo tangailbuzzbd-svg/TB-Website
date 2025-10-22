@@ -284,11 +284,15 @@
             <!-- Right side: Actions -->
             <div class="flex items-center space-x-2 sm:space-x-4">
                 <!-- Search -->
-                <div class="hidden md:block relative flex-grow md:flex-grow-0 rounded-full overflow-hidden shadow-md">
-                    <input type="text" id="search-input" placeholder="পণ্য খুঁজুন..." class="w-full pl-6 pr-12 py-2 text-dark outline-none focus:ring-2 focus:ring-theme-pink rounded-full text-sm">
-                    <button id="search-button" class="absolute right-0 top-0 h-full bg-theme-pink text-white px-4 hover:bg-theme-purple transition-colors">
-                        <i class="fas fa-search"></i>
-                    </button>
+                <div class="hidden md:block relative flex-grow md:flex-grow-0">
+                    <div class="flex items-stretch rounded-full overflow-hidden shadow-md bg-white dark:bg-gray-900">
+                        <input type="text" id="search-input" placeholder="পণ্য খুঁজুন..." class="flex-1 min-w-0 px-4 py-2 outline-none focus:ring-2 focus:ring-theme-pink bg-transparent text-sm text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-400">
+                        <button id="search-button" class="px-4 bg-theme-pink text-white hover:bg-theme-purple transition-colors shrink-0">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                    <!-- Live search results (desktop) -->
+                    <div id="search-results-desktop" class="absolute top-full left-0 w-full bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 shadow-lg rounded-b-lg z-50 overflow-hidden hidden max-h-80 overflow-y-auto"></div>
                 </div>
 
                 <!-- Language Selector (Professional Dropdown) -->
@@ -338,11 +342,15 @@
         </div>
         <!-- Search bar for mobile -->
         <div class="md:hidden mt-4 px-4">
-            <div class="relative w-full rounded-full overflow-hidden shadow-md">
-                <input type="text" id="search-input-mobile" placeholder="পণ্য খুঁজুন..." class="w-full pl-6 pr-12 py-2 text-dark outline-none focus:ring-2 focus:ring-theme-pink rounded-full text-sm">
-                <button id="search-button-mobile" class="absolute right-0 top-0 h-full bg-theme-pink text-white px-4 hover:bg-theme-purple transition-colors">
-                    <i class="fas fa-search"></i>
+            <div class="relative w-full">
+                <div class="flex items-stretch rounded-full overflow-hidden shadow-md bg-white dark:bg-gray-900">
+                    <input type="text" id="search-input-mobile" placeholder="পণ্য খুঁজুন..." class="flex-1 min-w-0 px-4 py-2 outline-none focus:ring-2 focus:ring-theme-pink bg-transparent text-sm text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-400">
+                    <button id="search-button-mobile" class="px-4 bg-theme-pink text-white hover:bg-theme-purple transition-colors shrink-0">
+                        <i class="fas fa-search"></i>
                     </button>
+                </div>
+                <!-- Live search results (mobile) -->
+                <div id="search-results-mobile" class="absolute top-full left-0 w-full bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 shadow-lg rounded-b-lg z-50 overflow-hidden hidden max-h-80 overflow-y-auto"></div>
             </div>
         </div>
     </header>
@@ -1823,6 +1831,58 @@
         }
         window.scrollToElement = scrollToElement;
 
+        // Live Search Suggestions (Autocomplete)
+        function hideSearchResults() {
+            const desktopBox = document.getElementById('search-results-desktop');
+            const mobileBox = document.getElementById('search-results-mobile');
+            if (desktopBox) { desktopBox.innerHTML = ''; desktopBox.classList.add('hidden'); }
+            if (mobileBox) { mobileBox.innerHTML = ''; mobileBox.classList.add('hidden'); }
+        }
+        // Expose to global for inline handlers used in suggestion items
+        window.hideSearchResults = hideSearchResults;
+
+        function handleSearchSuggestions(event) {
+            try {
+                const target = event.target;
+                const query = String(target.value || '').trim().toLowerCase();
+                const isDesktop = target.id === 'search-input';
+                const boxId = isDesktop ? 'search-results-desktop' : 'search-results-mobile';
+                const resultsBox = document.getElementById(boxId);
+                if (!resultsBox) return;
+
+                if (!query || query.length < 2 || !Array.isArray(productsData) || productsData.length === 0) {
+                    resultsBox.innerHTML = '';
+                    resultsBox.classList.add('hidden');
+                    return;
+                }
+
+                const matches = productsData
+                    .filter(p => {
+                        const name = (p?.name || '').toLowerCase();
+                        const brand = (p?.brand || '').toLowerCase();
+                        const cat = (p?.category || '').toLowerCase();
+                        const sub = (p?.subCategory || '').toLowerCase();
+                        return name.includes(query) || brand.includes(query) || cat.includes(query) || sub.includes(query);
+                    })
+                    .slice(0, 5);
+
+                if (matches.length === 0) {
+                    resultsBox.innerHTML = '';
+                    resultsBox.classList.add('hidden');
+                    return;
+                }
+
+                const itemCls = 'block w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-gray-800 dark:text-gray-200';
+                const html = matches.map(p => {
+                    const title = (p.name || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                    return `<button type="button" class="${itemCls}" onclick="(function(){ hideSearchResults(); showProductDetails('${p.id}'); })()">${title}</button>`;
+                }).join('');
+
+                resultsBox.innerHTML = html;
+                resultsBox.classList.remove('hidden');
+            } catch (e) { /* noop */ }
+        }
+
         function renderStars(rating) {
             const fullStars = Math.floor(rating);
             const halfStar = rating % 1 >= 0.5;
@@ -2962,9 +3022,11 @@
                 console.error('showProductDetails failed', err);
                 if (typeof showToast === 'function') showToast('Failed to open product', false);
             }
-        }
+    }
+    // Expose to global for inline onclick usage in product cards and suggestions
+    window.showProductDetails = showProductDetails;
 
-        function renderThumbnails(thumbnails) {
+    function renderThumbnails(thumbnails) {
             const container = document.getElementById('thumbnail-container');
             container.innerHTML = thumbnails.map(src => 
                 `<img src="${src}" class="w-16 h-16 rounded-lg object-cover cursor-pointer hover:ring-2 hover:ring-theme-pink transition-all" onclick="document.getElementById('product-image').src='${src}'">`
@@ -4809,8 +4871,19 @@
         };
         
         function performSearch() {
-            const query = DOMElements.searchInput.value.toLowerCase() || DOMElements.searchInputMobile.value.toLowerCase();
-            const filtered = productsData.filter(p => p.name.toLowerCase().includes(query) || p.brand.toLowerCase().includes(query));
+            const qDesktop = DOMElements.searchInput ? DOMElements.searchInput.value : '';
+            const qMobile = DOMElements.searchInputMobile ? DOMElements.searchInputMobile.value : '';
+            const query = String(qDesktop || qMobile || '').trim().toLowerCase();
+            if (!query) { hideSearchResults(); return; }
+            const base = Array.isArray(productsData) ? productsData : [];
+            const filtered = base.filter(p => {
+                const name = (p?.name || '').toLowerCase();
+                const brand = (p?.brand || '').toLowerCase();
+                const cat = (p?.category || '').toLowerCase();
+                const sub = (p?.subCategory || '').toLowerCase();
+                return name.includes(query) || brand.includes(query) || cat.includes(query) || sub.includes(query);
+            });
+            hideSearchResults();
             renderProducts(filtered);
             showPage('home-page');
             scrollToElement('products');
@@ -5673,8 +5746,19 @@
 
             DOMElements.searchButton.addEventListener('click', performSearch);
             DOMElements.searchInput.addEventListener('keypress', e => e.key === 'Enter' && performSearch());
+            // Live search suggestions
+            if (DOMElements.searchInput) DOMElements.searchInput.addEventListener('input', handleSearchSuggestions);
+            if (DOMElements.searchInputMobile) DOMElements.searchInputMobile.addEventListener('input', handleSearchSuggestions);
+            if (DOMElements.searchButton) DOMElements.searchButton.addEventListener('click', hideSearchResults);
+            if (DOMElements.searchButtonMobile) DOMElements.searchButtonMobile.addEventListener('click', hideSearchResults);
             DOMElements.searchButtonMobile.addEventListener('click', performSearch);
             DOMElements.searchInputMobile.addEventListener('keypress', e => e.key === 'Enter' && performSearch());
+            // Hide suggestions when clicking outside of search areas
+            document.addEventListener('click', (e) => {
+                const inDesktop = e.target.closest('#search-input') || e.target.closest('#search-results-desktop') || e.target.closest('#search-button');
+                const inMobile = e.target.closest('#search-input-mobile') || e.target.closest('#search-results-mobile') || e.target.closest('#search-button-mobile');
+                if (!inDesktop && !inMobile) hideSearchResults();
+            });
             
             document.getElementById('hamburger-btn').addEventListener('click', () => openDrawer('nav-drawer'));
             
