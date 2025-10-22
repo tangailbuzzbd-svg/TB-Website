@@ -5708,8 +5708,15 @@
                     isSeen: false // Mark new messages as not seen initially
                 });
                 
-                // Update parent chat doc
-                await updateDoc(doc(db, 'live_chats', chatId), { lastActive: serverTimestamp() });
+                // Update parent chat doc with latest message metadata
+                await updateDoc(doc(db, 'live_chats', chatId), {
+                    lastActive: serverTimestamp(),
+                    lastMessage: text,
+                    lastMessageTimestamp: serverTimestamp(),
+                    lastSender: "user",
+                    isReadByAdmin: false, // notify admin
+                    userName: currentUser.displayName || currentUser.email || 'User'
+                });
 
                 DOMElements.chatInput.value = ''; // Clear input
                 
