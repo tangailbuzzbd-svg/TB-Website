@@ -67,6 +67,14 @@
         #toast-notification {
             transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
         }
+        /* Global responsive media and overflow fixes for mobile */
+        html, body {
+            overflow-x: hidden;
+        }
+        img, video {
+            max-width: 100%;
+            height: auto;
+        }
         .variant-btn-active {
             border-color: #3a86ff !important;
             background-color: #e0eaff !important;
@@ -895,7 +903,7 @@
                         <div class="w-full lg:w-1/2 flex flex-col items-center space-y-4">
                              <div id="product-image-container" class="relative w-full rounded-2xl shadow-lg overflow-hidden">
                                  <!-- Mouse events for handleImageZoom use 'var(--x-pos)' and 'var(--y-pos)' set in JS/CSS -->
-                                <img id="product-image" class="w-full h-full object-cover transition-transform duration-200 ease-out" src="" alt="Product Image">
+                                <img id="product-image" class="w-full h-auto object-contain transition-transform duration-200 ease-out" src="" alt="Product Image">
                             </div>
                             <!-- Thumbnail Images -->
                             <div id="thumbnail-container" class="flex space-x-2 overflow-x-auto w-full justify-center">
@@ -1033,8 +1041,8 @@
         
         <!-- Emergency Chat Page -->
         <div id="emergency-chat-page" class="hidden page">
-            <section class="container mx-auto px-4 py-16">
-                <div class="bg-white dark:bg-gray-800 p-6 rounded-3xl shadow-xl max-w-2xl mx-auto flex flex-col h-[70vh]">
+            <section class="container mx-auto px-4 py-4 md:py-16">
+                <div class="bg-white dark:bg-gray-800 p-6 pb-[env(safe-area-inset-bottom)] rounded-3xl shadow-xl max-w-2xl mx-auto flex flex-col min-h-0 h-[80dvh] md:h-[70vh]">
                     <div class="flex justify-between items-center mb-4 border-b pb-4">
                         <h2 class="text-2xl font-bold text-theme-purple">জরুরী যোগাযোগ</h2>
                         <button onclick="showPage('home-page')" class="text-theme-blue hover:text-theme-pink transition-colors">
@@ -1043,7 +1051,7 @@
                     </div>
                     
                     <!-- Chat Messages Container -->
-                    <div id="chat-messages" class="flex-grow overflow-y-auto space-y-4 p-4 mb-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                    <div id="chat-messages" class="min-h-0 flex-grow overflow-y-auto space-y-4 p-4 mb-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
                         <p class="text-center text-gray-500">Loading chat...</p>
                     </div>
                     
