@@ -126,6 +126,15 @@
             transform: scale(2);
         }
 
+        /* Dark mode text contrast fixes */
+        .text-dark { color: #111827; }
+        .text-price-black { color: #111827; }
+        html.dark .text-dark { color: #e5e7eb !important; }
+        html.dark .text-price-black { color: #f3f4f6 !important; }
+        html.dark .text-black { color: #f3f4f6 !important; }
+        html.dark .text-gray-900 { color: #f3f4f6 !important; }
+        html.dark .text-gray-800 { color: #e5e7eb !important; }
+
         /* Custom CSS for Progress Tracker (Final Fix for Image Alignment) */
         /* Core Flex Container */
         .tracker-step-container {
@@ -354,6 +363,13 @@
             </div>
         </div>
     </header>
+
+    <!-- Global Breadcrumb (shown on details page) -->
+    <div id="global-breadcrumb" class="hidden border-b border-gray-200 dark:border-gray-800 bg-gray-50/60 dark:bg-gray-900/60">
+        <div class="container mx-auto px-4 py-2">
+            <nav id="global-breadcrumb-path" class="text-sm flex flex-wrap items-center text-gray-600 dark:text-gray-300 gap-1"></nav>
+        </div>
+    </div>
 
     <!-- Drawer Overlay -->
     <div id="drawer-overlay" class="drawer-overlay fixed inset-0 bg-black bg-opacity-50 z-40 hidden" onclick="closeDrawer()"></div>
@@ -1351,6 +1367,11 @@
     let currentSortOption = 'popularity'; // 'price-asc' | 'price-desc' | 'popularity' | 'rating' | 'newest'
     let activeFilters = { brands: new Set(), priceMin: null, priceMax: null, sizes: new Set(), colors: new Set() };
     let lastBaseProducts = [];
+        // --- Pagination State ---
+        let currentPage = 1;           // current page index (1-based)
+        const PAGE_SIZE = 30;          // items per page
+        let lastRenderKey = '';        // to reset page when base set changes
+        // --- End Pagination State ---
         
         // --- Category Tracking State ---
         let currentCategory = null; // Tracks current main category filter
@@ -1587,6 +1608,9 @@
             addressSelectList: document.getElementById('address-select-list'),
             useSelectedAddressBtn: document.getElementById('use-selected-address-btn'),
             manageAddressesShortcut: document.getElementById('manage-addresses-shortcut'),
+            // Global breadcrumb elements
+            globalBreadcrumb: document.getElementById('global-breadcrumb'),
+            globalBreadcrumbPath: document.getElementById('global-breadcrumb-path'),
         };
 
         // --- Error Handling & UI Helpers ---
@@ -1822,6 +1846,19 @@
                 // Re-apply translations on newly visible page
                 updateTextContent();
             }
+            // Toggle global breadcrumb visibility - show only on product details
+            try {
+                const bc = DOMElements.globalBreadcrumb;
+                const path = DOMElements.globalBreadcrumbPath;
+                if (bc) {
+                    if (pageId === 'product-details-page') {
+                        bc.classList.remove('hidden');
+                    } else {
+                        bc.classList.add('hidden');
+                        if (path) path.innerHTML = '';
+                    }
+                }
+            } catch {}
             window.scrollTo(0, 0);
         }
         window.showPage = showPage; // Exported to global scope
@@ -2135,17 +2172,33 @@
             lastBaseProducts = Array.isArray(productsToRender) ? productsToRender.slice() : [];
             // Ensure toolbar and filters UI are present
             ensureListingToolbar();
+
+            // Reset page when base set changes
+            const key = Array.isArray(lastBaseProducts) ? lastBaseProducts.map(p => p && p.id).join('|') : '';
+            if (key !== lastRenderKey) { currentPage = 1; lastRenderKey = key; }
+
             // Apply filters (only when a category/subcategory is active), then sorting
             const filtered = applyFilters(lastBaseProducts);
-            productsToRender = applySorting(filtered);
-            currentDisplayedProducts = productsToRender;
+            const sorted = applySorting(filtered);
+            currentDisplayedProducts = sorted;
+
+            // Paging calculations
+            const total = sorted.length;
+            const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+            if (currentPage > totalPages) currentPage = totalPages;
+            if (currentPage < 1) currentPage = 1;
+            const startIdx = (currentPage - 1) * PAGE_SIZE;
+            const endIdx = Math.min(startIdx + PAGE_SIZE, total);
+            const pageItems = sorted.slice(startIdx, endIdx);
+
             DOMElements.productList.innerHTML = '';
-            if (productsToRender.length === 0) {
+            if (pageItems.length === 0) {
                  DOMElements.productList.innerHTML = `<p class="col-span-full text-center text-gray-500">${translations[currentLanguage]['no-products']}</p>`;
+                 renderPagination(0);
                  return;
             }
             const fragment = document.createDocumentFragment();
-            productsToRender.forEach(product => {
+            pageItems.forEach(product => {
                 const productCard = document.createElement('div');
                 const isWished = localWishlistCache.has(product.id);
                 const heartClass = isWished ? 'fas text-theme-pink' : 'far text-gray-400';
@@ -2208,6 +2261,8 @@
                 try { renderTopCategoryStrip(); } catch (e) {}
             }
             // Removed redundant updateCategoryHeader call, which caused the error when dataset was accessed from null.
+            // Render pagination controls for current dataset
+            renderPagination(total);
         }
 
         // --- CATEGORY & SUB-CATEGORY LOGIC ---
@@ -2458,6 +2513,21 @@
                         renderProducts(lastBaseProducts);
                     });
                 }
+                // Always ensure the product list uses a responsive grid with 6 columns on large screens
+                try {
+                    // Ensure 5-column layout on large screens
+                    list.classList.remove('lg:grid-cols-6');
+                    list.classList.add('grid','gap-4','sm:gap-6','grid-cols-2','sm:grid-cols-3','md:grid-cols-4','lg:grid-cols-5');
+                } catch {}
+
+                // Ensure a pagination container exists after the product list
+                let pagination = document.getElementById('pagination-controls');
+                if (!pagination) {
+                    pagination = document.createElement('div');
+                    pagination.id = 'pagination-controls';
+                    pagination.className = 'mt-6 flex items-center justify-center gap-3 flex-wrap';
+                    list.insertAdjacentElement('afterend', pagination);
+                }
             } catch (e) { console.warn('ensureListingToolbar failed', e); }
         }
 
@@ -2591,6 +2661,71 @@
                 default:
                     return arr.sort((a,b) => (Number(b.ratingCount)||0) - (Number(a.ratingCount)||0));
             }
+        }
+        
+        // Simple pagination renderer (Prev/Next + range display)
+        function renderPagination(totalItems) {
+            try {
+                const container = document.getElementById('pagination-controls');
+                if (!container) return;
+                const total = Number(totalItems) || 0;
+                const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+                if (currentPage > totalPages) currentPage = totalPages;
+                if (currentPage < 1) currentPage = 1;
+
+                const start = total === 0 ? 0 : (currentPage - 1) * PAGE_SIZE + 1;
+                const end = Math.min(currentPage * PAGE_SIZE, total);
+
+                // Professional styling for the pagination block
+                container.className = 'mt-8 p-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900/60 shadow-sm flex flex-col items-center gap-3';
+
+                container.innerHTML = `
+                    <div class="flex items-center justify-center gap-3">
+                        <button id="page-prev" class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-100 border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 shadow-sm text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed">
+                            <i class="fa-solid fa-angle-left"></i>
+                            <span class="hidden sm:inline">Prev</span>
+                        </button>
+                        <span class="text-lg font-semibold">Page ${currentPage} of ${totalPages}</span>
+                        <button id="page-next" class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-100 border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 shadow-sm text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed">
+                            <span class="hidden sm:inline">Next</span>
+                            <i class="fa-solid fa-angle-right"></i>
+                        </button>
+                    </div>
+                    <button id="page-top" class="inline-flex items-center gap-2 mt-1 px-4 py-2 rounded-full bg-theme-pink text-white hover:bg-theme-purple shadow">
+                        <i class="fa-solid fa-arrow-up"></i>
+                        <span>Back to Top</span>
+                    </button>
+                `;
+
+                const prevBtn = document.getElementById('page-prev');
+                const nextBtn = document.getElementById('page-next');
+                const topBtn = document.getElementById('page-top');
+                if (prevBtn) {
+                    prevBtn.disabled = currentPage <= 1;
+                    prevBtn.onclick = () => {
+                        if (currentPage > 1) {
+                            currentPage -= 1;
+                            renderProducts(currentDisplayedProducts);
+                            try { document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' }); } catch {}
+                        }
+                    };
+                }
+                if (nextBtn) {
+                    nextBtn.disabled = currentPage >= totalPages;
+                    nextBtn.onclick = () => {
+                        if (currentPage < totalPages) {
+                            currentPage += 1;
+                            renderProducts(currentDisplayedProducts);
+                            try { document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' }); } catch {}
+                        }
+                    };
+                }
+                if (topBtn) {
+                    topBtn.onclick = () => {
+                        try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch { window.scrollTo(0,0); }
+                    };
+                }
+            } catch (e) { console.warn('renderPagination failed', e); }
         }
         // --- END SORTING & FILTERING UI/LOGIC ---
         
@@ -2881,6 +3016,30 @@
 
             const detailsPage = document.getElementById('product-details-page');
             if(!detailsPage) return;
+            
+            // Update global breadcrumb: Home > Category > Subcategory > Product Name
+            try {
+                const bc = DOMElements.globalBreadcrumb;
+                const path = DOMElements.globalBreadcrumbPath;
+                if (bc && path) {
+                    const homeLabel = (translations?.[currentLanguage]?.['home']) || 'Home';
+                    const cat = product.category || null;
+                    const sub = product.subCategory || null;
+                    const catLabel = cat ? getCategoryLabel(cat) : null;
+                    const safeCat = cat ? String(cat).replace(/'/g, "\\'") : '';
+                    const safeSub = sub ? String(sub).replace(/'/g, "\\'") : '';
+                    let html = `<a href=\"javascript:void(0);\" class=\"text-theme-blue hover:underline\" onclick=\"renderAllProducts && renderAllProducts(); showPage('home-page');\">${homeLabel}</a>`;
+                    if (cat) {
+                        html += ` <span class=\"mx-2 text-gray-400\">›</span> <a href=\"javascript:void(0);\" class=\"text-theme-blue hover:underline\" onclick=\"filterProducts && filterProducts('${safeCat}');\">${catLabel}</a>`;
+                    }
+                    if (sub) {
+                        html += ` <span class=\"mx-2 text-gray-400\">›</span> <a href=\"javascript:void(0);\" class=\"text-theme-blue hover:underline\" onclick=\"filterSubCategory && filterSubCategory('${safeCat}','${safeSub}');\">${sub}</a>`;
+                    }
+                    html += ` <span class=\"mx-2 text-gray-400\">›</span> <span class=\"font-semibold text-gray-900 dark:text-gray-100\">${(product.name||'').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</span>`;
+                    path.innerHTML = html;
+                    bc.classList.remove('hidden');
+                }
+            } catch (e) { console.warn('breadcrumb update failed', e); }
             
             // Populate product details
             const isWished = localWishlistCache.has(product.id);
@@ -3742,9 +3901,47 @@
             let cartHtml = '';
             
             if(localCartCache.size === 0){
-                const emptyHtml = `<p data-lang="cart-empty" class="text-center text-gray-500">${translations[currentLanguage]['cart-empty']}</p>`;
-                if (cartEl) cartEl.innerHTML = emptyHtml;
-                if (pageItems) pageItems.innerHTML = emptyHtml;
+                // Empty state with smart suggestions from wishlist or featured products
+                const emptyMsg = `<p data-lang="cart-empty" class="text-center text-gray-500 mb-4">${translations[currentLanguage]['cart-empty']}</p>`;
+                let subheading = '';
+                let suggested = [];
+                try {
+                    const all = Array.isArray(productsData) ? productsData : [];
+                    if (localWishlistCache && localWishlistCache.size > 0) {
+                        subheading = '<h4 class="text-center font-semibold text-gray-800 dark:text-gray-100 mb-3">Add items from your Wishlist?</h4>';
+                        suggested = all.filter(p => p && localWishlistCache.has(p.id));
+                    } else {
+                        subheading = '<h4 class="text-center font-semibold text-gray-800 dark:text-gray-100 mb-3">Shop our Featured Products</h4>';
+                        suggested = all.slice().sort((a,b) => (Number(b.ratingCount)||0) - (Number(a.ratingCount)||0));
+                    }
+                } catch (e) { /* fallback: no suggestions */ }
+
+                // Horizontal row showing up to 6 products
+                const row = (suggested && suggested.length > 0) ? (`
+                    <div class="flex gap-4 overflow-x-auto pb-2 -mx-1 px-1">
+                        ${suggested.slice(0, 6).map(p => {
+                            const img = p?.imageUrl || p?.image || 'https://placehold.co/300x300/f5f7fa/6a0dad?text=Product';
+                            const name = (p?.name || '').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+                            const price = Number(p?.price || 0);
+                            return `
+                                <div class="w-40 flex-shrink-0 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 overflow-hidden">
+                                    <div class="aspect-square bg-gray-50 dark:bg-gray-900 flex items-center justify-center overflow-hidden">
+                                        <img src="${img}" alt="${name}" class="w-full h-full object-cover"/>
+                                    </div>
+                                    <div class="p-3 flex flex-col gap-2">
+                                        <p class="text-sm font-medium line-clamp-2">${name}</p>
+                                        <div class="text-sm font-semibold text-price-black">৳${price.toFixed(0)}</div>
+                                        <button class="mt-auto inline-flex items-center justify-center px-3 py-1.5 text-sm rounded-full bg-theme-pink text-white hover:bg-theme-purple"
+                                            onclick="addToCartInDb && addToCartInDb('${p?.id}', true)">Add to Cart</button>
+                                    </div>
+                                </div>`;
+                        }).join('')}
+                    </div>
+                `) : '';
+
+                const combinedHtml = `<div class="py-4">${emptyMsg}${subheading}${row}</div>`;
+                if (cartEl) cartEl.innerHTML = combinedHtml;
+                if (pageItems) pageItems.innerHTML = combinedHtml;
             } else {
                 for (const [cartItemId, item] of localCartCache.entries()) {
                     // Build variants text
@@ -3797,8 +3994,44 @@
                         </div>
                     `;
                 }
-                if (cartEl) cartEl.innerHTML = cartHtml;
-                if (pageItems) pageItems.innerHTML = cartHtml;
+                // Also append a Featured Products section below the cart items
+                let featuredSection = '';
+                try {
+                    const all = Array.isArray(productsData) ? productsData : [];
+                    const suggested = all.slice().sort((a,b) => (Number(b.ratingCount)||0) - (Number(a.ratingCount)||0));
+                    if (suggested.length > 0) {
+                        const row = `
+                            <div class="flex gap-4 overflow-x-auto pb-2 -mx-1 px-1">
+                                ${suggested.slice(0, 6).map(p => {
+                                    const img = p?.imageUrl || p?.image || 'https://placehold.co/300x300/f5f7fa/6a0dad?text=Product';
+                                    const name = (p?.name || '').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+                                    const price = Number(p?.price || 0);
+                                    return `
+                                        <div class="w-40 flex-shrink-0 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 overflow-hidden">
+                                            <div class="aspect-square bg-gray-50 dark:bg-gray-900 flex items-center justify-center overflow-hidden">
+                                                <img src="${img}" alt="${name}" class="w-full h-full object-cover"/>
+                                            </div>
+                                            <div class="p-3 flex flex-col gap-2">
+                                                <p class="text-sm font-medium line-clamp-2">${name}</p>
+                                                <div class="text-sm font-semibold text-price-black">৳${price.toFixed(0)}</div>
+                                                <button class="mt-auto inline-flex items-center justify-center px-3 py-1.5 text-sm rounded-full bg-theme-pink text-white hover:bg-theme-purple"
+                                                    onclick="addToCartInDb && addToCartInDb('${p?.id}', true)">Add to Cart</button>
+                                            </div>
+                                        </div>`;
+                                }).join('')}
+                            </div>
+                        `;
+                        featuredSection = `
+                            <div class="mt-5 pt-4 border-t border-gray-200 dark:border-gray-700">
+                                <h4 class="text-base font-semibold text-gray-800 dark:text-gray-100 mb-3">Featured Products</h4>
+                                ${row}
+                            </div>`;
+                    }
+                } catch(e) { /* ignore */ }
+
+                const combined = cartHtml + featuredSection;
+                if (cartEl) cartEl.innerHTML = combined;
+                if (pageItems) pageItems.innerHTML = combined;
             }
         }
         
