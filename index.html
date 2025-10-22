@@ -212,6 +212,41 @@
         <p id="toast-message">Item added to cart!</p>
     </div>
 
+    <!-- Variant Selection Modal (for product cards) -->
+    <div id="variant-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-50 z-[115] hidden items-center justify-center">
+        <div class="bg-white dark:bg-gray-800 rounded-3xl p-8 max-w-md w-full mx-4 shadow-2xl">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-theme-purple" data-lang="select-variants">Select Options</h3>
+                <button onclick="closeVariantModal()" class="text-gray-500 hover:text-gray-800 text-3xl">&times;</button>
+            </div>
+            <div id="variant-modal-product" class="flex items-center gap-3 mb-4">
+                <img id="vm-product-image" class="w-14 h-14 rounded-xl object-cover" src="" alt="" onerror="this.onerror=null;this.src='https://placehold.co/80x80/ccc/000?text=Image';">
+                <div class="min-w-0">
+                    <div id="vm-product-name" class="text-sm font-semibold text-theme-purple truncate"></div>
+                    <div id="vm-product-price" class="text-xs text-gray-500"></div>
+                </div>
+            </div>
+            <div id="variant-modal-options" class="space-y-4">
+                <div id="vm-size-options" class="hidden">
+                    <label class="block text-sm font-semibold mb-2" data-lang="size">Size:</label>
+                    <div class="flex flex-wrap gap-2" id="vm-size-variants-container"></div>
+                </div>
+                <div id="vm-storage-options" class="hidden">
+                    <label class="block text-sm font-semibold mb-2" data-lang="storage">Storage:</label>
+                    <div class="flex flex-wrap gap-2" id="vm-storage-variants-container"></div>
+                </div>
+                <div id="vm-color-options" class="hidden">
+                    <label class="block text-sm font-semibold mb-2" data-lang="color">Color:</label>
+                    <div class="flex flex-wrap gap-2" id="vm-color-variants-container"></div>
+                </div>
+            </div>
+            <div class="mt-6 grid grid-cols-2 gap-2">
+                <button id="vm-add-btn" class="w-full bg-theme-blue text-white py-2 rounded-full font-bold hover:bg-theme-purple transition-colors" data-lang="add-to-cart">Add to Cart</button>
+                <button id="vm-buy-btn" class="w-full bg-white border border-theme-blue text-theme-blue py-2 rounded-full font-bold hover:bg-gray-100 transition-colors" data-lang="buy-now">Buy Now</button>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Header Section -->
     <header class="bg-gradient-to-r from-theme-blue to-theme-purple text-white py-4 sticky top-0 z-40 shadow-2xl">
@@ -313,6 +348,23 @@
             <div class="flex justify-between items-center mb-6">
                 <h3 class="text-2xl font-bold text-theme-purple" data-lang="payment-method">Select Payment Method</h3>
                 <button onclick="closePaymentModal()" class="text-gray-500 hover:text-gray-800 text-3xl">&times;</button>
+            </div>
+            <!-- Shipping Address Selection -->
+            <div id="shipping-address-section" class="mb-6 p-4 border rounded-xl bg-gray-50 dark:bg-gray-900/40">
+                <div class="flex items-start justify-between gap-3">
+                    <div>
+                        <h4 class="font-semibold text-gray-800 dark:text-gray-200 mb-1">Shipping Address</h4>
+                        <p id="selected-address-display" class="text-sm text-gray-600 dark:text-gray-300">No address selected</p>
+                    </div>
+                    <button id="change-address-btn" class="px-3 py-1.5 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm hover:bg-gray-100">Change</button>
+                </div>
+                <div id="address-select-panel" class="hidden mt-3">
+                    <div id="address-select-list" class="space-y-2 max-h-48 overflow-auto"></div>
+                    <div class="mt-3 flex gap-2">
+                        <button id="use-selected-address-btn" class="w-full px-3 py-2 rounded-full bg-theme-blue text-white font-semibold hover:bg-theme-purple">Use Selected</button>
+                        <button id="manage-addresses-shortcut" class="w-full px-3 py-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100 font-semibold hover:bg-gray-300">Manage</button>
+                    </div>
+                </div>
             </div>
             <div id="payment-options" class="space-y-4">
                 <!-- Main Payment Options -->
@@ -522,6 +574,11 @@
                             <span><i class="fas fa-user-edit mr-3"></i> Edit Profile</span>
                             <i class="fas fa-chevron-right text-sm"></i>
                         </button>
+                        <!-- Manage Addresses -->
+                        <button id="manage-addresses-btn" class="w-full py-3 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-xl font-semibold hover:bg-gray-300 transition-colors shadow-md flex items-center justify-between px-4">
+                            <span><i class="fas fa-location-dot mr-3"></i> Manage Addresses</span>
+                            <i class="fas fa-chevron-right text-sm"></i>
+                        </button>
                         
                         <!-- Logout (Prominent) -->
                          <button id="logout-btn" class="w-full py-3 bg-theme-pink text-white rounded-xl font-semibold hover:bg-theme-purple transition-colors shadow-lg mt-8 flex items-center justify-between px-4" data-lang="logout">
@@ -563,6 +620,54 @@
                         </button>
                     </div>
                 </form>
+
+                <!-- Addresses Management Section -->
+                <div id="addresses-section" class="hidden text-left space-y-4 mt-6">
+                    <h4 class="text-xl font-bold text-theme-purple">Shipping Addresses</h4>
+                    <div id="addresses-list" class="space-y-3">
+                        <!-- Address cards injected here -->
+                    </div>
+                    <div class="p-4 border rounded-xl bg-gray-50 dark:bg-gray-800/50">
+                        <h5 id="address-form-title" class="font-semibold mb-3">Add New Address</h5>
+                        <form id="address-form" class="grid grid-cols-1 gap-3">
+                            <input type="hidden" id="address-id-hidden" />
+                            <div>
+                                <label class="block text-sm font-medium">Full Name</label>
+                                <input id="addr-name" type="text" class="w-full mt-1 px-3 py-2 border rounded-lg bg-white dark:bg-gray-700" required />
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium">Mobile</label>
+                                <input id="addr-mobile" type="text" class="w-full mt-1 px-3 py-2 border rounded-lg bg-white dark:bg-gray-700" required />
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium">Address Line 1</label>
+                                <input id="addr-line1" type="text" class="w-full mt-1 px-3 py-2 border rounded-lg bg-white dark:bg-gray-700" required />
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium">Address Line 2 (Optional)</label>
+                                <input id="addr-line2" type="text" class="w-full mt-1 px-3 py-2 border rounded-lg bg-white dark:bg-gray-700" />
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-sm font-medium">City</label>
+                                    <input id="addr-city" type="text" class="w-full mt-1 px-3 py-2 border rounded-lg bg-white dark:bg-gray-700" required />
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium">Area/District</label>
+                                    <input id="addr-area" type="text" class="w-full mt-1 px-3 py-2 border rounded-lg bg-white dark:bg-gray-700" />
+                                </div>
+                            </div>
+                            <label class="inline-flex items-center gap-2 mt-1">
+                                <input id="addr-default" type="checkbox" class="w-4 h-4" />
+                                <span>Set as default</span>
+                            </label>
+                            <div class="flex gap-3 pt-2">
+                                <button id="save-address-btn" type="submit" class="w-full py-2 bg-theme-blue text-white rounded-full font-bold hover:bg-theme-purple transition-colors">Save Address</button>
+                                <button id="cancel-address-btn" type="button" class="w-full py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-full font-bold hover:bg-gray-300 transition-colors">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -819,6 +924,8 @@
                                 <div id="product-rating-count-details" class="text-xs text-gray-500 ml-2"></div>
                             </div>
                             <div id="product-price-details" class="flex items-center space-x-2"></div>
+                            <!-- Stock indicator -->
+                            <p id="product-stock-details" class="text-sm font-medium"></p>
                             
                             <!-- Variants: Size, Storage, Color -->
                             <div id="product-options" class="space-y-4">
@@ -893,6 +1000,12 @@
                             </form>
                         </div>
                         <!-- END NEW: Review Submission Form -->
+                    </div>
+
+                    <!-- Related Products Section -->
+                    <div id="related-products-section" class="mt-16 hidden">
+                        <h3 class="text-2xl md:text-3xl font-bold mb-4 border-b-2 border-theme-pink pb-2 inline-block">Related Products</h3>
+                        <div id="related-product-list" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
                     </div>
                 </div>
             </section>
@@ -1045,6 +1158,58 @@
             </section>
         </div>
 
+        <!-- Support Page -->
+        <div id="support-page" class="hidden page">
+            <section class="container mx-auto px-4 py-16">
+                <div class="max-w-3xl mx-auto text-center mb-12">
+                    <h2 class="text-3xl sm:text-4xl font-bold text-theme-purple" data-lang="support-title">Get Support</h2>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Live Chat Card -->
+                    <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-6 border dark:border-gray-700 flex flex-col">
+                        <div class="w-12 h-12 rounded-2xl bg-theme-blue text-white flex items-center justify-center mb-4">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-1" data-lang="support-live-chat">Live Chat</h3>
+                        <p class="text-gray-600 dark:text-gray-300" data-lang="support-live-chat-desc">তাৎক্ষণিক সাপোর্টের জন্য</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-2" data-lang="support-live-chat-hours">সময়: সকাল ১০টা - রাত ৮টা</p>
+                        <button onclick="showPage('emergency-chat-page')" class="mt-4 inline-flex items-center justify-center gap-2 bg-theme-pink text-white px-4 py-2 rounded-full hover:bg-theme-purple transition-colors">
+                            <span data-lang="support-start-chat">Start Chat</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+
+                    <!-- Email Card -->
+                    <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-6 border dark:border-gray-700 flex flex-col">
+                        <div class="w-12 h-12 rounded-2xl bg-theme-purple text-white flex items-center justify-center mb-4">
+                            <i class="fas fa-envelope-open-text"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-1" data-lang="support-email">Email Support</h3>
+                        <p class="text-gray-600 dark:text-gray-300" data-lang="support-email-desc">বিস্তারিত সমস্যা বা অভিযোগের জন্য</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-2" data-lang="support-email-sla">রিপ্লাইয়ের সময়: ২৪ ঘণ্টার মধ্যে</p>
+                        <a href="mailto:tangailbuzz.bd@gmail.com" class="mt-4 inline-flex items-center justify-center gap-2 bg-theme-blue text-white px-4 py-2 rounded-full hover:bg-theme-purple transition-colors">
+                            <span data-lang="support-send-email">Send Email</span>
+                            <i class="fas fa-paper-plane"></i>
+                        </a>
+                    </div>
+
+                    <!-- Phone Call Card -->
+                    <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-6 border dark:border-gray-700 flex flex-col">
+                        <div class="w-12 h-12 rounded-2xl bg-theme-pink text-white flex items-center justify-center mb-4">
+                            <i class="fas fa-phone-volume"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-1" data-lang="support-phone">Phone Call</h3>
+                        <p class="text-gray-600 dark:text-gray-300" data-lang="support-phone-desc">শুধুমাত্র জরুরি পেমেন্ট বা অর্ডার সংক্রান্ত সমস্যার জন্য</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-2" data-lang="support-phone-hours">সময়: সকাল ১০টা - সন্ধ্যা ৬টা</p>
+                        <a href="tel:+8801863205976" class="mt-4 inline-flex items-center justify-center gap-2 bg-theme-blue text-white px-4 py-2 rounded-full hover:bg-theme-purple transition-colors">
+                            <span data-lang="support-call-now">Call Now</span>
+                            <i class="fas fa-phone"></i>
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </div>
+
 
     </main> <!-- End Main Content Container -->
 
@@ -1128,11 +1293,10 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
     import { getAuth, onAuthStateChanged, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, deleteUser, signInWithCustomToken, signInAnonymously, sendPasswordResetEmail, reauthenticateWithCredential, EmailAuthProvider, reauthenticateWithPopup, fetchSignInMethodsForEmail } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-    import { getFirestore, doc, setDoc, getDoc, deleteDoc, onSnapshot, updateDoc, increment, deleteField, collection, addDoc, serverTimestamp, getDocs, writeBatch, query, where, arrayUnion, orderBy, limit, FieldPath } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    import { getFirestore, doc, setDoc, getDoc, deleteDoc, onSnapshot, updateDoc, increment, deleteField, collection, addDoc, serverTimestamp, getDocs, writeBatch, runTransaction, query, where, arrayUnion, orderBy, limit, FieldPath } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
         
-        // Use the global Firebase config and auth token provided by the environment
-        window.appId = typeof __app_id !== 'undefined' ? __app_id.replace(/\//g, '_') : 'default-app-id';
+    // Firebase initialization
         const firebaseConfig = {
             apiKey: "AIzaSyBIRNr3X-_xOHQ6ITW3pXgqgcjhP2xEEEA",
             authDomain: "tangailbuzz47.firebaseapp.com",
@@ -1142,14 +1306,13 @@
             appId: "1:1017968115713:web:967a0e13107d8816b44000",
             measurementId: "G-7HYDCZTN2H"
         };
-        window.initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : '';
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
         const storage = getStorage(app);
 
-        let currentUser = null;
+    let currentUser = null;
         let currentUserData = null; // To hold Firestore data for the user
         let userOrders = [];
         let userDocUnsubscribe = () => {};
@@ -1162,9 +1325,16 @@
         let selectedVariants = {};
         let discountAmount = 0;
         let appliedCouponCode = null;
-        let confirmResolver = null; // Used for the custom confirmation modal
+    let confirmResolver = null; // Used for the custom confirmation modal
         let chatUnsubscribe = () => {}; // For real-time chat updates
         let allCoupons = []; // Stores all active coupon data
+        // Addresses & shipping selection
+        let selectedShippingAddressId = null;
+        let selectedShippingAddress = null;
+    // Sorting & Filtering State
+    let currentSortOption = 'popularity'; // 'price-asc' | 'price-desc' | 'popularity' | 'rating' | 'newest'
+    let activeFilters = { brands: new Set(), priceMin: null, priceMax: null, sizes: new Set(), colors: new Set() };
+    let lastBaseProducts = [];
         
         // --- Category Tracking State ---
         let currentCategory = null; // Tracks current main category filter
@@ -1236,6 +1406,20 @@
                 'hero-cta-shop': 'Shop Now',
                 'hero-cta-browse': 'Browse Categories',
                 'hero-badge': 'Fresh arrivals daily',
+                // Support page
+                'support-title': 'Get Support',
+                'support-live-chat': 'Live Chat',
+                'support-live-chat-desc': 'For instant support',
+                'support-live-chat-hours': 'Hours: 10:00 AM - 8:00 PM',
+                'support-start-chat': 'Start Chat',
+                'support-email': 'Email Support',
+                'support-email-desc': 'For detailed issues or complaints',
+                'support-email-sla': 'Response time: within 24 hours',
+                'support-send-email': 'Send Email',
+                'support-phone': 'Phone Call',
+                'support-phone-desc': 'For urgent payment or order issues only',
+                'support-phone-hours': 'Hours: 10:00 AM - 6:00 PM',
+                'support-call-now': 'Call Now',
             },
             bn: {
                 'deliver-to': 'ডেলিভারি লোকেশন', 'home': 'হোম', 'products': 'পণ্য', 'categories': 'ক্যাটাগরি', 'offers': 'অফার', 'search-placeholder': 'পণ্য খুঁজুন...', 'featured-products': 'বৈশিষ্ট্যযুক্ত পণ্য', 'shop-by-category': 'ক্যাটাগরি অনুসারে কেনাকাটা করুন', 'cat-electronics': 'ইলেকট্রনিক্স', 'cat-fashion': 'ফ্যাশন', 'cat-home-garden': 'হোম অ্যান্ড গার্ডেন', 'cat-health-beauty': 'স্বাস্থ্য ও সৌন্দর্য', 'cat-sports': 'খেলাধুলা ও আউটডোর', 'cat-books': 'বই ও স্টেশনারি', 'cat-kids': 'বাচ্চা ও খেলনা', 'cat-cars': 'গাড়ি ও বাইক', 'why-choose-us': 'আমাদেরকে কেন বেছে নিবেন', 'feature-delivery-title': 'দ্রুত ডেলিভারি', 'feature-delivery-desc': 'আমরা ২-৩ কার্যদিবসের মধ্যে আপনার দোরগোড়ায় পণ্য পৌঁছে দিই।', 'feature-payment-title': 'নিরাপদ পেমেন্ট', 'feature-payment-desc': 'আপনার নিরাপত্তা ও গোপনীয়তার জন্য সকল লেনদেন এনক্রিপ্টেড।', 'feature-return-title': 'সহজ রিটার্ন', 'feature-return-desc': 'পছন্দ না হলে ৩০ দিনের মধ্যে পণ্য ফেরত দিন এবং সম্পূর্ণ মূল্য ফেরত পান।', 'feature-support-title': '২৪/৭ সাপোর্ট', 'feature-support-desc': 'আমাদের গ্রাহক সহায়তা দল দিনরাত আপনার জন্য উপলব্ধ।', 'add-to-cart': 'কার্টে যোগ করুন', 'added-to-cart': 'যোগ হয়েছে!', 'no-products': 'আপনার অনুসন্ধানের সাথে মেলে এমন কোনো পণ্য পাওয়া যায়নি।', 'back-to-products': 'সকল পণ্যে ফিরে যান', 'returnable': '৩০-দিনের মধ্যে ফেরতযোগ্য', 'not-returnable': 'ফেরতযোগ্য নয়', 'secure-payments': 'নিরাপদ পেমেন্ট', 'size': 'সাইজ:', 'storage': 'স্টোরেজ:', 'color': 'রঙ:', 'product-description': 'পণ্যের বিবরণ', 'product-specifications': 'পণ্যের স্পেসিফিকেশন', 'specifications': 'স্পেসিফিকেশন', 'value': 'মান', 'no-specs': 'এই পণ্যের জন্য কোন স্পেসিফিকেশন উপলব্ধ নেই।', 'product-reviews': 'পণ্যের রিভিউ', 'no-reviews': 'এই পণ্যের জন্য এখনো কোনো রিভিউ নেই।', 'cart': 'আপনার কার্ট', 'cart-empty': 'আপনার কার্ট খালি।', 'total': 'মোট মূল্য:', 'checkout': 'চেকআউট করুন', 'your-wishlist': 'আপনার উইশলিস্ট', 'wishlist-empty': 'আপনার উইশলিস্ট খালি। কিছু পণ্য যোগ করুন!', 'your-account': 'আপনার অ্যাকাউন্ট', 'signin-google': 'Google দিয়ে সাইন ইন করুন', 'logout': 'লগআউট', 'toast-cart-added': 'পণ্য কার্টে যোগ করা হয়েছে!', 'toast-wishlist-added': 'পণ্য উইশলিস্টে যোগ করা হয়েছে!', 'toast-wishlist-removed': 'পণ্য উইশলিস্ট থেকে সরানো হয়েছে!', 'toast-login-success': 'সফলভাবে লগইন হয়েছে!', 'toast-logout-success': 'সফলভাবে লগআউট হয়েছে!',
@@ -1296,6 +1480,20 @@
                 'wishlist': 'উইশলিস্ট',
                 'cart-short': 'কার্ট',
                 'remove': 'সরান',
+                // Support page
+                'support-title': 'সাপোর্ট',
+                'support-live-chat': 'লাইভ চ্যাট',
+                'support-live-chat-desc': 'তাৎক্ষণিক সাপোর্টের জন্য',
+                'support-live-chat-hours': 'সময়: সকাল ১০টা - রাত ৮টা',
+                'support-start-chat': 'চ্যাট শুরু করুন',
+                'support-email': 'ইমেইল সাপোর্ট',
+                'support-email-desc': 'বিস্তারিত সমস্যা বা অভিযোগের জন্য',
+                'support-email-sla': 'রিপ্লাইয়ের সময়: ২৪ ঘণ্টার মধ্যে',
+                'support-send-email': 'ইমেইল পাঠান',
+                'support-phone': 'ফোন কল',
+                'support-phone-desc': 'শুধুমাত্র জরুরি পেমেন্ট বা অর্ডার সংক্রান্ত সমস্যার জন্য',
+                'support-phone-hours': 'সময়: সকাল ১০টা - সন্ধ্যা ৬টা',
+                'support-call-now': 'এখনই কল করুন',
             }
         };
 
@@ -1349,7 +1547,103 @@
             categoryPath: document.getElementById('category-path'),
             currentCategoryTitle: document.getElementById('current-category-title'),
             subcategoryButtons: document.getElementById('subcategory-buttons'),
+            // Address management elements
+            manageAddressesBtn: document.getElementById('manage-addresses-btn'),
+            addressesSection: document.getElementById('addresses-section'),
+            addressesList: document.getElementById('addresses-list'),
+            addressForm: document.getElementById('address-form'),
+            addressFormTitle: document.getElementById('address-form-title'),
+            addrIdHidden: document.getElementById('address-id-hidden'),
+            addrName: document.getElementById('addr-name'),
+            addrMobile: document.getElementById('addr-mobile'),
+            addrLine1: document.getElementById('addr-line1'),
+            addrLine2: document.getElementById('addr-line2'),
+            addrCity: document.getElementById('addr-city'),
+            addrArea: document.getElementById('addr-area'),
+            addrDefault: document.getElementById('addr-default'),
+            saveAddressBtn: document.getElementById('save-address-btn'),
+            cancelAddressBtn: document.getElementById('cancel-address-btn'),
+            // Payment modal address elements
+            shippingAddressSection: document.getElementById('shipping-address-section'),
+            selectedAddressDisplay: document.getElementById('selected-address-display'),
+            changeAddressBtn: document.getElementById('change-address-btn'),
+            addressSelectPanel: document.getElementById('address-select-panel'),
+            addressSelectList: document.getElementById('address-select-list'),
+            useSelectedAddressBtn: document.getElementById('use-selected-address-btn'),
+            manageAddressesShortcut: document.getElementById('manage-addresses-shortcut'),
         };
+
+        // --- Error Handling & UI Helpers ---
+        // Safe toast display with localization fallback.
+        if (typeof window.showToast !== 'function') {
+            window.showToast = function(messageKeyOrText, isSuccess = true) {
+                try {
+                    const el = DOMElements.toast;
+                    const msgEl = DOMElements.toastMessage;
+                    if (!el || !msgEl) {
+                        // Fallback to alert for environments without toast DOM
+                        if (typeof messageKeyOrText === 'string') {
+                            console[isSuccess ? 'log' : 'warn'](messageKeyOrText);
+                        }
+                        return;
+                    }
+                    const dict = (typeof translations !== 'undefined' && translations[currentLanguage]) ? translations[currentLanguage] : {};
+                    const text = dict[messageKeyOrText] || messageKeyOrText || 'Action completed';
+                    msgEl.textContent = text;
+                    el.classList.remove('hidden');
+                    el.classList.toggle('bg-green-600', !!isSuccess);
+                    el.classList.toggle('bg-red-600', !isSuccess);
+                    clearTimeout(el._hideTimer);
+                    el._hideTimer = setTimeout(() => el.classList.add('hidden'), 2500);
+                } catch (e) {
+                    console.warn('Toast failed:', e);
+                }
+            }
+        }
+
+        // Centralized error logger
+        function logError(context, error) {
+            try {
+                console.error(`[${context}]`, error);
+            } catch {}
+        }
+
+        // Generic async wrapper to standardize UI state and error reporting
+        async function safeAsync(fn, { onStart, onSuccess, onError, onFinally } = {}) {
+            try {
+                onStart && onStart();
+                const res = await fn();
+                onSuccess && onSuccess(res);
+                return res;
+            } catch (err) {
+                onError && onError(err);
+                // Default surface
+                showToast(err?.message || 'Something went wrong. Please try again.', false);
+                throw err;
+            } finally {
+                onFinally && onFinally();
+            }
+        }
+
+        // Disable/enable a button safely while an async task runs
+        async function withDisabled(btn, task) {
+            if (!btn) return task();
+            const prevDisabled = btn.disabled;
+            btn.disabled = true;
+            try { return await task(); } finally { btn.disabled = prevDisabled; }
+        }
+
+        // Global guards for uncaught errors
+        if (!window.__globalErrorHandlersInstalled) {
+            window.__globalErrorHandlersInstalled = true;
+            window.addEventListener('error', (e) => {
+                logError('window.onerror', e?.error || e?.message || e);
+            });
+            window.addEventListener('unhandledrejection', (e) => {
+                logError('unhandledrejection', e?.reason || e);
+                showToast('An unexpected error occurred.', false);
+            });
+        }
         
         // --- Dark Mode Logic ---
 
@@ -1531,7 +1825,251 @@
             return starsHtml;
         }
 
+        // --- ADDRESS MANAGEMENT & SELECTION ---
+        function generateAddressId() {
+            return 'addr_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+        }
+
+        function getUserAddresses() {
+            return Array.isArray(currentUserData?.addresses) ? currentUserData.addresses : [];
+        }
+
+        function getDefaultAddress(addresses) {
+            const arr = Array.isArray(addresses) ? addresses : [];
+            return arr.find(a => a && a.isDefault) || null;
+        }
+
+        function openManageAddresses() {
+            if (!currentUser || currentUser.isAnonymous) { openDrawer('profile-drawer'); return; }
+            openDrawer('profile-drawer');
+            if (DOMElements.userProfileView) DOMElements.userProfileView.classList.remove('hidden');
+            if (DOMElements.editProfileForm) DOMElements.editProfileForm.classList.add('hidden');
+            if (DOMElements.addressesSection) DOMElements.addressesSection.classList.remove('hidden');
+            renderAddressesList();
+            resetAddressForm();
+        }
+        window.openManageAddresses = openManageAddresses;
+
+        function resetAddressForm() {
+            if (!DOMElements.addressForm) return;
+            DOMElements.addressFormTitle.textContent = 'Add New Address';
+            DOMElements.addrIdHidden.value = '';
+            DOMElements.addrName.value = '';
+            DOMElements.addrMobile.value = '';
+            DOMElements.addrLine1.value = '';
+            DOMElements.addrLine2.value = '';
+            DOMElements.addrCity.value = '';
+            DOMElements.addrArea.value = '';
+            DOMElements.addrDefault.checked = false;
+        }
+
+        function renderAddressesList() {
+            const list = DOMElements.addressesList; if (!list) return;
+            const addrs = getUserAddresses();
+            if (!addrs.length) {
+                list.innerHTML = '<p class="text-sm text-gray-500">No saved addresses. Add one below.</p>';
+                return;
+            }
+            list.innerHTML = addrs.map(addr => {
+                const title = `${addr.name || ''} ${addr.isDefault ? '<span class=\'ml-2 text-xs px-2 py-0.5 rounded-full bg-green-100 text-green-700\'>Default</span>' : ''}`;
+                const line = [addr.line1, addr.line2, addr.city, addr.area].filter(Boolean).join(', ');
+                return `
+                    <div class="p-3 border rounded-xl bg-white dark:bg-gray-800 flex items-start justify-between gap-3">
+                        <div>
+                            <p class="font-medium">${title}</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-300">${line}</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-300">📱 ${addr.mobile || ''}</p>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <button class="text-sm px-3 py-1 rounded-full bg-gray-100 hover:bg-gray-200 edit-address-btn" data-id="${addr.id}">Edit</button>
+                            <button class="text-sm px-3 py-1 rounded-full bg-red-100 text-red-700 hover:bg-red-200 delete-address-btn" data-id="${addr.id}">Delete</button>
+                            ${addr.isDefault ? '' : `<button class="text-sm px-3 py-1 rounded-full bg-green-100 text-green-700 hover:bg-green-200 set-default-address-btn" data-id="${addr.id}">Set Default</button>`}
+                        </div>
+                    </div>`;
+            }).join('');
+
+            list.querySelectorAll('.edit-address-btn').forEach(btn => btn.addEventListener('click', () => {
+                const id = btn.dataset.id; const addr = getUserAddresses().find(a => a.id === id); if (!addr) return;
+                DOMElements.addressFormTitle.textContent = 'Edit Address';
+                DOMElements.addrIdHidden.value = addr.id || '';
+                DOMElements.addrName.value = addr.name || '';
+                DOMElements.addrMobile.value = addr.mobile || '';
+                DOMElements.addrLine1.value = addr.line1 || '';
+                DOMElements.addrLine2.value = addr.line2 || '';
+                DOMElements.addrCity.value = addr.city || '';
+                DOMElements.addrArea.value = addr.area || '';
+                DOMElements.addrDefault.checked = !!addr.isDefault;
+            }));
+            list.querySelectorAll('.delete-address-btn').forEach(btn => btn.addEventListener('click', async () => {
+                const id = btn.dataset.id; await deleteAddress(id);
+            }));
+            list.querySelectorAll('.set-default-address-btn').forEach(btn => btn.addEventListener('click', async () => {
+                const id = btn.dataset.id; await setDefaultAddress(id);
+            }));
+        }
+
+        async function saveNewAddress(addressData) {
+            if (!currentUser) return;
+            const userDocRef = doc(db, 'users', currentUser.uid);
+            const addrs = getUserAddresses();
+            const newAddr = { ...addressData };
+            let updated = [...addrs, newAddr];
+            if (newAddr.isDefault) {
+                updated = updated.map(a => ({ ...a, isDefault: a.id === newAddr.id }));
+            }
+            await safeAsync(async () => updateDoc(userDocRef, { addresses: updated }), {
+                onSuccess: () => showToast('Address saved!', true),
+                onError: () => showToast('Failed to save address', false)
+            });
+        }
+
+        async function updateAddress(addressId, updatedAddressData) {
+            if (!currentUser) return;
+            const userDocRef = doc(db, 'users', currentUser.uid);
+            const addrs = getUserAddresses();
+            let updated = addrs.map(a => a.id === addressId ? { ...a, ...updatedAddressData } : a);
+            if (updatedAddressData.isDefault) {
+                updated = updated.map(a => ({ ...a, isDefault: a.id === addressId }));
+            }
+            await safeAsync(async () => updateDoc(userDocRef, { addresses: updated }), {
+                onSuccess: () => showToast('Address updated!', true),
+                onError: () => showToast('Failed to update address', false)
+            });
+        }
+
+        async function deleteAddress(addressId) {
+            if (!currentUser) return;
+            const userDocRef = doc(db, 'users', currentUser.uid);
+            const addrs = getUserAddresses();
+            const updated = addrs.filter(a => a.id !== addressId);
+            await safeAsync(async () => updateDoc(userDocRef, { addresses: updated }), {
+                onSuccess: () => showToast('Address deleted', true),
+                onError: () => showToast('Failed to delete address', false)
+            });
+            if (selectedShippingAddressId === addressId) {
+                selectedShippingAddressId = null; selectedShippingAddress = null;
+            }
+        }
+
+        async function setDefaultAddress(addressId) {
+            if (!currentUser) return;
+            const userDocRef = doc(db, 'users', currentUser.uid);
+            const addrs = getUserAddresses();
+            const updated = addrs.map(a => ({ ...a, isDefault: a.id === addressId }));
+            await safeAsync(async () => updateDoc(userDocRef, { addresses: updated }), {
+                onSuccess: () => showToast('Default address set', true),
+                onError: () => showToast('Failed to set default', false)
+            });
+        }
+
+        function renderSelectedShippingAddress() {
+            const box = DOMElements.selectedAddressDisplay; if (!box) return;
+            if (selectedShippingAddress) {
+                const a = selectedShippingAddress;
+                const line = [a.line1, a.line2, a.city, a.area].filter(Boolean).join(', ');
+                box.textContent = `${a.name || ''} — ${line} — 📱 ${a.mobile || ''}`;
+            } else {
+                const addrs = getUserAddresses();
+                if (addrs.length > 0) {
+                    const def = getDefaultAddress(addrs) || addrs[0];
+                    selectedShippingAddress = def; selectedShippingAddressId = def?.id || null;
+                    return renderSelectedShippingAddress();
+                }
+                // Legacy fallback
+                if (currentUserData?.location || currentUserData?.mobile) {
+                    box.textContent = `${currentUser?.displayName || ''} — ${currentUserData.location || ''} — 📱 ${currentUserData.mobile || ''}`;
+                } else {
+                    box.textContent = 'No address selected';
+                }
+            }
+        }
+
+        function renderAddressSelectList() {
+            const list = DOMElements.addressSelectList; if (!list) return;
+            const addrs = getUserAddresses();
+            if (!addrs.length) { list.innerHTML = '<p class="text-sm text-gray-500">No saved addresses</p>'; return; }
+            list.innerHTML = addrs.map(a => {
+                const line = [a.line1, a.line2, a.city, a.area].filter(Boolean).join(', ');
+                const checked = a.id === selectedShippingAddressId ? 'checked' : '';
+                return `<label class="flex items-start gap-3 p-2 border rounded-lg cursor-pointer">
+                    <input type="radio" name="select-address" class="mt-1" value="${a.id}" ${checked} />
+                    <div>
+                        <p class="font-medium">${a.name || ''} ${a.isDefault ? '<span class=\'ml-2 text-xs px-2 py-0.5 rounded-full bg-green-100 text-green-700\'>Default</span>' : ''}</p>
+                        <p class="text-sm text-gray-600">${line}</p>
+                        <p class="text-sm text-gray-600">📱 ${a.mobile || ''}</p>
+                    </div>
+                </label>`;
+            }).join('');
+        }
+
+        function selectAddressById(id) {
+            const addrs = getUserAddresses();
+            selectedShippingAddressId = id;
+            selectedShippingAddress = addrs.find(a => a.id === id) || null;
+            renderSelectedShippingAddress();
+        }
+
+        // Wire up address UI events
+        if (DOMElements.manageAddressesBtn) {
+            DOMElements.manageAddressesBtn.addEventListener('click', openManageAddresses);
+        }
+        if (DOMElements.cancelAddressBtn) {
+            DOMElements.cancelAddressBtn.addEventListener('click', () => resetAddressForm());
+        }
+        if (DOMElements.addressForm) {
+            DOMElements.addressForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const data = {
+                    id: DOMElements.addrIdHidden.value || generateAddressId(),
+                    name: DOMElements.addrName.value.trim(),
+                    mobile: DOMElements.addrMobile.value.trim(),
+                    line1: DOMElements.addrLine1.value.trim(),
+                    line2: DOMElements.addrLine2.value.trim(),
+                    city: DOMElements.addrCity.value.trim(),
+                    area: DOMElements.addrArea.value.trim(),
+                    isDefault: !!DOMElements.addrDefault.checked,
+                };
+                if (!data.name || !data.mobile || !data.line1) { showToast('Please fill required fields', false); return; }
+                const editingId = DOMElements.addrIdHidden.value;
+                if (editingId) {
+                    await updateAddress(editingId, data);
+                } else {
+                    await saveNewAddress(data);
+                }
+                resetAddressForm();
+                renderAddressesList();
+            });
+        }
+        if (DOMElements.changeAddressBtn) {
+            DOMElements.changeAddressBtn.addEventListener('click', () => {
+                if (!DOMElements.addressSelectPanel) return;
+                DOMElements.addressSelectPanel.classList.toggle('hidden');
+                renderAddressSelectList();
+            });
+        }
+        if (DOMElements.useSelectedAddressBtn) {
+            DOMElements.useSelectedAddressBtn.addEventListener('click', () => {
+                const picked = document.querySelector('input[name="select-address"]:checked');
+                if (picked) selectAddressById(picked.value);
+                if (DOMElements.addressSelectPanel) DOMElements.addressSelectPanel.classList.add('hidden');
+            });
+        }
+        if (DOMElements.manageAddressesShortcut) {
+            DOMElements.manageAddressesShortcut.addEventListener('click', () => {
+                closePaymentModal();
+                openManageAddresses();
+            });
+        }
+        // --- END ADDRESS MANAGEMENT & SELECTION ---
+
         function renderProducts(productsToRender) {
+            // Keep a reference of the unfiltered list to re-apply on sort/filter changes
+            lastBaseProducts = Array.isArray(productsToRender) ? productsToRender.slice() : [];
+            // Ensure toolbar and filters UI are present
+            ensureListingToolbar();
+            // Apply filters (only when a category/subcategory is active), then sorting
+            const filtered = applyFilters(lastBaseProducts);
+            productsToRender = applySorting(filtered);
             currentDisplayedProducts = productsToRender;
             DOMElements.productList.innerHTML = '';
             if (productsToRender.length === 0) {
@@ -1590,6 +2128,8 @@
                 fragment.appendChild(productCard);
             });
             DOMElements.productList.appendChild(fragment);
+            // Update filter UI values for current base set
+            try { renderFiltersUI(); } catch (e) {}
             // If viewing all products, show the featured header
             if (currentCategory === null && currentSubCategory === null) {
                 DOMElements.currentCategoryTitle.dataset.lang = 'featured-products';
@@ -1743,6 +2283,8 @@
         // Action when clicking a main category (e.g., Electronics)
         window.filterProducts = (category) => {
             const filtered = productsData.filter(p => p.category === category);
+            // Reset filters when switching main category (preserve sort)
+            resetFiltersOnCategoryChange();
             
             updateCategoryHeader(category, null); // Set only main category
             renderProducts(filtered); 
@@ -1755,6 +2297,8 @@
         // Action when clicking a sub-category button (e.g., Mobile)
         window.filterSubCategory = (category, subCategory) => {
             const filtered = productsData.filter(p => p.category === category && p.subCategory === subCategory);
+            // Reset filters when switching subcategory (preserve sort)
+            resetFiltersOnCategoryChange();
             
             updateCategoryHeader(category, subCategory); // Set main and sub category
             renderProducts(filtered); 
@@ -1764,6 +2308,223 @@
         };
         
         // --- END CATEGORY & SUB-CATEGORY LOGIC ---
+
+        // --- SORTING & FILTERING UI/LOGIC ---
+        function ensureListingToolbar() {
+            try {
+                const list = DOMElements.productList;
+                if (!list || !list.parentNode) return;
+                if (!document.getElementById('products-toolbar')) {
+                    const toolbar = document.createElement('div');
+                    toolbar.id = 'products-toolbar';
+                    toolbar.className = 'flex flex-wrap items-center justify-between gap-3 mb-4';
+                    toolbar.innerHTML = `
+                        <div class="flex items-center gap-2">
+                          <label for="sort-select" class="text-sm text-gray-600">Sort:</label>
+                          <select id="sort-select" class="px-2 py-1 rounded border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-sm">
+                            <option value="popularity">Popularity</option>
+                            <option value="rating">Rating (High to Low)</option>
+                            <option value="price-asc">Price: Low to High</option>
+                            <option value="price-desc">Price: High to Low</option>
+                            <option value="newest">Newest</option>
+                          </select>
+                        </div>
+                        <div class="flex items-center gap-2">
+                          <button id="toggle-filters-btn" class="px-3 py-1.5 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700">Filters</button>
+                          <button id="clear-filters-btn" class="px-2 py-1 text-sm text-red-600 hover:text-red-700">Clear</button>
+                        </div>
+                    `;
+                    list.parentNode.insertBefore(toolbar, list);
+
+                    const panel = document.createElement('div');
+                    panel.id = 'filters-panel';
+                    panel.className = 'hidden border rounded-xl p-4 mb-4 bg-white dark:bg-gray-900';
+                    panel.innerHTML = `
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                          <div>
+                            <h4 class="font-semibold mb-2">Brand</h4>
+                            <div id="filter-brands" class="space-y-1 max-h-48 overflow-auto"></div>
+                          </div>
+                          <div>
+                            <h4 class="font-semibold mb-2">Price</h4>
+                            <div class="flex items-center gap-2">
+                              <input id="filter-price-min" type="number" placeholder="Min" class="px-2 py-1 rounded border w-24" />
+                              <span>-</span>
+                              <input id="filter-price-max" type="number" placeholder="Max" class="px-2 py-1 rounded border w-24" />
+                            </div>
+                          </div>
+                          <div>
+                            <h4 class="font-semibold mb-2">Sizes</h4>
+                            <div id="filter-sizes" class="flex flex-wrap gap-2"></div>
+                          </div>
+                          <div>
+                            <h4 class="font-semibold mb-2">Colors</h4>
+                            <div id="filter-colors" class="flex flex-wrap gap-2"></div>
+                          </div>
+                        </div>
+                    `;
+                    list.parentNode.insertBefore(panel, list);
+
+                    const sortSelect = document.getElementById('sort-select');
+                    sortSelect.value = currentSortOption;
+                    sortSelect.addEventListener('change', () => {
+                        currentSortOption = sortSelect.value;
+                        renderProducts(lastBaseProducts);
+                    });
+
+                    const toggleBtn = document.getElementById('toggle-filters-btn');
+                    toggleBtn.addEventListener('click', () => {
+                        const p = document.getElementById('filters-panel');
+                        if (!p) return;
+                        const active = !!currentCategory || !!currentSubCategory;
+                        if (!active) {
+                            showToast('Select a category to use filters.', false);
+                            return;
+                        }
+                        p.classList.toggle('hidden');
+                    });
+
+                    const clearBtn = document.getElementById('clear-filters-btn');
+                    clearBtn.addEventListener('click', () => {
+                        resetFiltersOnCategoryChange(false);
+                        renderProducts(lastBaseProducts);
+                    });
+                }
+            } catch (e) { console.warn('ensureListingToolbar failed', e); }
+        }
+
+        function resetFiltersOnCategoryChange(showMsg = false) {
+            activeFilters = { brands: new Set(), priceMin: null, priceMax: null, sizes: new Set(), colors: new Set() };
+            const p = document.getElementById('filters-panel');
+            if (p) p.classList.add('hidden');
+            if (showMsg) showToast('Filters cleared');
+        }
+
+        function deriveAvailableFilters(base) {
+            const brands = new Set();
+            const sizes = new Set();
+            const colors = new Set();
+            let minPrice = Infinity, maxPrice = -Infinity;
+            (base || []).forEach(p => {
+                if (p.brand) brands.add(String(p.brand));
+                (Array.isArray(p.sizes) ? p.sizes : []).forEach(s => sizes.add(String(s)));
+                (Array.isArray(p.colors) ? p.colors : []).forEach(c => colors.add(String(c)));
+                const price = Number(p.price) || 0;
+                if (price > 0) { minPrice = Math.min(minPrice, price); maxPrice = Math.max(maxPrice, price); }
+            });
+            if (!isFinite(minPrice)) minPrice = 0;
+            if (!isFinite(maxPrice)) maxPrice = 0;
+            return { brands: Array.from(brands).sort(), sizes: Array.from(sizes), colors: Array.from(colors), minPrice, maxPrice };
+        }
+
+        function renderFiltersUI() {
+            const active = !!currentCategory || !!currentSubCategory;
+            const panel = document.getElementById('filters-panel');
+            const toggleBtn = document.getElementById('toggle-filters-btn');
+            if (!panel || !toggleBtn) return;
+            toggleBtn.disabled = !active;
+            if (!active) { panel.classList.add('hidden'); return; }
+
+            const { brands, sizes, colors, minPrice, maxPrice } = deriveAvailableFilters(lastBaseProducts);
+            const brandsEl = document.getElementById('filter-brands');
+            const sizesEl = document.getElementById('filter-sizes');
+            const colorsEl = document.getElementById('filter-colors');
+            const minEl = document.getElementById('filter-price-min');
+            const maxEl = document.getElementById('filter-price-max');
+            if (!brandsEl || !sizesEl || !colorsEl || !minEl || !maxEl) return;
+
+            brandsEl.innerHTML = brands.map(b => {
+                const id = `brand-${b.replace(/\W+/g,'-')}`;
+                const checked = activeFilters.brands.has(b) ? 'checked' : '';
+                return `<label class="flex items-center gap-2 text-sm"><input type="checkbox" class="brand-chk" id="${id}" value="${b}" ${checked}/> <span>${b}</span></label>`;
+            }).join('') || '<p class="text-sm text-gray-500">No brands</p>';
+
+            sizesEl.innerHTML = sizes.map(s => {
+                const act = activeFilters.sizes.has(s);
+                return `<button data-size="${s}" class="px-3 py-1 rounded-full border ${act ? 'bg-theme-pink text-white border-theme-pink' : 'bg-white dark:bg-gray-800 text-gray-700 border-gray-300'}">${s}</button>`;
+            }).join('') || '<p class="text-sm text-gray-500">No sizes</p>';
+
+            colorsEl.innerHTML = colors.map(c => {
+                const act = activeFilters.colors.has(c);
+                return `<button data-color="${c}" class="px-3 py-1 rounded-full border ${act ? 'bg-theme-pink text-white border-theme-pink' : 'bg-white dark:bg-gray-800 text-gray-700 border-gray-300'}">${c}</button>`;
+            }).join('') || '<p class="text-sm text-gray-500">No colors</p>';
+
+            minEl.placeholder = minPrice ? String(minPrice) : '0';
+            maxEl.placeholder = maxPrice ? String(maxPrice) : '0';
+            minEl.value = activeFilters.priceMin ?? '';
+            maxEl.value = activeFilters.priceMax ?? '';
+
+            brandsEl.querySelectorAll('input.brand-chk').forEach(chk => chk.addEventListener('change', (e) => {
+                const v = e.target.value;
+                if (e.target.checked) activeFilters.brands.add(v); else activeFilters.brands.delete(v);
+                renderProducts(lastBaseProducts);
+            }));
+            sizesEl.querySelectorAll('button[data-size]').forEach(btn => btn.addEventListener('click', () => {
+                const v = btn.dataset.size;
+                if (activeFilters.sizes.has(v)) activeFilters.sizes.delete(v); else activeFilters.sizes.add(v);
+                renderProducts(lastBaseProducts);
+            }));
+            colorsEl.querySelectorAll('button[data-color]').forEach(btn => btn.addEventListener('click', () => {
+                const v = btn.dataset.color;
+                if (activeFilters.colors.has(v)) activeFilters.colors.delete(v); else activeFilters.colors.add(v);
+                renderProducts(lastBaseProducts);
+            }));
+            const onPriceChange = () => {
+                const minV = parseFloat(minEl.value);
+                const maxV = parseFloat(maxEl.value);
+                activeFilters.priceMin = isNaN(minV) ? null : minV;
+                activeFilters.priceMax = isNaN(maxV) ? null : maxV;
+                renderProducts(lastBaseProducts);
+            };
+            minEl.onchange = onPriceChange;
+            maxEl.onchange = onPriceChange;
+        }
+
+        function applyFilters(list) {
+            if (!currentCategory && !currentSubCategory) return list;
+            return (list || []).filter(p => {
+                if (activeFilters.brands.size > 0 && (!p.brand || !activeFilters.brands.has(String(p.brand)))) return false;
+                const price = Number(p.price) || 0;
+                if (activeFilters.priceMin !== null && price < activeFilters.priceMin) return false;
+                if (activeFilters.priceMax !== null && price > activeFilters.priceMax) return false;
+                if (activeFilters.sizes.size > 0) {
+                    const sizes = new Set(Array.isArray(p.sizes) ? p.sizes.map(String) : []);
+                    let ok = false; activeFilters.sizes.forEach(s => { if (sizes.has(s)) ok = true; });
+                    if (!ok) return false;
+                }
+                if (activeFilters.colors.size > 0) {
+                    const colors = new Set(Array.isArray(p.colors) ? p.colors.map(String) : []);
+                    let ok = false; activeFilters.colors.forEach(c => { if (colors.has(c)) ok = true; });
+                    if (!ok) return false;
+                }
+                return true;
+            });
+        }
+
+        function applySorting(list) {
+            const arr = Array.isArray(list) ? list.slice() : [];
+            switch (currentSortOption) {
+                case 'price-asc':
+                    return arr.sort((a,b) => (Number(a.price)||0) - (Number(b.price)||0));
+                case 'price-desc':
+                    return arr.sort((a,b) => (Number(b.price)||0) - (Number(a.price)||0));
+                case 'rating':
+                    return arr.sort((a,b) => (Number(b.rating)||0) - (Number(a.rating)||0));
+                case 'newest':
+                    return arr.sort((a,b) => {
+                        const at = a.createdAt ? (a.createdAt.seconds || a.createdAt) : 0;
+                        const bt = b.createdAt ? (b.createdAt.seconds || b.createdAt) : 0;
+                        if (bt !== at) return bt - at;
+                        const rc = (Number(b.ratingCount)||0) - (Number(a.ratingCount)||0);
+                        if (rc !== 0) return rc;
+                        return (Number(b.price)||0) - (Number(a.price)||0);
+                    });
+                case 'popularity':
+                default:
+                    return arr.sort((a,b) => (Number(b.ratingCount)||0) - (Number(a.ratingCount)||0));
+            }
+        }
+        // --- END SORTING & FILTERING UI/LOGIC ---
         
         // --- TOP CATEGORY STRIP (DYNAMIC) ---
         function renderTopCategoryStrip() {
@@ -1963,6 +2724,15 @@
             const productId = productCard.dataset.productId;
             
             if (target.closest('.add-to-cart')) {
+                try {
+                    const product = (productsData || []).find(p => p.id === productId);
+                    const required = product ? getRequiredVariants(product) : [];
+                    if (required.length > 0) {
+                        // Open quick-select modal instead of redirecting to details
+                        openVariantModal(productId, 'add');
+                        return;
+                    }
+                } catch (err) { console.log('Variant check failed', err); }
                 addToCartInDb(productId, true).catch(err => console.log(err));
             } else if (target.closest('.wishlist')) {
                 toggleWishlistInDb(productId);
@@ -2108,6 +2878,23 @@
 
             const productRatingCountEl = detailsPage.querySelector('#product-rating-count-details');
             if (productRatingCountEl) productRatingCountEl.textContent = `(${product.ratingCount || 0})`;
+
+            // Stock display with low-stock visual indicator
+            const stockEl = detailsPage.querySelector('#product-stock-details');
+            if (stockEl) {
+                const stockNum = Number(product.stock) || 0;
+                stockEl.classList.remove('text-green-600','text-amber-600','text-red-600');
+                if (stockNum <= 0) {
+                    stockEl.textContent = translations?.[currentLanguage]?.['out-of-stock'] || 'Out of Stock';
+                    stockEl.classList.add('text-red-600');
+                } else if (stockNum < 5) {
+                    stockEl.textContent = `Only ${stockNum} left!`;
+                    stockEl.classList.add('text-amber-600');
+                } else {
+                    stockEl.textContent = `In stock: ${stockNum}`;
+                    stockEl.classList.add('text-green-600');
+                }
+            }
             
             const addToCartBtn = detailsPage.querySelector('#add-to-cart-details');
             if (addToCartBtn) addToCartBtn.dataset.productId = productId;
@@ -2158,6 +2945,8 @@
             renderInfoDetails(product);
             renderAllVariants(product);
             setupReviewForm(productId); // Setup review form
+            // Render related products based on this product
+            try { renderRelatedProducts(product); } catch (e) { console.warn('related products render failed', e); }
 
             showPage('product-details-page');
             updateTextContent();
@@ -2228,6 +3017,57 @@
             }).join('');
         }
 
+        // Render Related Products based on same subCategory or category
+        function renderRelatedProducts(product) {
+            const section = document.getElementById('related-products-section');
+            const listEl = document.getElementById('related-product-list');
+            if (!section || !listEl) return;
+            try {
+                if (!productsData || productsData.length === 0) {
+                    section.classList.add('hidden');
+                    listEl.innerHTML = '';
+                    return;
+                }
+                let pool = [];
+                if (product?.subCategory) {
+                    pool = productsData.filter(p => p?.subCategory === product.subCategory);
+                }
+                if ((!pool || pool.length === 0) && product?.category) {
+                    pool = productsData.filter(p => p?.category === product.category);
+                }
+                pool = (pool || []).filter(p => p && p.id !== product.id);
+                if (pool.length === 0) {
+                    section.classList.add('hidden');
+                    listEl.innerHTML = '';
+                    return;
+                }
+                // Randomize and limit
+                const picks = pool.slice().sort(() => Math.random() - 0.5).slice(0, 5);
+                listEl.innerHTML = picks.map(p => {
+                    const img = p.imageUrl || p.image || 'https://placehold.co/300x300/f5f7fa/6a0dad?text=Product';
+                    const price = Number(p.price || 0);
+                    const isOffer = p.isOffer && Number(p.originalPrice) > Number(p.price);
+                    const priceHtml = isOffer
+                        ? `<div class="flex items-baseline gap-1"><span class="font-semibold text-price-black">৳${price.toFixed(0)}</span><span class="text-xs text-gray-400 line-through">৳${Number(p.originalPrice||0).toFixed(0)}</span></div>`
+                        : `<span class="font-semibold text-price-black">৳${price.toFixed(0)}</span>`;
+                    return `
+                        <div class="rounded-2xl border bg-white dark:bg-gray-800 overflow-hidden hover:shadow transition cursor-pointer" onclick="showProductDetails('${p.id}')">
+                            <div class="aspect-square overflow-hidden bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+                                <img src="${img}" alt="${(p.name||'').replace(/"/g,'&quot;')}" class="w-full h-full object-cover">
+                            </div>
+                            <div class="p-3">
+                                <p class="text-sm font-medium line-clamp-2 mb-1">${p.name || ''}</p>
+                                <div class="text-sm">${priceHtml}</div>
+                            </div>
+                        </div>`;
+                }).join('');
+                section.classList.remove('hidden');
+            } catch (e) {
+                console.warn('renderRelatedProducts failed', e);
+                try { section.classList.add('hidden'); } catch {}
+            }
+        }
+
         function renderPriceDetails(product) {
             const priceElement = document.getElementById('product-price-details');
             const price = product.price || 0;
@@ -2277,13 +3117,12 @@
             containerDiv.classList.remove('hidden');
             const container = document.getElementById(`${variantType}-variants-container`);
             container.innerHTML = options.map(option => {
-                if(variantType === 'color') {
-                    return `<button class="w-8 h-8 rounded-full border-2 border-gray-300" style="background-color: ${option.toLowerCase()}" data-variant-type="color" data-value="${option}"></button>`;
+                if (variantType === 'color') {
+                    return `<button class="w-8 h-8 rounded-full border-2 border-gray-300" style="background-color: ${String(option).toLowerCase()}" data-variant-type="color" data-value="${option}"></button>`;
                 }
                 return `<button class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100 transition-colors text-dark" data-variant-type="${variantType}" data-value="${option}">${option}</button>`;
             }).join('');
         }
-
         function handleVariantSelection(e) {
             const button = e.target.closest('button[data-variant-type]');
             if (!button) return;
@@ -2490,6 +3329,7 @@
                     }
                     const data = docSnap.data() || {};
                     currentUserData = data;
+                    if (!Array.isArray(currentUserData.addresses)) currentUserData.addresses = [];
                     
                     // --- Check Block Status ---
                     isCurrentUserBlocked = data.isBlocked || false;
@@ -2501,6 +3341,25 @@
                     // --- End Check Block Status ---
 
                     updateProfileModalUI(user, data);
+                    // Keep addresses UI in sync
+                    try { renderAddressesList(); } catch (_) {}
+                    // Reconcile selected shipping address if needed
+                    try {
+                        const addrs = currentUserData.addresses || [];
+                        if (!selectedShippingAddressId && addrs.length > 0) {
+                            const def = getDefaultAddress(addrs);
+                            selectedShippingAddressId = def?.id || addrs[0]?.id || null;
+                            selectedShippingAddress = addrs.find(a => a.id === selectedShippingAddressId) || null;
+                        } else if (selectedShippingAddressId) {
+                            selectedShippingAddress = addrs.find(a => a.id === selectedShippingAddressId) || null;
+                            if (!selectedShippingAddress && addrs.length > 0) {
+                                const def = getDefaultAddress(addrs);
+                                selectedShippingAddressId = def?.id || addrs[0]?.id || null;
+                                selectedShippingAddress = addrs.find(a => a.id === selectedShippingAddressId) || null;
+                            }
+                        }
+                        renderSelectedShippingAddress();
+                    } catch (_) {}
 
                     localWishlistCache.clear();
                     const wishlistData = data.wishlist || {};
@@ -2529,6 +3388,8 @@
                 updateCartUI();
                 updateWishlistUI();
                 updateProfileModalUI(null);
+                selectedShippingAddressId = null;
+                selectedShippingAddress = null;
             }
         }
         
@@ -2914,12 +3775,15 @@
         // --- CART HELPERS ---
         function getBaseProductId(cartItemId) {
             if (!cartItemId) return '';
-            // Find start of variant segment like _S: or _C:
-            const idxS = cartItemId.indexOf('_S:'); // size or storage (both S due to legacy key)
-            const idxC = cartItemId.indexOf('_C:'); // color
-            const idxList = [idxS, idxC].filter(i => i >= 0);
-            if (idxList.length === 0) return cartItemId;
-            const minIdx = Math.min(...idxList);
+            // Find start of variant segment. Support both legacy keys (_S:, _C:) and new keys (_SZ:, _ST:, _C:)
+            const indices = [
+                cartItemId.indexOf('_SZ:'), // size (new)
+                cartItemId.indexOf('_ST:'), // storage (new)
+                cartItemId.indexOf('_S:'),  // legacy size/storage
+                cartItemId.indexOf('_C:')   // color (legacy and new)
+            ].filter(i => i >= 0);
+            if (indices.length === 0) return cartItemId;
+            const minIdx = Math.min(...indices);
             return cartItemId.slice(0, minIdx);
         }
 
@@ -2996,12 +3860,20 @@
                 DOMElements.userName.textContent = user.displayName || 'User';
                 DOMElements.userEmail.textContent = user.email;
                 DOMElements.userMobile.textContent = userData?.mobile ? `📱 ${userData.mobile}` : '';
-                DOMElements.userLocation.textContent = userData?.location ? `📍 ${userData.location}` : '';
+                // Prefer default saved address for display if available
+                const addrs = Array.isArray(userData?.addresses) ? userData.addresses : [];
+                if (addrs.length > 0) {
+                    const def = getDefaultAddress(addrs) || addrs[0];
+                    DOMElements.userLocation.textContent = def?.line1 ? `📍 ${def.line1}${def.city ? ', ' + def.city : ''}` : '';
+                } else {
+                    DOMElements.userLocation.textContent = userData?.location ? `📍 ${userData.location}` : '';
+                }
 
             } else {
                 DOMElements.authOptions.classList.remove('hidden');
                 DOMElements.userProfileView.classList.add('hidden');
                 DOMElements.editProfileForm.classList.add('hidden');
+                const addrSec = DOMElements.addressesSection; if (addrSec) addrSec.classList.add('hidden');
             }
         }
         
@@ -3013,7 +3885,7 @@
                 const userDocRef = doc(db, 'users', user.uid);
                 const docSnap = await getDoc(userDocRef);
              if (!docSnap.exists()) {
-                 await setDoc(userDocRef, { email: user.email, name: user.displayName, photoURL: user.photoURL, cart: {}, wishlist: {}, usedCoupons: [], mobile: '', location: '', isBlocked: false, createdAt: serverTimestamp() });
+                 await setDoc(userDocRef, { email: user.email, name: user.displayName, photoURL: user.photoURL, cart: {}, wishlist: {}, usedCoupons: [], mobile: '', location: '', addresses: [], isBlocked: false, createdAt: serverTimestamp() });
              } else if (!docSnap.data()?.createdAt) {
                  await updateDoc(userDocRef, { createdAt: serverTimestamp() });
              }
@@ -3039,7 +3911,7 @@
                 const userDocRef = doc(db, 'users', user.uid);
                 const docSnap = await getDoc(userDocRef);
                 if (!docSnap.exists()) {
-                    await setDoc(userDocRef, { email: user.email || '', name: user.displayName || 'Facebook User', photoURL: user.photoURL || '', cart: {}, wishlist: {}, usedCoupons: [], mobile: '', location: '', isBlocked: false, createdAt: serverTimestamp() });
+                    await setDoc(userDocRef, { email: user.email || '', name: user.displayName || 'Facebook User', photoURL: user.photoURL || '', cart: {}, wishlist: {}, usedCoupons: [], mobile: '', location: '', addresses: [], isBlocked: false, createdAt: serverTimestamp() });
                 } else if (!docSnap.data()?.createdAt) {
                     await updateDoc(userDocRef, { createdAt: serverTimestamp() });
                 }
@@ -3112,7 +3984,7 @@
                     displayName: name
                 });
                 const userDocRef = doc(db, 'users', userCredential.user.uid);
-                await setDoc(userDocRef, { email: userCredential.user.email, name, mobile, location, cart: {}, wishlist: {}, usedCoupons: [], isBlocked: false, createdAt: serverTimestamp() });
+                await setDoc(userDocRef, { email: userCredential.user.email, name, mobile, location, addresses: [], cart: {}, wishlist: {}, usedCoupons: [], isBlocked: false, createdAt: serverTimestamp() });
 
                 closeDrawer();
                 showToast('toast-register-success', true); 
@@ -3446,16 +4318,35 @@
                 showToast('cart-is-empty', false);
                 return;
             }
-             if (!currentUserData?.location || !currentUserData?.mobile) {
-                showToast('toast-update-profile', false);
-                openDrawer('profile-drawer');
-                DOMElements.userProfileView.classList.add('hidden');
-                DOMElements.editProfileForm.classList.remove('hidden');
-                return;
+            // Address validation: require at least one saved address or fallback to legacy fields
+            const addrs = Array.isArray(currentUserData?.addresses) ? currentUserData.addresses : [];
+            if (addrs.length === 0) {
+                if (!currentUserData?.location || !currentUserData?.mobile) {
+                    showToast('Please add a shipping address in your profile.', false);
+                    openDrawer('profile-drawer');
+                    // Show addresses section to guide the user
+                    try { openManageAddresses(); } catch (_) {}
+                    return;
+                }
             }
             closeDrawer();
             DOMElements.paymentModal.classList.remove('hidden');
             DOMElements.paymentModal.classList.add('flex');
+            // Initialize selected shipping address view
+            try {
+                if (addrs.length > 0) {
+                    if (!selectedShippingAddressId) {
+                        const def = getDefaultAddress(addrs);
+                        selectedShippingAddressId = def?.id || addrs[0]?.id || null;
+                        selectedShippingAddress = addrs.find(a => a.id === selectedShippingAddressId) || null;
+                    }
+                } else {
+                    selectedShippingAddressId = null;
+                    selectedShippingAddress = null;
+                }
+                renderSelectedShippingAddress();
+                renderAddressSelectList();
+            } catch (_) {}
         }
 
         function closePaymentModal() {
@@ -3464,6 +4355,125 @@
         }
         window.closePaymentModal = closePaymentModal;
         
+        // --- Variant Selection Modal Logic ---
+        let currentVariantModal = null; // { productId, action: 'add'|'buy', selected: { size, storage, color } }
+
+        function openVariantModal(productId, action = 'add') {
+            try {
+                const product = (productsData || []).find(p => p.id === productId);
+                if (!product) return;
+                currentVariantModal = { productId, action, selected: {} };
+
+                // Fill product summary
+                const img = document.getElementById('vm-product-image');
+                const nameEl = document.getElementById('vm-product-name');
+                const priceEl = document.getElementById('vm-product-price');
+                if (img) img.src = product.imageUrl || product.image || '';
+                if (nameEl) nameEl.textContent = product.name || '';
+                if (priceEl) priceEl.textContent = `৳${Number(product.price || 0).toFixed(2)}`;
+
+                // Render options
+                renderVariantOptionsModal('size', product.sizes);
+                renderVariantOptionsModal('storage', product.storage);
+                renderVariantOptionsModal('color', product.colors);
+
+                const modal = document.getElementById('variant-modal');
+                if (modal) {
+                    modal.classList.remove('hidden');
+                    modal.classList.add('flex');
+                }
+            } catch (err) { console.log('openVariantModal failed', err); }
+        }
+        window.openVariantModal = openVariantModal;
+
+        function closeVariantModal() {
+            const modal = document.getElementById('variant-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+            currentVariantModal = null;
+        }
+        window.closeVariantModal = closeVariantModal;
+
+        function renderVariantOptionsModal(variantType, options) {
+            const wrapper = document.getElementById(`vm-${variantType}-options`);
+            const container = document.getElementById(`vm-${variantType}-variants-container`);
+            if (!wrapper || !container) return;
+            if (!options || options.length === 0) {
+                wrapper.classList.add('hidden');
+                container.innerHTML = '';
+                return;
+            }
+            wrapper.classList.remove('hidden');
+            container.innerHTML = options.map(option => {
+                if (variantType === 'color') {
+                    return `<button class="w-8 h-8 rounded-full border-2 border-gray-300" style="background-color: ${String(option).toLowerCase()}" data-vm-variant-type="color" data-value="${option}"></button>`;
+                }
+                return `<button class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100 transition-colors text-dark" data-vm-variant-type="${variantType}" data-value="${option}">${option}</button>`;
+            }).join('');
+        }
+
+        function highlightMissingVariantUIForModal(missingTypes = []) {
+            try {
+                missingTypes.forEach(type => {
+                    const labelEl = document.querySelector(`#vm-${type}-options label`);
+                    const wrapper = document.getElementById(`vm-${type}-options`);
+                    if (wrapper) wrapper.classList.remove('hidden');
+                    if (labelEl) labelEl.classList.add('text-red-600', 'animate-pulse');
+                });
+            } catch (err) { console.log('Variant modal highlight failed:', err); }
+        }
+
+        // Delegate clicks inside the modal to handle variant selection
+        document.getElementById('variant-modal-options').addEventListener('click', (e) => {
+            const btn = e.target.closest('button[data-vm-variant-type]');
+            if (!btn || !currentVariantModal) return;
+            const { vmVariantType } = { vmVariantType: btn.dataset.vmVariantType };
+            const value = btn.dataset.value;
+            const container = btn.parentElement;
+            container.querySelectorAll('button').forEach(b => b.classList.remove(vmVariantType === 'color' ? 'color-variant-active' : 'variant-btn-active'));
+            btn.classList.add(vmVariantType === 'color' ? 'color-variant-active' : 'variant-btn-active');
+            currentVariantModal.selected[vmVariantType] = value;
+            const labelEl = document.querySelector(`#vm-${vmVariantType}-options label`);
+            if (labelEl) labelEl.classList.remove('text-red-600', 'animate-pulse');
+        });
+
+        // Confirm buttons inside modal
+        document.getElementById('vm-add-btn').addEventListener('click', async () => {
+            if (!currentVariantModal) return;
+            const product = (productsData || []).find(p => p.id === currentVariantModal.productId);
+            const required = product ? getRequiredVariants(product) : [];
+            const missing = required.filter(t => !currentVariantModal.selected[t]);
+            if (missing.length > 0) {
+                showToast('toast-select-variant', false);
+                highlightMissingVariantUIForModal(missing);
+                return;
+            }
+            // Copy to global selection and add
+            selectedVariants = { ...currentVariantModal.selected };
+            try { await addToCartInDb(currentVariantModal.productId, false); } catch (e) { console.log(e); }
+            closeVariantModal();
+        });
+        document.getElementById('vm-buy-btn').addEventListener('click', async () => {
+            if (!currentVariantModal) return;
+            const product = (productsData || []).find(p => p.id === currentVariantModal.productId);
+            const required = product ? getRequiredVariants(product) : [];
+            const missing = required.filter(t => !currentVariantModal.selected[t]);
+            if (missing.length > 0) {
+                showToast('toast-select-variant', false);
+                highlightMissingVariantUIForModal(missing);
+                return;
+            }
+            selectedVariants = { ...currentVariantModal.selected };
+            try {
+                await addToCartInDb(currentVariantModal.productId, false);
+                closeVariantModal();
+                openPaymentModal();
+            } catch (e) { console.log(e); }
+        });
+        // --- END Variant Selection Modal Logic ---
+
         function generateRandomOrderId() {
             const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
             let result = '';
@@ -3488,12 +4498,30 @@
                 return;
             }
 
-            if (!currentUserData?.location || !currentUserData?.mobile) {
-                showToast('toast-update-profile', false);
+            // Ensure we have a shipping address: prefer selected saved address, else fallback to legacy fields
+            let shippingAddress = null;
+            const addrs = Array.isArray(currentUserData?.addresses) ? currentUserData.addresses : [];
+            if (addrs.length > 0) {
+                if (!selectedShippingAddress) {
+                    const def = getDefaultAddress(addrs);
+                    selectedShippingAddress = def || addrs[0] || null;
+                }
+                shippingAddress = selectedShippingAddress;
+            } else if (currentUserData?.location && currentUserData?.mobile) {
+                shippingAddress = {
+                    id: 'legacy',
+                    name: currentUser.displayName || 'Customer',
+                    mobile: currentUserData.mobile,
+                    line1: currentUserData.location,
+                    city: '',
+                    area: '',
+                    isDefault: true,
+                };
+            } else {
+                showToast('Please add a shipping address in your profile.', false);
                 closePaymentModal();
                 openDrawer('profile-drawer');
-                DOMElements.userProfileView.classList.add('hidden');
-                DOMElements.editProfileForm.classList.remove('hidden');
+                try { openManageAddresses(); } catch (_) {}
                 return;
             }
             
@@ -3518,8 +4546,19 @@
                 userId: currentUser.uid,
                 userName: currentUser.displayName,
                 userEmail: currentUser.email,
-                userLocation: currentUserData.location,
-                userMobile: currentUserData.mobile,
+                // Keep legacy fields for backward compatibility but prefer shippingAddress for fulfillment
+                userLocation: shippingAddress?.line1 || currentUserData.location || '',
+                userMobile: shippingAddress?.mobile || currentUserData.mobile || '',
+                shippingAddress: shippingAddress ? {
+                    id: shippingAddress.id,
+                    name: shippingAddress.name || currentUser.displayName || '',
+                    mobile: shippingAddress.mobile || '',
+                    line1: shippingAddress.line1 || '',
+                    line2: shippingAddress.line2 || '',
+                    city: shippingAddress.city || '',
+                    area: shippingAddress.area || '',
+                    isDefault: !!shippingAddress.isDefault,
+                } : null,
                 items: Array.from(localCartCache.values()),
                 subtotal: subtotal,
                 deliveryCharge: deliveryCharge,
@@ -4208,35 +5247,49 @@
             const chatId = currentUser.uid;
             const chatDocRef = doc(db, 'live_chats', chatId);
             const messagesCollectionRef = collection(chatDocRef, 'messages');
-            
-            // Initialize chat doc if it doesn't exist
-            const chatDocSnap = await getDoc(chatDocRef);
-            if (!chatDocSnap.exists()) {
-                await setDoc(chatDocRef, {
+
+            // Atomically ensure chat doc exists, update lastActive, and send a single welcome message once.
+            await runTransaction(db, async (tx) => {
+                const snap = await tx.get(chatDocRef);
+                const nowFields = { lastActive: serverTimestamp() };
+                const baseDoc = {
                     userId: currentUser.uid,
-                    userName: currentUser.displayName || currentUser.email,
+                    userName: currentUser.displayName || currentUser.email || 'User',
                     createdAt: serverTimestamp(),
-                    lastActive: serverTimestamp()
-                });
-            } else {
-                await updateDoc(chatDocRef, { lastActive: serverTimestamp() });
-            }
-            
-            // Check if this is the first interaction to send a welcome message.
-            const firstMessageQuery = query(messagesCollectionRef, limit(1));
-            const firstMessageSnapshot = await getDocs(firstMessageQuery);
-            if (firstMessageSnapshot.empty) {
-                // No messages exist, so add the welcome message from the admin.
-                await addDoc(messagesCollectionRef, {
-                    text: "অভিনন্দন! আমাদের সাথে যোগাযোগ করার জন্য ধন্যবাদ। অনুগ্রহ করে অপেক্ষা করুন, অ্যাডমিন শীঘ্রই আপনার বার্তার উত্তর দেবেন।",
-                    senderId: "admin",
-                    senderName: "Admin",
-                    timestamp: serverTimestamp()
-                });
-            }
+                    lastActive: serverTimestamp(),
+                };
+
+                if (!snap.exists()) {
+                    // First-time chat: create doc and send the welcome message with the flag in the same transaction
+                    tx.set(chatDocRef, { ...baseDoc, welcomeMessageSent: true });
+                    const welcomeRef = doc(messagesCollectionRef);
+                    tx.set(welcomeRef, {
+                        text: "অভিনন্দন! আমাদের সাথে যোগাযোগ করার জন্য ধন্যবাদ। অনুগ্রহ করে অপেক্ষা করুন, অ্যাডমিন শীঘ্রই আপনার বার্তার উত্তর দেবেন।",
+                        senderId: "admin",
+                        senderName: "Admin",
+                        timestamp: serverTimestamp()
+                    });
+                } else {
+                    // Existing chat: bump lastActive and send welcome only if not already sent
+                    const data = snap.data() || {};
+                    const alreadySent = data.welcomeMessageSent === true;
+                    if (!alreadySent) {
+                        tx.update(chatDocRef, { ...nowFields, welcomeMessageSent: true });
+                        const welcomeRef = doc(messagesCollectionRef);
+                        tx.set(welcomeRef, {
+                            text: "অভিনন্দন! আমাদের সাথে যোগাযোগ করার জন্য ধন্যবাদ। অনুগ্রহ করে অপেক্ষা করুন, অ্যাডমিন শীঘ্রই আপনার বার্তার উত্তর দেবেন।",
+                            senderId: "admin",
+                            senderName: "Admin",
+                            timestamp: serverTimestamp()
+                        });
+                    } else {
+                        tx.update(chatDocRef, nowFields);
+                    }
+                }
+            });
 
             DOMElements.chatMessages.innerHTML = `<p class="text-center text-gray-500">Loading messages...</p>`;
-            
+
             // Set up real-time listener for messages
             const q = query(messagesCollectionRef, orderBy('timestamp', 'asc'));
 
@@ -4539,7 +5592,10 @@
             if(DOMElements.emergencyContactBtn) DOMElements.emergencyContactBtn.addEventListener('click', handleEmergencyChatClick);
             if(DOMElements.chatForm) DOMElements.chatForm.addEventListener('submit', sendChatMessage);
             const headerEmergencyBtn = document.getElementById('emergency-contact-header');
-            if (headerEmergencyBtn) headerEmergencyBtn.addEventListener('click', handleEmergencyChatClick);
+            // Header Support button should open the Support page (with Chat, Email, Phone options)
+            if (headerEmergencyBtn) headerEmergencyBtn.addEventListener('click', () => {
+                showPage('support-page');
+            });
 
             if(document.getElementById('my-orders-btn')) document.getElementById('my-orders-btn').addEventListener('click', () => { showPage('my-orders-page'); closeDrawer(); });
             if(DOMElements.myOrdersBtnProfile) DOMElements.myOrdersBtnProfile.addEventListener('click', () => { showPage('my-orders-page'); closeDrawer(); });
