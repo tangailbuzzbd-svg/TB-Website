@@ -479,16 +479,7 @@
         </div>
         <div id="cart-summary" class="p-6 border-t space-y-2">
             
-            <!-- Available Coupons Section moved inside cart drawer -->
-            <div id="coupon-details-container">
-                <h4 class="text-lg font-bold text-theme-purple mb-3" data-lang="available-coupons">উপলব্ধ কুপন</h4>
-                <div id="coupons-list" class="space-y-3 mb-4">
-                    <!-- Coupons will be dynamically loaded here -->
-                    <div class="col-span-full text-center py-4">
-                        <div class="loader mx-auto"></div>
-                    </div>
-                </div>
-            </div>
+            <!-- Available Coupons section removed as requested -->
             
             <!-- Summary -->
              <div class="flex justify-between items-center text-md font-medium">
@@ -504,17 +495,19 @@
                 <span id="cart-discount"></span>
             </div>
             <div class="flex justify-between items-center text-xl font-semibold border-t pt-2 mt-2">
-                <span data-lang="total">Total:</span>
+                <span data-lang="total-inclusive-vat">Total (Inclusive of VAT)</span>
                 <span id="cart-total" class="text-theme-blue">৳0.00</span>
             </div>
              <!-- Coupon Form -->
             <div class="mt-4">
-                <form id="coupon-form" class="flex flex-col sm:flex-row gap-2">
-                    <input type="text" id="coupon-input" placeholder="Enter Coupon Code" class="flex-grow px-3 py-2 text-sm sm:text-base border rounded-full focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white" data-lang-placeholder="coupon-placeholder">
-                    <button type="submit" id="apply-coupon-btn" class="bg-theme-blue text-white px-4 py-2 text-sm sm:text-base rounded-full font-semibold hover:bg-theme-purple transition-colors" data-lang="apply-coupon">Apply</button>
+                <form id="coupon-form" class="w-full">
+                    <div class="flex w-full overflow-hidden rounded-md border border-gray-300 bg-white dark:bg-gray-800">
+                        <input type="text" id="coupon-input" placeholder="Coupon Code" class="flex-grow px-3 py-2 text-sm sm:text-base bg-transparent border-0 focus:outline-none focus:ring-0 text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-400" data-lang-placeholder="coupon-placeholder">
+                        <button type="submit" id="apply-coupon-btn" class="bg-theme-blue text-white px-4 py-2 text-sm sm:text-base font-semibold hover:bg-theme-purple transition-colors" data-lang="apply-coupon">Apply</button>
+                    </div>
                 </form>
             </div>
-            <button id="checkout-btn" class="w-full bg-theme-pink text-white py-4 rounded-full font-bold hover:bg-theme-purple transition-colors shadow-lg mt-4" data-lang="checkout">চেকআউট করুন</button>
+            <button id="checkout-btn" class="w-full bg-theme-blue text-white py-4 rounded-md font-bold hover:bg-theme-purple transition-colors shadow-lg mt-4" data-lang="checkout">চেকআউট করুন</button>
         </div>
     </div>
     
@@ -718,11 +711,16 @@
             <!-- Summary -->
             <aside class="lg:col-span-1">
                 <div class="p-5 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm space-y-4">
-                    <h3 class="text-xl font-bold text-theme-purple" data-lang="cart">আপনার কার্ট</h3>
-                    <div id="cart-page-coupons">
-                        <h4 class="text-base font-bold text-theme-purple mb-2" data-lang="available-coupons">উপলব্ধ কুপন</h4>
-                        <div id="cart-page-coupons-list" class="space-y-3"></div>
-                    </div>
+                    <h3 class="text-xl font-bold text-theme-purple" data-lang="order-summary">Order Summary</h3>
+                    <!-- Coupon Apply under Order Summary heading -->
+                    <form id="cart-page-coupon-form" class="w-full">
+                        <div class="flex w-full overflow-hidden rounded-md border border-gray-300 bg-white dark:bg-gray-800">
+                            <input type="text" id="cart-page-coupon-input" class="flex-grow px-3 py-2 text-sm sm:text-base bg-transparent border-0 focus:outline-none focus:ring-0 text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-400" data-lang-placeholder="coupon-placeholder" placeholder="Coupon Code">
+                            <button type="submit" class="bg-theme-blue text-white px-4 py-2 text-sm sm:text-base font-semibold hover:bg-theme-purple transition-colors" data-lang="apply-coupon">Apply</button>
+                        </div>
+                    </form>
+                    <p id="cart-page-coupon-applied" class="hidden text-xs text-green-600"></p>
+                    <!-- Available Coupons section removed on cart page as requested -->
                     <div class="flex justify-between text-sm">
                         <span data-lang="subtotal">Subtotal:</span>
                         <span id="cart-page-subtotal" class="text-dark">৳0.00</span>
@@ -736,14 +734,10 @@
                         <span id="cart-page-discount">- ৳0.00</span>
                     </div>
                     <div class="flex justify-between text-lg font-semibold border-t pt-2 mt-2">
-                        <span data-lang="total">Total:</span>
+                        <span data-lang="total-inclusive-vat">Total (Inclusive of VAT)</span>
                         <span id="cart-page-total" class="text-theme-blue">৳0.00</span>
                     </div>
-                    <form id="cart-page-coupon-form" class="flex flex-col sm:flex-row gap-2">
-                        <input type="text" id="cart-page-coupon-input" class="flex-grow px-3 py-2 text-sm sm:text-base border rounded-full focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white" data-lang-placeholder="coupon-placeholder" placeholder="Enter Coupon Code">
-                        <button type="submit" class="bg-theme-blue text-white px-4 py-2 text-sm sm:text-base rounded-full font-semibold hover:bg-theme-purple transition-colors" data-lang="apply-coupon">Apply</button>
-                    </form>
-                    <button id="cart-page-checkout-btn" class="w-full bg-theme-pink text-white py-3 rounded-full font-bold hover:bg-theme-purple transition-colors shadow-lg" data-lang="checkout">চেকআউট করুন</button>
+                    <button id="cart-page-checkout-btn" class="w-full bg-theme-blue text-white py-3 rounded-md font-bold hover:bg-theme-purple transition-colors shadow-lg" data-lang="checkout">চেকআউট করুন</button>
                 </div>
             </aside>
         </div>
@@ -795,8 +789,8 @@
                             <img id="right-promo-img" src="https://images.unsplash.com/photo-1524594081293-190a2fe0baae?q=80&w=1200&auto=format&fit=crop" alt="Promo: Smart prices on accessories" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/ddd/000?text=Promo';">
                             <div class="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors"></div>
                             <div class="absolute bottom-4 left-4 right-4 text-white drop-shadow">
-                                <h3 id="right-promo-title" class="text-xl sm:text-2xl font-extrabold">SHARP LOOKS, SMART PRICES</h3>
-                                <p id="right-promo-subtitle" class="text-sm sm:text-base font-semibold">Up to 70% off</p>
+                                <h3 id="right-promo-title" class="text-xl sm:text-2xl font-extrabold hidden"></h3>
+                                <p id="right-promo-subtitle" class="text-sm sm:text-base font-semibold hidden"></p>
                             </div>
                         </a>
                     </aside>
@@ -1397,7 +1391,7 @@
                 'account-blocked': 'Your account is blocked. You cannot place orders or send messages.',
                 'account-blocked-banner': 'Your account has been blocked by an administrator. Please contact support.',
                 'toast-account-blocked-action': 'Action failed: Your account is blocked.',
-                'coupon-placeholder': 'Enter Coupon Code', 'apply-coupon': 'Apply', 'discount': 'Discount',
+                'coupon-placeholder': 'Coupon Code', 'apply-coupon': 'Apply', 'discount': 'Discount', 'order-summary': 'Order Summary', 'total-inclusive-vat': 'Total (Inclusive of VAT)',
                 'toast-coupon-applied': 'Coupon applied successfully!', 'toast-coupon-invalid': 'Invalid or expired coupon code.',
                 'toast-coupon-used': 'You have already used this coupon.', 'toast-coupon-min-purchase': 'Minimum purchase of ৳{amount} required.',
                 'warranty': '{text} Warranty', // Updated key for text string
@@ -1471,7 +1465,7 @@
                 'toast-abusive-language': 'আপত্তিকর ভাষা ব্যবহার করা যাবে না।',
                 'account-blocked': 'আপনার অ্যাকাউন্ট ব্লক করা হয়েছে। আপনি অর্ডার বা মেসেজ করতে পারবেন না।',
                 'toast-account-blocked-action': 'Action failed: Your account is blocked.',
-                'coupon-placeholder': 'কুপন কোড লিখুন', 'apply-coupon': 'প্রয়োগ', 'discount': 'ডিসকাউন্ট',
+                'coupon-placeholder': 'কুপন কোড', 'apply-coupon': 'প্রয়োগ', 'discount': 'ডিসকাউন্ট', 'order-summary': 'অর্ডার সারাংশ', 'total-inclusive-vat': 'মোট (ভ্যাটসহ)',
                 'toast-coupon-applied': 'কুপন সফলভাবে প্রয়োগ করা হয়েছে!', 'toast-coupon-invalid': 'অবৈধ বা মেয়াদোত্তীর্ণ কুপন কোড।',
                 'toast-coupon-used': 'আপনি ইতিমধ্যে এই কুপন ব্যবহার করেছেন।', 'toast-coupon-min-purchase': 'এই কুপনটি ব্যবহার করতে সর্বনিম্ন ৳{amount} কেনাকাটা করতে হবে।',
                 'warranty': '{text} ওয়ারেন্টি', // Updated key for text string
@@ -1729,10 +1723,15 @@
         function showBlockedUI(messageKey) {
             const banner = DOMElements.blockedBanner;
             if (banner) {
-                banner.textContent = translations[currentLanguage][messageKey] || messageKey;
+                // Prefer translated message if available; otherwise use a clear default per language
+                const defaultText = currentLanguage === 'bn' ? 'আপনার অ্যাকাউন্ট ব্লক করা হয়েছে' : 'Your account is blocked';
+                const map = translations[currentLanguage] || {};
+                const text = (messageKey && map[messageKey]) ? map[messageKey] : defaultText;
+                banner.textContent = text;
                 banner.classList.remove('hidden');
                 // Adjust header margin to not overlap
-                document.querySelector('header').style.marginTop = `${banner.offsetHeight}px`;
+                const headerEl = document.querySelector('header');
+                if (headerEl) headerEl.style.marginTop = `${banner.offsetHeight}px`;
             }
             // Disable critical action buttons
             if(DOMElements.checkoutBtn) DOMElements.checkoutBtn.disabled = true;
@@ -1804,6 +1803,8 @@
 
             updateTextContent();
             renderProducts(currentDisplayedProducts); // Re-render products with new language
+            // Refresh language-aware dynamic content (e.g., Side Promo titles from Firestore)
+            try { fetchRightPromoFromFirestore && fetchRightPromoFromFirestore(); } catch (e) {}
             if (typeof renderTopCategoryStrip === 'function') {
                 try { renderTopCategoryStrip(); } catch (e) {}
             }
@@ -1838,8 +1839,7 @@
                 } else if (pageId === 'my-orders-page'){
                     fetchUserOrders();
                 } else if (pageId === 'cart-page') {
-                    // Ensure coupons load on full cart page
-                    fetchAndRenderCoupons();
+                    // Coupons list removed; only apply coupon option remains
                 } else if (pageId === 'home-page' && currentDisplayedProducts.length === 0) {
                      renderProducts(productsData);
                 }
@@ -3498,7 +3498,14 @@
                 // Sort by order if provided
                 promos.sort((a, b) => (a.order || 0) - (b.order || 0));
                 const promo = promos[0];
-                if (!promo) return; // keep defaults
+                if (!promo) {
+                    // No promo in Firestore: hide any default texts
+                    const titleEl0 = DOMElements.rightPromoTitle;
+                    const subEl0 = DOMElements.rightPromoSubtitle;
+                    if (titleEl0) { titleEl0.textContent = ''; titleEl0.classList.add('hidden'); }
+                    if (subEl0) { subEl0.textContent = ''; subEl0.classList.add('hidden'); }
+                    return;
+                }
 
                 const img = DOMElements.rightPromoImg;
                 const titleEl = DOMElements.rightPromoTitle;
@@ -3515,10 +3522,22 @@
                 const isBn = (typeof currentLanguage !== 'undefined' && currentLanguage === 'bn');
                 const titleBn = promo.title_bn || promo.titleBn || promo.titleBangla;
                 const subtitleBn = promo.subtitle_bn || promo.subtitleBn || promo.subtitleBangla;
-                const title = (isBn && titleBn) ? titleBn : (promo.title || titleBn || titleEl.textContent);
-                const subtitle = (isBn && subtitleBn) ? subtitleBn : (promo.subtitle || subtitleBn || subEl.textContent);
-                if (title) titleEl.textContent = title;
-                if (subtitle) subEl.textContent = subtitle;
+                const title = (isBn && titleBn) ? titleBn : (promo.title || titleBn || '');
+                const subtitle = (isBn && subtitleBn) ? subtitleBn : (promo.subtitle || subtitleBn || '');
+                if (title && String(title).trim()) {
+                    titleEl.textContent = title;
+                    titleEl.classList.remove('hidden');
+                } else {
+                    titleEl.textContent = '';
+                    titleEl.classList.add('hidden');
+                }
+                if (subtitle && String(subtitle).trim()) {
+                    subEl.textContent = subtitle;
+                    subEl.classList.remove('hidden');
+                } else {
+                    subEl.textContent = '';
+                    subEl.classList.add('hidden');
+                }
 
                 const link = promo.url || promo.link || promo.href;
                 if (link) {
@@ -3861,6 +3880,18 @@
                     pageDiscount.textContent = `- ৳${discountAmount.toFixed(2)}`;
                 } else {
                     pageDiscountRow.classList.add('hidden');
+                }
+            }
+
+            // Applied coupon message under Order Summary input
+            const pageCouponMsg = document.getElementById('cart-page-coupon-applied');
+            if (pageCouponMsg) {
+                if (appliedCouponCode && discountAmount > 0) {
+                    pageCouponMsg.textContent = `Applied ${appliedCouponCode}: - ৳${discountAmount.toFixed(2)}`;
+                    pageCouponMsg.classList.remove('hidden');
+                } else {
+                    pageCouponMsg.classList.add('hidden');
+                    pageCouponMsg.textContent = '';
                 }
             }
 
@@ -4567,7 +4598,7 @@
                 drawer.classList.add('active');
                 if(drawerId === 'cart-drawer') {
                     updateCartUI();
-                    fetchAndRenderCoupons(); // Load coupons when cart is opened
+                    // Coupons list removed; only apply coupon option remains
                 }
             }
         }
@@ -4953,23 +4984,12 @@
                 }
 
                 let couponsHtml = usableCoupons.map(coupon => {
-                    // Use 'value' for fixed discount amount, as seen in the firebase screenshot
-                    const discountValue = coupon.type === 'fixed' ? (coupon.value || 0) : (coupon.discountValue || 0);
-                    
-                    const discountText = coupon.type === 'percentage' 
-                        ? `${coupon.value}% OFF` 
-                        : `৳${discountValue.toFixed(0)} Fixed Discount`;
-                    
+                    const code = coupon.code || '';
                     return `
                         <div class="p-2 sm:p-3 bg-gray-100 dark:bg-gray-700 rounded-lg border border-dashed border-theme-pink/50">
                             <div class="flex items-center justify-between gap-2">
-                                <div class="min-w-0">
-                                    <p class="text-xs font-semibold text-gray-600 dark:text-gray-300 truncate" title="${discountText}" data-lang="discount-value">${translations[currentLanguage]['discount-value']}: ${discountText}</p>
-                                    <p class="text-[11px] text-gray-500">${translations[currentLanguage]['min-spend']}: ৳${(coupon.minSpend || 0).toFixed(0)}</p>
-                                    <p class="text-[11px] text-red-500">Expires: ${coupon.expiryDate || 'N/A'}</p>
-                                </div>
-                                <button onclick="copyToClipboard(this, '${coupon.code}')" class="text-[11px] sm:text-xs font-bold bg-theme-blue text-white px-2 py-1 rounded-full hover:bg-theme-purple transition-colors flex-shrink-0" data-lang="tap-to-copy">
-                                    ${coupon.code}
+                                <button onclick="copyToClipboard(this, '${code}')" class="text-sm sm:text-base font-bold bg-theme-blue text-white px-3 py-1 rounded-full hover:bg-theme-purple transition-colors">
+                                    ${code}
                                 </button>
                             </div>
                         </div>
