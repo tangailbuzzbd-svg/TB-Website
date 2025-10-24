@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TangailBuzz - Online Shopping</title>
+    <!-- FAVICON UPDATE: Added the new provided logo URL as the favicon -->
+    <link rel="icon" type="image/png" href="https://github.com/tangailbuzzbd-svg/TangailBuzz-Picture-/blob/main/gdrg_upscaled%20(1).png?raw=true">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -271,22 +273,26 @@
             <!-- Left side: Hamburger (mobile) and Logo -->
             <div class="flex items-center space-x-4">
                  <!-- Hamburger Menu for Mobile -->
-                <button id="hamburger-btn" class="md:hidden text-2xl">
+                <button id="hamburger-btn" class="md:hidden text-2xl text-white"> <!-- Adjusted text color -->
                     <i class="fas fa-bars"></i>
                 </button>
                 <div class="flex items-center text-3xl font-bold transform hover:scale-105 transition-transform cursor-pointer" onclick="renderAllProducts()">
-                    <img src="https://raw.githubusercontent.com/tangailbuzzbd-svg/TangailBuzz-Picture-/main/MD%20EOUSUF%20ALI%20BACK-1_upscaled.png" alt="TangailBuzz Logo" class="h-12 w-auto mr-2">
-                    <span class="hidden sm:inline">TangailBuzz</span>
+                    <!-- LOGO STYLING UPDATE: Wrap icon in white circle -->
+                    <div class="w-12 h-12 rounded-full bg-white flex items-center justify-center p-1 shadow-md mr-2 flex-shrink-0">
+                         <img src="https://github.com/tangailbuzzbd-svg/TangailBuzz-Picture-/blob/main/gdrg_upscaled%20(1).png?raw=true" alt="TangailBuzz Logo Icon" class="h-full w-full object-contain">
+                    </div>
+                    <span class="hidden sm:inline text-white">TangailBuzz</span> <!-- Text remains white -->
+                    <!-- END LOGO STYLING UPDATE -->
                 </div>
             </div>
 
             <!-- Center: Navigation (Desktop) -->
             <nav class="hidden md:flex">
                 <ul class="flex items-center space-x-6">
-                    <li><a href="javascript:void(0);" onclick="renderAllProducts()" class="text-white hover:text-theme-pink font-semibold transition-colors" data-lang="home">হোম</a></li>
-                    <li><a href="#products" onclick="showPage('home-page'); scrollToElement('products')" class="text-white hover:text-theme-pink font-semibold transition-colors" data-lang="products">পণ্য</a></li>
-                    <li><a href="#categories" onclick="showPage('home-page'); scrollToElement('categories')" class="text-white hover:text-theme-pink font-semibold transition-colors" data-lang="categories">ক্যাটাগরি</a></li>
-                    <li><a href="javascript:void(0);" onclick="showOffers()" class="text-white hover:text-theme-pink font-semibold transition-colors" data-lang="offers">অফার</a></li>
+                    <li><a href="javascript:void(0);" onclick="renderAllProducts()" class="text-white hover:text-theme-pink font-semibold transition-colors" data-lang="home">হোম</a></li> <!-- Adjusted text color -->
+                    <li><a href="#products" onclick="showPage('home-page'); scrollToElement('products')" class="text-white hover:text-theme-pink font-semibold transition-colors" data-lang="products">পণ্য</a></li> <!-- Adjusted text color -->
+                    <li><a href="#categories" onclick="showPage('home-page'); scrollToElement('categories')" class="text-white hover:text-theme-pink font-semibold transition-colors" data-lang="categories">ক্যাটাগরি</a></li> <!-- Adjusted text color -->
+                    <li><a href="javascript:void(0);" onclick="showOffers()" class="text-white hover:text-theme-pink font-semibold transition-colors" data-lang="offers">অফার</a></li> <!-- Adjusted text color -->
                 </ul>
             </nav>
 
@@ -294,7 +300,7 @@
             <div class="flex items-center space-x-2 sm:space-x-4">
                 <!-- Search -->
                 <div class="hidden md:block relative flex-grow md:flex-grow-0">
-                    <div class="flex items-stretch rounded-full overflow-hidden shadow-md bg-white dark:bg-gray-900">
+                    <div class="flex items-stretch rounded-full overflow-hidden shadow-md bg-white dark:bg-gray-900"> <!-- Search BG remains white/dark -->
                         <input type="text" id="search-input" placeholder="পণ্য খুঁজুন..." class="flex-1 min-w-0 px-4 py-2 outline-none focus:ring-2 focus:ring-theme-pink bg-transparent text-sm text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-400">
                         <button id="search-button" class="px-4 bg-theme-pink text-white hover:bg-theme-purple transition-colors shrink-0">
                             <i class="fas fa-search"></i>
@@ -306,9 +312,10 @@
 
                 <!-- Language Selector (Professional Dropdown) -->
                 <div class="relative" id="lang-selector">
+                     <!-- Adjusted styles for gradient header -->
                     <button id="lang-button" class="flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/40 bg-white/10 hover:bg-white/20 text-white text-sm font-semibold backdrop-blur transition-colors" aria-haspopup="true" aria-expanded="false" title="Language" aria-label="Language" data-lang-title="language" data-lang-aria-label="language">
                         <i class="fas fa-globe"></i>
-                        <span id="lang-current" class="text-white dark:text-white">বাংলা</span>
+                        <span id="lang-current" class="text-white">বাংলা</span> <!-- Adjusted text color -->
                         <i class="fas fa-chevron-down text-xs opacity-80"></i>
                     </button>
                     <div id="lang-menu" class="hidden absolute right-0 mt-2 w-44 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl overflow-hidden z-50 text-gray-800 dark:text-gray-200">
@@ -322,37 +329,42 @@
                 </div>
                 
                 <!-- Dark Mode Toggle -->
-                <button id="dark-mode-toggle" class="text-white text-xl p-2 rounded-full hover:bg-white hover:text-theme-blue transition-colors flex flex-col items-center" aria-label="Toggle Dark Mode" title="Dark Mode" data-lang-title="dark-mode" data-lang-aria-label="dark-mode">
+                 <!-- Adjusted styles for gradient header -->
+                <button id="dark-mode-toggle" class="text-white text-xl p-2 rounded-full hover:bg-white/20 transition-colors flex flex-col items-center" aria-label="Toggle Dark Mode" title="Dark Mode" data-lang-title="dark-mode" data-lang-aria-label="dark-mode">
                     <i class="fas fa-sun" id="dark-mode-icon"></i>
-                    <span class="hidden md:block text-[10px] leading-3 mt-1 text-white/90" data-lang="dark-mode">Dark Mode</span>
+                    <span class="hidden md:block text-[10px] leading-3 mt-1 text-white/90" data-lang="dark-mode">Dark Mode</span> <!-- Adjusted text color -->
                 </button>
                 
                 <!-- Support (Header) -->
+                 <!-- Adjusted styles for gradient header -->
                 <div id="emergency-contact-header" class="relative transform hover:scale-110 transition-transform cursor-pointer flex flex-col items-center" title="Support" aria-label="Support" data-lang-title="emergency-contact" data-lang-aria-label="emergency-contact">
-                    <i class="fas fa-headset text-white text-2xl"></i>
-                    <span class="hidden md:block text-[10px] leading-3 mt-1 text-white/90" data-lang="emergency-contact">Support</span>
+                    <i class="fas fa-headset text-white text-2xl"></i> <!-- Adjusted text color -->
+                    <span class="hidden md:block text-[10px] leading-3 mt-1 text-white/90" data-lang="emergency-contact">Support</span> <!-- Adjusted text color -->
                 </div>
                 
+                 <!-- Adjusted styles for gradient header -->
                 <div id="profile-icon" class="relative transform hover:scale-110 transition-transform cursor-pointer flex flex-col items-center" onclick="openDrawer('profile-drawer')" title="Profile" aria-label="Profile" data-lang-title="profile" data-lang-aria-label="profile">
-                    <i class="fas fa-user-circle text-white text-2xl"></i>
-                    <span class="hidden md:block text-[10px] leading-3 mt-1 text-white/90" data-lang="profile">Profile</span>
+                    <i class="fas fa-user-circle text-white text-2xl"></i> <!-- Adjusted text color -->
+                    <span class="hidden md:block text-[10px] leading-3 mt-1 text-white/90" data-lang="profile">Profile</span> <!-- Adjusted text color -->
                 </div>
+                 <!-- Adjusted styles for gradient header -->
                 <div class="relative transform hover:scale-110 transition-transform cursor-pointer flex flex-col items-center" onclick="showPage('wishlist-page')" title="Wishlist" aria-label="Wishlist" data-lang-title="wishlist" data-lang-aria-label="wishlist">
-                    <i class="fas fa-heart text-white text-2xl"></i>
+                    <i class="fas fa-heart text-white text-2xl"></i> <!-- Adjusted text color -->
                     <span id="wishlist-count-badge" class="absolute -top-2 -right-2 bg-theme-pink text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center hidden">0</span>
-                    <span class="hidden md:block text-[10px] leading-3 mt-1 text-white/90" data-lang="wishlist">Wishlist</span>
+                    <span class="hidden md:block text-[10px] leading-3 mt-1 text-white/90" data-lang="wishlist">Wishlist</span> <!-- Adjusted text color -->
                 </div>
+                 <!-- Adjusted styles for gradient header -->
                 <div class="relative transform hover:scale-110 transition-transform cursor-pointer flex flex-col items-center" onclick="showPage('cart-page')" title="Cart" aria-label="Cart" data-lang-title="cart-short" data-lang-aria-label="cart-short">
-                    <i class="fas fa-shopping-cart text-white text-2xl"></i>
+                    <i class="fas fa-shopping-cart text-white text-2xl"></i> <!-- Adjusted text color -->
                     <span id="cart-count" class="absolute -top-2 -right-2 bg-theme-pink text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">0</span>
-                    <span class="hidden md:block text-[10px] leading-3 mt-1 text-white/90" data-lang="cart-short">Cart</span>
+                    <span class="hidden md:block text-[10px] leading-3 mt-1 text-white/90" data-lang="cart-short">Cart</span> <!-- Adjusted text color -->
                 </div>
             </div>
         </div>
         <!-- Search bar for mobile -->
         <div class="md:hidden mt-4 px-4">
             <div class="relative w-full">
-                <div class="flex items-stretch rounded-full overflow-hidden shadow-md bg-white dark:bg-gray-900">
+                <div class="flex items-stretch rounded-full overflow-hidden shadow-md bg-white dark:bg-gray-900"> <!-- Search BG remains white/dark -->
                     <input type="text" id="search-input-mobile" placeholder="পণ্য খুঁজুন..." class="flex-1 min-w-0 px-4 py-2 outline-none focus:ring-2 focus:ring-theme-pink bg-transparent text-sm text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-400">
                     <button id="search-button-mobile" class="px-4 bg-theme-pink text-white hover:bg-theme-purple transition-colors shrink-0">
                         <i class="fas fa-search"></i>
