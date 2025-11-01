@@ -1358,6 +1358,85 @@
         let localCartCache = new Map();
         let localWishlistCache = new Set();
     let productsData = []; // Will be populated from Firestore
+    
+    // --- Presence: Live visitor heartbeat (for Admin dashboard live view) ---
+    try {
+        const getTabSessionId = () => {
+            let sid = sessionStorage.getItem('tb_tab_id');
+            if (!sid) {
+                sid = (self.crypto?.randomUUID?.() || Math.random().toString(36).slice(2)) + '-' + Date.now();
+                sessionStorage.setItem('tb_tab_id', sid);
+            }
+            return sid;
+        };
+        const presenceSessionId = getTabSessionId();
+        const presenceRef = doc(collection(db, 'presence'), presenceSessionId);
+        let presenceAnonAttempted = false;
+        const ensurePresenceAuth = async () => {
+            if (auth.currentUser || presenceAnonAttempted) {
+                return;
+            }
+            presenceAnonAttempted = true;
+            try {
+                await signInAnonymously(auth);
+            } catch (err) {
+                presenceAnonAttempted = false;
+                console.warn('Anonymous sign-in for presence failed', err);
+                throw err;
+            }
+        };
+
+        const sendPresence = async (initial = false) => {
+            try {
+                await setDoc(presenceRef, {
+                    sessionId: presenceSessionId,
+                    uid: auth.currentUser?.uid || null,
+                    isLoggedIn: !!auth.currentUser,
+                    userAgent: navigator.userAgent,
+                    path: location.pathname + location.search + location.hash,
+                    referrer: document.referrer || null,
+                    lastActive: serverTimestamp(),
+                    ...(initial ? { startedAt: serverTimestamp() } : {})
+                }, { merge: true });
+            } catch (e) {
+                if (e?.code === 'permission-denied') {
+                    try {
+                        await ensurePresenceAuth();
+                        return sendPresence(initial);
+                    } catch (_) {
+                        // fall through to warn user if anonymous sign-in also fails
+                    }
+                }
+                console.warn('Presence heartbeat failed', e);
+            }
+        };
+
+        // Initial ping
+    ensurePresenceAuth().catch(() => {}).finally(() => { sendPresence(true); });
+
+        // Refresh on auth changes
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                ensurePresenceAuth().catch(() => {});
+            }
+            sendPresence(false);
+        });
+
+        // Heartbeat while visible
+    let hbId = null;
+    const startHB = () => { if (hbId) clearInterval(hbId); hbId = setInterval(() => sendPresence(false), 10000); };
+        const stopHB = () => { if (hbId) { clearInterval(hbId); hbId = null; } };
+        if (document.visibilityState === 'visible') startHB();
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') { sendPresence(false); startHB(); }
+            else { sendPresence(false); stopHB(); }
+        });
+        // On pagehide/blur try a final update
+        window.addEventListener('pagehide', () => { sendPresence(false); stopHB(); });
+        window.addEventListener('beforeunload', () => { sendPresence(false); stopHB(); });
+    } catch (e) {
+        console.warn('Presence setup failed', e);
+    }
     let renderContext = null; // Controls render behavior for specific pages (e.g., 'wishlist')
         let currentDisplayedProducts = [];
         let selectedVariants = {};
