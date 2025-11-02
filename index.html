@@ -313,10 +313,10 @@
                 <!-- Language Selector (Professional Dropdown) -->
                 <div class="relative" id="lang-selector">
                      <!-- Adjusted styles for gradient header -->
-                    <button id="lang-button" class="flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/40 bg-white/10 hover:bg-white/20 text-white text-sm font-semibold backdrop-blur transition-colors" aria-haspopup="true" aria-expanded="false" title="Language" aria-label="Language" data-lang-title="language" data-lang-aria-label="language">
-                        <i class="fas fa-globe"></i>
-                        <span id="lang-current" class="text-white">বাংলা</span> <!-- Adjusted text color -->
-                        <i class="fas fa-chevron-down text-xs opacity-80"></i>
+                    <button id="lang-button" class="flex items-center gap-3 px-4 py-2 rounded-full border border-white/40 bg-white/15 hover:bg-white/25 text-white text-base sm:text-sm font-semibold backdrop-blur transition-colors shadow-md shadow-black/10" aria-haspopup="true" aria-expanded="false" title="Language" aria-label="Language" data-lang-title="language" data-lang-aria-label="language">
+                        <i class="fas fa-globe text-lg sm:text-base"></i>
+                        <span id="lang-current" class="text-white font-semibold">বাংলা</span> <!-- Adjusted text color -->
+                        <i class="fas fa-chevron-down text-sm sm:text-xs opacity-80"></i>
                     </button>
                     <div id="lang-menu" class="hidden absolute right-0 mt-2 w-44 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl overflow-hidden z-50 text-gray-800 dark:text-gray-200">
                         <button class="lang-option w-full text-left px-3 py-2 text-sm flex items-center gap-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200" data-lang-value="bn">
@@ -476,6 +476,9 @@
                 <li><a href="#products" onclick="showPage('home-page'); scrollToElement('products')" class="text-lg font-semibold text-gray-700 hover:text-theme-blue" data-lang="products">পণ্য</a></li>
                 <li><a href="#categories" onclick="showPage('home-page'); scrollToElement('categories')" class="text-lg font-semibold text-gray-700 hover:text-theme-blue" data-lang="categories">ক্যাটাগরি</a></li>
                 <li><a href="javascript:void(0);" onclick="showOffers(); closeDrawer();" class="text-lg font-semibold text-gray-700 hover:text-theme-blue" data-lang="offers">অফার</a></li>
+                <li><a href="javascript:void(0);" onclick="closeDrawer(); setTimeout(() => openDrawer('profile-drawer'), 200);" class="text-lg font-semibold text-gray-700 hover:text-theme-blue" data-lang="profile">প্রোফাইল</a></li>
+                <li><a href="javascript:void(0);" onclick="closeDrawer(); setTimeout(() => showPage('support-page'), 200);" class="text-lg font-semibold text-gray-700 hover:text-theme-blue" data-lang="emergency-contact">সাপোর্ট</a></li>
+                <li><a href="javascript:void(0);" onclick="closeDrawer(); setTimeout(() => openDrawer('cart-drawer'), 200);" class="text-lg font-semibold text-gray-700 hover:text-theme-blue" data-lang="cart-short">কার্ট</a></li>
             </ul>
         </nav>
     </div>
