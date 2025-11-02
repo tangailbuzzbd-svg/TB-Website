@@ -1372,6 +1372,92 @@
         const presenceSessionId = getTabSessionId();
         const presenceRef = doc(collection(db, 'presence'), presenceSessionId);
         let presenceAnonAttempted = false;
+
+        const detectPresenceDeviceInfo = () => {
+            const ua = navigator.userAgent || '';
+            const uaData = navigator.userAgentData;
+            const platform = uaData?.platform || navigator.platform || '';
+            let deviceType = 'Desktop';
+            if (/iPad|Tablet/i.test(ua)) {
+                deviceType = 'Tablet';
+            } else if (/Mobi|Android/i.test(ua)) {
+                deviceType = 'Mobile';
+            }
+
+            const browser = (() => {
+                if (/edg/i.test(ua)) return 'Microsoft Edge';
+                if (/chrome|crios/i.test(ua) && !/edg/i.test(ua)) return 'Google Chrome';
+                if (/safari/i.test(ua) && !/chrome|crios/i.test(ua)) return 'Apple Safari';
+                if (/firefox|fxios/i.test(ua)) return 'Mozilla Firefox';
+                return uaData?.brands?.[0]?.brand || 'Unknown Browser';
+            })();
+
+            const os = (() => {
+                if (/windows nt 10/i.test(ua)) return 'Windows 10/11';
+                if (/windows nt 6\.3/i.test(ua)) return 'Windows 8.1';
+                if (/windows nt 6\.2/i.test(ua)) return 'Windows 8';
+                if (/windows nt 6\.1/i.test(ua)) return 'Windows 7';
+                if (/mac os x 10[._]15/i.test(ua)) return 'macOS Catalina';
+                if (/mac os x/i.test(ua)) return 'macOS';
+                if (/iphone|ipad|ipod/i.test(ua)) return 'iOS';
+                if (/android/i.test(ua)) return 'Android';
+                if (/linux/i.test(ua)) return 'Linux';
+                return platform || 'Unknown OS';
+            })();
+
+            const brand = uaData?.brands?.find(b => b?.brand && b.brand !== 'Not A(Brand)')?.brand || null;
+            const labelParts = [];
+            if (deviceType && deviceType !== 'Desktop') labelParts.push(deviceType);
+            if (os) labelParts.push(os);
+            if (browser) labelParts.push(browser);
+
+            return {
+                userAgent: ua,
+                platform,
+                brand,
+                deviceType,
+                browser,
+                os,
+                label: labelParts.join(' | ') || ua,
+                language: navigator.language || null
+            };
+        };
+
+        const presenceDeviceInfo = detectPresenceDeviceInfo();
+        let presenceLocationData = null;
+        let presenceLocationFetchPromise = null;
+        const fetchPresenceLocation = async () => {
+            if (presenceLocationData) return presenceLocationData;
+            if (presenceLocationFetchPromise) return presenceLocationFetchPromise;
+
+            presenceLocationFetchPromise = (async () => {
+                try {
+                    const res = await fetch('https://ipapi.co/json/', { headers: { 'Accept': 'application/json' } });
+                    if (!res.ok) throw new Error('Geo lookup failed');
+                    const payload = await res.json();
+                    const loc = {
+                        ip: payload.ip || null,
+                        city: payload.city || null,
+                        region: payload.region || payload.region_code || null,
+                        country: payload.country_name || payload.country || null,
+                        latitude: typeof payload.latitude === 'number' ? payload.latitude : Number(payload.latitude) || null,
+                        longitude: typeof payload.longitude === 'number' ? payload.longitude : Number(payload.longitude) || null,
+                        timezone: payload.timezone || null,
+                        org: payload.org || payload.asn || null
+                    };
+                    presenceLocationData = loc;
+                    return loc;
+                } catch (err) {
+                    console.warn('Presence geo lookup failed', err);
+                    return null;
+                } finally {
+                    presenceLocationFetchPromise = null;
+                }
+            })();
+
+            return presenceLocationFetchPromise;
+        };
+        let presenceLocationAttached = false;
         const ensurePresenceAuth = async () => {
             if (auth.currentUser || presenceAnonAttempted) {
                 return;
@@ -1388,7 +1474,7 @@
 
         const sendPresence = async (initial = false) => {
             try {
-                await setDoc(presenceRef, {
+                const payload = {
                     sessionId: presenceSessionId,
                     uid: auth.currentUser?.uid || null,
                     isLoggedIn: !!auth.currentUser,
@@ -1397,7 +1483,24 @@
                     referrer: document.referrer || null,
                     lastActive: serverTimestamp(),
                     ...(initial ? { startedAt: serverTimestamp() } : {})
-                }, { merge: true });
+                };
+
+                if (presenceDeviceInfo) {
+                    payload.device = presenceDeviceInfo;
+                }
+
+                let locationToPersist = null;
+                if (!presenceLocationAttached) {
+                    locationToPersist = await fetchPresenceLocation();
+                    if (locationToPersist) {
+                        payload.location = locationToPersist;
+                    }
+                }
+
+                await setDoc(presenceRef, payload, { merge: true });
+                if (locationToPersist) {
+                    presenceLocationAttached = true;
+                }
             } catch (e) {
                 if (e?.code === 'permission-denied') {
                     try {
