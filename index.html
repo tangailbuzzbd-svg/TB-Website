@@ -330,14 +330,14 @@
                 
                 <!-- Dark Mode Toggle -->
                  <!-- Adjusted styles for gradient header -->
-                <button id="dark-mode-toggle" class="text-white text-xl p-2 rounded-full hover:bg-white/20 transition-colors flex flex-col items-center" aria-label="Toggle Dark Mode" title="Dark Mode" data-lang-title="dark-mode" data-lang-aria-label="dark-mode">
+                <button id="dark-mode-toggle" class="hidden md:flex md:flex-col items-center text-white text-xl p-2 rounded-full hover:bg-white/20 transition-colors" aria-label="Toggle Dark Mode" title="Dark Mode" data-lang-title="dark-mode" data-lang-aria-label="dark-mode">
                     <i class="fas fa-sun" id="dark-mode-icon"></i>
                     <span class="hidden md:block text-[10px] leading-3 mt-1 text-white/90" data-lang="dark-mode">Dark Mode</span> <!-- Adjusted text color -->
                 </button>
                 
                 <!-- Support (Header) -->
                  <!-- Adjusted styles for gradient header -->
-                <div id="emergency-contact-header" class="relative transform hover:scale-110 transition-transform cursor-pointer flex flex-col items-center" title="Support" aria-label="Support" data-lang-title="emergency-contact" data-lang-aria-label="emergency-contact">
+                <div id="emergency-contact-header" class="hidden md:flex relative transform hover:scale-110 transition-transform cursor-pointer flex-col items-center" title="Support" aria-label="Support" data-lang-title="emergency-contact" data-lang-aria-label="emergency-contact">
                     <i class="fas fa-headset text-white text-2xl"></i> <!-- Adjusted text color -->
                     <span class="hidden md:block text-[10px] leading-3 mt-1 text-white/90" data-lang="emergency-contact">Support</span> <!-- Adjusted text color -->
                 </div>
@@ -348,13 +348,13 @@
                     <span class="hidden md:block text-[10px] leading-3 mt-1 text-white/90" data-lang="profile">Profile</span> <!-- Adjusted text color -->
                 </div>
                  <!-- Adjusted styles for gradient header -->
-                <div class="relative transform hover:scale-110 transition-transform cursor-pointer flex flex-col items-center" onclick="showPage('wishlist-page')" title="Wishlist" aria-label="Wishlist" data-lang-title="wishlist" data-lang-aria-label="wishlist">
+                <div class="hidden md:flex relative transform hover:scale-110 transition-transform cursor-pointer flex-col items-center" onclick="showPage('wishlist-page')" title="Wishlist" aria-label="Wishlist" data-lang-title="wishlist" data-lang-aria-label="wishlist">
                     <i class="fas fa-heart text-white text-2xl"></i> <!-- Adjusted text color -->
                     <span id="wishlist-count-badge" class="absolute -top-2 -right-2 bg-theme-pink text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center hidden">0</span>
                     <span class="hidden md:block text-[10px] leading-3 mt-1 text-white/90" data-lang="wishlist">Wishlist</span> <!-- Adjusted text color -->
                 </div>
                  <!-- Adjusted styles for gradient header -->
-                <div class="relative transform hover:scale-110 transition-transform cursor-pointer flex flex-col items-center" onclick="showPage('cart-page')" title="Cart" aria-label="Cart" data-lang-title="cart-short" data-lang-aria-label="cart-short">
+                <div class="hidden md:flex relative transform hover:scale-110 transition-transform cursor-pointer flex-col items-center" onclick="showPage('cart-page')" title="Cart" aria-label="Cart" data-lang-title="cart-short" data-lang-aria-label="cart-short">
                     <i class="fas fa-shopping-cart text-white text-2xl"></i> <!-- Adjusted text color -->
                     <span id="cart-count" class="absolute -top-2 -right-2 bg-theme-pink text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">0</span>
                     <span class="hidden md:block text-[10px] leading-3 mt-1 text-white/90" data-lang="cart-short">Cart</span> <!-- Adjusted text color -->
@@ -540,8 +540,27 @@
         <div class="p-6 text-center relative">
             <button onclick="closeDrawer()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl">&times;</button>
             <h3 id="profile-drawer-title" class="text-3xl font-bold text-theme-purple mb-8" data-lang="your-account">আপনার অ্যাকাউন্ট</h3>
-            
-            <div class="space-y-4">
+
+            <div class="block md:hidden space-y-3 text-left mb-6">
+                <button type="button" class="w-full flex items-center justify-between px-4 py-3 rounded-xl bg-theme-blue text-white font-semibold shadow-md hover:bg-theme-purple transition-colors" onclick="closeDrawer(); showPage('my-orders-page');">
+                    <span><i class="fas fa-box-open mr-3"></i>My Orders</span>
+                    <i class="fas fa-chevron-right text-sm"></i>
+                </button>
+                <button type="button" class="w-full flex items-center justify-between px-4 py-3 rounded-xl bg-white text-theme-blue border border-theme-blue font-semibold shadow-sm hover:bg-theme-blue hover:text-white transition-colors" onclick="closeDrawer(); showPage('wishlist-page');">
+                    <span><i class="fas fa-heart mr-3"></i>Wishlist</span>
+                    <i class="fas fa-chevron-right text-sm"></i>
+                </button>
+                <button type="button" class="w-full flex items-center justify-between px-4 py-3 rounded-xl bg-white text-theme-blue border border-theme-blue font-semibold shadow-sm hover:bg-theme-blue hover:text-white transition-colors" onclick="closeDrawer(); showPage('support-page');">
+                    <span><i class="fas fa-headset mr-3"></i>Contact Support</span>
+                    <i class="fas fa-chevron-right text-sm"></i>
+                </button>
+                <button type="button" class="mobile-profile-toggle w-full flex items-center justify-between px-4 py-2 rounded-xl bg-gray-100 text-gray-700 dark:bg-gray-900/60 dark:text-gray-200 border border-gray-200 dark:border-gray-700 text-sm font-semibold" onclick="toggleMobileProfileDetails(this);">
+                    <span><i class="fas fa-user-cog mr-3"></i>Account Settings</span>
+                    <i class="fas fa-plus text-xs"></i>
+                </button>
+            </div>
+
+            <div id="profile-full-section" class="hidden md:block space-y-4">
                 <!-- Logged OUT state -->
                 <div id="auth-options">
                     <!-- Login Form -->
@@ -4973,6 +4992,18 @@
                        DOMElements.editProfileForm.classList.add('hidden');
                        updateTextContent();
                     }
+                    const fullSection = document.getElementById('profile-full-section');
+                    if (fullSection && window.innerWidth < 768) {
+                        fullSection.classList.add('hidden');
+                    }
+                    const toggleBtn = drawer.querySelector('.mobile-profile-toggle');
+                    if (toggleBtn) {
+                        const icons = toggleBtn.querySelectorAll('i');
+                        if (icons.length > 1) {
+                            icons[icons.length - 1].classList.remove('fa-minus');
+                            icons[icons.length - 1].classList.add('fa-plus');
+                        }
+                    }
                 }
                 DOMElements.drawerOverlay.classList.remove('hidden');
                 drawer.classList.add('active');
@@ -4983,6 +5014,27 @@
             }
         }
         window.openDrawer = openDrawer;
+
+        function toggleMobileProfileDetails(triggerBtn) {
+            const section = document.getElementById('profile-full-section');
+            if (!section) return;
+            const isHidden = section.classList.contains('hidden');
+            if (isHidden) {
+                section.classList.remove('hidden');
+            } else {
+                section.classList.add('hidden');
+            }
+            if (triggerBtn) {
+                const icons = triggerBtn.querySelectorAll('i');
+                if (icons.length > 1) {
+                    const indicator = icons[icons.length - 1];
+                    const nowHidden = section.classList.contains('hidden');
+                    indicator.classList.toggle('fa-plus', nowHidden);
+                    indicator.classList.toggle('fa-minus', !nowHidden);
+                }
+            }
+        }
+        window.toggleMobileProfileDetails = toggleMobileProfileDetails;
 
         function closeDrawer() {
             DOMElements.drawerOverlay.classList.add('hidden');
