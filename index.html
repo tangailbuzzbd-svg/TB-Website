@@ -1426,38 +1426,163 @@
         const presenceDeviceInfo = detectPresenceDeviceInfo();
         let presenceLocationData = null;
         let presenceLocationFetchPromise = null;
-        const fetchPresenceLocation = async () => {
-            if (presenceLocationData) return presenceLocationData;
-            if (presenceLocationFetchPromise) return presenceLocationFetchPromise;
+        let presenceLocationLastAttempt = 0;
 
-            presenceLocationFetchPromise = (async () => {
-                try {
-                    const res = await fetch('https://ipapi.co/json/', { headers: { 'Accept': 'application/json' } });
-                    if (!res.ok) throw new Error('Geo lookup failed');
-                    const payload = await res.json();
-                    const loc = {
-                        ip: payload.ip || null,
-                        city: payload.city || null,
-                        region: payload.region || payload.region_code || null,
-                        country: payload.country_name || payload.country || null,
-                        latitude: typeof payload.latitude === 'number' ? payload.latitude : Number(payload.latitude) || null,
-                        longitude: typeof payload.longitude === 'number' ? payload.longitude : Number(payload.longitude) || null,
-                        timezone: payload.timezone || null,
-                        org: payload.org || payload.asn || null
-                    };
-                    presenceLocationData = loc;
-                    return loc;
-                } catch (err) {
-                    console.warn('Presence geo lookup failed', err);
-                    return null;
-                } finally {
-                    presenceLocationFetchPromise = null;
-                }
-            })();
-
-            return presenceLocationFetchPromise;
+        const sanitizeLocationValue = (value) => {
+            if (value === undefined || value === null) return null;
+            if (typeof value === 'number') {
+                return Number.isFinite(value) ? value : null;
+            }
+            if (typeof value === 'string') {
+                const trimmed = value.trim();
+                return trimmed === '' ? null : trimmed;
+            }
+            return null;
         };
-        let presenceLocationAttached = false;
+
+        const normalizePresenceLocation = (raw) => {
+            if (!raw || typeof raw !== 'object') return null;
+            const normalized = {};
+
+            const assignString = (key, ...candidates) => {
+                for (const candidate of candidates) {
+                    const value = sanitizeLocationValue(candidate);
+                    if (typeof value === 'string') {
+                        normalized[key] = value;
+                        return;
+                    }
+                }
+            };
+
+            const assignNumber = (key, ...candidates) => {
+                for (const candidate of candidates) {
+                    const value = sanitizeLocationValue(candidate);
+                    if (typeof value === 'number') {
+                        normalized[key] = value;
+                        return;
+                    }
+                    if (typeof value === 'string') {
+                        const parsed = Number(value);
+                        if (!Number.isNaN(parsed)) {
+                            normalized[key] = parsed;
+                            return;
+                        }
+                    }
+                }
+            };
+
+            assignString('ip', raw.ip, raw.ipAddress, raw.query, raw.IPv4, raw.ipv4, raw.ipv6, raw.IPv6);
+            assignString('city', raw.city, raw.city_name, raw.cityName);
+            assignString('region', raw.region, raw.region_name, raw.regionName, raw.state, raw.state_name, raw.stateProv, raw.state_prov, raw.prov, raw.province);
+            assignString('country', raw.country_name, raw.country, raw.countryName, raw.country_long);
+            assignString('timezone', raw.timezone, raw.timezone_name, raw.time_zone?.name, raw.time_zone_name, raw.timezone_abbr);
+            assignString('org', raw.org, raw.asn, raw.asn_org, raw.connection?.isp, raw.isp, raw.org_name, raw.company, raw.isp_name);
+            assignNumber('latitude', raw.latitude, raw.lat, raw.lat_decimal);
+            assignNumber('longitude', raw.longitude, raw.lon, raw.lng, raw.lon_decimal);
+
+            const locationParts = [normalized.city, normalized.region, normalized.country].filter(Boolean);
+            if (locationParts.length > 0) {
+                normalized.display = locationParts.join(', ');
+            } else if (normalized.country) {
+                normalized.display = normalized.country;
+            }
+
+            if (Object.keys(normalized).length === 0) {
+                return null;
+            }
+            return normalized;
+        };
+
+        const fetchJsonWithTimeout = async (url, options = {}, timeoutMs = 5000) => {
+            const controller = new AbortController();
+            const id = setTimeout(() => controller.abort(), timeoutMs);
+            try {
+                const response = await fetch(url, { cache: 'no-store', ...options, signal: controller.signal });
+                if (!response.ok) {
+                    throw new Error(`Request failed with status ${response.status}`);
+                }
+                return await response.json();
+            } finally {
+                clearTimeout(id);
+            }
+        };
+
+        const fetchPresenceLocation = async (force = false) => {
+            const hasGoodLocation = Boolean(
+                presenceLocationData &&
+                presenceLocationData.ip &&
+                (presenceLocationData.display || presenceLocationData.city || presenceLocationData.region || presenceLocationData.country)
+            );
+
+            if (!force && hasGoodLocation) {
+                return presenceLocationData;
+            }
+            if (!force && presenceLocationFetchPromise) {
+                return presenceLocationFetchPromise;
+            }
+
+            const now = Date.now();
+            if (!force && presenceLocationLastAttempt && now - presenceLocationLastAttempt < 15000) {
+                return presenceLocationData;
+            }
+            presenceLocationLastAttempt = now;
+
+            const providers = [
+                async () => {
+                    const payload = await fetchJsonWithTimeout('https://ipapi.co/json/', { headers: { 'Accept': 'application/json' } });
+                    if (!payload || payload.error) return null;
+                    return normalizePresenceLocation(payload);
+                },
+                async () => {
+                    const payload = await fetchJsonWithTimeout('https://ipwho.is/', { headers: { 'Accept': 'application/json' } });
+                    if (payload && payload.success === false) return null;
+                    return normalizePresenceLocation(payload);
+                },
+                async () => {
+                    const payload = await fetchJsonWithTimeout('https://geolocation-db.com/json/', { headers: { 'Accept': 'application/json' } });
+                    return normalizePresenceLocation(payload);
+                },
+                async () => {
+                    const payload = await fetchJsonWithTimeout('https://ipwhois.app/json/', { headers: { 'Accept': 'application/json' } });
+                    if (payload && payload.success === false) return null;
+                    return normalizePresenceLocation(payload);
+                },
+                async () => {
+                    const payload = await fetchJsonWithTimeout('https://freeipapi.com/api/json', { headers: { 'Accept': 'application/json' } });
+                    return normalizePresenceLocation(payload);
+                },
+                async () => {
+                    const payload = await fetchJsonWithTimeout('https://api.ipify.org?format=json', { headers: { 'Accept': 'application/json' } });
+                    return normalizePresenceLocation(payload);
+                }
+            ];
+
+            const runProviders = async () => {
+                for (const provider of providers) {
+                    try {
+                        const result = await provider();
+                        if (result) {
+                            presenceLocationData = result;
+                            return result;
+                        }
+                    } catch (err) {
+                        console.warn('Presence geo provider failed', err);
+                    }
+                }
+                return presenceLocationData;
+            };
+
+            if (force) {
+                return runProviders();
+            }
+
+            presenceLocationFetchPromise = runProviders();
+            try {
+                return await presenceLocationFetchPromise;
+            } finally {
+                presenceLocationFetchPromise = null;
+            }
+        };
         const ensurePresenceAuth = async () => {
             if (auth.currentUser || presenceAnonAttempted) {
                 return;
@@ -1489,18 +1614,30 @@
                     payload.device = presenceDeviceInfo;
                 }
 
-                let locationToPersist = null;
-                if (!presenceLocationAttached) {
-                    locationToPersist = await fetchPresenceLocation();
-                    if (locationToPersist) {
-                        payload.location = locationToPersist;
+                let locationPayload = presenceLocationData;
+                const hasDetails = Boolean(locationPayload && (locationPayload.display || locationPayload.city || locationPayload.region || locationPayload.country));
+                const needsRefresh = !locationPayload || !locationPayload.ip || !hasDetails;
+                if (needsRefresh) {
+                    try {
+                        locationPayload = await fetchPresenceLocation();
+                    } catch (err) {
+                        console.warn('Presence location fetch failed', err);
+                    }
+                } else {
+                    // Keep the cached location warm without blocking the heartbeat.
+                    fetchPresenceLocation().catch(() => {});
+                }
+
+                if (locationPayload) {
+                    presenceLocationData = locationPayload;
+                    payload.location = locationPayload;
+                    if (locationPayload.ip) {
+                        payload.ip = locationPayload.ip;
+                        payload.ipAddress = locationPayload.ip;
                     }
                 }
 
                 await setDoc(presenceRef, payload, { merge: true });
-                if (locationToPersist) {
-                    presenceLocationAttached = true;
-                }
             } catch (e) {
                 if (e?.code === 'permission-denied') {
                     try {
