@@ -771,10 +771,10 @@
             </section>
             <!-- Hero/Banner Composite (2-part layout) -->
             <section class="container mx-auto px-4 py-4">
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
                     <!-- Left: Main Banner Slider -->
                     <div class="lg:col-span-2">
-                        <div id="banner-slider" class="relative overflow-hidden w-full rounded-2xl shadow-xl h-[220px] sm:h-[260px]">
+                        <div id="banner-slider" class="relative overflow-hidden w-full rounded-2xl shadow-xl h-[200px] sm:h-[240px] lg:h-[260px]">
                             <!-- Slides Container -->
                             <div id="slides-container" class="flex transition-transform duration-500 ease-in-out h-full">
                                 <!-- Banners will be loaded from Firebase here -->
@@ -800,9 +800,9 @@
                         <a id="right-promo-link" href="javascript:void(0)" onclick="scrollToElement('categories')" class="group block relative overflow-hidden rounded-2xl shadow-xl h-[220px] sm:h-[260px]">
                             <img id="right-promo-img" src="https://images.unsplash.com/photo-1524594081293-190a2fe0baae?q=80&w=1200&auto=format&fit=crop" alt="Promo: Smart prices on accessories" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/ddd/000?text=Promo';">
                             <div class="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors"></div>
-                            <div class="absolute bottom-4 left-4 right-4 text-white drop-shadow">
-                                <h3 id="right-promo-title" class="text-xl sm:text-2xl font-extrabold hidden"></h3>
-                                <p id="right-promo-subtitle" class="text-sm sm:text-base font-semibold hidden"></p>
+                            <div class="absolute bottom-4 left-4 right-4 text-white drop-shadow space-y-1">
+                                <h3 id="right-promo-title" class="text-lg sm:text-2xl font-extrabold hidden"></h3>
+                                <p id="right-promo-subtitle" class="text-xs sm:text-base font-semibold hidden"></p>
                             </div>
                         </a>
                     </aside>
@@ -812,7 +812,7 @@
             <!-- Hero Section removed: merged into composite above to match design -->
         
             <!-- Featured Products Section -->
-            <section id="products" class="container mx-auto px-4 py-16">
+            <section id="products" class="container mx-auto px-4 py-10 sm:py-16">
                 <!-- NEW: Breadcrumb and Sub-Category Header -->
                 <div id="category-header" class="hidden mb-8 p-4 bg-white dark:bg-gray-800 rounded-xl shadow-md border dark:border-gray-700">
                     <div id="breadcrumb" class="text-sm text-gray-500 dark:text-gray-400 mb-4">
@@ -826,72 +826,72 @@
                 </div>
                 <!-- END NEW: Breadcrumb and Sub-Category Header -->
 
-                <div id="product-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 min-h-[300px]">
+                <div id="product-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 sm:gap-6 lg:gap-8 min-h-[300px]">
                     <div class="loader"></div>
                 </div>
             </section>
 
             <!-- Categories Section -->
-            <section id="categories" class="container mx-auto px-4 py-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-center mb-10 relative after:content-[''] after:absolute after:bottom-[-10px] after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-1 after:bg-theme-pink after:rounded-full" data-lang="shop-by-category">ক্যাটাগরি অনুসারে কেনাকাটা করুন</h2>
-                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-8">
-                    <div class="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-xl text-center transition-transform hover:-translate-y-2 hover:shadow-2xl cursor-pointer" onclick="filterProducts('electronics')">
-                        <div class="text-5xl text-theme-blue mb-4"><i class="fas fa-mobile-alt"></i></div>
-                        <h3 class="text-xl font-semibold" data-lang="cat-electronics">ইলেকট্রনিক্স</h3>
+            <section id="categories" class="container mx-auto px-4 py-10 sm:py-16">
+                <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-8 sm:mb-10 relative after:content-[''] after:absolute after:bottom-[-10px] after:left-1/2 after:-translate-x-1/2 after:w-16 sm:after:w-20 after:h-1 after:bg-theme-pink after:rounded-full" data-lang="shop-by-category">ক্যাটাগরি অনুসারে কেনাকাটা করুন</h2>
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-5 sm:gap-6 lg:gap-8">
+                    <div class="bg-white dark:bg-gray-800 p-5 sm:p-6 lg:p-8 rounded-3xl shadow-xl text-center transition-transform hover:-translate-y-2 hover:shadow-2xl cursor-pointer" onclick="filterProducts('electronics')">
+                        <div class="text-3xl sm:text-4xl lg:text-5xl text-theme-blue mb-3"><i class="fas fa-mobile-alt"></i></div>
+                        <h3 class="text-lg sm:text-xl font-semibold" data-lang="cat-electronics">ইলেকট্রনিক্স</h3>
                     </div>
-                    <div class="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-xl text-center transition-transform hover:-translate-y-2 hover:shadow-2xl cursor-pointer" onclick="filterProducts('fashion')">
-                        <div class="text-5xl text-theme-blue mb-4"><i class="fas fa-tshirt"></i></div>
-                        <h3 class="text-xl font-semibold" data-lang="cat-fashion">ফ্যাশন</h3>
+                    <div class="bg-white dark:bg-gray-800 p-5 sm:p-6 lg:p-8 rounded-3xl shadow-xl text-center transition-transform hover:-translate-y-2 hover:shadow-2xl cursor-pointer" onclick="filterProducts('fashion')">
+                        <div class="text-3xl sm:text-4xl lg:text-5xl text-theme-blue mb-3"><i class="fas fa-tshirt"></i></div>
+                        <h3 class="text-lg sm:text-xl font-semibold" data-lang="cat-fashion">ফ্যাশন</h3>
                     </div>
-                    <div class="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-xl text-center transition-transform hover:-translate-y-2 hover:shadow-2xl cursor-pointer" onclick="filterProducts('home-garden')">
-                        <div class="text-5xl text-theme-blue mb-4"><i class="fas fa-home"></i></div>
-                        <h3 class="text-xl font-semibold" data-lang="cat-home-garden">হোম অ্যান্ড গার্ডেন</h3>
+                    <div class="bg-white dark:bg-gray-800 p-5 sm:p-6 lg:p-8 rounded-3xl shadow-xl text-center transition-transform hover:-translate-y-2 hover:shadow-2xl cursor-pointer" onclick="filterProducts('home-garden')">
+                        <div class="text-3xl sm:text-4xl lg:text-5xl text-theme-blue mb-3"><i class="fas fa-home"></i></div>
+                        <h3 class="text-lg sm:text-xl font-semibold" data-lang="cat-home-garden">হোম অ্যান্ড গার্ডেন</h3>
                     </div>
-                    <div class="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-xl text-center transition-transform hover:-translate-y-2 hover:shadow-2xl cursor-pointer" onclick="filterProducts('health-beauty')">
-                        <div class="text-5xl text-theme-blue mb-4"><i class="fas fa-heartbeat"></i></div>
-                        <h3 class="text-xl font-semibold" data-lang="cat-health-beauty">স্বাস্থ্য ও সৌন্দর্য</h3>
+                    <div class="bg-white dark:bg-gray-800 p-5 sm:p-6 lg:p-8 rounded-3xl shadow-xl text-center transition-transform hover:-translate-y-2 hover:shadow-2xl cursor-pointer" onclick="filterProducts('health-beauty')">
+                        <div class="text-3xl sm:text-4xl lg:text-5xl text-theme-blue mb-3"><i class="fas fa-heartbeat"></i></div>
+                        <h3 class="text-lg sm:text-xl font-semibold" data-lang="cat-health-beauty">স্বাস্থ্য ও সৌন্দর্য</h3>
                     </div>
-                    <div class="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-xl text-center transition-transform hover:-translate-y-2 hover:shadow-2xl cursor-pointer" onclick="filterProducts('sports')">
-                        <div class="text-5xl text-theme-blue mb-4"><i class="fas fa-dumbbell"></i></div>
-                        <h3 class="text-xl font-semibold" data-lang="cat-sports">খেলাধুলা ও আউটডোর</h3>
+                    <div class="bg-white dark:bg-gray-800 p-5 sm:p-6 lg:p-8 rounded-3xl shadow-xl text-center transition-transform hover:-translate-y-2 hover:shadow-2xl cursor-pointer" onclick="filterProducts('sports')">
+                        <div class="text-3xl sm:text-4xl lg:text-5xl text-theme-blue mb-3"><i class="fas fa-dumbbell"></i></div>
+                        <h3 class="text-lg sm:text-xl font-semibold" data-lang="cat-sports">খেলাধুলা ও আউটডোর</h3>
                     </div>
-                    <div class="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-xl text-center transition-transform hover:-translate-y-2 hover:shadow-2xl cursor-pointer" onclick="filterProducts('books')">
-                        <div class="text-5xl text-theme-blue mb-4"><i class="fas fa-book-open"></i></div>
-                        <h3 class="text-xl font-semibold" data-lang="cat-books">বই ও স্টেশনারি</h3>
+                    <div class="bg-white dark:bg-gray-800 p-5 sm:p-6 lg:p-8 rounded-3xl shadow-xl text-center transition-transform hover:-translate-y-2 hover:shadow-2xl cursor-pointer" onclick="filterProducts('books')">
+                        <div class="text-3xl sm:text-4xl lg:text-5xl text-theme-blue mb-3"><i class="fas fa-book-open"></i></div>
+                        <h3 class="text-lg sm:text-xl font-semibold" data-lang="cat-books">বই ও স্টেশনারি</h3>
                     </div>
-                    <div class="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-xl text-center transition-transform hover:-translate-y-2 hover:shadow-2xl cursor-pointer" onclick="filterProducts('kids')">
-                        <div class="text-5xl text-theme-blue mb-4"><i class="fas fa-baby"></i></div>
-                        <h3 class="text-xl font-semibold" data-lang="cat-kids">বাচ্চা ও খেলনা</h3>
+                    <div class="bg-white dark:bg-gray-800 p-5 sm:p-6 lg:p-8 rounded-3xl shadow-xl text-center transition-transform hover:-translate-y-2 hover:shadow-2xl cursor-pointer" onclick="filterProducts('kids')">
+                        <div class="text-3xl sm:text-4xl lg:text-5xl text-theme-blue mb-3"><i class="fas fa-baby"></i></div>
+                        <h3 class="text-lg sm:text-xl font-semibold" data-lang="cat-kids">বাচ্চা ও খেলনা</h3>
                     </div>
-                    <div class="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-xl text-center transition-transform hover:-translate-y-2 hover:shadow-2xl cursor-pointer" onclick="filterProducts('cars')">
-                        <div class="text-5xl text-theme-blue mb-4"><i class="fas fa-car-side"></i></div>
-                        <h3 class="text-xl font-semibold" data-lang="cat-cars">গাড়ি ও বাইক</h3>
+                    <div class="bg-white dark:bg-gray-800 p-5 sm:p-6 lg:p-8 rounded-3xl shadow-xl text-center transition-transform hover:-translate-y-2 hover:shadow-2xl cursor-pointer" onclick="filterProducts('cars')">
+                        <div class="text-3xl sm:text-4xl lg:text-5xl text-theme-blue mb-3"><i class="fas fa-car-side"></i></div>
+                        <h3 class="text-lg sm:text-xl font-semibold" data-lang="cat-cars">গাড়ি ও বাইক</h3>
                     </div>
                 </div>
             </section>
 
             <!-- Features Section -->
-            <section class="bg-gray-200 dark:bg-gray-800 py-16">
+            <section class="bg-gray-200 dark:bg-gray-800 py-10 sm:py-16">
                 <div class="container mx-auto px-4">
-                    <h2 class="text-3xl md:text-4xl font-bold text-center mb-10 relative after:content-[''] after:absolute after:bottom-[-10px] after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-1 after:bg-theme-pink after:rounded-full" data-lang="why-choose-us">আমাদেরকে কেন বেছে নিবেন</h2>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
-                        <div class="p-6 text-center animate-slide-in-up">
-                            <div class="text-5xl text-theme-pink mb-4"><i class="fas fa-truck"></i></div>
+                    <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-8 sm:mb-10 relative after:content-[''] after:absolute after:bottom-[-10px] after:left-1/2 after:-translate-x-1/2 after:w-16 sm:after:w-20 after:h-1 after:bg-theme-pink after:rounded-full" data-lang="why-choose-us">আমাদেরকে কেন বেছে নিবেন</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 sm:gap-6 lg:gap-8">
+                        <div class="p-5 sm:p-6 text-center animate-slide-in-up bg-white dark:bg-gray-900/40 rounded-2xl shadow-sm">
+                            <div class="text-4xl sm:text-5xl text-theme-pink mb-3"><i class="fas fa-truck"></i></div>
                             <h3 class="text-xl font-semibold mb-2" data-lang="feature-delivery-title">দ্রুত ডেলিভারি</h3>
                             <p class="text-gray-600" data-lang="feature-delivery-desc">আমরা ২-৩ কার্যদিবসের মধ্যে আপনার দোরগোড়ায় পণ্য পৌঁছে দিই।</p>
                         </div>
-                        <div class="p-6 text-center animate-slide-in-up">
-                            <div class="text-5xl text-theme-pink mb-4"><i class="fas fa-shield-alt"></i></div>
+                        <div class="p-5 sm:p-6 text-center animate-slide-in-up bg-white dark:bg-gray-900/40 rounded-2xl shadow-sm">
+                            <div class="text-4xl sm:text-5xl text-theme-pink mb-3"><i class="fas fa-shield-alt"></i></div>
                             <h3 class="text-xl font-semibold mb-2" data-lang="feature-payment-title">নিরাপদ পেমেন্ট</h3>
                             <p class="text-gray-600" data-lang="feature-payment-desc">আপনার নিরাপত্তা ও গোপনীয়তার জন্য সকল লেনদেন এনক্রিপ্টেড।</p>
                         </div>
-                        <div class="p-6 text-center animate-slide-in-up">
-                            <div class="text-5xl text-theme-pink mb-4"><i class="fas fa-undo"></i></div>
+                        <div class="p-5 sm:p-6 text-center animate-slide-in-up bg-white dark:bg-gray-900/40 rounded-2xl shadow-sm">
+                            <div class="text-4xl sm:text-5xl text-theme-pink mb-3"><i class="fas fa-undo"></i></div>
                             <h3 class="text-xl font-semibold mb-2" data-lang="feature-return-title">সহজ রিটার্ন</h3>
                             <p class="text-gray-600" data-lang="feature-return-desc">পছন্দ না হলে ৩০ দিনের মধ্যে পণ্য ফেরত দিন এবং সম্পূর্ণ মূল্য ফেরত পান।</p>
                         </div>
-                        <div class="p-6 text-center animate-slide-in-up">
-                            <div class="text-5xl text-theme-pink mb-4"><i class="fas fa-headset"></i></div>
+                        <div class="p-5 sm:p-6 text-center animate-slide-in-up bg-white dark:bg-gray-900/40 rounded-2xl shadow-sm">
+                            <div class="text-4xl sm:text-5xl text-theme-pink mb-3"><i class="fas fa-headset"></i></div>
                             <h3 class="text-xl font-semibold mb-2" data-lang="feature-support-title">২৪/৭ সাপোর্ট</h3>
                             <p class="text-gray-600" data-lang="feature-support-desc">আমাদের গ্রাহক সহায়তা দল দিনরাত আপনার জন্য উপলব্ধ।</p>
                         </div>
