@@ -311,7 +311,7 @@
                 </div>
 
                 <!-- Language Selector (Professional Dropdown) -->
-                <div class="relative" id="lang-selector">
+                <div class="relative hidden md:block" id="lang-selector">
                      <!-- Adjusted styles for gradient header -->
                     <button id="lang-button" class="flex items-center gap-3 px-4 py-2 rounded-full border border-white/40 bg-white/15 hover:bg-white/25 text-white text-base sm:text-sm font-semibold backdrop-blur transition-colors shadow-md shadow-black/10" aria-haspopup="true" aria-expanded="false" title="Language" aria-label="Language" data-lang-title="language" data-lang-aria-label="language">
                         <i class="fas fa-globe text-lg sm:text-base"></i>
@@ -478,6 +478,15 @@
                 <li><a href="javascript:void(0);" onclick="showOffers(); closeDrawer();" class="text-lg font-semibold text-gray-700 hover:text-theme-blue" data-lang="offers">অফার</a></li>
                 <li><a href="javascript:void(0);" onclick="closeDrawer(); setTimeout(() => openDrawer('profile-drawer'), 200);" class="text-lg font-semibold text-gray-700 hover:text-theme-blue" data-lang="profile">প্রোফাইল</a></li>
                 <li><a href="javascript:void(0);" onclick="closeDrawer(); setTimeout(() => showPage('support-page'), 200);" class="text-lg font-semibold text-gray-700 hover:text-theme-blue" data-lang="emergency-contact">সাপোর্ট</a></li>
+                <li>
+                    <div class="flex items-center justify-between bg-gray-100 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3">
+                        <div class="flex items-center gap-2 text-lg font-semibold text-gray-700 dark:text-gray-100"><i class="fas fa-globe text-theme-blue"></i><span>ভাষা</span></div>
+                        <div class="flex items-center gap-2">
+                            <button type="button" class="px-3 py-1.5 rounded-lg text-sm font-semibold bg-theme-blue text-white hover:bg-theme-purple transition-colors" onclick="closeDrawer(); setLanguage('bn');">বাংলা</button>
+                            <button type="button" class="px-3 py-1.5 rounded-lg text-sm font-semibold bg-white text-theme-blue border border-theme-blue hover:bg-theme-blue hover:text-white transition-colors" onclick="closeDrawer(); setLanguage('en');">EN</button>
+                        </div>
+                    </div>
+                </li>
                 <li><a href="javascript:void(0);" onclick="closeDrawer(); setTimeout(() => openDrawer('cart-drawer'), 200);" class="text-lg font-semibold text-gray-700 hover:text-theme-blue" data-lang="cart-short">কার্ট</a></li>
             </ul>
         </nav>
