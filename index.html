@@ -1,15 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TangailBuzz - Online Shopping</title>
+    <title>টাঙ্গাইলবাজ - অনলাইন শপিং</title>
     <!-- FAVICON UPDATE: Added the new provided logo URL as the favicon -->
     <link rel="icon" type="image/png" href="https://github.com/tangailbuzzbd-svg/TangailBuzz-Picture-/blob/main/gdrg_upscaled%20(1).png?raw=true">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.maateen.me/solaiman-lipi/font.css">
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -33,7 +34,7 @@
                         'price-black': '#000000',
                     },
                     fontFamily: {
-                        sans: ['Poppins', 'Noto Sans Bengali', 'sans-serif'],
+                        sans: ['Poppins', 'SolaimanLipi', 'Noto Sans Bengali', 'sans-serif'],
                     },
                     animation: {
                         'fade-in': 'fadeIn 1s ease-in-out',
@@ -72,6 +73,17 @@
         /* Global responsive media and overflow fixes for mobile */
         html, body {
             overflow-x: hidden;
+            height: 100%;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            font-family: 'Poppins', 'SolaimanLipi', 'Noto Sans Bengali', sans-serif;
+        }
+        html[lang="bn"] body {
+            font-family: 'SolaimanLipi', 'Poppins', 'Noto Sans Bengali', sans-serif !important;
         }
         img, video {
             max-width: 100%;
@@ -136,6 +148,16 @@
         html.dark .text-black { color: #f3f4f6 !important; }
         html.dark .text-gray-900 { color: #f3f4f6 !important; }
         html.dark .text-gray-800 { color: #e5e7eb !important; }
+
+        .flash-sale-countdown {
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 0.03em;
+        }
+
+        .flash-sale-card .flash-sale-label {
+            letter-spacing: 0.08em;
+        }
+
 
         /* Custom CSS for Progress Tracker (Final Fix for Image Alignment) */
         /* Core Flex Container */
@@ -225,17 +247,16 @@
     
     <!-- Blocked User Banner -->
     <div id="blocked-account-banner" class="hidden fixed top-0 left-0 w-full bg-red-600 text-white text-center p-3 z-[9999] font-semibold"></div>
-
     <!-- Toast Notification -->
     <div id="toast-notification" class="fixed top-20 right-5 bg-green-500 text-white py-3 px-6 rounded-lg shadow-xl z-[200] transform translate-x-[150%] opacity-0">
-        <p id="toast-message">Item added to cart!</p>
+        <p id="toast-message">পণ্য কার্টে যোগ করা হয়েছে!</p>
     </div>
 
     <!-- Variant Selection Modal (for product cards) -->
     <div id="variant-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-50 z-[115] hidden items-center justify-center">
         <div class="bg-white dark:bg-gray-800 rounded-3xl p-8 max-w-md w-full mx-4 shadow-2xl">
             <div class="flex justify-between items-center mb-6">
-                <h3 class="text-2xl font-bold text-theme-purple" data-lang="select-variants">Select Options</h3>
+                <h3 class="text-2xl font-bold text-theme-purple" data-lang="select-variants">অপশন নির্বাচন করুন</h3>
                 <button onclick="closeVariantModal()" class="text-gray-500 hover:text-gray-800 text-3xl">&times;</button>
             </div>
             <div id="variant-modal-product" class="flex items-center gap-3 mb-4">
@@ -247,28 +268,28 @@
             </div>
             <div id="variant-modal-options" class="space-y-4">
                 <div id="vm-size-options" class="hidden">
-                    <label class="block text-sm font-semibold mb-2" data-lang="size">Size:</label>
+                    <label class="block text-sm font-semibold mb-2" data-lang="size">সাইজ:</label>
                     <div class="flex flex-wrap gap-2" id="vm-size-variants-container"></div>
                 </div>
                 <div id="vm-storage-options" class="hidden">
-                    <label class="block text-sm font-semibold mb-2" data-lang="storage">Storage:</label>
+                    <label class="block text-sm font-semibold mb-2" data-lang="storage">স্টোরেজ:</label>
                     <div class="flex flex-wrap gap-2" id="vm-storage-variants-container"></div>
                 </div>
                 <div id="vm-color-options" class="hidden">
-                    <label class="block text-sm font-semibold mb-2" data-lang="color">Color:</label>
+                    <label class="block text-sm font-semibold mb-2" data-lang="color">রঙ:</label>
                     <div class="flex flex-wrap gap-2" id="vm-color-variants-container"></div>
                 </div>
             </div>
             <div class="mt-6 grid grid-cols-2 gap-2">
-                <button id="vm-add-btn" class="w-full bg-theme-blue text-white py-2 rounded-full font-bold hover:bg-theme-purple transition-colors" data-lang="add-to-cart">Add to Cart</button>
-                <button id="vm-buy-btn" class="w-full bg-white border border-theme-blue text-theme-blue py-2 rounded-full font-bold hover:bg-gray-100 transition-colors" data-lang="buy-now">Buy Now</button>
+                <button id="vm-add-btn" class="w-full bg-theme-blue text-white py-2 rounded-full font-bold hover:bg-theme-purple transition-colors" data-lang="add-to-cart">কার্টে যোগ করুন</button>
+                <button id="vm-buy-btn" class="w-full bg-white border border-theme-blue text-theme-blue py-2 rounded-full font-bold hover:bg-gray-100 transition-colors" data-lang="buy-now">এখনই কিনুন</button>
             </div>
         </div>
     </div>
 
 
     <!-- Header Section -->
-    <header class="bg-gradient-to-r from-theme-blue to-theme-purple text-white py-4 sticky top-0 z-40 shadow-2xl">
+    <header class="bg-gradient-to-r from-theme-blue to-theme-purple text-white py-4 sticky top-0 z-40 shadow-2xl flex-shrink-0">
         <div class="container mx-auto px-4 flex items-center justify-between">
             <!-- Left side: Hamburger (mobile) and Logo -->
             <div class="flex items-center space-x-4">
@@ -310,54 +331,36 @@
                     <div id="search-results-desktop" class="absolute top-full left-0 w-full bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 shadow-lg rounded-b-lg z-50 overflow-hidden hidden max-h-80 overflow-y-auto"></div>
                 </div>
 
-                <!-- Language Selector (Professional Dropdown) -->
-                <div class="relative hidden md:block" id="lang-selector">
-                     <!-- Adjusted styles for gradient header -->
-                    <button id="lang-button" class="flex items-center gap-3 px-4 py-2 rounded-full border border-white/40 bg-white/15 hover:bg-white/25 text-white text-base sm:text-sm font-semibold backdrop-blur transition-colors shadow-md shadow-black/10" aria-haspopup="true" aria-expanded="false" title="Language" aria-label="Language" data-lang-title="language" data-lang-aria-label="language">
-                        <i class="fas fa-globe text-lg sm:text-base"></i>
-                        <span id="lang-current" class="text-white font-semibold">বাংলা</span> <!-- Adjusted text color -->
-                        <i class="fas fa-chevron-down text-sm sm:text-xs opacity-80"></i>
-                    </button>
-                    <div id="lang-menu" class="hidden absolute right-0 mt-2 w-44 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl overflow-hidden z-50 text-gray-800 dark:text-gray-200">
-                        <button class="lang-option w-full text-left px-3 py-2 text-sm flex items-center gap-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200" data-lang-value="bn">
-                            <span>🇧🇩</span><span>বাংলা</span>
-                        </button>
-                        <button class="lang-option w-full text-left px-3 py-2 text-sm flex items-center gap-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200" data-lang-value="en">
-                            <span>🇬🇧</span><span>English</span>
-                        </button>
-                    </div>
-                </div>
-                
                 <!-- Dark Mode Toggle -->
                  <!-- Adjusted styles for gradient header -->
                 <button id="dark-mode-toggle" class="hidden md:flex md:flex-col items-center text-white text-xl p-2 rounded-full hover:bg-white/20 transition-colors" aria-label="Toggle Dark Mode" title="Dark Mode" data-lang-title="dark-mode" data-lang-aria-label="dark-mode">
                     <i class="fas fa-sun" id="dark-mode-icon"></i>
-                    <span class="hidden md:block text-[10px] leading-3 mt-1 text-white/90" data-lang="dark-mode">Dark Mode</span> <!-- Adjusted text color -->
+                    <span class="hidden md:block text-[10px] leading-3 mt-1 text-white/90" data-lang="dark-mode">ডার্ক মোড</span> <!-- Adjusted text color -->
                 </button>
                 
                 <!-- Support (Header) -->
                  <!-- Adjusted styles for gradient header -->
                 <div id="emergency-contact-header" class="hidden md:flex relative transform hover:scale-110 transition-transform cursor-pointer flex-col items-center" title="Support" aria-label="Support" data-lang-title="emergency-contact" data-lang-aria-label="emergency-contact">
                     <i class="fas fa-headset text-white text-2xl"></i> <!-- Adjusted text color -->
-                    <span class="hidden md:block text-[10px] leading-3 mt-1 text-white/90" data-lang="emergency-contact">Support</span> <!-- Adjusted text color -->
+                    <span class="hidden md:block text-[10px] leading-3 mt-1 text-white/90" data-lang="emergency-contact">সাপোর্ট</span> <!-- Adjusted text color -->
                 </div>
                 
                  <!-- Adjusted styles for gradient header -->
                 <div id="profile-icon" class="relative transform hover:scale-110 transition-transform cursor-pointer flex flex-col items-center" onclick="openDrawer('profile-drawer')" title="Profile" aria-label="Profile" data-lang-title="profile" data-lang-aria-label="profile">
                     <i class="fas fa-user-circle text-white text-2xl"></i> <!-- Adjusted text color -->
-                    <span class="hidden md:block text-[10px] leading-3 mt-1 text-white/90" data-lang="profile">Profile</span> <!-- Adjusted text color -->
+                    <span class="hidden md:block text-[10px] leading-3 mt-1 text-white/90" data-lang="profile">প্রোফাইল</span> <!-- Adjusted text color -->
                 </div>
                  <!-- Adjusted styles for gradient header -->
                 <div class="hidden md:flex relative transform hover:scale-110 transition-transform cursor-pointer flex-col items-center" onclick="showPage('wishlist-page')" title="Wishlist" aria-label="Wishlist" data-lang-title="wishlist" data-lang-aria-label="wishlist">
                     <i class="fas fa-heart text-white text-2xl"></i> <!-- Adjusted text color -->
                     <span id="wishlist-count-badge" class="absolute -top-2 -right-2 bg-theme-pink text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center hidden">0</span>
-                    <span class="hidden md:block text-[10px] leading-3 mt-1 text-white/90" data-lang="wishlist">Wishlist</span> <!-- Adjusted text color -->
+                    <span class="hidden md:block text-[10px] leading-3 mt-1 text-white/90" data-lang="wishlist">উইশলিস্ট</span> <!-- Adjusted text color -->
                 </div>
                  <!-- Adjusted styles for gradient header -->
                 <div class="hidden md:flex relative transform hover:scale-110 transition-transform cursor-pointer flex-col items-center" onclick="showPage('cart-page')" title="Cart" aria-label="Cart" data-lang-title="cart-short" data-lang-aria-label="cart-short">
                     <i class="fas fa-shopping-cart text-white text-2xl"></i> <!-- Adjusted text color -->
                     <span id="cart-count" class="absolute -top-2 -right-2 bg-theme-pink text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">0</span>
-                    <span class="hidden md:block text-[10px] leading-3 mt-1 text-white/90" data-lang="cart-short">Cart</span> <!-- Adjusted text color -->
+                    <span class="hidden md:block text-[10px] leading-3 mt-1 text-white/90" data-lang="cart-short">কার্ট</span> <!-- Adjusted text color -->
                 </div>
             </div>
         </div>
@@ -390,23 +393,23 @@
     <div id="payment-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-50 z-[100] hidden items-center justify-center">
         <div class="bg-white dark:bg-gray-800 rounded-3xl p-8 max-w-md w-full mx-4 shadow-2xl">
             <div class="flex justify-between items-center mb-6">
-                <h3 class="text-2xl font-bold text-theme-purple" data-lang="payment-method">Select Payment Method</h3>
+                <h3 class="text-2xl font-bold text-theme-purple" data-lang="payment-method">পেমেন্ট পদ্ধতি নির্বাচন করুন</h3>
                 <button onclick="closePaymentModal()" class="text-gray-500 hover:text-gray-800 text-3xl">&times;</button>
             </div>
             <!-- Shipping Address Selection -->
             <div id="shipping-address-section" class="mb-6 p-4 border rounded-xl bg-gray-50 dark:bg-gray-900/40">
                 <div class="flex items-start justify-between gap-3">
                     <div>
-                        <h4 class="font-semibold text-gray-800 dark:text-gray-200 mb-1">Shipping Address</h4>
-                        <p id="selected-address-display" class="text-sm text-gray-600 dark:text-gray-300">No address selected</p>
+                        <h4 class="font-semibold text-gray-800 dark:text-gray-200 mb-1">শিপিং ঠিকানা</h4>
+                        <p id="selected-address-display" class="text-sm text-gray-600 dark:text-gray-300">কোনো ঠিকানা নির্বাচন করা হয়নি</p>
                     </div>
-                    <button id="change-address-btn" class="px-3 py-1.5 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm hover:bg-gray-100">Change</button>
+                    <button id="change-address-btn" class="px-3 py-1.5 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm hover:bg-gray-100">পরিবর্তন</button>
                 </div>
                 <div id="address-select-panel" class="hidden mt-3">
                     <div id="address-select-list" class="space-y-2 max-h-48 overflow-auto"></div>
                     <div class="mt-3 flex gap-2">
-                        <button id="use-selected-address-btn" class="w-full px-3 py-2 rounded-full bg-theme-blue text-white font-semibold hover:bg-theme-purple">Use Selected</button>
-                        <button id="manage-addresses-shortcut" class="w-full px-3 py-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100 font-semibold hover:bg-gray-300">Manage</button>
+                        <button id="use-selected-address-btn" class="w-full px-3 py-2 rounded-full bg-theme-blue text-white font-semibold hover:bg-theme-purple">নির্বাচিত ঠিকানা ব্যবহার করুন</button>
+                        <button id="manage-addresses-shortcut" class="w-full px-3 py-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100 font-semibold hover:bg-gray-300">পরিচালনা করুন</button>
                     </div>
                 </div>
             </div>
@@ -414,11 +417,11 @@
                 <!-- Main Payment Options -->
                  <label class="flex items-center p-4 border rounded-lg cursor-pointer has-[:checked]:bg-blue-50 dark:has-[:checked]:bg-blue-900 has-[:checked]:border-theme-blue">
                     <input type="radio" name="main-payment" value="Mobile Banking" class="w-5 h-5 accent-theme-blue">
-                    <span class="ml-4 font-semibold" data-lang="mobile-banking">Mobile Banking</span>
+                    <span class="ml-4 font-semibold" data-lang="mobile-banking">মোবাইল ব্যাংকিং</span>
                 </label>
                  <label class="flex items-center p-4 border rounded-lg cursor-pointer has-[:checked]:bg-blue-50 dark:has-[:checked]:bg-blue-900 has-[:checked]:border-theme-blue">
                     <input type="radio" name="main-payment" value="Cash on Delivery" class="w-5 h-5 accent-theme-blue" checked>
-                    <span class="ml-4 font-semibold" data-lang="cod">Cash on Delivery</span>
+                    <span class="ml-4 font-semibold" data-lang="cod">ক্যাশ অন ডেলিভারি</span>
                 </label>
 
                 <!-- Sub Payment Options for Mobile Banking (hidden by default) -->
@@ -434,7 +437,7 @@
                 </div>
             </div>
             <div class="mt-8">
-                <button id="confirm-order-btn" class="w-full bg-theme-pink text-white py-3 rounded-full font-bold hover:bg-theme-purple transition-colors shadow-lg" data-lang="confirm-order">Confirm Order</button>
+                <button id="confirm-order-btn" class="w-full bg-theme-pink text-white py-3 rounded-full font-bold hover:bg-theme-purple transition-colors shadow-lg" data-lang="confirm-order">অর্ডার নিশ্চিত করুন</button>
             </div>
         </div>
     </div>
@@ -445,10 +448,10 @@
              <div class="w-20 h-20 mx-auto bg-green-100 rounded-full flex items-center justify-center">
                 <i class="fas fa-check text-4xl text-green-500"></i>
             </div>
-            <h3 class="text-2xl font-bold text-gray-800 mt-6" data-lang="order-placed-success">Your order has been placed successfully!</h3>
+            <h3 class="text-2xl font-bold text-gray-800 mt-6" data-lang="order-placed-success">আপনার অর্ডারটি সফলভাবে সম্পন্ন হয়েছে!</h3>
             <p id="payment-instruction" class="mt-4 text-gray-600"></p>
             <div class="mt-8">
-                <button id="close-success-modal" class="w-full bg-theme-blue text-white py-3 rounded-full font-bold hover:bg-theme-purple transition-colors shadow-lg">Close</button>
+                <button id="close-success-modal" class="w-full bg-theme-blue text-white py-3 rounded-full font-bold hover:bg-theme-purple transition-colors shadow-lg">বন্ধ করুন</button>
             </div>
         </div>
     </div>
@@ -456,11 +459,11 @@
     <!-- Custom Confirmation Modal (Replaces window.confirm) -->
     <div id="confirmation-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-50 z-[120] hidden items-center justify-center">
         <div class="bg-white dark:bg-gray-800 rounded-3xl p-8 max-w-sm w-full mx-4 shadow-2xl text-center">
-            <h3 id="confirm-title" class="text-2xl font-bold text-red-600 mb-4">Confirm Action</h3>
-            <p id="confirm-message" class="text-gray-600">Are you sure you want to proceed?</p>
+            <h3 id="confirm-title" class="text-2xl font-bold text-red-600 mb-4">নিশ্চিত করুন</h3>
+            <p id="confirm-message" class="text-gray-600">আপনি কি নিশ্চিত যে আপনি এগোতে চান?</p>
             <div class="flex justify-center space-x-4">
-                <button id="confirm-cancel-btn" class="px-6 py-2 bg-gray-300 text-gray-800 rounded-full font-semibold hover:bg-gray-400 transition-colors">Cancel</button>
-                <button id="confirm-ok-btn" class="px-6 py-2 bg-red-600 text-white rounded-full font-semibold hover:bg-red-700 transition-colors">Confirm</button>
+                <button id="confirm-cancel-btn" class="px-6 py-2 bg-gray-300 text-gray-800 rounded-full font-semibold hover:bg-gray-400 transition-colors">বাতিল</button>
+                <button id="confirm-ok-btn" class="px-6 py-2 bg-red-600 text-white rounded-full font-semibold hover:bg-red-700 transition-colors">নিশ্চিত</button>
             </div>
         </div>
     </div>
@@ -469,24 +472,17 @@
     <!-- Mobile Navigation Drawer (Left) -->
     <div id="nav-drawer" class="drawer left fixed top-0 left-0 h-full w-64 bg-white dark:bg-gray-800 shadow-lg z-50 p-6">
         <button onclick="closeDrawer()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl">&times;</button>
-        <h3 class="text-2xl font-bold text-theme-purple mb-8">Menu</h3>
+    <h3 class="text-2xl font-bold text-theme-purple mb-8">মেনু</h3>
         <nav>
             <ul class="space-y-4">
                 <li><a href="javascript:void(0);" onclick="renderAllProducts(); closeDrawer();" class="text-lg font-semibold text-gray-700 hover:text-theme-blue" data-lang="home">হোম</a></li>
                 <li><a href="#products" onclick="showPage('home-page'); scrollToElement('products')" class="text-lg font-semibold text-gray-700 hover:text-theme-blue" data-lang="products">পণ্য</a></li>
                 <li><a href="#categories" onclick="showPage('home-page'); scrollToElement('categories')" class="text-lg font-semibold text-gray-700 hover:text-theme-blue" data-lang="categories">ক্যাটাগরি</a></li>
+                <li><a href="javascript:void(0);" onclick="showPage('home-page'); closeDrawer(); setTimeout(() => scrollToElement('mega-sale-section'), 200);" class="text-lg font-semibold text-gray-700 hover:text-theme-blue" data-lang="mega-sale-nav">মেগা সেল</a></li>
                 <li><a href="javascript:void(0);" onclick="showOffers(); closeDrawer();" class="text-lg font-semibold text-gray-700 hover:text-theme-blue" data-lang="offers">অফার</a></li>
+                <li><a href="admin.html#add-product" onclick="closeDrawer();" class="text-lg font-semibold text-gray-700 hover:text-theme-blue" data-lang="add-product-nav">পণ্য যোগ করুন</a></li>
                 <li><a href="javascript:void(0);" onclick="closeDrawer(); setTimeout(() => openDrawer('profile-drawer'), 200);" class="text-lg font-semibold text-gray-700 hover:text-theme-blue" data-lang="profile">প্রোফাইল</a></li>
                 <li><a href="javascript:void(0);" onclick="closeDrawer(); setTimeout(() => showPage('support-page'), 200);" class="text-lg font-semibold text-gray-700 hover:text-theme-blue" data-lang="emergency-contact">সাপোর্ট</a></li>
-                <li>
-                    <div class="flex items-center justify-between bg-gray-100 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3">
-                        <div class="flex items-center gap-2 text-lg font-semibold text-gray-700 dark:text-gray-100"><i class="fas fa-globe text-theme-blue"></i><span>ভাষা</span></div>
-                        <div class="flex items-center gap-2">
-                            <button type="button" class="px-3 py-1.5 rounded-lg text-sm font-semibold bg-theme-blue text-white hover:bg-theme-purple transition-colors" onclick="closeDrawer(); setLanguage('bn');">বাংলা</button>
-                            <button type="button" class="px-3 py-1.5 rounded-lg text-sm font-semibold bg-white text-theme-blue border border-theme-blue hover:bg-theme-blue hover:text-white transition-colors" onclick="closeDrawer(); setLanguage('en');">EN</button>
-                        </div>
-                    </div>
-                </li>
                 <li><a href="javascript:void(0);" onclick="closeDrawer(); setTimeout(() => openDrawer('cart-drawer'), 200);" class="text-lg font-semibold text-gray-700 hover:text-theme-blue" data-lang="cart-short">কার্ট</a></li>
             </ul>
         </nav>
@@ -507,27 +503,27 @@
             
             <!-- Summary -->
              <div class="flex justify-between items-center text-md font-medium">
-                <span data-lang="subtotal">Subtotal:</span>
+                <span data-lang="subtotal">মোট:</span>
                 <span id="cart-subtotal" class="text-dark">৳0.00</span>
             </div>
              <div class="flex justify-between items-center text-md font-medium">
-                <span data-lang="delivery-charge">Delivery Charge:</span>
+                <span data-lang="delivery-charge">ডেলিভারি চার্জ:</span>
                 <span id="delivery-charge" class="text-dark">৳0.00</span>
             </div>
             <div id="discount-row" class="hidden flex justify-between items-center text-md font-medium text-green-600">
-                <span data-lang="discount">Discount:</span>
+                <span data-lang="discount">ডিসকাউন্ট:</span>
                 <span id="cart-discount"></span>
             </div>
             <div class="flex justify-between items-center text-xl font-semibold border-t pt-2 mt-2">
-                <span data-lang="total-inclusive-vat">Total (Inclusive of VAT)</span>
+                <span data-lang="total-inclusive-vat">মোট (ভ্যাটসহ)</span>
                 <span id="cart-total" class="text-theme-blue">৳0.00</span>
             </div>
              <!-- Coupon Form -->
             <div class="mt-4">
                 <form id="coupon-form" class="w-full">
                     <div class="flex w-full overflow-hidden rounded-md border border-gray-300 bg-white dark:bg-gray-800">
-                        <input type="text" id="coupon-input" placeholder="Coupon Code" class="flex-grow px-3 py-2 text-sm sm:text-base bg-transparent border-0 focus:outline-none focus:ring-0 text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-400" data-lang-placeholder="coupon-placeholder">
-                        <button type="submit" id="apply-coupon-btn" class="bg-theme-blue text-white px-4 py-2 text-sm sm:text-base font-semibold hover:bg-theme-purple transition-colors" data-lang="apply-coupon">Apply</button>
+                        <input type="text" id="coupon-input" placeholder="কুপন কোড" class="flex-grow px-3 py-2 text-sm sm:text-base bg-transparent border-0 focus:outline-none focus:ring-0 text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-400" data-lang-placeholder="coupon-placeholder">
+                        <button type="submit" id="apply-coupon-btn" class="bg-theme-blue text-white px-4 py-2 text-sm sm:text-base font-semibold hover:bg-theme-purple transition-colors" data-lang="apply-coupon">প্রয়োগ</button>
                     </div>
                 </form>
             </div>
@@ -543,19 +539,19 @@
 
             <div class="block md:hidden space-y-3 text-left mb-6">
                 <button type="button" class="w-full flex items-center justify-between px-4 py-3 rounded-xl bg-theme-blue text-white font-semibold shadow-md hover:bg-theme-purple transition-colors" onclick="closeDrawer(); showPage('my-orders-page');">
-                    <span><i class="fas fa-box-open mr-3"></i>My Orders</span>
+                    <span><i class="fas fa-box-open mr-3"></i>আমার অর্ডার</span>
                     <i class="fas fa-chevron-right text-sm"></i>
                 </button>
                 <button type="button" class="w-full flex items-center justify-between px-4 py-3 rounded-xl bg-white text-theme-blue border border-theme-blue font-semibold shadow-sm hover:bg-theme-blue hover:text-white transition-colors" onclick="closeDrawer(); showPage('wishlist-page');">
-                    <span><i class="fas fa-heart mr-3"></i>Wishlist</span>
+                    <span><i class="fas fa-heart mr-3"></i>উইশলিস্ট</span>
                     <i class="fas fa-chevron-right text-sm"></i>
                 </button>
                 <button type="button" class="w-full flex items-center justify-between px-4 py-3 rounded-xl bg-white text-theme-blue border border-theme-blue font-semibold shadow-sm hover:bg-theme-blue hover:text-white transition-colors" onclick="closeDrawer(); showPage('support-page');">
-                    <span><i class="fas fa-headset mr-3"></i>Contact Support</span>
+                    <span><i class="fas fa-headset mr-3"></i>সাপোর্টে যোগাযোগ</span>
                     <i class="fas fa-chevron-right text-sm"></i>
                 </button>
                 <button type="button" class="mobile-profile-toggle w-full flex items-center justify-between px-4 py-2 rounded-xl bg-gray-100 text-gray-700 dark:bg-gray-900/60 dark:text-gray-200 border border-gray-200 dark:border-gray-700 text-sm font-semibold" onclick="toggleMobileProfileDetails(this);">
-                    <span><i class="fas fa-user-cog mr-3"></i>Account Settings</span>
+                    <span><i class="fas fa-user-cog mr-3"></i>অ্যাকাউন্ট সেটিংস</span>
                     <i class="fas fa-plus text-xs"></i>
                 </button>
             </div>
@@ -565,48 +561,48 @@
                 <div id="auth-options">
                     <!-- Login Form -->
                     <form id="login-form" class="space-y-4 text-left">
-                        <input type="email" id="login-email" placeholder="Email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-700">
-                        <input type="password" id="login-password" placeholder="Password" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-700">
-                        <button type="submit" class="w-full py-3 bg-theme-blue text-white rounded-full font-bold hover:bg-theme-purple transition-colors">Login</button>
+                        <input type="email" id="login-email" placeholder="ইমেইল" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-700">
+                        <input type="password" id="login-password" placeholder="পাসওয়ার্ড" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-700">
+                        <button type="submit" class="w-full py-3 bg-theme-blue text-white rounded-full font-bold hover:bg-theme-purple transition-colors">লগইন</button>
                         <div class="flex justify-between text-sm">
-                            <a href="#" id="show-reset-form" class="text-theme-blue hover:underline">Forgot password?</a>
+                            <a href="#" id="show-reset-form" class="text-theme-blue hover:underline">পাসওয়ার্ড ভুলে গেছেন?</a>
                             <span></span>
                         </div>
-                        <p class="text-center text-sm">Don't have an account? <a href="#" id="show-register-form" class="text-theme-blue hover:underline">Register</a></p>
+                        <p class="text-center text-sm">অ্যাকাউন্ট নেই? <a href="#" id="show-register-form" class="text-theme-blue hover:underline">রেজিস্টার করুন</a></p>
                     </form>
 
                     <!-- Reset Password Form (hidden by default) -->
                     <form id="reset-form" class="hidden space-y-4 text-left">
-                        <p class="text-sm text-gray-600">Enter your account email. We'll send a link to reset your password.</p>
-                        <input type="email" id="reset-email" placeholder="Email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-700">
-                        <button type="submit" class="w-full py-3 bg-theme-blue text-white rounded-full font-bold hover:bg-theme-purple transition-colors">Send reset link</button>
-                        <p class="text-center text-sm">Remembered it? <a href="#" id="show-login-from-reset" class="text-theme-blue hover:underline">Back to login</a></p>
+                        <p class="text-sm text-gray-600">আপনার অ্যাকাউন্টের ইমেইল দিন। আমরা পাসওয়ার্ড রিসেট করার লিংক পাঠাবো।</p>
+                        <input type="email" id="reset-email" placeholder="ইমেইল" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-700">
+                        <button type="submit" class="w-full py-3 bg-theme-blue text-white rounded-full font-bold hover:bg-theme-purple transition-colors">রিসেট লিংক পাঠান</button>
+                        <p class="text-center text-sm">পাসওয়ার্ড মনে পড়েছে? <a href="#" id="show-login-from-reset" class="text-theme-blue hover:underline">লগইনে ফিরে যান</a></p>
                     </form>
 
                     <!-- Register Form (hidden by default) -->
                     <form id="register-form" class="hidden space-y-4 text-left">
-                        <input type="text" id="register-name" placeholder="Full Name" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-700">
-                        <input type="tel" id="register-mobile" placeholder="Mobile Number" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-700">
-                        <input type="text" id="register-location" placeholder="Location" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-700">
-                        <input type="email" id="register-email" placeholder="Email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-700">
-                        <input type="password" id="register-password" placeholder="Password" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-700">
-                        <button type="submit" class="w-full py-3 bg-theme-blue text-white rounded-full font-bold hover:bg-theme-purple transition-colors">Register</button>
-                        <p class="text-center text-sm">Already have an account? <a href="#" id="show-login-form" class="text-theme-blue hover:underline">Login</a></p>
+                        <input type="text" id="register-name" placeholder="পূর্ণ নাম" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-700">
+                        <input type="tel" id="register-mobile" placeholder="মোবাইল নম্বর" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-700">
+                        <input type="text" id="register-location" placeholder="লোকেশন" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-700">
+                        <input type="email" id="register-email" placeholder="ইমেইল" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-700">
+                        <input type="password" id="register-password" placeholder="পাসওয়ার্ড" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-700">
+                        <button type="submit" class="w-full py-3 bg-theme-blue text-white rounded-full font-bold hover:bg-theme-purple transition-colors">রেজিস্টার</button>
+                        <p class="text-center text-sm">আগেই অ্যাকাউন্ট আছে? <a href="#" id="show-login-form" class="text-theme-blue hover:underline">লগইন করুন</a></p>
                     </form>
                     
                     <div class="relative flex py-2 items-center">
                         <div class="flex-grow border-t border-gray-300"></div>
-                        <span class="flex-shrink mx-4 text-gray-400 text-sm">OR</span>
+                        <span class="flex-shrink mx-4 text-gray-400 text-sm">অথবা</span>
                         <div class="flex-grow border-t border-gray-300"></div>
                     </div>
                     
                     <button id="login-google-btn" class="w-full py-3 px-6 bg-white border border-gray-300 text-gray-700 rounded-full font-bold hover:bg-gray-100 transition-colors shadow-lg flex items-center justify-center">
                         <i class="fab fa-google mr-2 text-xl"></i>
-                        <span data-lang="signin-google">Sign in with Google</span>
+                        <span data-lang="signin-google">Google দিয়ে সাইন ইন করুন</span>
                     </button>
                     <button id="login-facebook-btn" class="mt-3 w-full py-3 px-6 bg-[#1877F2] text-white rounded-full font-bold hover:bg-[#165FDB] transition-colors shadow-lg flex items-center justify-center">
                         <i class="fab fa-facebook mr-2 text-xl"></i>
-                        <span>Continue with Facebook</span>
+                        <span>Facebook দিয়ে চালিয়ে যান</span>
                     </button>
                      <p id="auth-error" class="text-red-500 text-sm mt-2 h-4"></p>
                 </div>
@@ -631,7 +627,7 @@
                         
                         <!-- My Orders (Theme Blue) -->
                         <button id="my-orders-btn-profile" class="w-full py-3 bg-theme-blue text-white rounded-xl font-semibold hover:bg-theme-purple transition-colors shadow-md flex items-center justify-between px-4" data-lang="my-orders">
-                            <span><i class="fas fa-box-open mr-3"></i> My Orders</span>
+                            <span><i class="fas fa-box-open mr-3"></i> আমার অর্ডার</span>
                             <i class="fas fa-chevron-right text-sm"></i>
                         </button>
 
@@ -639,12 +635,12 @@
                         
                         <!-- Edit Profile (Grey/Secondary) -->
                         <button id="edit-profile-btn" class="w-full py-3 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-xl font-semibold hover:bg-gray-300 transition-colors shadow-md flex items-center justify-between px-4">
-                            <span><i class="fas fa-user-edit mr-3"></i> Edit Profile</span>
+                            <span><i class="fas fa-user-edit mr-3"></i> প্রোফাইল সম্পাদনা</span>
                             <i class="fas fa-chevron-right text-sm"></i>
                         </button>
                         <!-- Manage Addresses -->
                         <button id="manage-addresses-btn" class="w-full py-3 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-xl font-semibold hover:bg-gray-300 transition-colors shadow-md flex items-center justify-between px-4">
-                            <span><i class="fas fa-location-dot mr-3"></i> Manage Addresses</span>
+                            <span><i class="fas fa-location-dot mr-3"></i> ঠিকানা পরিচালনা</span>
                             <i class="fas fa-chevron-right text-sm"></i>
                         </button>
                         
@@ -655,9 +651,9 @@
                         </button>
 
                         <!-- Delete Account (Danger, Separate) -->
-                        <button id="delete-account-btn" class="w-full py-3 bg-red-500 text-white rounded-xl font-semibold hover:bg-red-600 transition-colors shadow-md flex items-center justify-center mt-4">
-                             <i class="fas fa-trash-alt mr-2"></i> Delete Account
-                        </button>
+                    <button id="delete-account-btn" class="w-full py-3 bg-red-500 text-white rounded-xl font-semibold hover:bg-red-600 transition-colors shadow-md flex items-center justify-center mt-4">
+                        <i class="fas fa-trash-alt mr-2"></i> অ্যাকাউন্ট মুছুন
+                    </button>
 
                     </div>
                 </div>
@@ -666,24 +662,24 @@
                     <div class="text-center">
                          <img id="edit-photo-preview" src="" alt="Profile Photo Preview" class="w-24 h-24 rounded-full mx-auto shadow-lg object-cover mb-2">
                          <input type="file" id="edit-photo-input" accept="image/*" class="text-sm w-full">
-                         <button type="button" id="remove-photo-btn" class="mt-2 px-4 py-2 text-sm rounded-full border border-red-400 text-red-600 hover:bg-red-50 transition-colors">Remove Photo</button>
+                         <button type="button" id="remove-photo-btn" class="mt-2 px-4 py-2 text-sm rounded-full border border-red-400 text-red-600 hover:bg-red-50 transition-colors">ছবি সরান</button>
                     </div>
                     <div>
-                        <label for="edit-name-input" class="block text-sm font-medium text-gray-700">Name</label>
+                        <label for="edit-name-input" class="block text-sm font-medium text-gray-700">নাম</label>
                         <input type="text" id="edit-name-input" class="w-full mt-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-700">
                     </div>
                     <div>
-                        <label for="edit-mobile-input" class="block text-sm font-medium text-gray-700">Mobile Number</label>
+                        <label for="edit-mobile-input" class="block text-sm font-medium text-gray-700">মোবাইল নম্বর</label>
                         <input type="text" id="edit-mobile-input" placeholder="e.g., 01xxxxxxxxx" class="w-full mt-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-700">
                     </div>
                      <div>
-                        <label for="edit-location-input" class="block text-sm font-medium text-gray-700">Location</label>
+                        <label for="edit-location-input" class="block text-sm font-medium text-gray-700">লোকেশন</label>
                         <input type="text" id="edit-location-input" placeholder="e.g., Dhaka, Bangladesh" class="w-full mt-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-700">
                     </div>
                     <div class="flex gap-4 pt-4">
-                        <button type="button" id="cancel-edit-btn" class="w-full py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-full font-bold hover:bg-gray-300 transition-colors">Cancel</button>
+                        <button type="button" id="cancel-edit-btn" class="w-full py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-full font-bold hover:bg-gray-300 transition-colors">বাতিল</button>
                         <button type="submit" id="save-profile-btn" class="w-full py-2 bg-theme-blue text-white rounded-full font-bold hover:bg-theme-purple transition-colors flex items-center justify-center">
-                            <span class="btn-text">Save Changes</span>
+                            <span class="btn-text">পরিবর্তন সংরক্ষণ করুন</span>
                             <div class="loader-small hidden"></div>
                         </button>
                     </div>
@@ -691,47 +687,47 @@
 
                 <!-- Addresses Management Section -->
                 <div id="addresses-section" class="hidden text-left space-y-4 mt-6">
-                    <h4 class="text-xl font-bold text-theme-purple">Shipping Addresses</h4>
+                    <h4 class="text-xl font-bold text-theme-purple">শিপিং ঠিকানা সমূহ</h4>
                     <div id="addresses-list" class="space-y-3">
                         <!-- Address cards injected here -->
                     </div>
                     <div class="p-4 border rounded-xl bg-gray-50 dark:bg-gray-800/50">
-                        <h5 id="address-form-title" class="font-semibold mb-3">Add New Address</h5>
+                        <h5 id="address-form-title" class="font-semibold mb-3">নতুন ঠিকানা যোগ করুন</h5>
                         <form id="address-form" class="grid grid-cols-1 gap-3">
                             <input type="hidden" id="address-id-hidden" />
                             <div>
-                                <label class="block text-sm font-medium">Full Name</label>
+                                <label class="block text-sm font-medium">পূর্ণ নাম</label>
                                 <input id="addr-name" type="text" class="w-full mt-1 px-3 py-2 border rounded-lg bg-white dark:bg-gray-700" required />
                             </div>
                             <div>
-                                <label class="block text-sm font-medium">Mobile</label>
+                                <label class="block text-sm font-medium">মোবাইল</label>
                                 <input id="addr-mobile" type="text" class="w-full mt-1 px-3 py-2 border rounded-lg bg-white dark:bg-gray-700" required />
                             </div>
                             <div>
-                                <label class="block text-sm font-medium">Address Line 1</label>
+                                <label class="block text-sm font-medium">ঠিকানা লাইন ১</label>
                                 <input id="addr-line1" type="text" class="w-full mt-1 px-3 py-2 border rounded-lg bg-white dark:bg-gray-700" required />
                             </div>
                             <div>
-                                <label class="block text-sm font-medium">Address Line 2 (Optional)</label>
+                                <label class="block text-sm font-medium">ঠিকানা লাইন ২ (ঐচ্ছিক)</label>
                                 <input id="addr-line2" type="text" class="w-full mt-1 px-3 py-2 border rounded-lg bg-white dark:bg-gray-700" />
                             </div>
                             <div class="grid grid-cols-2 gap-3">
                                 <div>
-                                    <label class="block text-sm font-medium">City</label>
+                                    <label class="block text-sm font-medium">শহর</label>
                                     <input id="addr-city" type="text" class="w-full mt-1 px-3 py-2 border rounded-lg bg-white dark:bg-gray-700" required />
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium">Area/District</label>
+                                    <label class="block text-sm font-medium">এলাকা/জেলা</label>
                                     <input id="addr-area" type="text" class="w-full mt-1 px-3 py-2 border rounded-lg bg-white dark:bg-gray-700" />
                                 </div>
                             </div>
                             <label class="inline-flex items-center gap-2 mt-1">
                                 <input id="addr-default" type="checkbox" class="w-4 h-4" />
-                                <span>Set as default</span>
+                                <span>ডিফল্ট হিসেবে নির্ধারণ করুন</span>
                             </label>
                             <div class="flex gap-3 pt-2">
-                                <button id="save-address-btn" type="submit" class="w-full py-2 bg-theme-blue text-white rounded-full font-bold hover:bg-theme-purple transition-colors">Save Address</button>
-                                <button id="cancel-address-btn" type="button" class="w-full py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-full font-bold hover:bg-gray-300 transition-colors">Cancel</button>
+                                <button id="save-address-btn" type="submit" class="w-full py-2 bg-theme-blue text-white rounded-full font-bold hover:bg-theme-purple transition-colors">ঠিকানা সংরক্ষণ করুন</button>
+                                <button id="cancel-address-btn" type="button" class="w-full py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-full font-bold hover:bg-gray-300 transition-colors">বাতিল</button>
                             </div>
                         </form>
                     </div>
@@ -744,7 +740,7 @@
     <section id="cart-page" class="page hidden max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div class="flex items-center justify-between mb-6">
             <h2 class="text-2xl sm:text-3xl font-bold text-theme-purple" data-lang="cart">আপনার কার্ট</h2>
-            <button onclick="showPage('home-page')" class="text-theme-blue hover:text-theme-pink transition-colors text-sm sm:text-base" data-lang="back-to-products">Back to All Products</button>
+            <button onclick="showPage('home-page')" class="text-theme-blue hover:text-theme-pink transition-colors text-sm sm:text-base" data-lang="back-to-products">সকল পণ্যে ফিরে যান</button>
         </div>
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <!-- Items -->
@@ -754,30 +750,30 @@
             <!-- Summary -->
             <aside class="lg:col-span-1">
                 <div class="p-5 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm space-y-4">
-                    <h3 class="text-xl font-bold text-theme-purple" data-lang="order-summary">Order Summary</h3>
+                    <h3 class="text-xl font-bold text-theme-purple" data-lang="order-summary">অর্ডার সারাংশ</h3>
                     <!-- Coupon Apply under Order Summary heading -->
                     <form id="cart-page-coupon-form" class="w-full">
                         <div class="flex w-full overflow-hidden rounded-md border border-gray-300 bg-white dark:bg-gray-800">
-                            <input type="text" id="cart-page-coupon-input" class="flex-grow px-3 py-2 text-sm sm:text-base bg-transparent border-0 focus:outline-none focus:ring-0 text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-400" data-lang-placeholder="coupon-placeholder" placeholder="Coupon Code">
-                            <button type="submit" class="bg-theme-blue text-white px-4 py-2 text-sm sm:text-base font-semibold hover:bg-theme-purple transition-colors" data-lang="apply-coupon">Apply</button>
+                            <input type="text" id="cart-page-coupon-input" class="flex-grow px-3 py-2 text-sm sm:text-base bg-transparent border-0 focus:outline-none focus:ring-0 text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-400" data-lang-placeholder="coupon-placeholder" placeholder="কুপন কোড">
+                            <button type="submit" class="bg-theme-blue text-white px-4 py-2 text-sm sm:text-base font-semibold hover:bg-theme-purple transition-colors" data-lang="apply-coupon">প্রয়োগ</button>
                         </div>
                     </form>
                     <p id="cart-page-coupon-applied" class="hidden text-xs text-green-600"></p>
                     <!-- Available Coupons section removed on cart page as requested -->
                     <div class="flex justify-between text-sm">
-                        <span data-lang="subtotal">Subtotal:</span>
+                        <span data-lang="subtotal">মোট:</span>
                         <span id="cart-page-subtotal" class="text-dark">৳0.00</span>
                     </div>
                     <div class="flex justify-between text-sm">
-                        <span data-lang="delivery-charge">Delivery Charge:</span>
+                        <span data-lang="delivery-charge">ডেলিভারি চার্জ:</span>
                         <span id="cart-page-delivery" class="text-dark">৳0.00</span>
                     </div>
                     <div id="cart-page-discount-row" class="hidden flex justify-between text-sm text-green-600">
-                        <span data-lang="discount">Discount:</span>
+                        <span data-lang="discount">ডিসকাউন্ট:</span>
                         <span id="cart-page-discount">- ৳0.00</span>
                     </div>
                     <div class="flex justify-between text-lg font-semibold border-t pt-2 mt-2">
-                        <span data-lang="total-inclusive-vat">Total (Inclusive of VAT)</span>
+                        <span data-lang="total-inclusive-vat">মোট (ভ্যাটসহ)</span>
                         <span id="cart-page-total" class="text-theme-blue">৳0.00</span>
                     </div>
                     <button id="cart-page-checkout-btn" class="w-full bg-theme-blue text-white py-3 rounded-md font-bold hover:bg-theme-purple transition-colors shadow-lg" data-lang="checkout">চেকআউট করুন</button>
@@ -788,7 +784,7 @@
 
 
     <!-- Main Content Container -->
-    <main id="main-content-container">
+    <main id="main-content-container" class="flex-1 overflow-x-hidden">
 
         <!-- Home Page -->
         <div id="home-page" class="page">
@@ -842,6 +838,62 @@
             
             <!-- Hero Section removed: merged into composite above to match design -->
         
+            <!-- Flash Sale Section -->
+            <section id="flash-sale-section" class="container mx-auto px-4 pt-4 pb-6 sm:pb-8 hidden">
+                <div class="relative overflow-hidden rounded-3xl shadow-xl bg-gradient-to-r from-theme-blue via-theme-purple to-theme-pink text-white">
+                    <div class="absolute -top-14 -right-12 h-56 w-56 rounded-full bg-white/10 blur-2xl"></div>
+                    <div class="absolute -bottom-16 -left-14 h-60 w-60 rounded-full bg-black/10 blur-3xl"></div>
+                    <div class="relative px-5 sm:px-8 py-6 sm:py-7 space-y-6">
+                        <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                            <div class="space-y-2.5 max-w-xl">
+                                <span class="inline-flex items-center gap-2 bg-white/15 border border-white/20 backdrop-blur-sm text-xs sm:text-sm font-semibold uppercase tracking-wide px-3 py-1 rounded-full">🔥 <span data-lang="flash-sale-badge">ফ্ল্যাশ</span></span>
+                                <div class="space-y-1.5">
+                                    <h2 id="flash-sale-heading" class="text-2xl sm:text-3xl font-extrabold leading-tight" data-lang="flash-sale-heading">ফ্ল্যাশ সেল</h2>
+                                    <p id="flash-sale-subheading" class="text-white/80 text-sm sm:text-base leading-relaxed" data-lang="flash-sale-subheading">সময় সীমিত অফার চলছে—শেষ হওয়ার আগেই কিনে ফেলুন!</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3 bg-white/15 border border-white/25 rounded-2xl px-5 py-3 backdrop-blur">
+                                <div class="flex flex-col">
+                                    <span id="flash-sale-countdown-label" class="text-xs sm:text-sm font-medium uppercase text-white/80" data-lang="flash-sale-countdown-label">শেষ হতে বাকি</span>
+                                    <span id="flash-sale-master-countdown" class="flash-sale-countdown text-xl sm:text-2xl font-bold tracking-tight">00:00:00</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="flash-sale-empty" class="text-center text-white/80 text-sm sm:text-base hidden" data-lang="flash-sale-empty">এখন কোনো ফ্ল্যাশ ডিল নেই। আবারও দেখে যান।</div>
+                        <div class="bg-white/90 dark:bg-gray-900/80 rounded-2xl p-4 sm:p-5">
+                            <div id="flash-sale-grid" class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Mega Sale Section -->
+            <section id="mega-sale-section" class="container mx-auto px-4 pb-6 sm:pb-10 hidden">
+                <div class="rounded-3xl shadow-xl overflow-hidden bg-white dark:bg-gray-900 border border-theme-purple/10">
+                    <div class="bg-gradient-to-r from-theme-purple/10 via-theme-blue/10 to-theme-pink/10 px-5 sm:px-8 py-6 sm:py-7 flex flex-col md:flex-row md:items-center md:justify-between gap-5">
+                        <div class="space-y-2.5 max-w-2xl">
+                            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-theme-purple/10 text-theme-purple text-xs sm:text-sm font-semibold uppercase tracking-wide">
+                                ⭐ <span data-lang="mega-sale-badge">মেগা সেল</span>
+                            </span>
+                            <div class="space-y-1.5">
+                                <h2 id="mega-sale-heading" class="text-2xl sm:text-3xl font-extrabold text-theme-purple" data-lang="mega-sale-heading">মেগা সেল</h2>
+                                <p id="mega-sale-subheading" class="text-gray-600 dark:text-gray-300 text-sm sm:text-base leading-relaxed" data-lang="mega-sale-subheading">সপ্তাহের সবচেয়ে বড় ডিসকাউন্টগুলো—স্টক শেষ হওয়ার আগেই সংগ্রহ করুন।</p>
+                            </div>
+                        </div>
+                        <div class="self-start md:self-center">
+                            <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-theme-blue text-white text-xs sm:text-sm font-semibold shadow-lg">
+                                <i class="fas fa-percent"></i>
+                                <span data-lang="mega-sale-highlight">বিশেষ নির্বাচন</span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="px-5 sm:px-8 py-6 sm:py-7">
+                        <div id="mega-sale-empty" class="text-center text-gray-500 dark:text-gray-300 text-sm sm:text-base hidden" data-lang="mega-sale-empty">এখন কোনো মেগা ডিল নেই। আবার দেখে যান।</div>
+                        <div id="mega-sale-grid" class="grid grid-cols-1 gap-5 sm:gap-6 md:grid-cols-2 lg:grid-cols-4"></div>
+                    </div>
+                </div>
+            </section>
+
             <!-- Featured Products Section -->
             <section id="products" class="container mx-auto px-4 py-10 sm:py-16">
                 <!-- NEW: Breadcrumb and Sub-Category Header -->
@@ -1280,10 +1332,8 @@
         </div>
 
 
-    </main> <!-- End Main Content Container -->
-
     <!-- Footer -->
-    <footer class="bg-dark text-white py-12">
+    <footer class="bg-dark text-white py-12 flex-shrink-0">
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
                 <!-- Column 1 -->
@@ -1358,6 +1408,8 @@
         </div>
     </footer>
 
+    </main> <!-- End Main Content Container -->
+
     <!-- Firebase SDK Scripts (Modular v9+) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
@@ -1389,6 +1441,130 @@
         let localCartCache = new Map();
         let localWishlistCache = new Set();
     let productsData = []; // Will be populated from Firestore
+    const flashSaleCountdowns = new Map();
+    let flashSaleIntervalId = null;
+
+    const FLASH_FLAG_KEYS = ['flashSale', 'flash_sale', 'flashsell', 'flashSell', 'flash_selling', 'flash_sale_enabled', 'flashSaleEnabled'];
+    const FLASH_PRICE_KEYS = ['flashPrice', 'flash_price', 'flashsale_price', 'flashSalePrice'];
+    const FLASH_START_KEYS = ['flashStart', 'flash_start', 'flashSaleStart', 'flashsale_start', 'flashSaleStartTime'];
+    const FLASH_END_KEYS = ['flashEnd', 'flash_end', 'flashSaleEnd', 'flashsale_end', 'flashSaleEndTime'];
+    const FLASH_DURATION_KEYS = ['flashDurationHours', 'flash_duration_hours', 'flashLengthHours', 'flash_sale_duration'];
+    const REGULAR_PRICE_KEYS = ['mainPrice', 'mainprice', 'price', 'regularPrice', 'regular_price', 'mrp', 'basePrice', 'base_price', 'sellingPrice', 'selling_price'];
+    const OFFER_PRICE_KEYS = ['offerPrice', 'offerprice', 'salePrice', 'sale_price', 'discountPrice', 'discount_price', 'specialPrice', 'special_price'];
+    const OFFER_FLAG_KEYS = ['isOnOffer', 'isonoffer', 'offer', 'hasOffer', 'isOffer', 'offerActive', 'discountActive'];
+    const MEGA_FLAG_KEYS = ['megaSale', 'mega_sale', 'megaSell', 'mega_sell', 'megaDeal', 'mega_deal', 'megaSaleEnabled', 'mega_sale_enabled', 'megaOffer'];
+    const MEGA_LABEL_KEYS = ['megaSaleLabel', 'mega_sale_label', 'megaLabel', 'mega_label', 'megaSellLabel'];
+    const MEGA_DISCOUNT_THRESHOLD = 25; // Percentage fallback when no explicit flag present
+
+    const getNormalizedString = (value) => {
+        if (value === undefined || value === null) return '';
+        if (typeof value === 'string') return value.trim();
+        if (typeof value === 'number' && Number.isFinite(value)) return String(value);
+        return '';
+    };
+
+    const resolveBooleanField = (obj, keys) => {
+        for (const key of keys) {
+            const candidate = obj?.[key];
+            if (typeof candidate === 'boolean') return candidate;
+            if (typeof candidate === 'number') return candidate === 1;
+            if (typeof candidate === 'string') {
+                const normalized = candidate.trim().toLowerCase();
+                if (['true', '1', 'yes', 'on', 'enabled'].includes(normalized)) return true;
+                if (['false', '0', 'no', 'off', 'disabled'].includes(normalized)) return false;
+            }
+        }
+        return false;
+    };
+
+    const resolveNumberField = (obj, keys) => {
+        for (const key of keys) {
+            const candidate = obj?.[key];
+            if (candidate === undefined || candidate === null) continue;
+            const parsed = Number(candidate);
+            if (!Number.isNaN(parsed)) {
+                return parsed;
+            }
+            if (typeof candidate === 'string') {
+                const sanitized = candidate.replace(/[^0-9.,-]/g, '').replace(/,/g, '');
+                if (sanitized) {
+                    const fallbackParsed = Number(sanitized);
+                    if (!Number.isNaN(fallbackParsed)) {
+                        return fallbackParsed;
+                    }
+                }
+            }
+        }
+        return null;
+    };
+
+    const getFirstAvailableValue = (obj, keys) => {
+        for (const key of keys) {
+            if (obj && Object.prototype.hasOwnProperty.call(obj, key)) {
+                return obj[key];
+            }
+        }
+        return null;
+    };
+
+    const parseFirestoreDate = (input) => {
+        if (!input) return null;
+        if (input instanceof Date) return new Date(input.getTime());
+        if (typeof input?.toDate === 'function') {
+            try {
+                return input.toDate();
+            } catch (_) {
+                return null;
+            }
+        }
+        if (typeof input === 'number' && Number.isFinite(input)) {
+            return new Date(input);
+        }
+        if (typeof input === 'string') {
+            const trimmed = input.trim();
+            if (!trimmed) return null;
+            const numeric = Number(trimmed);
+            if (!Number.isNaN(numeric) && trimmed.length <= 13) {
+                return new Date(numeric);
+            }
+            const parsed = Date.parse(trimmed);
+            if (!Number.isNaN(parsed)) {
+                return new Date(parsed);
+            }
+        }
+        if (typeof input === 'object' && typeof input.seconds === 'number') {
+            const ms = input.seconds * 1000 + (input.nanoseconds || 0) / 1e6;
+            return new Date(ms);
+        }
+        return null;
+    };
+
+    const formatCountdown = (ms) => {
+        if (!Number.isFinite(ms) || ms <= 0) {
+            return '00:00:00';
+        }
+        const totalSeconds = Math.floor(ms / 1000);
+        const days = Math.floor(totalSeconds / 86400);
+        const hours = Math.floor((totalSeconds % 86400) / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+        const pad = (value) => String(Math.max(0, value)).padStart(2, '0');
+        if (days > 0) {
+            return `${days}d ${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+        }
+        const totalHours = Math.floor(totalSeconds / 3600);
+        return `${pad(totalHours)}:${pad(minutes)}:${pad(seconds)}`;
+    };
+
+    const escapeHtml = (input) => {
+        if (input === undefined || input === null) return '';
+        return String(input)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    };
     
     // --- Presence: Live visitor heartbeat (for Admin dashboard live view) ---
     try {
@@ -1703,8 +1879,8 @@
             else { sendPresence(false); stopHB(); }
         });
         // On pagehide/blur try a final update
-        window.addEventListener('pagehide', () => { sendPresence(false); stopHB(); });
-        window.addEventListener('beforeunload', () => { sendPresence(false); stopHB(); });
+    window.addEventListener('pagehide', () => { sendPresence(false); stopHB(); clearFlashSaleTimerInterval(); });
+    window.addEventListener('beforeunload', () => { sendPresence(false); stopHB(); clearFlashSaleTimerInterval(); });
     } catch (e) {
         console.warn('Presence setup failed', e);
     }
@@ -1740,8 +1916,15 @@
 
         const translations = {
             en: {
-                'deliver-to': 'Deliver to', 'home': 'Home', 'products': 'Products', 'categories': 'Categories', 'offers': 'Offers', 'search-placeholder': 'Search for products...', 'featured-products': 'Featured Products', 'shop-by-category': 'Shop by Category', 'cat-electronics': 'Electronics', 'cat-fashion': 'Fashion', 'cat-home-garden': 'Home & Garden', 'cat-health-beauty': 'Health & Beauty', 'cat-sports': 'Sports & Outdoors', 'cat-books': 'Books & Stationery', 'cat-kids': 'Kids & Toys', 'cat-cars': 'Cars & Bikes', 'why-choose-us': 'Why Choose Us', 'feature-delivery-title': 'Fast Delivery', 'feature-delivery-desc': 'We deliver to your doorstep within 2-3 business days.', 'feature-payment-title': 'Secure Payment', 'feature-payment-desc': 'All transactions are encrypted for your security and privacy.', 'feature-return-title': 'Easy Returns', 'feature-return-desc': 'Return products within 30 days for a full refund if you\'re not satisfied.', 'feature-support-title': '24/7 Support', 'feature-support-desc': 'Our customer support team is available for you day and night.', 'add-to-cart': 'Add to Cart', 'added-to-cart': 'Added!', 'no-products': 'No products found matching your criteria.', 'back-to-products': 'Back to All Products', 'returnable': '30-Day Returnable', 'not-returnable': 'Not Returnable', 'secure-payments': 'Secure Payments', 'size': 'Size:', 'storage': 'Storage:', 'color': 'Color:', 'product-description': 'Product Description', 'product-specifications': 'Product Specifications', 'specifications': 'Specification', 'value': 'Value', 'no-specs': 'No specifications available for this product.', 'product-reviews': 'Product Reviews', 'no-reviews': 'There are no reviews for this product yet.', 'cart': 'Your Cart', 'cart-empty': 'Your cart is empty.', 'total': 'Total:', 'checkout': 'Checkout', 'your-wishlist': 'Your Wishlist', 'wishlist-empty': 'Your wishlist is empty. Add some products!', 'your-account': 'Your Account', 'signin-google': 'Sign in with Google', 'logout': 'Logout', 'toast-cart-added': 'Product added to cart!', 'toast-wishlist-added': 'Product added to wishlist!', 'toast-wishlist-removed': 'Product removed from wishlist!', 'toast-login-success': 'Successfully logged in!', 'toast-logout-success': 'Successfully logged out!',
-                'toast-register-success': 'Account created successfully!', 'login': 'Login', 'register': 'Register Account', 'toast-select-variant': 'Please select all required options!', 'payment-method': 'Select Payment Method', 'cod': 'Cash on Delivery', 'online-payment': 'Online Payment', 'confirm-order': 'Confirm Order', 'order-placed-success': 'Your order has been placed successfully!', 'order-placed-fail': 'Failed to place order. Please try again.', 'cart-is-empty': 'Your cart is empty. Cannot checkout.', 'mobile-banking': 'Mobile Banking', 'payment-instruction-bkash': 'Please send {amount} Taka to this Bkash number: +8801863205976 from your app.', 'payment-instruction-nagad': 'Please send {amount} Taka to this Nagad number: +8801863205976 from your app.', 'payment-instruction-cod': 'Our delivery person will collect the payment upon delivery.', 'profile-updated': 'Profile updated successfully!', 'profile-update-fail': 'Failed to update profile.', 'toast-storage-permission-error': 'Storage permission denied. Check Firebase rules.', 'toast-update-profile': 'Please update your location and mobile number in your profile before ordering.', 'emergency-contact': 'Support', 'message-sent': 'Message sent successfully!', 'out-of-stock': 'Out of Stock', 'toast-out-of-stock': 'Sorry, this product is currently out of stock.', 'subtotal': 'Subtotal', 'delivery-charge': 'Delivery Charge', 'my-orders': 'My Orders',
+                'deliver-to': 'Deliver to',
+                'home': 'Home',
+                'products': 'Products',
+                'categories': 'Categories',
+                'offers': 'Offers',
+                'mega-sale-nav': 'Mega Sale',
+                'add-product-nav': 'Add Product',
+                'search-placeholder': 'Search for products...', 'featured-products': 'Featured Products', 'shop-by-category': 'Shop by Category', 'cat-electronics': 'Electronics', 'cat-fashion': 'Fashion', 'cat-home-garden': 'Home & Garden', 'cat-health-beauty': 'Health & Beauty', 'cat-sports': 'Sports & Outdoors', 'cat-books': 'Books & Stationery', 'cat-kids': 'Kids & Toys', 'cat-cars': 'Cars & Bikes', 'why-choose-us': 'Why Choose Us', 'feature-delivery-title': 'Fast Delivery', 'feature-delivery-desc': 'We deliver to your doorstep within 2-3 business days.', 'feature-payment-title': 'Secure Payment', 'feature-payment-desc': 'All transactions are encrypted for your security and privacy.', 'feature-return-title': 'Easy Returns', 'feature-return-desc': 'Return products within 30 days for a full refund if you\'re not satisfied.', 'feature-support-title': '24/7 Support', 'feature-support-desc': 'Our customer support team is available for you day and night.', 'add-to-cart': 'Add to Cart', 'added-to-cart': 'Added!', 'no-products': 'No products found matching your criteria.', 'back-to-products': 'Back to All Products', 'returnable': '30-Day Returnable', 'not-returnable': 'Not Returnable', 'secure-payments': 'Secure Payments', 'size': 'Size:', 'storage': 'Storage:', 'color': 'Color:', 'product-description': 'Product Description', 'product-specifications': 'Product Specifications', 'specifications': 'Specification', 'value': 'Value', 'no-specs': 'No specifications available for this product.', 'product-reviews': 'Product Reviews', 'no-reviews': 'There are no reviews for this product yet.', 'cart': 'Your Cart', 'cart-empty': 'Your cart is empty.', 'total': 'Total:', 'checkout': 'Checkout', 'your-wishlist': 'Your Wishlist', 'wishlist-empty': 'Your wishlist is empty. Add some products!', 'your-account': 'Your Account', 'signin-google': 'Sign in with Google', 'logout': 'Logout', 'toast-cart-added': 'Product added to cart!', 'toast-wishlist-added': 'Product added to wishlist!', 'toast-wishlist-removed': 'Product removed from wishlist!', 'toast-login-success': 'Successfully logged in!', 'toast-logout-success': 'Successfully logged out!',
+                'toast-register-success': 'Account created successfully!', 'login': 'Login', 'register': 'Register Account', 'toast-select-variant': 'Please select all required options!', 'select-variants': 'Select Options', 'buy-now': 'Buy Now', 'payment-method': 'Select Payment Method', 'cod': 'Cash on Delivery', 'online-payment': 'Online Payment', 'confirm-order': 'Confirm Order', 'order-placed-success': 'Your order has been placed successfully!', 'order-placed-fail': 'Failed to place order. Please try again.', 'cart-is-empty': 'Your cart is empty. Cannot checkout.', 'mobile-banking': 'Mobile Banking', 'payment-instruction-bkash': 'Please send {amount} Taka to this Bkash number: +8801863205976 from your app.', 'payment-instruction-nagad': 'Please send {amount} Taka to this Nagad number: +8801863205976 from your app.', 'payment-instruction-cod': 'Our delivery person will collect the payment upon delivery.', 'profile-updated': 'Profile updated successfully!', 'profile-update-fail': 'Failed to update profile.', 'toast-storage-permission-error': 'Storage permission denied. Check Firebase rules.', 'toast-update-profile': 'Please update your location and mobile number in your profile before ordering.', 'emergency-contact': 'Support', 'message-sent': 'Message sent successfully!', 'out-of-stock': 'Out of Stock', 'toast-out-of-stock': 'Sorry, this product is currently out of stock.', 'subtotal': 'Subtotal', 'delivery-charge': 'Delivery Charge', 'my-orders': 'My Orders',
                 'delete-account-confirm': 'Are you sure you want to delete your account? This action cannot be undone. All data will be lost.',
                 'account-deleted': 'Your account has been successfully deleted.',
                 'delete-account-failed': 'Failed to delete account. Please try again.',
@@ -1813,10 +1996,24 @@
                 'support-phone-desc': 'For urgent payment or order issues only',
                 'support-phone-hours': 'Hours: 10:00 AM - 6:00 PM',
                 'support-call-now': 'Call Now',
+                'flash-sale-heading': 'Flash Sale',
+                'flash-sale-subheading': 'Limited-time deals are counting down!',
+                'flash-sale-empty': 'No flash deals right now. Check back soon!',
+                'flash-sale-badge': 'FLASH',
+                'flash-sale-upcoming': 'UPCOMING',
+                'flash-sale-ended': 'Ended',
+                'flash-sale-countdown-label': 'Ends in',
+                'flash-sale-countdown-starts': 'Starts in',
+                'flash-sale-coming-soon': 'Coming Soon',
+                'mega-sale-heading': 'Mega Sale',
+                'mega-sale-subheading': 'Handpicked blockbuster deals you can’t miss.',
+                'mega-sale-empty': 'No mega deals right now. Check back again.',
+                'mega-sale-badge': 'Mega Sale',
+                'mega-sale-highlight': 'Curated Picks',
             },
             bn: {
                 'deliver-to': 'ডেলিভারি লোকেশন', 'home': 'হোম', 'products': 'পণ্য', 'categories': 'ক্যাটাগরি', 'offers': 'অফার', 'search-placeholder': 'পণ্য খুঁজুন...', 'featured-products': 'বৈশিষ্ট্যযুক্ত পণ্য', 'shop-by-category': 'ক্যাটাগরি অনুসারে কেনাকাটা করুন', 'cat-electronics': 'ইলেকট্রনিক্স', 'cat-fashion': 'ফ্যাশন', 'cat-home-garden': 'হোম অ্যান্ড গার্ডেন', 'cat-health-beauty': 'স্বাস্থ্য ও সৌন্দর্য', 'cat-sports': 'খেলাধুলা ও আউটডোর', 'cat-books': 'বই ও স্টেশনারি', 'cat-kids': 'বাচ্চা ও খেলনা', 'cat-cars': 'গাড়ি ও বাইক', 'why-choose-us': 'আমাদেরকে কেন বেছে নিবেন', 'feature-delivery-title': 'দ্রুত ডেলিভারি', 'feature-delivery-desc': 'আমরা ২-৩ কার্যদিবসের মধ্যে আপনার দোরগোড়ায় পণ্য পৌঁছে দিই।', 'feature-payment-title': 'নিরাপদ পেমেন্ট', 'feature-payment-desc': 'আপনার নিরাপত্তা ও গোপনীয়তার জন্য সকল লেনদেন এনক্রিপ্টেড।', 'feature-return-title': 'সহজ রিটার্ন', 'feature-return-desc': 'পছন্দ না হলে ৩০ দিনের মধ্যে পণ্য ফেরত দিন এবং সম্পূর্ণ মূল্য ফেরত পান।', 'feature-support-title': '২৪/৭ সাপোর্ট', 'feature-support-desc': 'আমাদের গ্রাহক সহায়তা দল দিনরাত আপনার জন্য উপলব্ধ।', 'add-to-cart': 'কার্টে যোগ করুন', 'added-to-cart': 'যোগ হয়েছে!', 'no-products': 'আপনার অনুসন্ধানের সাথে মেলে এমন কোনো পণ্য পাওয়া যায়নি।', 'back-to-products': 'সকল পণ্যে ফিরে যান', 'returnable': '৩০-দিনের মধ্যে ফেরতযোগ্য', 'not-returnable': 'ফেরতযোগ্য নয়', 'secure-payments': 'নিরাপদ পেমেন্ট', 'size': 'সাইজ:', 'storage': 'স্টোরেজ:', 'color': 'রঙ:', 'product-description': 'পণ্যের বিবরণ', 'product-specifications': 'পণ্যের স্পেসিফিকেশন', 'specifications': 'স্পেসিফিকেশন', 'value': 'মান', 'no-specs': 'এই পণ্যের জন্য কোন স্পেসিফিকেশন উপলব্ধ নেই।', 'product-reviews': 'পণ্যের রিভিউ', 'no-reviews': 'এই পণ্যের জন্য এখনো কোনো রিভিউ নেই।', 'cart': 'আপনার কার্ট', 'cart-empty': 'আপনার কার্ট খালি।', 'total': 'মোট মূল্য:', 'checkout': 'চেকআউট করুন', 'your-wishlist': 'আপনার উইশলিস্ট', 'wishlist-empty': 'আপনার উইশলিস্ট খালি। কিছু পণ্য যোগ করুন!', 'your-account': 'আপনার অ্যাকাউন্ট', 'signin-google': 'Google দিয়ে সাইন ইন করুন', 'logout': 'লগআউট', 'toast-cart-added': 'পণ্য কার্টে যোগ করা হয়েছে!', 'toast-wishlist-added': 'পণ্য উইশলিস্টে যোগ করা হয়েছে!', 'toast-wishlist-removed': 'পণ্য উইশলিস্ট থেকে সরানো হয়েছে!', 'toast-login-success': 'সফলভাবে লগইন হয়েছে!', 'toast-logout-success': 'সফলভাবে লগআউট হয়েছে!',
-                'toast-register-success': 'অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে!', 'login': 'লগইন', 'register': 'অ্যাকাউন্ট রেজিস্টার', 'toast-select-variant': 'অনুগ্রহ করে সব অপশন সিলেক্ট করুন!', 'payment-method': 'পেমেন্ট পদ্ধতি নির্বাচন করুন', 'cod': 'ক্যাশ অন ডেলিভারি', 'online-payment': 'অনলাইন পেমেন্ট', 'confirm-order': 'অর্ডার কনফার্ম করুন', 'order-placed-success': 'আপনার অর্ডারটি সফলভাবে সম্পন্ন হয়েছে!', 'order-placed-fail': 'অর্ডার করতে ব্যর্থ হয়েছে। আবার চেষ্টা করুন।', 'cart-is-empty': 'আপনার কার্ট খালি। চেকআউট করা সম্ভব নয়।', 'mobile-banking': 'মোবাইল ব্যাংকিং', 'payment-instruction-bkash': 'অনুগ্রহ করে আপনার অ্যাপ থেকে এই বিকাশ নম্বরে ৳{amount} পাঠান: +8801863205976।', 'payment-instruction-nagad': 'অনুগ্রহ করে আপনার অ্যাপ থেকে এই নগদ নম্বরে ৳{amount} পাঠান: +8801863205976।', 'payment-instruction-cod': 'আমাদের ডেলিভারি প্রতিনিধি পণ্য পৌঁছানোর সময় আপনার থেকে টাকা সংগ্রহ করবে।', 'profile-updated': 'প্রোফাইল সফলভাবে আপডেট হয়েছে!', 'profile-update-fail': 'প্রোফাইল আপডেট করতে ব্যর্থ হয়েছে।', 'toast-storage-permission-error': 'স্টোরেজ পারমিশন সমস্যা। অনুগ্রহ করে Firebase রুলস চেক করুন।', 'toast-update-profile': 'অর্ডার করার পূর্বে অনুগ্রহ করে আপনার প্রোফাইলে ঠিকানা ও মোবাইল নম্বর আপডেট করুন।', 'emergency-contact': 'সাপোর্ট', 'message-sent': 'আপনার বার্তা সফলভাবে পাঠানো হয়েছে!', 'out-of-stock': 'স্টক শেষ', 'toast-out-of-stock': 'দুঃখিত, এই পণ্যটি বর্তমানে স্টক আউট।', 'subtotal': 'মোট', 'delivery-charge': 'ডেলিভারি চার্জ', 'my-orders': 'আমার অর্ডার',
+                'toast-register-success': 'অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে!', 'login': 'লগইন', 'register': 'অ্যাকাউন্ট রেজিস্টার', 'toast-select-variant': 'অনুগ্রহ করে সব অপশন সিলেক্ট করুন!', 'select-variants': 'অপশন নির্বাচন করুন', 'buy-now': 'এখনই কিনুন', 'payment-method': 'পেমেন্ট পদ্ধতি নির্বাচন করুন', 'cod': 'ক্যাশ অন ডেলিভারি', 'online-payment': 'অনলাইন পেমেন্ট', 'confirm-order': 'অর্ডার নিশ্চিত করুন', 'order-placed-success': 'আপনার অর্ডারটি সফলভাবে সম্পন্ন হয়েছে!', 'order-placed-fail': 'অর্ডার করতে ব্যর্থ হয়েছে। আবার চেষ্টা করুন।', 'cart-is-empty': 'আপনার কার্ট খালি। চেকআউট করা সম্ভব নয়।', 'mobile-banking': 'মোবাইল ব্যাংকিং', 'payment-instruction-bkash': 'অনুগ্রহ করে আপনার অ্যাপ থেকে এই বিকাশ নম্বরে ৳{amount} পাঠান: +8801863205976।', 'payment-instruction-nagad': 'অনুগ্রহ করে আপনার অ্যাপ থেকে এই নগদ নম্বরে ৳{amount} পাঠান: +8801863205976।', 'payment-instruction-cod': 'আমাদের ডেলিভারি প্রতিনিধি পণ্য পৌঁছানোর সময় আপনার থেকে টাকা সংগ্রহ করবে।', 'profile-updated': 'প্রোফাইল সফলভাবে আপডেট হয়েছে!', 'profile-update-fail': 'প্রোফাইল আপডেট করতে ব্যর্থ হয়েছে।', 'toast-storage-permission-error': 'স্টোরেজ পারমিশন সমস্যা। অনুগ্রহ করে Firebase রুলস চেক করুন।', 'toast-update-profile': 'অর্ডার করার পূর্বে অনুগ্রহ করে আপনার প্রোফাইলে ঠিকানা ও মোবাইল নম্বর আপডেট করুন।', 'emergency-contact': 'সাপোর্ট', 'message-sent': 'আপনার বার্তা সফলভাবে পাঠানো হয়েছে!', 'out-of-stock': 'স্টক শেষ', 'toast-out-of-stock': 'দুঃখিত, এই পণ্যটি বর্তমানে স্টক আউট।', 'subtotal': 'মোট', 'delivery-charge': 'ডেলিভারি চার্জ', 'my-orders': 'আমার অর্ডার',
                 'delete-account-confirm': 'আপনি কি নিশ্চিত যে আপনি আপনার অ্যাকাউন্টটি মুছে ফেলতে চান? এই কাজটি ফিরিয়ে আনা যাবে না। আপনার সমস্ত ডেটা হারানো হবে।',
                 'account-deleted': 'আপনার অ্যাকাউন্ট সফলভাবে মুছে ফেলা হয়েছে।',
                 'delete-account-failed': 'অ্যাকাউন্ট মুছে ফেলার চেষ্টা ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।',
@@ -1826,7 +2023,8 @@
                 'chat-placeholder': 'আপনার বার্তা লিখুন...',
                 'toast-abusive-language': 'আপত্তিকর ভাষা ব্যবহার করা যাবে না।',
                 'account-blocked': 'আপনার অ্যাকাউন্ট ব্লক করা হয়েছে। আপনি অর্ডার বা মেসেজ করতে পারবেন না।',
-                'toast-account-blocked-action': 'Action failed: Your account is blocked.',
+                'account-blocked-banner': 'আপনার অ্যাকাউন্ট অ্যাডমিন দ্বারা ব্লক করা হয়েছে। সহায়তার জন্য সাপোর্টে যোগাযোগ করুন।',
+                'toast-account-blocked-action': 'প্রক্রিয়া সম্পন্ন হয়নি: আপনার অ্যাকাউন্ট ব্লক করা হয়েছে।',
                 'coupon-placeholder': 'কুপন কোড', 'apply-coupon': 'প্রয়োগ', 'discount': 'ডিসকাউন্ট', 'order-summary': 'অর্ডার সারাংশ', 'total-inclusive-vat': 'মোট (ভ্যাটসহ)',
                 'toast-coupon-applied': 'কুপন সফলভাবে প্রয়োগ করা হয়েছে!', 'toast-coupon-invalid': 'অবৈধ বা মেয়াদোত্তীর্ণ কুপন কোড।',
                 'toast-coupon-used': 'আপনি ইতিমধ্যে এই কুপন ব্যবহার করেছেন।', 'toast-coupon-min-purchase': 'এই কুপনটি ব্যবহার করতে সর্বনিম্ন ৳{amount} কেনাকাটা করতে হবে।',
@@ -1868,6 +2066,8 @@
                 'footer-we-accept': 'আমরা গ্রহণ করি',
                 'footer-copyright': '© ২০২৪ TangailBuzz। সর্বস্বত্ব সংরক্ষিত।',
                 // Header short labels
+                'mega-sale-nav': 'মেগা সেল',
+                'add-product-nav': 'পণ্য যোগ করুন',
                 'dark-mode': 'ডার্ক মোড',
                 'profile': 'প্রোফাইল',
                 'wishlist': 'উইশলিস্ট',
@@ -1887,11 +2087,25 @@
                 'support-phone-desc': 'শুধুমাত্র জরুরি পেমেন্ট বা অর্ডার সংক্রান্ত সমস্যার জন্য',
                 'support-phone-hours': 'সময়: সকাল ১০টা - সন্ধ্যা ৬টা',
                 'support-call-now': 'এখনই কল করুন',
+                'flash-sale-heading': 'ফ্ল্যাশ সেল',
+                'flash-sale-subheading': 'সময় সীমিত অফার চলছে—শেষ হওয়ার আগেই কিনে ফেলুন!',
+                'flash-sale-empty': 'এখন কোনো ফ্ল্যাশ ডিল নেই। আবারও দেখে যান।',
+                'flash-sale-badge': 'ফ্ল্যাশ',
+                'flash-sale-upcoming': 'আসছে',
+                'flash-sale-ended': 'শেষ',
+                'flash-sale-countdown-label': 'শেষ হতে বাকি',
+                'flash-sale-countdown-starts': 'শুরু হতে বাকি',
+                'flash-sale-coming-soon': 'শীঘ্রই আসছে',
+                'mega-sale-heading': 'মেগা সেল',
+                'mega-sale-subheading': 'সপ্তাহের সবচেয়ে বড় ডিসকাউন্ট—স্টক শেষ হওয়ার আগেই সংগ্রহ করুন।',
+                'mega-sale-empty': 'এখন কোনো মেগা ডিল নেই। আবার দেখে যান।',
+                'mega-sale-badge': 'মেগা সেল',
+                'mega-sale-highlight': 'বিশেষ নির্বাচন',
             }
         };
 
         const DOMElements = {
-            toast: document.getElementById('toast-notification'), toastMessage: document.getElementById('toast-message'), productList: document.getElementById('product-list'), cartCount: document.getElementById('cart-count'), cartItems: document.getElementById('cart-items'), cartSubtotal: document.getElementById('cart-subtotal'), deliveryCharge: document.getElementById('delivery-charge'), cartTotal: document.getElementById('cart-total'), wishlistItems: document.getElementById('wishlist-items'), authOptions: document.getElementById('auth-options'), 
+            toast: document.getElementById('toast-notification'), toastMessage: document.getElementById('toast-message'), productList: document.getElementById('product-list'), flashSaleSection: document.getElementById('flash-sale-section'), flashSaleGrid: document.getElementById('flash-sale-grid'), flashSaleEmpty: document.getElementById('flash-sale-empty'), flashSaleMasterCountdown: document.getElementById('flash-sale-master-countdown'), flashSaleCountdownLabel: document.getElementById('flash-sale-countdown-label'), megaSaleSection: document.getElementById('mega-sale-section'), megaSaleGrid: document.getElementById('mega-sale-grid'), megaSaleEmpty: document.getElementById('mega-sale-empty'), cartCount: document.getElementById('cart-count'), cartItems: document.getElementById('cart-items'), cartSubtotal: document.getElementById('cart-subtotal'), deliveryCharge: document.getElementById('delivery-charge'), cartTotal: document.getElementById('cart-total'), wishlistItems: document.getElementById('wishlist-items'), authOptions: document.getElementById('auth-options'), 
             userProfileView: document.getElementById('user-profile-view'), userPhoto: document.getElementById('user-photo'), userName: document.getElementById('user-name'), userEmail: document.getElementById('user-email'), userMobile: document.getElementById('user-mobile'), userLocation: document.getElementById('user-location'),
             loginBtn: document.getElementById('login-google-btn'), loginFacebookBtn: document.getElementById('login-facebook-btn'), logoutBtn: document.getElementById('logout-btn'), 
             editProfileBtn: document.getElementById('edit-profile-btn'), editProfileForm: document.getElementById('edit-profile-form'), saveProfileBtn: document.getElementById('save-profile-btn'), cancelEditBtn: document.getElementById('cancel-edit-btn'),
@@ -2154,17 +2368,17 @@
             DOMElements.chatInput.placeholder = translations[currentLanguage]['chat-placeholder'];
         }
 
-        function setLanguage(lang) {
-            const resolved = (lang === 'en' || lang === 'bn') ? lang : 'bn';
-            currentLanguage = resolved;
-            try { localStorage.setItem('lang', resolved); } catch (e) {}
-
-            // Update current label on the button if present
-            const langCurrent = document.getElementById('lang-current');
-            if (langCurrent) langCurrent.textContent = resolved === 'bn' ? 'বাংলা' : 'English';
+        function setLanguage() {
+            currentLanguage = 'bn';
+            try { localStorage.setItem('lang', 'bn'); } catch (e) {}
+            document.documentElement.setAttribute('lang', 'bn');
+            document.documentElement.classList.add('lang-bn');
+            document.documentElement.classList.remove('lang-en');
 
             updateTextContent();
             renderProducts(currentDisplayedProducts); // Re-render products with new language
+            renderFlashSaleSection(productsData);
+            renderMegaSaleSection(productsData);
             // Refresh language-aware dynamic content (e.g., Side Promo titles from Firestore)
             try { fetchRightPromoFromFirestore && fetchRightPromoFromFirestore(); } catch (e) {}
             if (typeof renderTopCategoryStrip === 'function') {
@@ -2565,22 +2779,61 @@
                 const isWished = localWishlistCache.has(product.id);
                 const heartClass = isWished ? 'fas text-theme-pink' : 'far text-gray-400';
                 const imageUrl = product.imageUrl || 'https://placehold.co/400x400/f5f7fa/6a0dad?text=Image';
-                const price = product.price || 0;
-                
-                let priceHtml = `<span class="text-xl font-bold text-price-black">৳${product.price.toFixed(2)}</span>`;
-                let offerSticker = '';
-                
-                // CHECK if the product is on offer
-                if (product.isOffer && product.originalPrice > product.price) {
-                    const discountPercent = Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100);
+                const localeStrings = translations[currentLanguage] || translations.en || {};
+                const basePrice = Number(product.basePrice) || Number(product.originalPrice) || Number(product.price) || 0;
+                const nowMs = Date.now();
+                const flashInfo = (product.flashSale && product.flashSale.enabled) ? product.flashSale : null;
+                let displayPrice = Number(product.price) || 0;
+                let comparePrice = product.originalPrice && product.originalPrice > displayPrice ? product.originalPrice : null;
+                let flashStatus = null;
+                if (flashInfo) {
+                    const startTs = flashInfo.start instanceof Date ? flashInfo.start.getTime() : null;
+                    const endTs = flashInfo.end instanceof Date ? flashInfo.end.getTime() : null;
+                    const isActive = (!startTs || startTs <= nowMs) && (!endTs || endTs > nowMs);
+                    const isUpcoming = !isActive && startTs && startTs > nowMs;
+                    if (isActive) {
+                        if (flashInfo.price && flashInfo.price > 0 && flashInfo.price < displayPrice) {
+                            if (!comparePrice || comparePrice < basePrice) {
+                                comparePrice = basePrice;
+                            }
+                            displayPrice = flashInfo.price;
+                        }
+                        flashStatus = 'active';
+                    } else if (isUpcoming) {
+                        flashStatus = 'upcoming';
+                    }
+                }
+
+                if (!comparePrice && basePrice && basePrice > displayPrice) {
+                    comparePrice = basePrice;
+                }
+
+                let discountPercent = null;
+                if (comparePrice && comparePrice > displayPrice) {
+                    discountPercent = Math.round(((comparePrice - displayPrice) / comparePrice) * 100);
+                }
+
+                let priceHtml = `<span class="text-xl font-bold text-price-black">৳${displayPrice.toFixed(2)}</span>`;
+                if (discountPercent !== null) {
                     priceHtml = `
                         <div class="flex items-baseline gap-2 flex-wrap">
-                            <span class="text-xl font-bold text-price-black">৳${product.price.toFixed(2)}</span>
-                            <span class="text-sm text-gray-400 line-through">৳${product.originalPrice.toFixed(2)}</span>
-                             <span class="text-xs font-bold text-red-500">(-${discountPercent}%)</span>
+                            <span class="text-xl font-bold text-price-black">৳${displayPrice.toFixed(2)}</span>
+                            <span class="text-sm text-gray-400 line-through">৳${comparePrice.toFixed(2)}</span>
+                            <span class="text-xs font-bold text-red-500">-${discountPercent}%</span>
                         </div>`;
-                    offerSticker = `<div class="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-md">OFFER</div>`;
                 }
+
+                const badgePieces = [];
+                if (flashStatus === 'active' || flashStatus === 'upcoming') {
+                    const flashKey = flashStatus === 'active' ? 'flash-sale-badge' : 'flash-sale-upcoming';
+                    const flashLabel = localeStrings[flashKey] || (flashStatus === 'active' ? 'FLASH' : 'UPCOMING');
+                    badgePieces.push(`<span class="inline-flex items-center justify-center uppercase text-[10px] font-semibold tracking-[0.3em] bg-theme-purple text-white px-3 py-1 rounded-full">${flashLabel}</span>`);
+                }
+                if (product.isOffer && discountPercent !== null && flashStatus !== 'active') {
+                    const offerLabel = currentLanguage === 'bn' ? 'অফার' : 'OFFER';
+                    badgePieces.push(`<span class="inline-flex items-center justify-center text-[10px] font-semibold tracking-[0.2em] bg-red-500 text-white px-3 py-1 rounded-full">${offerLabel}</span>`);
+                }
+                const badgesWrapper = badgePieces.length ? `<div class="absolute top-2 left-2 flex flex-col gap-2">${badgePieces.join('')}</div>` : '';
 
                 const isOutOfStock = Number(product.stock) <= 0;
                 const cartButtonText = isOutOfStock ? translations[currentLanguage]['out-of-stock'] : translations[currentLanguage]['add-to-cart'];
@@ -2591,7 +2844,7 @@
                 productCard.dataset.productId = product.id;
                 productCard.innerHTML = `
                     <div class="relative">
-                        ${offerSticker}
+                        ${badgesWrapper}
                         <img src="${imageUrl}" alt="${product.name}" class="w-full h-48 object-cover cursor-pointer" onerror="this.onerror=null;this.src='https://placehold.co/400x400/ccc/000?text=Image';">
                     </div>
                     <div class="p-4 flex flex-col flex-grow">
@@ -2625,6 +2878,376 @@
             // Removed redundant updateCategoryHeader call, which caused the error when dataset was accessed from null.
             // Render pagination controls for current dataset
             renderPagination(total);
+        }
+
+        function clearFlashSaleTimerInterval() {
+            if (flashSaleIntervalId) {
+                clearInterval(flashSaleIntervalId);
+                flashSaleIntervalId = null;
+            }
+        }
+
+        function updateFlashSaleTimers(initialRun = false) {
+            if (!flashSaleCountdowns || flashSaleCountdowns.size === 0) {
+                clearFlashSaleTimerInterval();
+                if (DOMElements.flashSaleMasterCountdown) {
+                    DOMElements.flashSaleMasterCountdown.textContent = '--:--:--';
+                }
+                return;
+            }
+
+            const now = Date.now();
+            let earliestTarget = null;
+            let activeCount = 0;
+            let upcomingCount = 0;
+            let needsRerender = false;
+            const localeStrings = translations[currentLanguage] || translations.en || {};
+
+            flashSaleCountdowns.forEach(entry => {
+                if (!entry || !entry.countdownEl) return;
+
+                if (entry.status === 'active') {
+                    if (Number.isFinite(entry.endTime)) {
+                        const remaining = entry.endTime - now;
+                        if (remaining <= 0) {
+                            entry.status = 'expired';
+                            needsRerender = true;
+                            return;
+                        }
+                        entry.countdownEl.textContent = formatCountdown(remaining);
+                        earliestTarget = earliestTarget === null ? entry.endTime : Math.min(earliestTarget, entry.endTime);
+                    } else {
+                        entry.countdownEl.textContent = '--:--:--';
+                    }
+                    activeCount += 1;
+                } else if (entry.status === 'upcoming') {
+                    if (Number.isFinite(entry.startTime)) {
+                        const remaining = entry.startTime - now;
+                        if (remaining <= 0) {
+                            entry.status = 'active';
+                            needsRerender = true;
+                            return;
+                        }
+                        entry.countdownEl.textContent = formatCountdown(remaining);
+                        earliestTarget = earliestTarget === null ? entry.startTime : Math.min(earliestTarget, entry.startTime);
+                    } else {
+                        entry.countdownEl.textContent = '--:--:--';
+                    }
+                    upcomingCount += 1;
+                }
+            });
+
+            if (needsRerender && !initialRun) {
+                renderFlashSaleSection(productsData);
+                return;
+            }
+
+            const countdownLabelEl = DOMElements.flashSaleCountdownLabel;
+            const masterCountdown = DOMElements.flashSaleMasterCountdown;
+            const labelKey = activeCount > 0 ? 'flash-sale-countdown-label' : 'flash-sale-countdown-starts';
+
+            if (countdownLabelEl) {
+                countdownLabelEl.dataset.lang = labelKey;
+                countdownLabelEl.textContent = localeStrings[labelKey] || countdownLabelEl.textContent;
+            }
+
+            if (masterCountdown) {
+                if (Number.isFinite(earliestTarget) && earliestTarget > now) {
+                    masterCountdown.textContent = formatCountdown(earliestTarget - now);
+                } else {
+                    masterCountdown.textContent = '--:--:--';
+                }
+            }
+
+            if (flashSaleCountdowns.size === 0 || (activeCount === 0 && upcomingCount === 0)) {
+                clearFlashSaleTimerInterval();
+            }
+        }
+
+        function renderFlashSaleSection(sourceProducts = productsData) {
+            const section = DOMElements.flashSaleSection;
+            const grid = DOMElements.flashSaleGrid;
+            const emptyState = DOMElements.flashSaleEmpty;
+            const masterCountdown = DOMElements.flashSaleMasterCountdown;
+            const countdownLabelEl = DOMElements.flashSaleCountdownLabel;
+            if (!section || !grid || !masterCountdown || !countdownLabelEl) return;
+
+            const localeStrings = translations[currentLanguage] || translations.en || {};
+            const productsArray = Array.isArray(sourceProducts) ? sourceProducts : [];
+            const now = Date.now();
+
+            flashSaleCountdowns.clear();
+            clearFlashSaleTimerInterval();
+
+            const deals = productsArray.map(product => {
+                const flashInfo = product?.flashSale;
+                if (!flashInfo || flashInfo.enabled !== true) return null;
+
+                const startTime = flashInfo.start instanceof Date ? flashInfo.start.getTime() : null;
+                const endTime = flashInfo.end instanceof Date ? flashInfo.end.getTime() : null;
+                let status = 'active';
+                if (Number.isFinite(endTime) && endTime <= now) {
+                    status = 'expired';
+                } else if (Number.isFinite(startTime) && startTime > now) {
+                    status = 'upcoming';
+                }
+                if (status === 'expired') return null;
+
+                const flashPriceRaw = Number(flashInfo.price);
+                const productPrice = Number(product.price) || 0;
+                const displayPrice = flashPriceRaw > 0 ? flashPriceRaw : productPrice;
+                const regularBase = Number(product.basePrice) || Number(product.originalPrice) || productPrice;
+                const comparePrice = regularBase > displayPrice ? regularBase : null;
+                const countdownTarget = status === 'active' ? endTime : (status === 'upcoming' ? startTime : null);
+
+                return {
+                    product,
+                    status,
+                    startTime,
+                    endTime,
+                    displayPrice,
+                    comparePrice,
+                    countdownTarget
+                };
+            }).filter(Boolean);
+
+            if (!deals.length) {
+                grid.innerHTML = '';
+                if (emptyState) emptyState.classList.add('hidden');
+                section.classList.add('hidden');
+                masterCountdown.textContent = '--:--:--';
+                countdownLabelEl.dataset.lang = 'flash-sale-countdown-label';
+                countdownLabelEl.textContent = localeStrings['flash-sale-countdown-label'] || countdownLabelEl.textContent;
+                return;
+            }
+
+            deals.sort((a, b) => {
+                const rank = { active: 0, upcoming: 1 };
+                const aRank = rank[a.status] ?? 2;
+                const bRank = rank[b.status] ?? 2;
+                if (aRank !== bRank) return aRank - bRank;
+                const aTarget = Number.isFinite(a.countdownTarget) ? a.countdownTarget : Number.MAX_SAFE_INTEGER;
+                const bTarget = Number.isFinite(b.countdownTarget) ? b.countdownTarget : Number.MAX_SAFE_INTEGER;
+                return aTarget - bTarget;
+            });
+
+            const visibleDeals = deals.slice(0, 4);
+
+            grid.innerHTML = '';
+            section.classList.remove('hidden');
+            if (emptyState) emptyState.classList.add('hidden');
+
+            let earliestTarget = null;
+            visibleDeals.forEach(deal => {
+                const { product, status, displayPrice, comparePrice, countdownTarget } = deal;
+                const productId = product.id;
+                const safeName = escapeHtml(product.name || '');
+                const imageUrl = product.imageUrl || 'https://placehold.co/400x400/f5f7fa/6a0dad?text=Image';
+                const ratingHtml = renderStars(product.rating || 0);
+                const ratingCount = product.ratingCount || 0;
+                const badgeKey = status === 'upcoming' ? 'flash-sale-upcoming' : 'flash-sale-badge';
+                const badgeLabel = localeStrings[badgeKey] || (status === 'upcoming' ? 'UPCOMING' : 'FLASH');
+                const cardCountdownLabelKey = status === 'upcoming' ? 'flash-sale-countdown-starts' : 'flash-sale-countdown-label';
+                const cardCountdownLabel = localeStrings[cardCountdownLabelKey] || (status === 'upcoming' ? 'Starts in' : 'Ends in');
+                const isWished = localWishlistCache.has(productId);
+                const heartClass = isWished ? 'fas text-theme-pink' : 'far text-gray-400';
+                const isOutOfStock = Number(product.stock) <= 0;
+                let buttonLabel;
+                let buttonDisabled = '';
+                let buttonClasses;
+                if (status === 'upcoming') {
+                    buttonLabel = localeStrings['flash-sale-coming-soon'] || 'Coming Soon';
+                    buttonDisabled = 'disabled';
+                    buttonClasses = 'bg-gray-400 cursor-not-allowed';
+                } else if (isOutOfStock) {
+                    buttonLabel = localeStrings['out-of-stock'] || 'Out of Stock';
+                    buttonDisabled = 'disabled';
+                    buttonClasses = 'bg-gray-400 cursor-not-allowed';
+                } else {
+                    buttonLabel = localeStrings['add-to-cart'] || 'Add to Cart';
+                    buttonClasses = 'bg-theme-blue hover:bg-theme-purple';
+                }
+
+                let priceHtml = `<span class="text-2xl font-bold text-price-black">৳${displayPrice.toFixed(2)}</span>`;
+                if (comparePrice && comparePrice > displayPrice) {
+                    const discountPercent = Math.round(((comparePrice - displayPrice) / comparePrice) * 100);
+                    priceHtml = `
+                        <div class="flex items-baseline gap-2 flex-wrap">
+                            <span class="text-2xl font-bold text-price-black">৳${displayPrice.toFixed(2)}</span>
+                            <span class="text-sm text-gray-400 line-through">৳${comparePrice.toFixed(2)}</span>
+                            <span class="text-xs font-bold text-red-500">-${discountPercent}%</span>
+                        </div>`;
+                }
+
+                const card = document.createElement('article');
+                card.className = 'flash-sale-card product-card relative flex flex-col bg-white dark:bg-gray-900 rounded-3xl shadow-lg border border-theme-pink/30 overflow-hidden';
+                card.dataset.productId = productId;
+                card.innerHTML = `
+                    <div class="relative">
+                        <img src="${imageUrl}" alt="${safeName}" class="w-full h-40 object-cover cursor-pointer" onerror="this.onerror=null;this.src='https://placehold.co/400x400/ccc/000?text=Image';">
+                        <div class="absolute top-3 left-3 flex flex-col gap-2">
+                            <span class="flash-sale-label flash-sale-status-badge inline-flex items-center justify-center uppercase text-[10px] font-semibold tracking-[0.3em] bg-theme-purple text-white px-3 py-1 rounded-full">${badgeLabel}</span>
+                        </div>
+                    </div>
+                    <div class="p-4 flex flex-col gap-3 flex-grow">
+                        <div>
+                            <h3 class="product-title font-semibold text-base sm:text-lg text-dark dark:text-gray-100 leading-snug cursor-pointer">${safeName}</h3>
+                            <div class="flex items-center text-xs text-gray-500 dark:text-gray-400 mt-1.5 gap-2">
+                                ${ratingHtml}
+                                <span>(${ratingCount})</span>
+                            </div>
+                        </div>
+                        <div>${priceHtml}</div>
+                        <div class="mt-auto flex items-center justify-between gap-2.5">
+                            <button class="flash-sale-action add-to-cart text-white py-2 px-4 rounded-full transition-colors shadow ${buttonClasses}" ${buttonDisabled} data-product-id="${productId}">${buttonLabel}</button>
+                            <button class="wishlist text-2xl transition-colors" data-product-id="${productId}"><i class="${heartClass} fa-heart"></i></button>
+                        </div>
+                        <div class="flex items-center justify-between mt-3 pt-2 border-t border-dashed border-theme-purple/30">
+                            <span class="flash-sale-countdown-label-card text-[10px] uppercase tracking-widest text-theme-purple font-semibold">${cardCountdownLabel}</span>
+                            <span class="flash-sale-countdown-display flash-sale-countdown text-sm font-bold text-theme-purple">${Number.isFinite(countdownTarget) ? formatCountdown(countdownTarget - now) : '--:--:--'}</span>
+                        </div>
+                    </div>`;
+
+                grid.appendChild(card);
+
+                const countdownEl = card.querySelector('.flash-sale-countdown-display');
+                const statusBadgeEl = card.querySelector('.flash-sale-status-badge');
+                const labelEl = card.querySelector('.flash-sale-countdown-label-card');
+
+                flashSaleCountdowns.set(productId, {
+                    product,
+                    status,
+                    startTime: deal.startTime,
+                    endTime: deal.endTime,
+                    countdownEl,
+                    statusBadgeEl,
+                    labelEl,
+                    countdownTarget
+                });
+
+                if (Number.isFinite(countdownTarget)) {
+                    earliestTarget = earliestTarget === null ? countdownTarget : Math.min(earliestTarget, countdownTarget);
+                }
+            });
+
+            const labelKey = visibleDeals.some(d => d.status === 'active') ? 'flash-sale-countdown-label' : 'flash-sale-countdown-starts';
+            countdownLabelEl.dataset.lang = labelKey;
+            countdownLabelEl.textContent = localeStrings[labelKey] || countdownLabelEl.textContent;
+
+            if (Number.isFinite(earliestTarget)) {
+                masterCountdown.textContent = formatCountdown(earliestTarget - now);
+            } else {
+                masterCountdown.textContent = '--:--:--';
+            }
+
+            const hasCountdown = Array.from(flashSaleCountdowns.values()).some(entry => {
+                if (!entry) return false;
+                const target = entry.status === 'active' ? entry.endTime : entry.startTime;
+                return Number.isFinite(target);
+            });
+
+            updateFlashSaleTimers(true);
+
+            if (hasCountdown) {
+                flashSaleIntervalId = setInterval(() => updateFlashSaleTimers(false), 1000);
+            }
+        }
+
+        function renderMegaSaleSection(sourceProducts = productsData) {
+            const section = DOMElements.megaSaleSection;
+            const grid = DOMElements.megaSaleGrid;
+            const emptyState = DOMElements.megaSaleEmpty;
+            if (!section || !grid || !emptyState) return;
+
+            const localeStrings = translations[currentLanguage] || translations.en || {};
+            const productsArray = Array.isArray(sourceProducts) ? sourceProducts : [];
+
+            const deals = productsArray.map(product => {
+                const mega = product?.megaSale;
+                if (!mega || mega.enabled !== true) return null;
+                if (product?.flashSale?.enabled) return null;
+                const discount = typeof mega.discountPercent === 'number' ? mega.discountPercent : (product?.discountPercent || 0);
+                return { product, mega, discount: Math.max(0, discount || 0) };
+            }).filter(Boolean);
+
+            if (!deals.length) {
+                grid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                section.classList.add('hidden');
+                return;
+            }
+
+            section.classList.remove('hidden');
+            emptyState.classList.add('hidden');
+
+            deals.sort((a, b) => b.discount - a.discount);
+            const visibleDeals = deals.slice(0, 4);
+
+            grid.innerHTML = '';
+
+            visibleDeals.forEach(({ product, mega, discount }) => {
+                const productId = product.id;
+                const safeName = escapeHtml(product.name || '');
+                const imageUrl = product.imageUrl || 'https://placehold.co/400x400/f5f7fa/6a0dad?text=Image';
+                const ratingHtml = renderStars(product.rating || 0);
+                const ratingCount = product.ratingCount || 0;
+                const isWished = localWishlistCache.has(productId);
+                const heartClass = isWished ? 'fas text-theme-pink' : 'far text-gray-400';
+                const isOutOfStock = Number(product.stock) <= 0;
+                const badgeText = mega.label || localeStrings['mega-sale-badge'] || 'Mega Sale';
+                const priceValue = Number(product.price) || 0;
+                const originalValue = Number.isFinite(mega.originalPrice) && mega.originalPrice > priceValue
+                    ? Number(mega.originalPrice)
+                    : (Number(product.originalPrice) > priceValue ? Number(product.originalPrice) : null);
+
+                let priceHtml = `<span class="text-2xl font-bold text-price-black">৳${priceValue.toFixed(2)}</span>`;
+                if (originalValue && originalValue > priceValue) {
+                    priceHtml = `
+                        <div class="flex items-baseline gap-2 flex-wrap">
+                            <span class="text-2xl font-bold text-price-black">৳${priceValue.toFixed(2)}</span>
+                            <span class="text-sm text-gray-400 line-through">৳${originalValue.toFixed(2)}</span>
+                            ${discount ? `<span class="text-xs font-bold text-theme-pink">-${discount}%</span>` : ''}
+                        </div>`;
+                } else if (discount) {
+                    priceHtml = `
+                        <div class="flex items-baseline gap-2 flex-wrap">
+                            <span class="text-2xl font-bold text-price-black">৳${priceValue.toFixed(2)}</span>
+                            <span class="text-xs font-bold text-theme-pink">-${discount}%</span>
+                        </div>`;
+                }
+
+                const buttonLabel = isOutOfStock ? (localeStrings['out-of-stock'] || 'Out of Stock') : (localeStrings['add-to-cart'] || 'Add to Cart');
+                const buttonClasses = isOutOfStock ? 'bg-gray-400 cursor-not-allowed' : 'bg-theme-blue hover:bg-theme-purple';
+                const buttonDisabled = isOutOfStock ? 'disabled' : '';
+
+                const card = document.createElement('article');
+                card.className = 'mega-sale-card product-card relative flex flex-col bg-white dark:bg-gray-900 rounded-3xl shadow-lg border border-theme-purple/20 overflow-hidden';
+                card.dataset.productId = productId;
+                card.innerHTML = `
+                    <div class="relative">
+                        <img src="${imageUrl}" alt="${safeName}" class="w-full h-40 object-cover cursor-pointer" onerror="this.onerror=null;this.src='https://placehold.co/400x400/ccc/000?text=Image';">
+                        <div class="absolute top-3 left-3 flex flex-col gap-2">
+                            <span class="inline-flex items-center gap-2 bg-theme-purple text-white text-[11px] font-semibold tracking-wide px-3 py-1 rounded-full shadow">${badgeText}</span>
+                            ${discount ? `<span class="inline-flex items-center gap-1 bg-white/90 text-theme-purple text-[11px] font-semibold px-2.5 py-1 rounded-full shadow-sm">-${discount}%</span>` : ''}
+                        </div>
+                    </div>
+                    <div class="p-4 flex flex-col gap-3 flex-grow">
+                        <div>
+                            <h3 class="product-title font-semibold text-base sm:text-lg text-dark dark:text-gray-100 leading-snug cursor-pointer">${safeName}</h3>
+                            <div class="flex items-center text-xs text-gray-500 dark:text-gray-400 mt-1.5 gap-2">
+                                ${ratingHtml}
+                                <span>(${ratingCount})</span>
+                            </div>
+                        </div>
+                        <div>${priceHtml}</div>
+                        <div class="mt-auto flex items-center justify-between gap-2.5">
+                            <button class="mega-sale-action add-to-cart text-white py-2 px-4 rounded-full transition-colors shadow ${buttonClasses}" ${buttonDisabled} data-product-id="${productId}">${buttonLabel}</button>
+                            <button class="wishlist text-2xl transition-colors" data-product-id="${productId}"><i class="${heartClass} fa-heart"></i></button>
+                        </div>
+                    </div>`;
+
+                grid.appendChild(card);
+            });
         }
 
         // --- CATEGORY & SUB-CATEGORY LOGIC ---
@@ -3790,20 +4413,9 @@
             try {
                 const querySnapshot = await getDocs(collection(db, "products"));
                 productsData = querySnapshot.docs.map(doc => {
-                    const data = doc.data();
-                    
-                    // Robustly check for offer flag and prices (camelCase or lowercase)
-                    const hasOffer = data.isOnOffer === true || data.isonoffer === true;
-                    const mainPrice = Number(data.mainPrice || data.mainprice) || 0;
-                    const offerPrice = Number(data.offerPrice || data.offerprice) || 0;
+                    const data = doc.data() || {};
+                    const modelID = data.model1 || data.model || doc.id;
 
-                    // An offer is valid only if the flag is set, prices are positive, and the offer is a discount.
-                    const isValidOffer = hasOffer && mainPrice > 0 && offerPrice > 0 && offerPrice < mainPrice;
-                    
-                    // NEW LOGIC: Use model1 if present, otherwise try model, otherwise use the Firestore document ID
-                    const modelID = data.model1 || data.model || doc.id; 
-
-                    // Normalize category and subcategory across different schemas
                     let categoryValue = data.category ?? data.Category ?? data.cat ?? data.categoryName ?? 'general';
                     if (typeof categoryValue === 'string') categoryValue = categoryValue.trim().toLowerCase();
 
@@ -3818,14 +4430,109 @@
                         normalizedSub = String(rawSub.name).trim().toLowerCase();
                     }
 
+                    let basePrice = resolveNumberField(data, REGULAR_PRICE_KEYS);
+                    if (!(basePrice > 0)) basePrice = null;
+
+                    let offerPrice = resolveNumberField(data, OFFER_PRICE_KEYS);
+                    if (!(offerPrice > 0)) offerPrice = null;
+
+                    const hasOfferFlag = resolveBooleanField(data, OFFER_FLAG_KEYS);
+                    const flashEnabled = resolveBooleanField(data, FLASH_FLAG_KEYS);
+                    let flashPrice = resolveNumberField(data, FLASH_PRICE_KEYS);
+                    if (!(flashPrice > 0)) flashPrice = null;
+
+                    const flashStartRaw = getFirstAvailableValue(data, FLASH_START_KEYS);
+                    const flashEndRaw = getFirstAvailableValue(data, FLASH_END_KEYS);
+                    let flashStartDate = parseFirestoreDate(flashStartRaw);
+                    let flashEndDate = parseFirestoreDate(flashEndRaw);
+                    const flashDurationHours = resolveNumberField(data, FLASH_DURATION_KEYS);
+                    if (!flashEndDate && flashDurationHours && flashDurationHours > 0 && flashStartDate instanceof Date) {
+                        flashEndDate = new Date(flashStartDate.getTime() + flashDurationHours * 3600000);
+                    }
+
+                    const nowTs = Date.now();
+                    const flashStartTs = flashStartDate instanceof Date ? flashStartDate.getTime() : null;
+                    const flashEndTs = flashEndDate instanceof Date ? flashEndDate.getTime() : null;
+                    const flashIsActive = flashEnabled && (!flashStartTs || flashStartTs <= nowTs) && (!flashEndTs || flashEndTs > nowTs);
+                    const flashIsUpcoming = flashEnabled && !flashIsActive && flashStartTs && flashStartTs > nowTs;
+
+                    let effectivePrice = basePrice && basePrice > 0 ? basePrice : null;
+                    let originalPriceValue = null;
+                    let isOffer = false;
+
+                    if (flashIsActive && flashPrice && flashPrice > 0) {
+                        if (basePrice && basePrice > flashPrice) {
+                            originalPriceValue = basePrice;
+                        }
+                        effectivePrice = flashPrice;
+                        isOffer = !!originalPriceValue;
+                    } else if (hasOfferFlag && offerPrice && basePrice && offerPrice < basePrice) {
+                        effectivePrice = offerPrice;
+                        originalPriceValue = basePrice;
+                        isOffer = true;
+                    } else if (!effectivePrice && offerPrice && offerPrice > 0) {
+                        effectivePrice = offerPrice;
+                        if (basePrice && basePrice > offerPrice) {
+                            originalPriceValue = basePrice;
+                            isOffer = true;
+                        }
+                    } else if (!effectivePrice && flashPrice && flashPrice > 0) {
+                        effectivePrice = flashPrice;
+                        if (basePrice && basePrice > flashPrice) {
+                            originalPriceValue = basePrice;
+                            isOffer = true;
+                        }
+                    }
+
+                    if (!effectivePrice || effectivePrice <= 0) {
+                        const fallbackPrice = Number(data.price) || Number(data.Price) || 0;
+                        effectivePrice = basePrice || offerPrice || flashPrice || fallbackPrice || 0;
+                    }
+
+                    if (!originalPriceValue && basePrice && basePrice > effectivePrice) {
+                        originalPriceValue = basePrice;
+                        if (basePrice !== effectivePrice) {
+                            isOffer = true;
+                        }
+                    }
+
+                    const flashSale = flashEnabled ? {
+                        enabled: true,
+                        price: flashPrice,
+                        start: flashStartDate || null,
+                        end: flashEndDate || null,
+                        isActive: flashIsActive,
+                        isUpcoming: flashIsUpcoming,
+                        label: getNormalizedString(data.flashSaleLabel || data.flash_sale_label || data.flashsellLabel || data.flashSellLabel || '') || null
+                    } : null;
+
+                    const discountReference = originalPriceValue || (basePrice && basePrice > effectivePrice ? basePrice : null);
+                    let discountPercent = 0;
+                    if (discountReference && discountReference > 0 && discountReference > effectivePrice) {
+                        discountPercent = Math.round(((discountReference - effectivePrice) / discountReference) * 100);
+                    }
+                    discountPercent = Math.max(0, discountPercent);
+
+                    const megaFlag = resolveBooleanField(data, MEGA_FLAG_KEYS);
+                    const megaLabelRaw = getNormalizedString(getFirstAvailableValue(data, MEGA_LABEL_KEYS));
+                    const megaSaleEnabled = megaFlag || (discountPercent >= MEGA_DISCOUNT_THRESHOLD && isOffer);
+                    const megaSale = megaSaleEnabled ? {
+                        enabled: true,
+                        label: megaLabelRaw || null,
+                        discountPercent,
+                        price: Number(effectivePrice) || 0,
+                        originalPrice: discountReference || null
+                    } : null;
+
                     return {
                         id: doc.id,
-                        modelID: modelID, // NEW: Fetch Model ID
+                        modelID,
                         name: data.name || "No Name Provided",
                         brand: data.brand || "No Brand",
-                        price: isValidOffer ? offerPrice : mainPrice,
-                        originalPrice: isValidOffer ? mainPrice : null,
-                        isOffer: isValidOffer,
+                        price: Number(effectivePrice) || 0,
+                        basePrice: basePrice || originalPriceValue || Number(effectivePrice) || 0,
+                        originalPrice: originalPriceValue && originalPriceValue > effectivePrice ? originalPriceValue : null,
+                        isOffer,
                         rating: data.rating || 0,
                         ratingCount: data.ratingCount || 0,
                         image: data.imageUrl || '',
@@ -3833,7 +4540,7 @@
                         description: data.details || '',
                         fullDescription: data.details || '',
                         category: categoryValue,
-                        subCategory: normalizedSub, // normalized subcategory
+                        subCategory: normalizedSub,
                         isReturnable: data.isRefundable === true,
                         specifications: data.specification || {},
                         reviews: data.reviews || [],
@@ -3842,9 +4549,15 @@
                         storage: data.storage || [],
                         colors: data.variants && typeof data.variants.color === 'string' ? data.variants.color.split(',').map(c => c.trim()) : (Array.isArray(data.colors) ? data.colors : []),
                         stock: data.stock !== undefined ? Number(data.stock) : 1,
-                        warrantyText: data.warranty || null // Use the fetched string field
+                        warrantyText: data.warranty || null,
+                        flashSale,
+                        megaSale,
+                        discountPercent
                     };
                 });
+                renderFlashSaleSection(productsData);
+                renderMegaSaleSection(productsData);
+
                 if (productsData.length === 0) {
                     DOMElements.productList.innerHTML = `<p class="col-span-full text-center text-gray-500">No products found in the database.</p>`;
                 } else {
@@ -3852,6 +4565,8 @@
                 }
             } catch (error) {
                 console.error("Error fetching products from Firestore: ", error);
+                renderFlashSaleSection([]);
+                renderMegaSaleSection([]);
                 DOMElements.productList.innerHTML = `<p class="col-span-full text-center text-red-500">Error loading products. Check console for details.</p>`;
             }
         }
@@ -6332,8 +7047,7 @@
             
             // 2. Load Product/Banner Data
             // Initialize language from storage
-            const storedLang = (() => { try { return localStorage.getItem('lang'); } catch (e) { return null; } })();
-            setLanguage(storedLang || 'bn');
+            setLanguage();
             DOMElements.productList.innerHTML = `<div class="loader"></div>`;
             await fetchProductsFromFirestore();
             await fetchBannersFromFirestore();
@@ -6461,35 +7175,6 @@
             // Review Form Listeners
             document.getElementById('rating-stars').addEventListener('click', handleStarClick);
             document.getElementById('review-form').addEventListener('submit', submitReview);
-
-            // Language selector interactions
-            const langButton = document.getElementById('lang-button');
-            const langMenu = document.getElementById('lang-menu');
-            const langCurrent = document.getElementById('lang-current');
-            if (langButton && langMenu) {
-                // Set initial label from stored language
-                const currentLang = (() => { try { return localStorage.getItem('lang'); } catch (e) { return null; } })() || 'bn';
-                if (langCurrent) langCurrent.textContent = currentLang === 'bn' ? 'বাংলা' : 'English';
-
-                langButton.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    langMenu.classList.toggle('hidden');
-                });
-
-                document.querySelectorAll('#lang-menu .lang-option').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        const value = e.currentTarget.getAttribute('data-lang-value');
-                        setLanguage(value);
-                    });
-                });
-
-                // Close on outside click
-                document.addEventListener('click', (e) => {
-                    if (!e.target.closest('#lang-selector')) {
-                        langMenu.classList.add('hidden');
-                    }
-                });
-            }
 
             // --- Invoice Button Delegation ---
             document.addEventListener('click', (e) => {
