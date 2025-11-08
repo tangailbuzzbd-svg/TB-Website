@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="bn">
-<head>
+<!DOCTYPE html><html lang="bn"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>টাঙ্গাইলবাজ - অনলাইন শপিং</title>
@@ -8,8 +6,8 @@
     <link rel="icon" type="image/png" href="https://github.com/tangailbuzzbd-svg/TangailBuzz-Picture-/blob/main/gdrg_upscaled%20(1).png?raw=true">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&amp;family=Poppins:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.maateen.me/solaiman-lipi/font.css">
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -66,16 +64,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
 
     <style>
-        /* Custom styles for toast notifications and other minor tweaks */
         #toast-notification {
             transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
         }
-        /* Global responsive media and overflow fixes for mobile */
         html, body {
             overflow-x: hidden;
             height: 100%;
         }
-
         body {
             min-height: 100vh;
             display: flex;
@@ -85,20 +80,10 @@
         html[lang="bn"] body {
             font-family: 'SolaimanLipi', 'Poppins', 'Noto Sans Bengali', sans-serif !important;
         }
-        img, video {
+        img {
             max-width: 100%;
             height: auto;
         }
-        .variant-btn-active {
-            border-color: #3a86ff !important;
-            background-color: #e0eaff !important;
-            color: #3a86ff !important;
-            font-weight: 600 !important;
-        }
-        .color-variant-active {
-            box-shadow: 0 0 0 2px #fff, 0 0 0 4px #3a86ff; /* Custom ring effect */
-        }
-        /* Simple loader */
         .loader {
             border: 4px solid #f3f3f3;
             border-radius: 50%;
@@ -107,20 +92,10 @@
             height: 40px;
             animation: spin 2s linear infinite;
         }
-        .loader-small {
-            border: 2px solid #f3f3f3;
-            border-top: 2px solid #fff;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
+        html.dark .language-option-active {
+            background-color: rgba(74, 123, 237, 0.25);
+            color: #cbd5f5;
         }
-        .active-lang {
-            text-decoration: underline;
-            text-underline-offset: 4px;
-            color: #f8f9fa;
-        }
-        /* Drawer & Modal Styles */
         .drawer-overlay, .modal-overlay {
             transition: opacity 0.3s ease-in-out;
         }
@@ -134,114 +109,251 @@
         .drawer.active {
             transform: translateX(0);
         }
-        /* CSS variables used by JS for image zoom */
         #product-image-container:hover #product-image {
             transform-origin: var(--x-pos) var(--y-pos);
             transform: scale(2);
         }
-
-        /* Dark mode text contrast fixes */
         .text-dark { color: #111827; }
-        .text-price-black { color: #111827; }
         html.dark .text-dark { color: #e5e7eb !important; }
         html.dark .text-price-black { color: #f3f4f6 !important; }
         html.dark .text-black { color: #f3f4f6 !important; }
         html.dark .text-gray-900 { color: #f3f4f6 !important; }
         html.dark .text-gray-800 { color: #e5e7eb !important; }
-
         .flash-sale-countdown {
             font-variant-numeric: tabular-nums;
             letter-spacing: 0.03em;
         }
-
-        .flash-sale-card .flash-sale-label {
-            letter-spacing: 0.08em;
-        }
-
-
-        /* Custom CSS for Progress Tracker (Final Fix for Image Alignment) */
-        /* Core Flex Container */
-        .tracker-step-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            padding: 0 10px; /* Small padding inside the card to push start/end points slightly from edge */
-        }
-        /* Style for the space between nodes (which holds the line) */
-        .tracker-connector {
-            flex-grow: 1; /* Takes all remaining space */
-            display: flex;
-            align-items: center;
-            justify-content: center; /* Center the line element */
-            height: 32px; /* Maintain vertical space */
-            margin-top: 12px; /* Align with circle top margin */
-        }
-        .tracker-connector-line {
-            height: 4px;
-            width: 100%; /* Line fills connector space */
-            background-color: #d1d5db; /* Grey line */
-        }
-        .tracker-connector.active .tracker-connector-line {
-            background-color: #34d399; /* Green line */
-        }
-        
-        /* Style for the nodes (circles and text) */
-        .tracker-node {
-            position: relative;
-            z-index: 20;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            flex-shrink: 0;
-            text-align: center;
-            /* Use a fixed, small width for each step to control spacing */
-            width: 70px; 
-            /* Push the text label slightly left/right for first/last node labels to align them under the circle */
-        }
-        .tracker-circle {
-            width: 32px;
-            height: 32px;
-            margin-top: 12px;
-        }
         .rating-star:hover, .rating-star.selected {
             color: #fca311; /* Amber/Yellow for selection/hover */
         }
-        /* Mobile-friendly vertical tracker layout */
-        @media (max-width: 640px) {
-            .tracker-step-container {
-                flex-direction: column;
-                align-items: stretch;
-                padding: 0 6px;
-            }
-            .tracker-node {
-                width: auto;
-                flex-direction: row;
-                align-items: center;
-                gap: 8px;
-                text-align: left;
-            }
-            .tracker-circle {
-                width: 28px;
-                height: 28px;
-                margin-top: 4px;
-            }
-            .tracker-node p {
+        .tracker-node p {
                 margin: 0;
                 font-size: 11px;
             }
-            .tracker-connector {
-                width: 4px;
-                height: 32px;
-                margin: 4px 0 4px 14px; /* align under the circle */
-                justify-content: flex-start;
+        .language-toggle-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+        }
+        .toggle-checkbox {
+            display: none;
+        }
+        .toggle-slider {
+            --toggle-width: 78px;
+            --toggle-height: 26px;
+            --knob-size: 22px;
+            position: relative;
+            width: var(--toggle-width);
+            height: var(--toggle-height);
+            border-radius: 9999px;
+            background-color: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(4px);
+            cursor: pointer;
+            transition: background-color 0.35s ease, box-shadow 0.35s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 3px 8px rgba(79, 70, 229, 0.15);
+            color: rgba(255, 255, 255, 0.65);
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            font-size: 8.5px;
+        }
+        .toggle-slider .label-en,
+        .toggle-slider .label-bn {
+            transition: color 0.35s ease;
+            z-index: 1;
+        }
+        .toggle-knob {
+            position: absolute;
+            width: var(--knob-size);
+            height: var(--knob-size);
+            top: calc((var(--toggle-height) - var(--knob-size)) / 2);
+            left: 2px;
+            border-radius: 9999px;
+            background-color: #ffffff;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.35s ease;
+            overflow: hidden;
+        }
+        .toggle-knob img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .toggle-checkbox:checked + .toggle-slider {
+            background-image: linear-gradient(90deg, rgba(99, 102, 241, 0.9), rgba(168, 85, 247, 0.9), rgba(236, 72, 153, 0.9));
+            box-shadow: 0 5px 12px rgba(79, 70, 229, 0.26);
+        }
+        .toggle-checkbox:checked + .toggle-slider .label-en {
+            color: rgba(255, 255, 255, 0.85);
+        }
+        .toggle-checkbox:checked + .toggle-slider .label-bn {
+            color: #ffd54f;
+        }
+        .flash-sale-animated-bg {
+            position: relative;
+            overflow: hidden;
+            background-image: linear-gradient(120deg, rgba(74, 123, 237, 0.95), rgba(106, 13, 173, 0.95), rgba(229, 54, 122, 0.95));
+            background-size: 260% 260%;
+            animation: flashGradientShift 7s ease-in-out infinite;
+        }
+        .flash-sale-animated-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0));
+            opacity: 0.35;
+            mix-blend-mode: screen;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .flash-sale-animated-bg > :not(.flash-sale-overlay-text) {
+            position: relative;
+            z-index: 1;
+        }
+        .flash-sale-overlay-text {
+            position: absolute;
+            inset: -8% -4%;
+            display: flex;
+            gap: 1.8rem;
+            align-items: center;
+            pointer-events: none;
+            transform: rotate(-10deg);
+            z-index: 0;
+        }
+        .flash-sale-overlay-text span {
+            font-weight: 700;
+            font-size: clamp(0.85rem, 2.2vw, 1.5rem);
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.12);
+            white-space: nowrap;
+            animation: flashTextMarquee 18s linear infinite;
+        }
+        .flash-sale-overlay-text span:nth-child(2) {
+            animation-delay: -9s;
+        }
+        .flash-sale-heading-animated {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.55rem;
+            padding: 0.45rem 1.35rem;
+            border-radius: 9999px;
+            background: linear-gradient(90deg, rgba(255, 94, 98, 0.92), rgba(255, 200, 82, 0.96), rgba(255, 94, 98, 0.92));
+            background-size: 220% 100%;
+            color: #fff;
+            box-shadow: 0 8px 22px rgba(255, 142, 90, 0.35);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            animation: flashRibbonGlow 3s linear infinite;
+        }
+        .flash-sale-heading-animated::before {
+            content: '';
+            position: absolute;
+            inset: -20%;
+            background: radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.25), transparent 60%),
+                        radial-gradient(circle at 80% 50%, rgba(255, 255, 255, 0.18), transparent 65%);
+            opacity: 0.65;
+            filter: blur(18px);
+            z-index: -1;
+        }
+        .flash-sale-heading-animated span[data-lang] {
+            font-weight: 800;
+            font-size: clamp(1.4rem, 1.8vw + 0.55rem, 2.2rem);
+            text-shadow: 0 2px 4px rgba(129, 22, 68, 0.35);
+        }
+        .flash-sale-heading-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 9999px;
+            background: rgba(255, 255, 255, 0.18);
+            box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.35);
+            font-size: 1.25rem;
+            animation: flashBoltTwinkle 1.1s ease-in-out infinite alternate;
+        }
+        .flash-sale-heading-animated .flash-sale-heading-icon:last-of-type {
+            animation-delay: 0.4s;
+        }
+        html.dark .flash-sale-heading-animated {
+            box-shadow: 0 8px 22px rgba(255, 167, 68, 0.45);
+        }
+        @keyframes flashRibbonGlow {
+            0% {
+                background-position: 0% 50%;
+                box-shadow: 0 8px 22px rgba(255, 142, 90, 0.35);
             }
-            .tracker-connector-line {
-                width: 4px;
-                height: 100%;
+            50% {
+                background-position: 100% 50%;
+                box-shadow: 0 8px 28px rgba(255, 184, 77, 0.45);
+            }
+            100% {
+                background-position: 0% 50%;
+                box-shadow: 0 8px 22px rgba(255, 142, 90, 0.35);
             }
         }
-        
-    </style>
+        @keyframes flashBoltTwinkle {
+            0% {
+                transform: scale(0.9) rotate(-8deg);
+                filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.45));
+            }
+            100% {
+                transform: scale(1.1) rotate(8deg);
+                filter: drop-shadow(0 0 10px rgba(255, 222, 89, 0.85));
+            }
+        }
+        @keyframes flashGradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        @keyframes flashTextMarquee {
+            0% {
+                transform: translate3d(0, 0, 0);
+            }
+            100% {
+                transform: translate3d(-50%, 0, 0);
+            }
+        }
+        .toggle-checkbox:not(:checked) + .toggle-slider .label-en {
+            color: #ffd54f;
+        }
+        .toggle-checkbox:not(:checked) + .toggle-slider .label-bn {
+            color: rgba(255, 255, 255, 0.85);
+        }
+        .toggle-checkbox:checked + .toggle-slider .toggle-knob {
+            transform: translateX(calc(var(--toggle-width) - var(--knob-size) - 4px));
+        }
+        html.dark .toggle-slider {
+            background-color: rgba(17, 24, 39, 0.6);
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4);
+        }
+        html.dark .toggle-checkbox:not(:checked) + .toggle-slider .label-bn,
+        html.dark .toggle-checkbox:checked + .toggle-slider .label-en {
+            color: rgba(209, 213, 219, 0.85);
+        }
+        html.dark .toggle-knob {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+</style>
 </head>
 <body class="bg-theme-light text-dark font-sans leading-relaxed transition-colors duration-300 dark:bg-gray-900 dark:text-gray-100">
     
@@ -257,7 +369,7 @@
         <div class="bg-white dark:bg-gray-800 rounded-3xl p-8 max-w-md w-full mx-4 shadow-2xl">
             <div class="flex justify-between items-center mb-6">
                 <h3 class="text-2xl font-bold text-theme-purple" data-lang="select-variants">অপশন নির্বাচন করুন</h3>
-                <button onclick="closeVariantModal()" class="text-gray-500 hover:text-gray-800 text-3xl">&times;</button>
+                <button onclick="closeVariantModal()" class="text-gray-500 hover:text-gray-800 text-3xl">×</button>
             </div>
             <div id="variant-modal-product" class="flex items-center gap-3 mb-4">
                 <img id="vm-product-image" class="w-14 h-14 rounded-xl object-cover" src="" alt="" onerror="this.onerror=null;this.src='https://placehold.co/80x80/ccc/000?text=Image';">
@@ -289,7 +401,7 @@
 
 
     <!-- Header Section -->
-    <header class="bg-gradient-to-r from-theme-blue to-theme-purple text-white py-4 sticky top-0 z-40 shadow-2xl flex-shrink-0">
+    <header class="bg-gradient-to-r from-theme-blue to-theme-purple text-white py-2 sticky top-0 z-40 shadow-2xl flex-shrink-0">
         <div class="container mx-auto px-4 flex items-center justify-between">
             <!-- Left side: Hamburger (mobile) and Logo -->
             <div class="flex items-center space-x-4">
@@ -297,9 +409,9 @@
                 <button id="hamburger-btn" class="md:hidden text-2xl text-white"> <!-- Adjusted text color -->
                     <i class="fas fa-bars"></i>
                 </button>
-                <div class="flex items-center text-3xl font-bold transform hover:scale-105 transition-transform cursor-pointer" onclick="renderAllProducts()">
+                <div class="flex items-center text-2xl font-bold transform hover:scale-105 transition-transform cursor-pointer" onclick="renderAllProducts()">
                     <!-- LOGO STYLING UPDATE: Wrap icon in white circle -->
-                    <div class="w-12 h-12 rounded-full bg-white flex items-center justify-center p-1 shadow-md mr-2 flex-shrink-0">
+                    <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center p-1 shadow-md mr-2 flex-shrink-0">
                          <img src="https://github.com/tangailbuzzbd-svg/TangailBuzz-Picture-/blob/main/gdrg_upscaled%20(1).png?raw=true" alt="TangailBuzz Logo Icon" class="h-full w-full object-contain">
                     </div>
                     <span class="hidden sm:inline text-white">TangailBuzz</span> <!-- Text remains white -->
@@ -314,6 +426,8 @@
                     <li><a href="#products" onclick="showPage('home-page'); scrollToElement('products')" class="text-white hover:text-theme-pink font-semibold transition-colors" data-lang="products">পণ্য</a></li> <!-- Adjusted text color -->
                     <li><a href="#categories" onclick="showPage('home-page'); scrollToElement('categories')" class="text-white hover:text-theme-pink font-semibold transition-colors" data-lang="categories">ক্যাটাগরি</a></li> <!-- Adjusted text color -->
                     <li><a href="javascript:void(0);" onclick="showOffers()" class="text-white hover:text-theme-pink font-semibold transition-colors" data-lang="offers">অফার</a></li> <!-- Adjusted text color -->
+                    <li><a href="javascript:void(0);" onclick="showPage('home-page'); scrollToElement('flash-sale-section')" class="text-white hover:text-theme-pink font-semibold transition-colors" data-lang="flash-sale-nav">ফ্ল্যাশ সেল</a></li>
+                    <li><a href="javascript:void(0);" onclick="showPage('home-page'); scrollToElement('mega-sale-section')" class="text-white hover:text-theme-pink font-semibold transition-colors" data-lang="mega-sale-nav">মেগা সেল</a></li>
                 </ul>
             </nav>
 
@@ -337,6 +451,20 @@
                     <i class="fas fa-sun" id="dark-mode-icon"></i>
                     <span class="hidden md:block text-[10px] leading-3 mt-1 text-white/90" data-lang="dark-mode">ডার্ক মোড</span> <!-- Adjusted text color -->
                 </button>
+
+                <!-- Language Toggle -->
+                <div class="hidden md:block">
+                    <div class="language-toggle-container">
+                        <input type="checkbox" id="lang-switch" class="toggle-checkbox" checked>
+                        <label for="lang-switch" class="toggle-slider" aria-label="Language Toggle" data-lang-aria-label="language-label">
+                            <span class="label-en">EN</span>
+                            <span class="label-bn">BN</span>
+                            <div class="toggle-knob">
+                                <img id="flag-icon" src="https://flagcdn.com/w40/bd.png" alt="Bangladesh Flag">
+                            </div>
+                        </label>
+                    </div>
+                </div>
                 
                 <!-- Support (Header) -->
                  <!-- Adjusted styles for gradient header -->
@@ -365,7 +493,7 @@
             </div>
         </div>
         <!-- Search bar for mobile -->
-        <div class="md:hidden mt-4 px-4">
+    <div class="md:hidden mt-2 px-4">
             <div class="relative w-full">
                 <div class="flex items-stretch rounded-full overflow-hidden shadow-md bg-white dark:bg-gray-900"> <!-- Search BG remains white/dark -->
                     <input type="text" id="search-input-mobile" placeholder="পণ্য খুঁজুন..." class="flex-1 min-w-0 px-4 py-2 outline-none focus:ring-2 focus:ring-theme-pink bg-transparent text-sm text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-400">
@@ -394,7 +522,7 @@
         <div class="bg-white dark:bg-gray-800 rounded-3xl p-8 max-w-md w-full mx-4 shadow-2xl">
             <div class="flex justify-between items-center mb-6">
                 <h3 class="text-2xl font-bold text-theme-purple" data-lang="payment-method">পেমেন্ট পদ্ধতি নির্বাচন করুন</h3>
-                <button onclick="closePaymentModal()" class="text-gray-500 hover:text-gray-800 text-3xl">&times;</button>
+                <button onclick="closePaymentModal()" class="text-gray-500 hover:text-gray-800 text-3xl">×</button>
             </div>
             <!-- Shipping Address Selection -->
             <div id="shipping-address-section" class="mb-6 p-4 border rounded-xl bg-gray-50 dark:bg-gray-900/40">
@@ -420,7 +548,7 @@
                     <span class="ml-4 font-semibold" data-lang="mobile-banking">মোবাইল ব্যাংকিং</span>
                 </label>
                  <label class="flex items-center p-4 border rounded-lg cursor-pointer has-[:checked]:bg-blue-50 dark:has-[:checked]:bg-blue-900 has-[:checked]:border-theme-blue">
-                    <input type="radio" name="main-payment" value="Cash on Delivery" class="w-5 h-5 accent-theme-blue" checked>
+                    <input type="radio" name="main-payment" value="Cash on Delivery" class="w-5 h-5 accent-theme-blue" checked="">
                     <span class="ml-4 font-semibold" data-lang="cod">ক্যাশ অন ডেলিভারি</span>
                 </label>
 
@@ -471,7 +599,7 @@
 
     <!-- Mobile Navigation Drawer (Left) -->
     <div id="nav-drawer" class="drawer left fixed top-0 left-0 h-full w-64 bg-white dark:bg-gray-800 shadow-lg z-50 p-6">
-        <button onclick="closeDrawer()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl">&times;</button>
+        <button onclick="closeDrawer()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl">×</button>
     <h3 class="text-2xl font-bold text-theme-purple mb-8">মেনু</h3>
         <nav>
             <ul class="space-y-4">
@@ -485,6 +613,19 @@
                 <li><a href="javascript:void(0);" onclick="closeDrawer(); setTimeout(() => showPage('support-page'), 200);" class="text-lg font-semibold text-gray-700 hover:text-theme-blue" data-lang="emergency-contact">সাপোর্ট</a></li>
                 <li><a href="javascript:void(0);" onclick="closeDrawer(); setTimeout(() => openDrawer('cart-drawer'), 200);" class="text-lg font-semibold text-gray-700 hover:text-theme-blue" data-lang="cart-short">কার্ট</a></li>
             </ul>
+            <div class="mt-10">
+                <p class="text-sm font-semibold text-gray-500 uppercase tracking-wide" data-lang="language-menu-heading">ভাষা নির্বাচন করুন</p>
+                <div class="mt-3 grid grid-cols-2 gap-3">
+                    <button type="button" class="language-option px-4 py-2 rounded-full border border-theme-blue text-theme-blue font-semibold transition-colors hover:bg-theme-blue hover:text-white" data-lang-option="bn">
+                        <span data-lang="language-bangla">বাংলা</span>
+                        <i class="fas fa-check lang-active-indicator text-white hidden"></i>
+                    </button>
+                    <button type="button" class="language-option px-4 py-2 rounded-full border border-theme-blue text-theme-blue font-semibold transition-colors hover:bg-theme-blue hover:text-white" data-lang-option="en">
+                        <span data-lang="language-english">ইংরেজি</span>
+                        <i class="fas fa-check lang-active-indicator text-white hidden"></i>
+                    </button>
+                </div>
+            </div>
         </nav>
     </div>
 
@@ -492,7 +633,7 @@
     <div id="cart-drawer" class="drawer fixed top-0 right-0 h-full w-full max-w-sm bg-white dark:bg-gray-800 shadow-lg z-50 flex flex-col">
         <div class="p-6 border-b flex justify-between items-center">
             <h3 class="text-2xl font-bold text-theme-purple" data-lang="cart">আপনার কার্ট</h3>
-            <button onclick="closeDrawer()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-3xl">&times;</button>
+            <button onclick="closeDrawer()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-3xl">×</button>
         </div>
         <div id="cart-items" class="p-6 space-y-6 flex-grow overflow-y-auto">
             <!-- Cart items will be dynamically inserted here -->
@@ -533,206 +674,188 @@
     
     <!-- Profile Drawer (Right) -->
     <div id="profile-drawer" class="drawer fixed top-0 right-0 h-full w-full max-w-sm bg-white dark:bg-gray-800 shadow-lg z-50 overflow-y-auto">
-        <div class="p-6 text-center relative">
-            <button onclick="closeDrawer()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl">&times;</button>
-            <h3 id="profile-drawer-title" class="text-3xl font-bold text-theme-purple mb-8" data-lang="your-account">আপনার অ্যাকাউন্ট</h3>
+        <div class="p-6 relative space-y-8">
+            <button onclick="closeDrawer()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl leading-none" aria-label="Close drawer">×</button>
+            <h3 id="profile-drawer-title" class="text-3xl font-bold text-theme-purple text-center" data-lang="your-account">আপনার অ্যাকাউন্ট</h3>
 
-            <div class="block md:hidden space-y-3 text-left mb-6">
-                <button type="button" class="w-full flex items-center justify-between px-4 py-3 rounded-xl bg-theme-blue text-white font-semibold shadow-md hover:bg-theme-purple transition-colors" onclick="closeDrawer(); showPage('my-orders-page');">
-                    <span><i class="fas fa-box-open mr-3"></i>আমার অর্ডার</span>
-                    <i class="fas fa-chevron-right text-sm"></i>
-                </button>
-                <button type="button" class="w-full flex items-center justify-between px-4 py-3 rounded-xl bg-white text-theme-blue border border-theme-blue font-semibold shadow-sm hover:bg-theme-blue hover:text-white transition-colors" onclick="closeDrawer(); showPage('wishlist-page');">
-                    <span><i class="fas fa-heart mr-3"></i>উইশলিস্ট</span>
-                    <i class="fas fa-chevron-right text-sm"></i>
-                </button>
-                <button type="button" class="w-full flex items-center justify-between px-4 py-3 rounded-xl bg-white text-theme-blue border border-theme-blue font-semibold shadow-sm hover:bg-theme-blue hover:text-white transition-colors" onclick="closeDrawer(); showPage('support-page');">
-                    <span><i class="fas fa-headset mr-3"></i>সাপোর্টে যোগাযোগ</span>
-                    <i class="fas fa-chevron-right text-sm"></i>
-                </button>
-                <button type="button" class="mobile-profile-toggle w-full flex items-center justify-between px-4 py-2 rounded-xl bg-gray-100 text-gray-700 dark:bg-gray-900/60 dark:text-gray-200 border border-gray-200 dark:border-gray-700 text-sm font-semibold" onclick="toggleMobileProfileDetails(this);">
-                    <span><i class="fas fa-user-cog mr-3"></i>অ্যাকাউন্ট সেটিংস</span>
-                    <i class="fas fa-plus text-xs"></i>
-                </button>
-            </div>
-
-            <div id="profile-full-section" class="hidden md:block space-y-4">
-                <!-- Logged OUT state -->
-                <div id="auth-options">
-                    <!-- Login Form -->
-                    <form id="login-form" class="space-y-4 text-left">
-                        <input type="email" id="login-email" placeholder="ইমেইল" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-700">
-                        <input type="password" id="login-password" placeholder="পাসওয়ার্ড" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-700">
-                        <button type="submit" class="w-full py-3 bg-theme-blue text-white rounded-full font-bold hover:bg-theme-purple transition-colors">লগইন</button>
-                        <div class="flex justify-between text-sm">
-                            <a href="#" id="show-reset-form" class="text-theme-blue hover:underline">পাসওয়ার্ড ভুলে গেছেন?</a>
-                            <span></span>
-                        </div>
-                        <p class="text-center text-sm">অ্যাকাউন্ট নেই? <a href="#" id="show-register-form" class="text-theme-blue hover:underline">রেজিস্টার করুন</a></p>
-                    </form>
-
-                    <!-- Reset Password Form (hidden by default) -->
-                    <form id="reset-form" class="hidden space-y-4 text-left">
-                        <p class="text-sm text-gray-600">আপনার অ্যাকাউন্টের ইমেইল দিন। আমরা পাসওয়ার্ড রিসেট করার লিংক পাঠাবো।</p>
-                        <input type="email" id="reset-email" placeholder="ইমেইল" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-700">
-                        <button type="submit" class="w-full py-3 bg-theme-blue text-white rounded-full font-bold hover:bg-theme-purple transition-colors">রিসেট লিংক পাঠান</button>
-                        <p class="text-center text-sm">পাসওয়ার্ড মনে পড়েছে? <a href="#" id="show-login-from-reset" class="text-theme-blue hover:underline">লগইনে ফিরে যান</a></p>
-                    </form>
-
-                    <!-- Register Form (hidden by default) -->
-                    <form id="register-form" class="hidden space-y-4 text-left">
-                        <input type="text" id="register-name" placeholder="পূর্ণ নাম" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-700">
-                        <input type="tel" id="register-mobile" placeholder="মোবাইল নম্বর" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-700">
-                        <input type="text" id="register-location" placeholder="লোকেশন" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-700">
-                        <input type="email" id="register-email" placeholder="ইমেইল" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-700">
-                        <input type="password" id="register-password" placeholder="পাসওয়ার্ড" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-700">
-                        <button type="submit" class="w-full py-3 bg-theme-blue text-white rounded-full font-bold hover:bg-theme-purple transition-colors">রেজিস্টার</button>
-                        <p class="text-center text-sm">আগেই অ্যাকাউন্ট আছে? <a href="#" id="show-login-form" class="text-theme-blue hover:underline">লগইন করুন</a></p>
-                    </form>
-                    
-                    <div class="relative flex py-2 items-center">
-                        <div class="flex-grow border-t border-gray-300"></div>
-                        <span class="flex-shrink mx-4 text-gray-400 text-sm">অথবা</span>
-                        <div class="flex-grow border-t border-gray-300"></div>
+            <div id="auth-options" class="space-y-6">
+                <form id="login-form" class="space-y-4 text-left">
+                    <div class="space-y-1">
+                        <label for="login-email" class="block text-sm font-semibold text-gray-700 dark:text-gray-200" data-lang="email">ইমেইল</label>
+                        <input id="login-email" type="email" autocomplete="email" class="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-theme-blue" required>
                     </div>
-                    
-                    <button id="login-google-btn" class="w-full py-3 px-6 bg-white border border-gray-300 text-gray-700 rounded-full font-bold hover:bg-gray-100 transition-colors shadow-lg flex items-center justify-center">
-                        <i class="fab fa-google mr-2 text-xl"></i>
-                        <span data-lang="signin-google">Google দিয়ে সাইন ইন করুন</span>
-                    </button>
-                    <button id="login-facebook-btn" class="mt-3 w-full py-3 px-6 bg-[#1877F2] text-white rounded-full font-bold hover:bg-[#165FDB] transition-colors shadow-lg flex items-center justify-center">
-                        <i class="fab fa-facebook mr-2 text-xl"></i>
-                        <span>Facebook দিয়ে চালিয়ে যান</span>
-                    </button>
-                     <p id="auth-error" class="text-red-500 text-sm mt-2 h-4"></p>
-                </div>
-
-                <!-- Logged IN state -->
-                <div id="user-profile-view" class="hidden">
-                    <!-- User Info Section -->
-                    <div class="space-y-2 mb-8">
-                        <img id="user-photo" src="" alt="User Photo" class="w-24 h-24 rounded-full mx-auto shadow-xl object-cover border-4 border-theme-purple/30">
-                        <p id="user-name" class="mt-4 text-xl font-bold text-theme-purple"></p>
-                        <p id="user-email" class="text-sm text-gray-500"></p>
-                        <div class="flex items-center justify-center space-x-1 text-sm mt-2">
-                             <p id="user-mobile" class="text-sm text-gray-600"></p>
-                        </div>
-                        <div class="flex items-center justify-center space-x-1 text-sm">
-                            <p id="user-location" class="text-sm text-gray-600"></p>
-                        </div>
+                    <div class="space-y-1">
+                        <label for="login-password" class="block text-sm font-semibold text-gray-700 dark:text-gray-200" data-lang="password">পাসওয়ার্ড</label>
+                        <input id="login-password" type="password" autocomplete="current-password" class="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-theme-blue" required>
                     </div>
-
-                    <!-- Button Actions Group -->
-                    <div class="space-y-4">
-                        
-                        <!-- My Orders (Theme Blue) -->
-                        <button id="my-orders-btn-profile" class="w-full py-3 bg-theme-blue text-white rounded-xl font-semibold hover:bg-theme-purple transition-colors shadow-md flex items-center justify-between px-4" data-lang="my-orders">
-                            <span><i class="fas fa-box-open mr-3"></i> আমার অর্ডার</span>
-                            <i class="fas fa-chevron-right text-sm"></i>
-                        </button>
-
-                        <!-- Emergency Contact moved to header -->
-                        
-                        <!-- Edit Profile (Grey/Secondary) -->
-                        <button id="edit-profile-btn" class="w-full py-3 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-xl font-semibold hover:bg-gray-300 transition-colors shadow-md flex items-center justify-between px-4">
-                            <span><i class="fas fa-user-edit mr-3"></i> প্রোফাইল সম্পাদনা</span>
-                            <i class="fas fa-chevron-right text-sm"></i>
-                        </button>
-                        <!-- Manage Addresses -->
-                        <button id="manage-addresses-btn" class="w-full py-3 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-xl font-semibold hover:bg-gray-300 transition-colors shadow-md flex items-center justify-between px-4">
-                            <span><i class="fas fa-location-dot mr-3"></i> ঠিকানা পরিচালনা</span>
-                            <i class="fas fa-chevron-right text-sm"></i>
-                        </button>
-                        
-                        <!-- Logout (Prominent) -->
-                         <button id="logout-btn" class="w-full py-3 bg-theme-pink text-white rounded-xl font-semibold hover:bg-theme-purple transition-colors shadow-lg mt-8 flex items-center justify-between px-4" data-lang="logout">
-                            <span><i class="fas fa-sign-out-alt mr-3"></i> লগআউট</span>
-                            <i class="fas fa-chevron-right text-sm"></i>
-                        </button>
-
-                        <!-- Delete Account (Danger, Separate) -->
-                    <button id="delete-account-btn" class="w-full py-3 bg-red-500 text-white rounded-xl font-semibold hover:bg-red-600 transition-colors shadow-md flex items-center justify-center mt-4">
-                        <i class="fas fa-trash-alt mr-2"></i> অ্যাকাউন্ট মুছুন
-                    </button>
-
-                    </div>
-                </div>
-                 <!-- Edit Profile Form -->
-                <form id="edit-profile-form" class="hidden text-left space-y-4">
-                    <div class="text-center">
-                         <img id="edit-photo-preview" src="" alt="Profile Photo Preview" class="w-24 h-24 rounded-full mx-auto shadow-lg object-cover mb-2">
-                         <input type="file" id="edit-photo-input" accept="image/*" class="text-sm w-full">
-                         <button type="button" id="remove-photo-btn" class="mt-2 px-4 py-2 text-sm rounded-full border border-red-400 text-red-600 hover:bg-red-50 transition-colors">ছবি সরান</button>
-                    </div>
-                    <div>
-                        <label for="edit-name-input" class="block text-sm font-medium text-gray-700">নাম</label>
-                        <input type="text" id="edit-name-input" class="w-full mt-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-700">
-                    </div>
-                    <div>
-                        <label for="edit-mobile-input" class="block text-sm font-medium text-gray-700">মোবাইল নম্বর</label>
-                        <input type="text" id="edit-mobile-input" placeholder="e.g., 01xxxxxxxxx" class="w-full mt-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-700">
-                    </div>
-                     <div>
-                        <label for="edit-location-input" class="block text-sm font-medium text-gray-700">লোকেশন</label>
-                        <input type="text" id="edit-location-input" placeholder="e.g., Dhaka, Bangladesh" class="w-full mt-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-700">
-                    </div>
-                    <div class="flex gap-4 pt-4">
-                        <button type="button" id="cancel-edit-btn" class="w-full py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-full font-bold hover:bg-gray-300 transition-colors">বাতিল</button>
-                        <button type="submit" id="save-profile-btn" class="w-full py-2 bg-theme-blue text-white rounded-full font-bold hover:bg-theme-purple transition-colors flex items-center justify-center">
-                            <span class="btn-text">পরিবর্তন সংরক্ষণ করুন</span>
-                            <div class="loader-small hidden"></div>
-                        </button>
+                    <button type="submit" class="w-full py-3 rounded-full bg-theme-blue text-white font-semibold hover:bg-theme-purple transition-colors" data-lang="login">লগইন করুন</button>
+                    <div class="flex items-center justify-between text-sm">
+                        <a id="show-register-form" href="#" class="text-theme-blue font-semibold hover:underline" data-lang="create-account">অ্যাকাউন্ট তৈরি করুন</a>
+                        <a id="show-reset-form" href="#" class="text-theme-blue hover:underline" data-lang="forgot-password">পাসওয়ার্ড ভুলে গেছেন?</a>
                     </div>
                 </form>
 
-                <!-- Addresses Management Section -->
-                <div id="addresses-section" class="hidden text-left space-y-4 mt-6">
-                    <h4 class="text-xl font-bold text-theme-purple">শিপিং ঠিকানা সমূহ</h4>
-                    <div id="addresses-list" class="space-y-3">
-                        <!-- Address cards injected here -->
+                <form id="register-form" class="hidden space-y-4 text-left">
+                    <div class="space-y-1">
+                        <label for="register-name" class="block text-sm font-semibold text-gray-700 dark:text-gray-200" data-lang="full-name">পূর্ণ নাম</label>
+                        <input id="register-name" type="text" autocomplete="name" class="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-theme-blue" required>
                     </div>
-                    <div class="p-4 border rounded-xl bg-gray-50 dark:bg-gray-800/50">
-                        <h5 id="address-form-title" class="font-semibold mb-3">নতুন ঠিকানা যোগ করুন</h5>
-                        <form id="address-form" class="grid grid-cols-1 gap-3">
-                            <input type="hidden" id="address-id-hidden" />
-                            <div>
-                                <label class="block text-sm font-medium">পূর্ণ নাম</label>
-                                <input id="addr-name" type="text" class="w-full mt-1 px-3 py-2 border rounded-lg bg-white dark:bg-gray-700" required />
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium">মোবাইল</label>
-                                <input id="addr-mobile" type="text" class="w-full mt-1 px-3 py-2 border rounded-lg bg-white dark:bg-gray-700" required />
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium">ঠিকানা লাইন ১</label>
-                                <input id="addr-line1" type="text" class="w-full mt-1 px-3 py-2 border rounded-lg bg-white dark:bg-gray-700" required />
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium">ঠিকানা লাইন ২ (ঐচ্ছিক)</label>
-                                <input id="addr-line2" type="text" class="w-full mt-1 px-3 py-2 border rounded-lg bg-white dark:bg-gray-700" />
-                            </div>
-                            <div class="grid grid-cols-2 gap-3">
-                                <div>
-                                    <label class="block text-sm font-medium">শহর</label>
-                                    <input id="addr-city" type="text" class="w-full mt-1 px-3 py-2 border rounded-lg bg-white dark:bg-gray-700" required />
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium">এলাকা/জেলা</label>
-                                    <input id="addr-area" type="text" class="w-full mt-1 px-3 py-2 border rounded-lg bg-white dark:bg-gray-700" />
-                                </div>
-                            </div>
-                            <label class="inline-flex items-center gap-2 mt-1">
-                                <input id="addr-default" type="checkbox" class="w-4 h-4" />
-                                <span>ডিফল্ট হিসেবে নির্ধারণ করুন</span>
-                            </label>
-                            <div class="flex gap-3 pt-2">
-                                <button id="save-address-btn" type="submit" class="w-full py-2 bg-theme-blue text-white rounded-full font-bold hover:bg-theme-purple transition-colors">ঠিকানা সংরক্ষণ করুন</button>
-                                <button id="cancel-address-btn" type="button" class="w-full py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-full font-bold hover:bg-gray-300 transition-colors">বাতিল</button>
-                            </div>
-                        </form>
+                    <div class="space-y-1">
+                        <label for="register-mobile" class="block text-sm font-semibold text-gray-700 dark:text-gray-200" data-lang="mobile-number">মোবাইল নম্বর</label>
+                        <input id="register-mobile" type="tel" autocomplete="tel" class="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-theme-blue">
+                    </div>
+                    <div class="space-y-1">
+                        <label for="register-location" class="block text-sm font-semibold text-gray-700 dark:text-gray-200" data-lang="location">অবস্থান</label>
+                        <input id="register-location" type="text" autocomplete="address-level2" class="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-theme-blue">
+                    </div>
+                    <div class="space-y-1">
+                        <label for="register-email" class="block text-sm font-semibold text-gray-700 dark:text-gray-200" data-lang="email">ইমেইল</label>
+                        <input id="register-email" type="email" autocomplete="email" class="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-theme-blue" required>
+                    </div>
+                    <div class="space-y-1">
+                        <label for="register-password" class="block text-sm font-semibold text-gray-700 dark:text-gray-200" data-lang="password">পাসওয়ার্ড</label>
+                        <input id="register-password" type="password" autocomplete="new-password" class="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-theme-blue" required>
+                    </div>
+                    <button type="submit" class="w-full py-3 rounded-full bg-theme-blue text-white font-semibold hover:bg-theme-purple transition-colors" data-lang="register">রেজিস্টার করুন</button>
+                    <p class="text-sm text-center text-gray-600 dark:text-gray-300">
+                        <span data-lang="have-account">ইতোমধ্যে অ্যাকাউন্ট আছে?</span>
+                        <a id="show-login-form" href="#" class="text-theme-blue font-semibold hover:underline" data-lang="login">লগইন করুন</a>
+                    </p>
+                </form>
+
+                <form id="reset-form" class="hidden space-y-4 text-left">
+                    <p class="text-sm text-gray-600 dark:text-gray-300" data-lang="reset-password-desc">আপনার নিবন্ধিত ইমেইল দিন, আমরা একটি রিসেট লিঙ্ক পাঠাবো।</p>
+                    <div class="space-y-1">
+                        <label for="reset-email" class="block text-sm font-semibold text-gray-700 dark:text-gray-200" data-lang="email">ইমেইল</label>
+                        <input id="reset-email" type="email" autocomplete="email" class="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-theme-blue" required>
+                    </div>
+                    <button type="submit" class="w-full py-3 rounded-full bg-theme-blue text-white font-semibold hover:bg-theme-purple transition-colors" data-lang="send-reset-link">রিসেট লিঙ্ক পাঠান</button>
+                    <a id="show-login-from-reset" href="#" class="block text-center text-sm text-theme-blue font-semibold hover:underline" data-lang="back-to-login">লগইনে ফিরে যান</a>
+                </form>
+
+                <div class="space-y-3">
+                    <button id="login-google-btn" type="button" class="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-full border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <i class="fab fa-google text-lg text-red-500"></i>
+                        <span data-lang="login-google">গুগল দিয়ে লগইন করুন</span>
+                    </button>
+                    <button id="login-facebook-btn" type="button" class="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-full border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <i class="fab fa-facebook text-lg text-blue-600"></i>
+                        <span data-lang="login-facebook">ফেসবুক দিয়ে লগইন করুন</span>
+                    </button>
+                </div>
+
+                <p id="auth-error" class="text-sm text-red-600 text-center"></p>
+            </div>
+
+            <div id="user-profile-view" class="hidden space-y-6">
+                <div class="flex flex-col items-center text-center space-y-3">
+                    <img id="user-photo" src="https://placehold.co/96x96/6a0dad/white?text=User" alt="User avatar" class="w-24 h-24 rounded-full object-cover shadow-md">
+                    <div class="space-y-1 text-sm text-gray-600 dark:text-gray-300">
+                        <p id="user-name" class="text-lg font-semibold text-gray-900 dark:text-gray-100"></p>
+                        <p id="user-email"></p>
+                        <p id="user-mobile"></p>
+                        <p id="user-location"></p>
+                    </div>
+                </div>
+
+                <button type="button" class="mobile-profile-toggle md:hidden w-full flex items-center justify-between px-4 py-2 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100 font-semibold">
+                    <span data-lang="account-options">অ্যাকাউন্ট অপশন</span>
+                    <i class="fas fa-plus text-xs"></i>
+                </button>
+
+                <div id="profile-full-section" class="space-y-4">
+                    <div class="space-y-3">
+                        <button id="edit-profile-btn" type="button" class="w-full px-4 py-3 rounded-full bg-theme-blue text-white font-semibold hover:bg-theme-purple transition-colors" data-lang="edit-profile">প্রোফাইল সম্পাদনা</button>
+                        <button id="my-orders-btn-profile" type="button" class="w-full px-4 py-3 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100 font-semibold hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors" data-lang="my-orders">আমার অর্ডার</button>
+                        <button id="manage-addresses-btn" type="button" class="w-full px-4 py-3 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100 font-semibold hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors" data-lang="manage-address">ঠিকানা ম্যানেজ করুন</button>
+                    </div>
+                    <div class="space-y-3">
+                        <button id="logout-btn" type="button" class="w-full px-4 py-3 rounded-full bg-theme-pink text-white font-semibold hover:bg-theme-purple transition-colors" data-lang="logout">লগ আউট</button>
+                        <button id="delete-account-btn" type="button" class="w-full px-4 py-3 rounded-full bg-red-100 text-red-600 font-semibold hover:bg-red-200 transition-colors" data-lang="delete-account">অ্যাকাউন্ট মুছুন</button>
                     </div>
                 </div>
             </div>
+
+            <form id="edit-profile-form" class="hidden space-y-5 text-left">
+                <div class="flex items-center gap-4">
+                    <img id="edit-photo-preview" src="https://placehold.co/96x96/6a0dad/white?text=User" alt="Profile preview" class="w-16 h-16 rounded-full object-cover shadow">
+                    <div class="space-y-2">
+                        <label class="inline-flex items-center gap-2 px-3 py-2 border border-dashed border-gray-300 dark:border-gray-600 rounded-full bg-white dark:bg-gray-700 text-sm font-semibold cursor-pointer hover:border-theme-blue">
+                            <i class="fas fa-upload text-theme-blue"></i>
+                            <span data-lang="upload-photo">ছবি আপলোড করুন</span>
+                            <input id="edit-photo-input" type="file" accept="image/*" class="hidden">
+                        </label>
+                        <button id="remove-photo-btn" type="button" class="text-sm text-red-600 hover:underline" data-lang="remove-photo">ছবি সরান</button>
+                    </div>
+                </div>
+                <div>
+                    <label for="edit-name-input" class="block text-sm font-semibold text-gray-700 dark:text-gray-200" data-lang="full-name">পূর্ণ নাম</label>
+                    <input id="edit-name-input" type="text" class="w-full mt-1 px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-theme-blue" required>
+                </div>
+                <div>
+                    <label for="edit-mobile-input" class="block text-sm font-semibold text-gray-700 dark:text-gray-200" data-lang="mobile-number">মোবাইল নম্বর</label>
+                    <input id="edit-mobile-input" type="tel" class="w-full mt-1 px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-theme-blue">
+                </div>
+                <div>
+                    <label for="edit-location-input" class="block text-sm font-semibold text-gray-700 dark:text-gray-200" data-lang="location">অবস্থান</label>
+                    <input id="edit-location-input" type="text" class="w-full mt-1 px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-theme-blue">
+                </div>
+                <div class="flex gap-3 pt-2">
+                    <button id="save-profile-btn" type="submit" class="flex-1 py-3 rounded-full bg-theme-blue text-white font-semibold hover:bg-theme-purple transition-colors flex items-center justify-center gap-2">
+                        <span class="btn-text" data-lang="save-changes">পরিবর্তন সংরক্ষণ করুন</span>
+                        <span class="loader-small hidden"></span>
+                    </button>
+                    <button id="cancel-edit-btn" type="button" class="flex-1 py-3 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100 font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" data-lang="cancel">বাতিল</button>
+                </div>
+            </form>
+
+            <section id="addresses-section" class="hidden space-y-4 text-left">
+                <header class="space-y-1">
+                    <h4 class="text-lg font-semibold text-gray-900 dark:text-gray-100" data-lang="saved-addresses">সংরক্ষিত ঠিকানাসমূহ</h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-300" data-lang="manage-address-help">আপনার ডেলিভারি ঠিকানাগুলো পরিচালনা করুন।</p>
+                </header>
+                <div id="addresses-list" class="space-y-3"></div>
+                <form id="address-form" class="space-y-4 p-4 border border-gray-200 dark:border-gray-700 rounded-2xl bg-gray-50 dark:bg-gray-900/40">
+                    <h5 id="address-form-title" class="text-base font-semibold text-gray-900 dark:text-gray-100">নতুন ঠিকানা যোগ করুন</h5>
+                    <input type="hidden" id="address-id-hidden">
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-200">পূর্ণ নাম</label>
+                            <input id="addr-name" type="text" class="w-full mt-1 px-3 py-2 border rounded-lg bg-white dark:bg-gray-700" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-200">মোবাইল</label>
+                            <input id="addr-mobile" type="tel" class="w-full mt-1 px-3 py-2 border rounded-lg bg-white dark:bg-gray-700" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-200">ঠিকানা লাইন ১</label>
+                            <input id="addr-line1" type="text" class="w-full mt-1 px-3 py-2 border rounded-lg bg-white dark:bg-gray-700" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-200">ঠিকানা লাইন ২ (ঐচ্ছিক)</label>
+                            <input id="addr-line2" type="text" class="w-full mt-1 px-3 py-2 border rounded-lg bg-white dark:bg-gray-700">
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-200">শহর</label>
+                                <input id="addr-city" type="text" class="w-full mt-1 px-3 py-2 border rounded-lg bg-white dark:bg-gray-700" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-200">এলাকা/জেলা</label>
+                                <input id="addr-area" type="text" class="w-full mt-1 px-3 py-2 border rounded-lg bg-white dark:bg-gray-700">
+                            </div>
+                        </div>
+                    </div>
+                    <label class="inline-flex items-center gap-2">
+                        <input id="addr-default" type="checkbox" class="w-4 h-4">
+                        <span class="text-sm text-gray-700 dark:text-gray-200">ডিফল্ট হিসেবে নির্ধারণ করুন</span>
+                    </label>
+                    <div class="flex gap-3 pt-2">
+                        <button id="save-address-btn" type="submit" class="flex-1 py-2 bg-theme-blue text-white rounded-full font-semibold hover:bg-theme-purple transition-colors">ঠিকানা সংরক্ষণ করুন</button>
+                        <button id="cancel-address-btn" type="button" class="flex-1 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100 rounded-full font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">বাতিল</button>
+                    </div>
+                </form>
+            </section>
         </div>
     </div>
 
@@ -791,8 +914,8 @@
             <!-- Top Category Strip (Under Header, Above Banner) -->
             <section id="top-category-strip" class="container mx-auto px-4 pt-4">
                 <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-md border border-gray-100 dark:border-gray-700">
-                    <div id="top-category-strip-list" class="flex gap-2 sm:gap-3 px-4 py-3 overflow-x-auto items-center">
-                        <!-- Dynamic category chips and inline dropdown will render here -->
+                    <div id="top-category-strip-list" class="flex gap-2 sm:gap-3 lg:gap-4 px-4 py-3 overflow-x-auto items-center scrollbar-thin">
+                        <!-- Dynamic category buttons will render here -->
                     </div>
                 </div>
             </section>
@@ -825,7 +948,7 @@
                     <!-- Right: Promo Tile (tall) -->
                     <aside class="lg:col-span-1">
                         <a id="right-promo-link" href="javascript:void(0)" onclick="scrollToElement('categories')" class="group block relative overflow-hidden rounded-2xl shadow-xl h-[220px] sm:h-[260px]">
-                            <img id="right-promo-img" src="https://images.unsplash.com/photo-1524594081293-190a2fe0baae?q=80&w=1200&auto=format&fit=crop" alt="Promo: Smart prices on accessories" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/ddd/000?text=Promo';">
+                            <img id="right-promo-img" src="https://images.unsplash.com/photo-1524594081293-190a2fe0baae?q=80&amp;w=1200&amp;auto=format&amp;fit=crop" alt="Promo: Smart prices on accessories" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/ddd/000?text=Promo';">
                             <div class="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors"></div>
                             <div class="absolute bottom-4 left-4 right-4 text-white drop-shadow space-y-1">
                                 <h3 id="right-promo-title" class="text-lg sm:text-2xl font-extrabold hidden"></h3>
@@ -839,30 +962,31 @@
             <!-- Hero Section removed: merged into composite above to match design -->
         
             <!-- Flash Sale Section -->
-            <section id="flash-sale-section" class="container mx-auto px-4 pt-4 pb-6 sm:pb-8 hidden">
-                <div class="relative overflow-hidden rounded-3xl shadow-xl bg-gradient-to-r from-theme-blue via-theme-purple to-theme-pink text-white">
-                    <div class="absolute -top-14 -right-12 h-56 w-56 rounded-full bg-white/10 blur-2xl"></div>
-                    <div class="absolute -bottom-16 -left-14 h-60 w-60 rounded-full bg-black/10 blur-3xl"></div>
-                    <div class="relative px-5 sm:px-8 py-6 sm:py-7 space-y-6">
-                        <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                            <div class="space-y-2.5 max-w-xl">
-                                <span class="inline-flex items-center gap-2 bg-white/15 border border-white/20 backdrop-blur-sm text-xs sm:text-sm font-semibold uppercase tracking-wide px-3 py-1 rounded-full">🔥 <span data-lang="flash-sale-badge">ফ্ল্যাশ</span></span>
-                                <div class="space-y-1.5">
-                                    <h2 id="flash-sale-heading" class="text-2xl sm:text-3xl font-extrabold leading-tight" data-lang="flash-sale-heading">ফ্ল্যাশ সেল</h2>
-                                    <p id="flash-sale-subheading" class="text-white/80 text-sm sm:text-base leading-relaxed" data-lang="flash-sale-subheading">সময় সীমিত অফার চলছে—শেষ হওয়ার আগেই কিনে ফেলুন!</p>
-                                </div>
+            <section id="flash-sale-section" class="container mx-auto px-4 pt-0.5 pb-1 hidden">
+                <div class="relative rounded-[13px] shadow-md overflow-hidden">
+                    <div class="relative overflow-hidden bg-gradient-to-r from-theme-blue via-theme-purple to-theme-pink text-white flash-sale-animated-bg">
+                        <div class="absolute -top-3.5 -right-3.5 h-16 w-16 rounded-full bg-white/10 blur-lg"></div>
+                        <div class="absolute -bottom-4 -left-4 h-20 w-20 rounded-full bg-black/10 blur-lg"></div>
+                        <div class="flash-sale-overlay-text" aria-hidden="true">
+                            <span>FLASH SALE • FLASH SALE • FLASH SALE • FLASH SALE • FLASH SALE • FLASH SALE •</span>
+                            <span>FLASH SALE • FLASH SALE • FLASH SALE • FLASH SALE • FLASH SALE • FLASH SALE •</span>
+                        </div>
+                        <div class="relative px-3.5 sm:px-4.5 py-1.5 flex flex-col gap-1.25 sm:flex-row sm:items-center sm:justify-between">
+                            <div class="flex flex-col gap-1.1 max-w-xl">
+                                <span class="inline-flex items-center gap-1.75 bg-white/15 border border-white/25 backdrop-blur-sm text-sm sm:text-base font-semibold uppercase tracking-wide px-3 py-0.85 rounded-full">🔥 <span data-lang="flash-sale-badge">ফ্ল্যাশ</span></span>
+                                <p id="flash-sale-subheading" class="text-white text-base sm:text-lg leading-relaxed font-semibold" data-lang="flash-sale-subheading">সময় সীমিত অফার চলছে—শেষ হওয়ার আগেই কিনে ফেলুন!</p>
                             </div>
-                            <div class="flex items-center gap-3 bg-white/15 border border-white/25 rounded-2xl px-5 py-3 backdrop-blur">
-                                <div class="flex flex-col">
-                                    <span id="flash-sale-countdown-label" class="text-xs sm:text-sm font-medium uppercase text-white/80" data-lang="flash-sale-countdown-label">শেষ হতে বাকি</span>
-                                    <span id="flash-sale-master-countdown" class="flash-sale-countdown text-xl sm:text-2xl font-bold tracking-tight">00:00:00</span>
+                            <div class="flex items-center gap-2.5 bg-white/15 border border-white/25 rounded-lg px-3.5 py-1 backdrop-blur">
+                                <div class="flex flex-col leading-tight">
+                                    <span id="flash-sale-countdown-label" class="text-sm sm:text-base font-semibold uppercase text-white/90" data-lang="flash-sale-countdown-label">শেষ হতে বাকি</span>
+                                    <span id="flash-sale-master-countdown" class="flash-sale-countdown text-xl sm:text-3xl font-extrabold tracking-tight">00:00:00</span>
                                 </div>
                             </div>
                         </div>
-                        <div id="flash-sale-empty" class="text-center text-white/80 text-sm sm:text-base hidden" data-lang="flash-sale-empty">এখন কোনো ফ্ল্যাশ ডিল নেই। আবারও দেখে যান।</div>
-                        <div class="bg-white/90 dark:bg-gray-900/80 rounded-2xl p-4 sm:p-5">
-                            <div id="flash-sale-grid" class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4"></div>
-                        </div>
+                    </div>
+                    <div class="bg-white/90 dark:bg-gray-900/80 px-2.5 sm:px-3.5 py-1.5 sm:py-2 space-y-1">
+                        <div id="flash-sale-empty" class="text-center text-gray-600 dark:text-gray-200 text-[10px] sm:text-xs hidden" data-lang="flash-sale-empty">এখন কোনো ফ্ল্যাশ ডিল নেই। আবারও দেখে যান।</div>
+                        <div id="flash-sale-grid" class="grid grid-cols-1 gap-1.5 sm:grid-cols-2 lg:grid-cols-4"></div>
                     </div>
                 </div>
             </section>
@@ -898,10 +1022,7 @@
             <section id="products" class="container mx-auto px-4 py-10 sm:py-16">
                 <!-- NEW: Breadcrumb and Sub-Category Header -->
                 <div id="category-header" class="hidden mb-8 p-4 bg-white dark:bg-gray-800 rounded-xl shadow-md border dark:border-gray-700">
-                    <div id="breadcrumb" class="text-sm text-gray-500 dark:text-gray-400 mb-4">
-                        <a href="javascript:void(0);" onclick="renderAllProducts()" class="text-theme-blue hover:underline" data-lang="all-products">সকল পণ্য</a>
-                        <span id="category-path"></span>
-                    </div>
+                    <div id="breadcrumb" class="text-sm text-gray-500 dark:text-gray-400 mb-4"></div>
                     <h2 id="current-category-title" class="text-3xl md:text-4xl font-bold mb-4 text-theme-purple text-center" data-lang="featured-products">বৈশিষ্ট্যযুক্ত পণ্য</h2>
                     <div id="subcategory-buttons" class="flex flex-wrap gap-3 justify-center">
                         <!-- Sub-category buttons will appear here -->
@@ -957,7 +1078,7 @@
             <section class="bg-gray-200 dark:bg-gray-800 py-10 sm:py-16">
                 <div class="container mx-auto px-4">
                     <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-8 sm:mb-10 relative after:content-[''] after:absolute after:bottom-[-10px] after:left-1/2 after:-translate-x-1/2 after:w-16 sm:after:w-20 after:h-1 after:bg-theme-pink after:rounded-full" data-lang="why-choose-us">আমাদেরকে কেন বেছে নিবেন</h2>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 sm:gap-6 lg:gap-8">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-5 sm:gap-6 lg:gap-8 max-w-5xl mx-auto">
                         <div class="p-5 sm:p-6 text-center animate-slide-in-up bg-white dark:bg-gray-900/40 rounded-2xl shadow-sm">
                             <div class="text-4xl sm:text-5xl text-theme-pink mb-3"><i class="fas fa-truck"></i></div>
                             <h3 class="text-xl font-semibold mb-2" data-lang="feature-delivery-title">দ্রুত ডেলিভারি</h3>
@@ -986,17 +1107,81 @@
         <!-- About Us Page -->
         <div id="about-us-page" class="hidden page">
              <section id="about-us" class="container mx-auto px-4 py-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-center mb-10 relative after:content-[''] after:absolute after:bottom-[-10px] after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-1 after:bg-theme-pink after:rounded-full">আমাদের সম্পর্কে</h2>
-                <div class="bg-white dark:bg-gray-800 p-8 md:p-12 rounded-3xl shadow-xl space-y-8">
-                    <p class="text-lg leading-relaxed text-gray-700 dark:text-gray-300">
-                        TangailBuzz একটি বিশ্বস্ত অনলাইন শপিং প্ল্যাটফর্ম যা সাশ্রয়ী মূল্যে মানসম্মত পণ্য সরবরাহ করতে প্রতিশ্রুতিবদ্ধ। আমরা গ্রাহকদের একটি সহজ এবং আনন্দদায়ক কেনাকাটার অভিজ্ঞতা দিতে বদ্ধপরিকর। আমাদের লক্ষ্য হল সকলের কাছে সেরা পণ্য পৌঁছে দেওয়া, যাতে তারা ঘরে বসেই তাদের পছন্দের জিনিস কিনতে পারেন।
-                    </p>
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-10 relative after:content-[''] after:absolute after:bottom-[-10px] after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-1 after:bg-theme-pink after:rounded-full" data-lang="about-heading">আমাদের সম্পর্কে</h2>
+                <div class="bg-white dark:bg-gray-800 p-8 md:p-12 rounded-3xl shadow-xl space-y-10">
+                    <div class="space-y-4">
+                        <h3 class="text-2xl font-bold text-theme-purple" data-lang="about-tagline-title">TangailBuzz: আপনার বিশ্বস্ত অনলাইন শপিং গন্তব্য</h3>
+                        <p class="text-lg leading-relaxed text-gray-700 dark:text-gray-300" data-lang="about-tagline-body">
+                            TangailBuzz একটি প্রতিশ্রুতিশীল ই-কমার্স প্ল্যাটফর্ম, যা ক্রেতা-কেন্দ্রিক পরিষেবা প্রদানের মাধ্যমে বাংলাদেশের অনলাইন শপিং-এর অভিজ্ঞতাকে নতুন মাত্রা দিতে বদ্ধপরিকর।
+                        </p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <h3 class="text-xl font-semibold text-theme-blue" data-lang="about-commitment-title">আমাদের অঙ্গীকার: মান, সাশ্রয় ও সহজলভ্যতা</h3>
+                        <p class="text-gray-700 dark:text-gray-300 leading-relaxed" data-lang="about-commitment-body">
+                            আমরা বিশ্বাস করি, মানসম্মত পণ্য কেনা প্রতিটি মানুষের অধিকার। এই নীতিতে বিশ্বাস রেখে, TangailBuzz সর্বোচ্চ মানসম্মত পণ্যগুলো সাশ্রয়ী মূল্যে আপনার কাছে পৌঁছে দিতে অঙ্গীকারবদ্ধ। আমরা পণ্যের গুণগত মান নিয়ে কোনো আপস করি না, যাতে আপনি সম্পূর্ণ আস্থা ও সন্তুষ্টি নিয়ে কেনাকাটা করতে পারেন।
+                        </p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <h3 class="text-xl font-semibold text-theme-blue" data-lang="about-mission-title">আমাদের লক্ষ্য: সহজ, নির্ভরযোগ্য ও আনন্দদায়ক শপিং</h3>
+                        <p class="text-gray-700 dark:text-gray-300 leading-relaxed" data-lang="about-mission-lead">
+                            আমাদের প্রধান লক্ষ্য হলো কেনাকাটার প্রক্রিয়াটিকে অত্যন্ত সহজ, নিরাপদ, নির্ভরযোগ্য এবং আনন্দদায়ক করে তোলা।
+                        </p>
+                        <ul class="space-y-3">
+                            <li class="p-4 bg-gray-100 dark:bg-gray-700 rounded-2xl shadow-sm">
+                                <h4 class="font-semibold text-theme-purple" data-lang="about-mission-effortless-title">সহজ কেনাকাটা</h4>
+                                <p class="text-gray-700 dark:text-gray-300 leading-relaxed" data-lang="about-mission-effortless-body">
+                                    আমাদের প্ল্যাটফর্মটি ব্যবহারকারী-বান্ধব (user-friendly) করে ডিজাইন করা হয়েছে, যাতে পণ্য খুঁজে বের করা থেকে শুরু করে অর্ডার নিশ্চিত করা পর্যন্ত পুরো প্রক্রিয়াটি মসৃণ ও স্বচ্ছন্দ হয়।
+                                </p>
+                            </li>
+                            <li class="p-4 bg-gray-100 dark:bg-gray-700 rounded-2xl shadow-sm">
+                                <h4 class="font-semibold text-theme-purple" data-lang="about-mission-home-title">ঘরে বসে শপিং</h4>
+                                <p class="text-gray-700 dark:text-gray-300 leading-relaxed" data-lang="about-mission-home-body">
+                                    বাংলাদেশের যেকোনো প্রান্তের মানুষ যেন ঘরে বসেই তাদের পছন্দের সেরা পণ্যটি কোনো ঝামেলা ছাড়াই কিনতে পারেন, তা নিশ্চিত করাই আমাদের প্রধান উদ্দেশ্য।
+                                </p>
+                            </li>
+                            <li class="p-4 bg-gray-100 dark:bg-gray-700 rounded-2xl shadow-sm">
+                                <h4 class="font-semibold text-theme-purple" data-lang="about-mission-trusted-title">বিশ্বস্ত অভিজ্ঞতা</h4>
+                                <p class="text-gray-700 dark:text-gray-300 leading-relaxed" data-lang="about-mission-trusted-body">
+                                    আমরা শুধুমাত্র পণ্য সরবরাহ করি না, বরং একটি সম্পূর্ণ বিশ্বস্ত শপিং অভিজ্ঞতা নিশ্চিত করি—যার মধ্যে রয়েছে দ্রুত ডেলিভারি, সহজ রিটার্ন প্রক্রিয়া এবং সার্বক্ষণিক গ্রাহক সহায়তা।
+                                </p>
+                            </li>
+                        </ul>
+                    </div>
+
                     <div class="flex flex-col md:flex-row items-center md:items-start gap-8 md:gap-12 p-6 bg-gray-100 dark:bg-gray-700 rounded-2xl shadow-inner">
                         <img src="https://github.com/tangailbuzzbd-svg/TangailBuzz-Picture-/blob/main/WhatsApp%20Image%202025-07-30%20at%2019.29.33_9f8c7d06.jpg?raw=true" alt="Md Eousuf Ali" class="w-32 h-32 rounded-full object-cover shadow-lg">
-                        <div>
-                            <h3 class="text-2xl font-bold text-theme-purple mb-2">প্রতিষ্ঠাতা: MD EOUSUF ALI</h3>
-                            <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
-                                Md Eousuf Ali, TangailBuzz-এর স্বপ্নদ্রষ্টা এবং প্রতিষ্ঠাতা। ডিজিটাল প্ল্যাটফর্মের মাধ্যমে বাংলাদেশের মানুষের কাছে উন্নত মানের পণ্য পৌঁছে দেওয়ার লক্ষ্য নিয়ে তিনি এই যাত্রা শুরু করেন। তাঁর দূরদর্শিতা এবং কঠোর পরিশ্রম TangailBuzz-কে আজকের অবস্থানে এনেছে।
+                        <div class="space-y-4">
+                            <h3 class="text-2xl font-bold text-theme-purple" data-lang="about-founder-title">প্রতিষ্ঠাতা: MD EOUSUF ALI – এক দূরদর্শী স্বপ্নদ্রষ্টা</h3>
+                            <p class="text-gray-700 dark:text-gray-300 leading-relaxed" data-lang="about-founder-body">
+                                MD EOUSUF ALI শুধুমাত্র TangailBuzz-এর প্রতিষ্ঠাতা নন, তিনি ডিজিটাল মাধ্যমে সামাজিক ও অর্থনৈতিক পরিবর্তনের একজন স্থপতি। তাঁর যাত্রা শুরু হয়েছিল একটি সরল কিন্তু গভীর প্রত্যয় নিয়ে: বাংলাদেশের প্রতিটি মানুষের কাছে যেন উন্নত মানের পণ্য সহজলভ্য হয়, তা নিশ্চিত করা।
+                            </p>
+                            <div class="space-y-3">
+                                <h4 class="font-semibold text-theme-blue" data-lang="about-founder-pillars-title">তাঁর দূরদর্শিতার মূল দিকগুলো</h4>
+                                <ul class="space-y-3">
+                                    <li class="bg-white/60 dark:bg-gray-800/60 p-4 rounded-2xl shadow">
+                                        <h5 class="font-semibold text-theme-purple" data-lang="about-founder-pillar-tech-title">টেকনোলজি ও মানুষের সংযোগ</h5>
+                                        <p class="text-gray-700 dark:text-gray-300 leading-relaxed" data-lang="about-founder-pillar-tech-body">
+                                            তিনি প্রযুক্তির ব্যবহারকে কেবল বাণিজ্য নয়, বরং সাধারণ মানুষের জীবনযাত্রার একটি অংশ করার স্বপ্ন দেখেছিলেন।
+                                        </p>
+                                    </li>
+                                    <li class="bg-white/60 dark:bg-gray-800/60 p-4 rounded-2xl shadow">
+                                        <h5 class="font-semibold text-theme-purple" data-lang="about-founder-pillar-goal-title">উন্নয়নের লক্ষ্য</h5>
+                                        <p class="text-gray-700 dark:text-gray-300 leading-relaxed" data-lang="about-founder-pillar-goal-body">
+                                            তাঁর লক্ষ্য কেবল ব্যবসা করা নয়, বরং একটি স্বচ্ছ ও নির্ভরযোগ্য শপিং ইকোসিস্টেম তৈরি করা যা ক্রেতা ও বিক্রেতা উভয়কেই উপকৃত করবে।
+                                        </p>
+                                    </li>
+                                    <li class="bg-white/60 dark:bg-gray-800/60 p-4 rounded-2xl shadow">
+                                        <h5 class="font-semibold text-theme-purple" data-lang="about-founder-pillar-drive-title">অদম্য স্পৃহা</h5>
+                                        <p class="text-gray-700 dark:text-gray-300 leading-relaxed" data-lang="about-founder-pillar-drive-body">
+                                            তাঁর অদম্য চেষ্টা, কঠোর পরিশ্রম এবং গ্রাহক-কেন্দ্রিক মনোভাবই TangailBuzz-কে আজকের অবস্থানে এনেছে। তিনি এই প্ল্যাটফর্মটিকে কেবল একটি ই-কমার্স সাইট নয়, বরং বিশ্বাস এবং গুণমানের প্রতিশ্রুতির প্রতীক হিসেবে প্রতিষ্ঠা করেছেন।
+                                        </p>
+                                    </li>
+                                </ul>
+                            </div>
+                            <p class="text-gray-700 dark:text-gray-300 leading-relaxed" data-lang="about-founder-conclusion">
+                                MD EOUSUF ALI-এর নেতৃত্ব TangailBuzz-কে কেবল একটি শপিং প্ল্যাটফর্ম নয়, বরং বাংলাদেশের ই-কমার্স জগতে একটি অনুপ্রেরণামূলক ব্র্যান্ড হিসেবে প্রতিষ্ঠিত করেছে।
                             </p>
                         </div>
                     </div>
@@ -1024,6 +1209,14 @@
                             </div>
                         </div>
                         <div class="w-full lg:w-1/2 space-y-4">
+                            <div id="product-sale-highlight" class="space-y-2 hidden">
+                                <div id="product-sale-badges" class="flex flex-wrap items-center gap-2"></div>
+                                <div id="product-sale-countdown-wrapper" class="hidden inline-flex items-center gap-2 bg-theme-purple/10 text-theme-purple px-3 py-2 rounded-full">
+                                    <i class="fas fa-clock text-sm"></i>
+                                    <span id="product-sale-countdown-label" class="text-xs font-semibold uppercase tracking-[0.25em]"></span>
+                                    <span id="product-sale-countdown" class="text-sm font-bold"></span>
+                                </div>
+                            </div>
                             <h2 id="product-title-details" class="text-3xl md:text-4xl font-bold text-theme-purple"></h2>
                             <p id="product-brand-details" class="text-sm text-gray-500"></p>
                             <!-- NEW: Product Model ID Display -->
@@ -1109,12 +1302,12 @@
                                             <i class="far fa-star text-gray-400 cursor-pointer rating-star" data-rating="3"></i>
                                             <i class="far fa-star text-gray-400 cursor-pointer rating-star" data-rating="4"></i>
                                             <i class="far fa-star text-gray-400 cursor-pointer rating-star" data-rating="5"></i>
-                                            <input type="hidden" id="review-rating" name="rating" required value="0">
+                                            <input type="hidden" id="review-rating" name="rating" required="" value="0">
                                         </div>
                                     </div>
                                     <div class="mb-4">
                                         <label for="review-comment" class="block text-sm font-semibold mb-2" data-lang="your-comment">আপনার মন্তব্য:</label>
-                                        <textarea id="review-comment" name="comment" rows="3" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-800" required></textarea>
+                                        <textarea id="review-comment" name="comment" rows="3" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-800" required=""></textarea>
                                     </div>
                                     <button type="submit" id="submit-review-btn" class="bg-theme-pink text-white py-2 px-6 rounded-full font-bold hover:bg-theme-purple transition-colors" data-lang="submit-review">রিভিউ জমা দিন</button>
                                 </div>
@@ -1170,7 +1363,7 @@
                     
                     <!-- Chat Input Form -->
                     <form id="chat-form" class="flex space-x-3">
-                        <input type="text" id="chat-input" placeholder="আপনার বার্তা লিখুন..." class="flex-grow px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-700" required>
+                        <input type="text" id="chat-input" placeholder="আপনার বার্তা লিখুন..." class="flex-grow px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-theme-blue bg-white dark:bg-gray-700" required="">
                         <button type="submit" id="send-chat-btn" class="bg-theme-blue text-white w-12 h-12 rounded-full hover:bg-theme-purple transition-colors shadow-lg">
                             <i class="fas fa-paper-plane"></i>
                         </button>
@@ -1339,7 +1532,7 @@
                 <!-- Column 1 -->
                 <div>
                     <h3 class="text-xl font-bold mb-4 border-b-2 border-theme-pink pb-2 inline-block">TangailBuzz</h3>
-                    <p class="text-gray-400 text-sm">সাশ্রয়ী মূল্যে মানসম্মত পণ্যের জন্য আপনার বিশ্বস্ত অনলাইন কেনাকাটার গন্তব্য।</p>
+                    <p class="text-gray-400 text-sm" data-lang="footer-tagline">সাশ্রয়ী মূল্যে মানসম্মত পণ্যের জন্য আপনার বিশ্বস্ত অনলাইন কেনাকাটার গন্তব্য।</p>
                     <div class="flex gap-4 mt-4">
                         <a href="#" class="w-10 h-10 flex items-center justify-center bg-gray-700 rounded-full text-white hover:bg-theme-pink transition-colors"><i class="fab fa-facebook-f"></i></a>
                         <a href="#" class="w-10 h-10 flex items-center justify-center bg-gray-700 rounded-full text-white hover:bg-theme-pink transition-colors"><i class="fab fa-twitter"></i></a>
@@ -1350,9 +1543,9 @@
 
                 <!-- Column 2 -->
                 <div>
-                    <h3 class="text-xl font-bold mb-4 border-b-2 border-theme-pink pb-2 inline-block">গুরুত্বপূর্ণ লিঙ্ক</h3>
+                    <h3 class="text-xl font-bold mb-4 border-b-2 border-theme-pink pb-2 inline-block" data-lang="footer-important-links">গুরুত্বপূর্ণ লিঙ্ক</h3>
                     <ul class="list-none text-gray-400 text-sm space-y-2">
-                        <li><a href="javascript:void(0);" onclick="renderAllProducts()" class="hover:text-theme-pink transition-colors">হোম</a></li>
+                        <li><a href="javascript:void(0);" onclick="renderAllProducts()" class="hover:text-theme-pink transition-colors" data-lang="footer-nav-home">হোম</a></li>
                         <li><a href="javascript:void(0);" onclick="showPage('home-page'); scrollToElement('products')" class="hover:text-theme-pink transition-colors" data-lang="footer-nav-products">Products</a></li>
                         <li><a href="javascript:void(0);" onclick="showPage('home-page'); scrollToElement('categories')" class="hover:text-theme-pink transition-colors" data-lang="footer-nav-categories">Categories</a></li>
                         <li><a href="javascript:void(0);" onclick="showOffers()" class="hover:text-theme-pink transition-colors" data-lang="footer-nav-offers">Offers</a></li>
@@ -1368,7 +1561,7 @@
                         <li><a href="javascript:void(0);" onclick="showPage('return-policy-page')" class="hover:text-theme-pink transition-colors" data-lang="footer-return-policy">Return Policy</a></li>
                         <li><a href="javascript:void(0);" onclick="showPage('shipping-info-page')" class="hover:text-theme-pink transition-colors" data-lang="footer-shipping-info">Shipping Info</a></li>
                         <li><a href="javascript:void(0);" onclick="showPage('privacy-policy-page')" class="hover:text-theme-pink transition-colors" data-lang="footer-privacy-policy">Privacy Policy</a></li>
-                        <li><a href="javascript:void(0);" onclick="showPage('terms-page')" class="hover:text-theme-pink transition-colors" data-lang="footer-terms">Terms & Conditions</a></li>
+                        <li><a href="javascript:void(0);" onclick="showPage('terms-page')" class="hover:text-theme-pink transition-colors" data-lang="footer-terms">Terms &amp; Conditions</a></li>
                     </ul>
                 </div>
 
@@ -1378,7 +1571,7 @@
                     <ul class="list-none text-gray-400 text-sm space-y-2">
                          <li class="flex items-center">
                             <i class="fas fa-map-marker-alt mr-2 text-theme-pink"></i>
-                            <a href="https://www.google.com/maps/search/?api=1&query=Tangail+Sadar" target="_blank" rel="noopener noreferrer" class="hover:text-theme-pink transition-colors">tangail sadar, tangail</a>
+                            <a href="https://www.google.com/maps/search/?api=1&amp;query=Tangail+Sadar" target="_blank" rel="noopener noreferrer" class="hover:text-theme-pink transition-colors">tangail sadar, tangail</a>
                         </li>
                         <li class="flex items-center">
                             <i class="fas fa-phone mr-2 text-theme-pink"></i>
@@ -1437,12 +1630,37 @@
         let currentUserData = null; // To hold Firestore data for the user
         let userOrders = [];
         let userDocUnsubscribe = () => {};
-        let currentLanguage = 'bn';
+    // Language preference configuration
+    const SUPPORTED_LANGUAGES = ['en', 'bn'];
+        const DEFAULT_LANGUAGE = 'bn';
+        const LANGUAGE_STORAGE_KEY = 'tb_language';
+        let currentLanguage = DEFAULT_LANGUAGE;
+        try {
+            const storedLanguage = localStorage.getItem(LANGUAGE_STORAGE_KEY) || localStorage.getItem('lang');
+            if (storedLanguage && SUPPORTED_LANGUAGES.includes(storedLanguage)) {
+                currentLanguage = storedLanguage;
+            }
+        } catch (error) {
+            console.warn('Language preference load failed:', error);
+        }
+        const LANGUAGE_FLAG_ASSETS = {
+            bn: { src: 'https://flagcdn.com/w40/bd.png', alt: 'Bangladesh Flag' },
+            en: { src: 'https://flagcdn.com/w40/gb.png', alt: 'United Kingdom Flag' }
+        };
+        function applyLanguageAttributes(lang) {
+            const html = document.documentElement;
+            const normalized = SUPPORTED_LANGUAGES.includes(lang) ? lang : DEFAULT_LANGUAGE;
+            html.setAttribute('lang', normalized === 'bn' ? 'bn' : 'en');
+            html.classList.toggle('lang-bn', normalized === 'bn');
+            html.classList.toggle('lang-en', normalized === 'en');
+        }
+        applyLanguageAttributes(currentLanguage);
         let localCartCache = new Map();
         let localWishlistCache = new Set();
     let productsData = []; // Will be populated from Firestore
     const flashSaleCountdowns = new Map();
     let flashSaleIntervalId = null;
+    let productDetailsFlashTimerId = null;
 
     const FLASH_FLAG_KEYS = ['flashSale', 'flash_sale', 'flashsell', 'flashSell', 'flash_selling', 'flash_sale_enabled', 'flashSaleEnabled'];
     const FLASH_PRICE_KEYS = ['flashPrice', 'flash_price', 'flashsale_price', 'flashSalePrice'];
@@ -1475,6 +1693,28 @@
             }
         }
         return false;
+    };
+
+    const resolveBooleanFieldDetailed = (obj, keys) => {
+        for (const key of keys) {
+            const candidate = obj?.[key];
+            if (typeof candidate === 'boolean') {
+                return { value: candidate, explicit: true };
+            }
+            if (typeof candidate === 'number' && Number.isFinite(candidate)) {
+                return { value: candidate === 1, explicit: true };
+            }
+            if (typeof candidate === 'string') {
+                const normalized = candidate.trim().toLowerCase();
+                if (['true', '1', 'yes', 'on', 'enabled', 'enable', 'active'].includes(normalized)) {
+                    return { value: true, explicit: true };
+                }
+                if (['false', '0', 'no', 'off', 'disabled', 'disable', 'inactive'].includes(normalized)) {
+                    return { value: false, explicit: true };
+                }
+            }
+        }
+        return { value: false, explicit: false };
     };
 
     const resolveNumberField = (obj, keys) => {
@@ -1565,6 +1805,13 @@
             .replace(/"/g, '&quot;')
             .replace(/'/g, '&#39;');
     };
+
+    function clearProductDetailsFlashTimer() {
+        if (productDetailsFlashTimerId) {
+            clearInterval(productDetailsFlashTimerId);
+            productDetailsFlashTimerId = null;
+        }
+    }
     
     // --- Presence: Live visitor heartbeat (for Admin dashboard live view) ---
     try {
@@ -1921,6 +2168,7 @@
                 'products': 'Products',
                 'categories': 'Categories',
                 'offers': 'Offers',
+                'flash-sale-nav': 'Flash Sale',
                 'mega-sale-nav': 'Mega Sale',
                 'add-product-nav': 'Add Product',
                 'search-placeholder': 'Search for products...', 'featured-products': 'Featured Products', 'shop-by-category': 'Shop by Category', 'cat-electronics': 'Electronics', 'cat-fashion': 'Fashion', 'cat-home-garden': 'Home & Garden', 'cat-health-beauty': 'Health & Beauty', 'cat-sports': 'Sports & Outdoors', 'cat-books': 'Books & Stationery', 'cat-kids': 'Kids & Toys', 'cat-cars': 'Cars & Bikes', 'why-choose-us': 'Why Choose Us', 'feature-delivery-title': 'Fast Delivery', 'feature-delivery-desc': 'We deliver to your doorstep within 2-3 business days.', 'feature-payment-title': 'Secure Payment', 'feature-payment-desc': 'All transactions are encrypted for your security and privacy.', 'feature-return-title': 'Easy Returns', 'feature-return-desc': 'Return products within 30 days for a full refund if you\'re not satisfied.', 'feature-support-title': '24/7 Support', 'feature-support-desc': 'Our customer support team is available for you day and night.', 'add-to-cart': 'Add to Cart', 'added-to-cart': 'Added!', 'no-products': 'No products found matching your criteria.', 'back-to-products': 'Back to All Products', 'returnable': '30-Day Returnable', 'not-returnable': 'Not Returnable', 'secure-payments': 'Secure Payments', 'size': 'Size:', 'storage': 'Storage:', 'color': 'Color:', 'product-description': 'Product Description', 'product-specifications': 'Product Specifications', 'specifications': 'Specification', 'value': 'Value', 'no-specs': 'No specifications available for this product.', 'product-reviews': 'Product Reviews', 'no-reviews': 'There are no reviews for this product yet.', 'cart': 'Your Cart', 'cart-empty': 'Your cart is empty.', 'total': 'Total:', 'checkout': 'Checkout', 'your-wishlist': 'Your Wishlist', 'wishlist-empty': 'Your wishlist is empty. Add some products!', 'your-account': 'Your Account', 'signin-google': 'Sign in with Google', 'logout': 'Logout', 'toast-cart-added': 'Product added to cart!', 'toast-wishlist-added': 'Product added to wishlist!', 'toast-wishlist-removed': 'Product removed from wishlist!', 'toast-login-success': 'Successfully logged in!', 'toast-logout-success': 'Successfully logged out!',
@@ -1944,6 +2192,7 @@
                 'model-id': 'Product ID: {id}', // FIX: Changed 'Model:' to 'Product ID:'
                 'available-coupons': 'Available Coupons', 'min-spend': 'Min Spend', 'discount-value': 'Discount', 'tap-to-copy': 'Tap to Copy', 'copied': 'Copied!',
                 'all-products': 'All Products',
+                'browse-everything': 'Browse everything in one place',
                 'current-category-title': '{category}',
                 'sub-category-filter': 'Filter by Sub-Category:',
                 'write-a-review': 'Write a Review',
@@ -1956,6 +2205,8 @@
                 // Category helpers
                 'all-in-category': 'All in',
                 // Footer
+                'footer-tagline': 'Your trusted online shopping destination for quality products at fair prices.',
+                'footer-important-links': 'Important Links',
                 'footer-nav-home': 'Home',
                 'footer-nav-products': 'Products',
                 'footer-nav-categories': 'Categories',
@@ -1969,7 +2220,7 @@
                 'footer-terms': 'Terms & Conditions',
                 'footer-col-contact': 'Contact Us',
                 'footer-we-accept': 'We Accept',
-                'footer-copyright': '© 2024 TangailBuzz. All rights reserved.',
+                'footer-copyright': '© 2025 TangailBuzz. All rights reserved.',
                 // Header short labels
                 'dark-mode': 'Dark Mode',
                 'profile': 'Profile',
@@ -2010,6 +2261,38 @@
                 'mega-sale-empty': 'No mega deals right now. Check back again.',
                 'mega-sale-badge': 'Mega Sale',
                 'mega-sale-highlight': 'Curated Picks',
+                'language-label': 'Language',
+                'language-menu-heading': 'Choose Language',
+                'language-english': 'English',
+                'language-bangla': 'Bangla',
+                'language-switch-toast': 'Language switched to {language}',
+                'download-invoice': 'Download Invoice',
+                'invoice-download-success': 'Invoice downloaded successfully!',
+                'invoice-download-error': 'Unable to download invoice right now.',
+                'invoice-missing-order': 'We could not find the order for this invoice.',
+                'about-heading': 'About Us',
+                'about-tagline-title': 'TangailBuzz: Your Trusted Online Shopping Destination',
+                'about-tagline-body': 'TangailBuzz is a committed e-commerce platform reshaping online shopping in Bangladesh with customer-first service and inspiring value.',
+                'about-commitment-title': 'Our Commitment: Quality, Affordability, and Accessibility',
+                'about-commitment-body': 'We believe quality products should be within everyone’s reach. That is why our promise is to deliver authentic goods at fair prices with complete peace of mind.',
+                'about-mission-title': 'Our Mission: Simple, Reliable, and Joyful Shopping',
+                'about-mission-lead': 'We focus on making every step of shopping effortless, secure, and delightful for every customer.',
+                'about-mission-effortless-title': 'Effortless Shopping',
+                'about-mission-effortless-body': 'The TangailBuzz experience is designed to feel intuitive from discovery to checkout, so you can shop without friction.',
+                'about-mission-home-title': 'Shop From Home',
+                'about-mission-home-body': 'Wherever you are in Bangladesh, TangailBuzz lets you order trusted products from the comfort of your home.',
+                'about-mission-trusted-title': 'A Trusted Experience',
+                'about-mission-trusted-body': 'Beyond products, we deliver confidence with quick delivery, easy returns, and always-on customer care.',
+                'about-founder-title': 'Founder: MD EOUSUF ALI – A Visionary Leader',
+                'about-founder-body': 'MD EOUSUF ALI is more than the founder of TangailBuzz; he is an architect of social and economic impact through digital innovation. His journey began with a clear promise: to make quality products accessible to every household in Bangladesh.',
+                'about-founder-pillars-title': 'The Pillars of His Vision',
+                'about-founder-pillar-tech-title': 'Bridging Technology and People',
+                'about-founder-pillar-tech-body': 'He envisioned technology as a bridge that improves everyday life, not just a tool for commerce.',
+                'about-founder-pillar-goal-title': 'A Goal Beyond Business',
+                'about-founder-pillar-goal-body': 'He is committed to building a transparent, reliable shopping ecosystem that benefits both buyers and sellers.',
+                'about-founder-pillar-drive-title': 'Relentless Drive',
+                'about-founder-pillar-drive-body': 'His persistence and customer-first mindset have shaped TangailBuzz into a symbol of trust and quality.',
+                'about-founder-conclusion': 'Under his leadership, TangailBuzz stands as an inspiring brand in Bangladesh’s e-commerce landscape.',
             },
             bn: {
                 'deliver-to': 'ডেলিভারি লোকেশন', 'home': 'হোম', 'products': 'পণ্য', 'categories': 'ক্যাটাগরি', 'offers': 'অফার', 'search-placeholder': 'পণ্য খুঁজুন...', 'featured-products': 'বৈশিষ্ট্যযুক্ত পণ্য', 'shop-by-category': 'ক্যাটাগরি অনুসারে কেনাকাটা করুন', 'cat-electronics': 'ইলেকট্রনিক্স', 'cat-fashion': 'ফ্যাশন', 'cat-home-garden': 'হোম অ্যান্ড গার্ডেন', 'cat-health-beauty': 'স্বাস্থ্য ও সৌন্দর্য', 'cat-sports': 'খেলাধুলা ও আউটডোর', 'cat-books': 'বই ও স্টেশনারি', 'cat-kids': 'বাচ্চা ও খেলনা', 'cat-cars': 'গাড়ি ও বাইক', 'why-choose-us': 'আমাদেরকে কেন বেছে নিবেন', 'feature-delivery-title': 'দ্রুত ডেলিভারি', 'feature-delivery-desc': 'আমরা ২-৩ কার্যদিবসের মধ্যে আপনার দোরগোড়ায় পণ্য পৌঁছে দিই।', 'feature-payment-title': 'নিরাপদ পেমেন্ট', 'feature-payment-desc': 'আপনার নিরাপত্তা ও গোপনীয়তার জন্য সকল লেনদেন এনক্রিপ্টেড।', 'feature-return-title': 'সহজ রিটার্ন', 'feature-return-desc': 'পছন্দ না হলে ৩০ দিনের মধ্যে পণ্য ফেরত দিন এবং সম্পূর্ণ মূল্য ফেরত পান।', 'feature-support-title': '২৪/৭ সাপোর্ট', 'feature-support-desc': 'আমাদের গ্রাহক সহায়তা দল দিনরাত আপনার জন্য উপলব্ধ।', 'add-to-cart': 'কার্টে যোগ করুন', 'added-to-cart': 'যোগ হয়েছে!', 'no-products': 'আপনার অনুসন্ধানের সাথে মেলে এমন কোনো পণ্য পাওয়া যায়নি।', 'back-to-products': 'সকল পণ্যে ফিরে যান', 'returnable': '৩০-দিনের মধ্যে ফেরতযোগ্য', 'not-returnable': 'ফেরতযোগ্য নয়', 'secure-payments': 'নিরাপদ পেমেন্ট', 'size': 'সাইজ:', 'storage': 'স্টোরেজ:', 'color': 'রঙ:', 'product-description': 'পণ্যের বিবরণ', 'product-specifications': 'পণ্যের স্পেসিফিকেশন', 'specifications': 'স্পেসিফিকেশন', 'value': 'মান', 'no-specs': 'এই পণ্যের জন্য কোন স্পেসিফিকেশন উপলব্ধ নেই।', 'product-reviews': 'পণ্যের রিভিউ', 'no-reviews': 'এই পণ্যের জন্য এখনো কোনো রিভিউ নেই।', 'cart': 'আপনার কার্ট', 'cart-empty': 'আপনার কার্ট খালি।', 'total': 'মোট মূল্য:', 'checkout': 'চেকআউট করুন', 'your-wishlist': 'আপনার উইশলিস্ট', 'wishlist-empty': 'আপনার উইশলিস্ট খালি। কিছু পণ্য যোগ করুন!', 'your-account': 'আপনার অ্যাকাউন্ট', 'signin-google': 'Google দিয়ে সাইন ইন করুন', 'logout': 'লগআউট', 'toast-cart-added': 'পণ্য কার্টে যোগ করা হয়েছে!', 'toast-wishlist-added': 'পণ্য উইশলিস্টে যোগ করা হয়েছে!', 'toast-wishlist-removed': 'পণ্য উইশলিস্ট থেকে সরানো হয়েছে!', 'toast-login-success': 'সফলভাবে লগইন হয়েছে!', 'toast-logout-success': 'সফলভাবে লগআউট হয়েছে!',
@@ -2033,6 +2316,7 @@
                 'model-id': 'প্রোডাক্ট আইডি: {id}', // FIX: Changed 'মডেল আইডি:' to 'প্রোডাক্ট আইডি:'
                 'available-coupons': 'উপলব্ধ কুপন', 'min-spend': 'সর্বনিম্ন খরচ', 'discount-value': 'ডিসকাউন্ট', 'tap-to-copy': 'কপি করুন', 'copied': 'কপি হয়েছে!',
                 'all-products': 'সকল পণ্য',
+                'browse-everything': 'এক জায়গায় সবকিছু দেখুন',
                 // Hero
                 'hero-title': 'আপনার স্টাইল খুঁজুন। শপ করুন বাজ়ে।',
                 'hero-subtitle': 'ইলেকট্রনিক্স, ফ্যাশনসহ নানা ক্যাটাগরিতে বিশেষ অফার, দ্রুত ডেলিভারি ও বিশ্বস্ত পণ্য।',
@@ -2051,6 +2335,8 @@
                 // Category helpers
                 'all-in-category': 'সকল',
                 // Footer
+                'footer-tagline': 'সাশ্রয়ী মূল্যে মানসম্মত পণ্যের জন্য আপনার বিশ্বস্ত অনলাইন কেনাকাটার গন্তব্য।',
+                'footer-important-links': 'গুরুত্বপূর্ণ লিঙ্ক',
                 'footer-nav-home': 'হোম',
                 'footer-nav-products': 'পণ্য',
                 'footer-nav-categories': 'ক্যাটাগরি',
@@ -2064,8 +2350,9 @@
                 'footer-terms': 'শর্তাবলী',
                 'footer-col-contact': 'যোগাযোগ করুন',
                 'footer-we-accept': 'আমরা গ্রহণ করি',
-                'footer-copyright': '© ২০২৪ TangailBuzz। সর্বস্বত্ব সংরক্ষিত।',
+                'footer-copyright': '© ২০২৫ TangailBuzz। সর্বস্বত্ব সংরক্ষিত।',
                 // Header short labels
+                'flash-sale-nav': 'ফ্ল্যাশ সেল',
                 'mega-sale-nav': 'মেগা সেল',
                 'add-product-nav': 'পণ্য যোগ করুন',
                 'dark-mode': 'ডার্ক মোড',
@@ -2101,8 +2388,62 @@
                 'mega-sale-empty': 'এখন কোনো মেগা ডিল নেই। আবার দেখে যান।',
                 'mega-sale-badge': 'মেগা সেল',
                 'mega-sale-highlight': 'বিশেষ নির্বাচন',
+                'language-label': 'ভাষা',
+                'language-menu-heading': 'ভাষা নির্বাচন করুন',
+                'language-english': 'ইংরেজি',
+                'language-bangla': 'বাংলা',
+                'language-switch-toast': '{language} ভাষা চালু হয়েছে',
+                'download-invoice': 'ইনভয়েস ডাউনলোড করুন',
+                'invoice-download-success': 'ইনভয়েস সফলভাবে ডাউনলোড হয়েছে!',
+                'invoice-download-error': 'এখন ইনভয়েস ডাউনলোড করা যাচ্ছে না।',
+                'invoice-missing-order': 'এই অর্ডারের ইনভয়েসের তথ্য পাওয়া যায়নি।',
+                'about-heading': 'আমাদের সম্পর্কে',
+                'about-tagline-title': 'TangailBuzz: আপনার বিশ্বস্ত অনলাইন শপিং গন্তব্য',
+                'about-tagline-body': 'TangailBuzz একটি প্রতিশ্রুতিশীল ই-কমার্স প্ল্যাটফর্ম, যা ক্রেতা-কেন্দ্রিক পরিষেবা প্রদানের মাধ্যমে বাংলাদেশের অনলাইন শপিং-এর অভিজ্ঞতাকে নতুন মাত্রা দিতে বদ্ধপরিকর।',
+                'about-commitment-title': 'আমাদের অঙ্গীকার: মান, সাশ্রয় ও সহজলভ্যতা',
+                'about-commitment-body': 'আমরা বিশ্বাস করি, মানসম্মত পণ্য কেনা প্রতিটি মানুষের অধিকার। এই নীতিতে বিশ্বাস রেখে, TangailBuzz সর্বোচ্চ মানসম্মত পণ্যগুলো সাশ্রয়ী মূল্যে আপনার কাছে পৌঁছে দিতে অঙ্গীকারবদ্ধ। আমরা পণ্যের গুণগত মান নিয়ে কোনো আপস করি না, যাতে আপনি সম্পূর্ণ আস্থা ও সন্তুষ্টি নিয়ে কেনাকাটা করতে পারেন।',
+                'about-mission-title': 'আমাদের লক্ষ্য: সহজ, নির্ভরযোগ্য ও আনন্দদায়ক শপিং',
+                'about-mission-lead': 'আমাদের প্রধান লক্ষ্য হলো কেনাকাটার প্রক্রিয়াটিকে অত্যন্ত সহজ, নিরাপদ, নির্ভরযোগ্য এবং আনন্দদায়ক করে তোলা।',
+                'about-mission-effortless-title': 'সহজ কেনাকাটা',
+                'about-mission-effortless-body': 'আমাদের প্ল্যাটফর্মটি ব্যবহারকারী-বান্ধব (user-friendly) করে ডিজাইন করা হয়েছে, যাতে পণ্য খুঁজে বের করা থেকে শুরু করে অর্ডার নিশ্চিত করা পর্যন্ত পুরো প্রক্রিয়াটি মসৃণ ও স্বচ্ছন্দ হয়।',
+                'about-mission-home-title': 'ঘরে বসে শপিং',
+                'about-mission-home-body': 'বাংলাদেশের যেকোনো প্রান্তের মানুষ যেন ঘরে বসেই তাদের পছন্দের সেরা পণ্যটি কোনো ঝামেলা ছাড়াই কিনতে পারেন, তা নিশ্চিত করাই আমাদের প্রধান উদ্দেশ্য।',
+                'about-mission-trusted-title': 'বিশ্বস্ত অভিজ্ঞতা',
+                'about-mission-trusted-body': 'আমরা শুধুমাত্র পণ্য সরবরাহ করি না, বরং একটি সম্পূর্ণ বিশ্বস্ত শপিং অভিজ্ঞতা নিশ্চিত করি—যার মধ্যে রয়েছে দ্রুত ডেলিভারি, সহজ রিটার্ন প্রক্রিয়া এবং সার্বক্ষণিক গ্রাহক সহায়তা।',
+                'about-founder-title': 'প্রতিষ্ঠাতা: MD EOUSUF ALI – এক দূরদর্শী স্বপ্নদ্রষ্টা',
+                'about-founder-body': 'MD EOUSUF ALI শুধুমাত্র TangailBuzz-এর প্রতিষ্ঠাতা নন, তিনি ডিজিটাল মাধ্যমে সামাজিক ও অর্থনৈতিক পরিবর্তনের একজন স্থপতি। তাঁর যাত্রা শুরু হয়েছিল একটি সরল কিন্তু গভীর প্রত্যয় নিয়ে: বাংলাদেশের প্রতিটি মানুষের কাছে যেন উন্নত মানের পণ্য সহজলভ্য হয়, তা নিশ্চিত করা।',
+                'about-founder-pillars-title': 'তাঁর দূরদর্শিতার মূল দিকগুলো',
+                'about-founder-pillar-tech-title': 'টেকনোলজি ও মানুষের সংযোগ',
+                'about-founder-pillar-tech-body': 'তিনি প্রযুক্তির ব্যবহারকে কেবল বাণিজ্য নয়, বরং সাধারণ মানুষের জীবনযাত্রার একটি অংশ করার স্বপ্ন দেখেছিলেন।',
+                'about-founder-pillar-goal-title': 'উন্নয়নের লক্ষ্য',
+                'about-founder-pillar-goal-body': 'তাঁর লক্ষ্য কেবল ব্যবসা করা নয়, বরং একটি স্বচ্ছ ও নির্ভরযোগ্য শপিং ইকোসিস্টেম তৈরি করা যা ক্রেতা ও বিক্রেতা উভয়কেই উপকৃত করবে।',
+                'about-founder-pillar-drive-title': 'অদম্য স্পৃহা',
+                'about-founder-pillar-drive-body': 'তাঁর অদম্য চেষ্টা, কঠোর পরিশ্রম এবং গ্রাহক-কেন্দ্রিক মনোভাবই TangailBuzz-কে আজকের অবস্থানে এনেছে। তিনি এই প্ল্যাটফর্মটিকে কেবল একটি ই-কমার্স সাইট নয়, বরং বিশ্বাস এবং গুণমানের প্রতিশ্রুতির প্রতীক হিসেবে প্রতিষ্ঠা করেছেন।',
+                'about-founder-conclusion': 'MD EOUSUF ALI-এর নেতৃত্ব TangailBuzz-কে কেবল একটি শপিং প্ল্যাটফর্ম নয়, বরং বাংলাদেশের ই-কমার্স জগতে একটি অনুপ্রেরণামূলক ব্র্যান্ড হিসেবে প্রতিষ্ঠিত করেছে।',
             }
         };
+
+        function resolveLocalizedString(keyOrText, vars = {}, locale = currentLanguage) {
+            const preferred = translations[locale] || {};
+            const englishFallback = translations.en || {};
+            const banglaFallback = translations.bn || {};
+            let template = typeof keyOrText === 'string' && preferred[keyOrText] !== undefined ? preferred[keyOrText]
+                : typeof keyOrText === 'string' && englishFallback[keyOrText] !== undefined ? englishFallback[keyOrText]
+                : typeof keyOrText === 'string' && banglaFallback[keyOrText] !== undefined ? banglaFallback[keyOrText]
+                : keyOrText;
+            if (typeof template !== 'string') {
+                return '';
+            }
+            return template.replace(/\{([^}]+)\}/g, (_, token) => (vars[token] !== undefined ? vars[token] : `{${token}}`));
+        }
+
+        function getLanguageLabel(languageCode, locale = currentLanguage) {
+            const normalized = SUPPORTED_LANGUAGES.includes(languageCode) ? languageCode : DEFAULT_LANGUAGE;
+            const labelKey = normalized === 'bn' ? 'language-bangla' : 'language-english';
+            const fallback = normalized === 'bn' ? 'বাংলা' : 'English';
+            const localized = resolveLocalizedString(labelKey, {}, locale);
+            return localized || fallback;
+        }
 
         const DOMElements = {
             toast: document.getElementById('toast-notification'), toastMessage: document.getElementById('toast-message'), productList: document.getElementById('product-list'), flashSaleSection: document.getElementById('flash-sale-section'), flashSaleGrid: document.getElementById('flash-sale-grid'), flashSaleEmpty: document.getElementById('flash-sale-empty'), flashSaleMasterCountdown: document.getElementById('flash-sale-master-countdown'), flashSaleCountdownLabel: document.getElementById('flash-sale-countdown-label'), megaSaleSection: document.getElementById('mega-sale-section'), megaSaleGrid: document.getElementById('mega-sale-grid'), megaSaleEmpty: document.getElementById('mega-sale-empty'), cartCount: document.getElementById('cart-count'), cartItems: document.getElementById('cart-items'), cartSubtotal: document.getElementById('cart-subtotal'), deliveryCharge: document.getElementById('delivery-charge'), cartTotal: document.getElementById('cart-total'), wishlistItems: document.getElementById('wishlist-items'), authOptions: document.getElementById('auth-options'), 
@@ -2151,7 +2492,6 @@
             // New Category Elements
             categoryHeader: document.getElementById('category-header'),
             breadcrumb: document.getElementById('breadcrumb'),
-            categoryPath: document.getElementById('category-path'),
             currentCategoryTitle: document.getElementById('current-category-title'),
             subcategoryButtons: document.getElementById('subcategory-buttons'),
             // Address management elements
@@ -2186,7 +2526,7 @@
         // --- Error Handling & UI Helpers ---
         // Safe toast display with localization fallback.
         if (typeof window.showToast !== 'function') {
-            window.showToast = function(messageKeyOrText, isSuccess = true) {
+            window.showToast = function(messageKeyOrText, isSuccess = true, vars = {}) {
                 try {
                     const el = DOMElements.toast;
                     const msgEl = DOMElements.toastMessage;
@@ -2197,8 +2537,7 @@
                         }
                         return;
                     }
-                    const dict = (typeof translations !== 'undefined' && translations[currentLanguage]) ? translations[currentLanguage] : {};
-                    const text = dict[messageKeyOrText] || messageKeyOrText || 'Action completed';
+                    const text = resolveLocalizedString(messageKeyOrText, vars);
                     msgEl.textContent = text;
                     el.classList.remove('hidden');
                     el.classList.toggle('bg-green-600', !!isSuccess);
@@ -2281,8 +2620,8 @@
         
         // --- UI & RENDERING ---
 
-        function showToast(messageKey, isSuccess = true) {
-            const message = translations[currentLanguage][messageKey] || messageKey;
+        function showToast(messageKeyOrText, isSuccess = true, vars = {}) {
+            const message = resolveLocalizedString(messageKeyOrText, vars);
             DOMElements.toastMessage.textContent = message;
             DOMElements.toast.className = `fixed top-20 right-5 text-white py-3 px-6 rounded-lg shadow-xl z-[200] transform transition-transform duration-500 ${isSuccess ? 'bg-green-500' : 'bg-red-500'}`;
             DOMElements.toast.classList.remove('translate-x-[150%]', 'opacity-0');
@@ -2299,10 +2638,7 @@
         function showBlockedUI(messageKey) {
             const banner = DOMElements.blockedBanner;
             if (banner) {
-                // Prefer translated message if available; otherwise use a clear default per language
-                const defaultText = currentLanguage === 'bn' ? 'আপনার অ্যাকাউন্ট ব্লক করা হয়েছে' : 'Your account is blocked';
-                const map = translations[currentLanguage] || {};
-                const text = (messageKey && map[messageKey]) ? map[messageKey] : defaultText;
+                const text = resolveLocalizedString(messageKey || 'account-blocked-banner');
                 banner.textContent = text;
                 banner.classList.remove('hidden');
                 // Adjust header margin to not overlap
@@ -2331,71 +2667,164 @@
         function updateTextContent() {
             document.querySelectorAll('[data-lang]').forEach(el => {
                 const key = el.dataset.lang;
-                const cur = (translations[currentLanguage] || {});
-                const en = (translations['en'] || {});
-                const bn = (translations['bn'] || {});
-                const value = (cur[key] !== undefined ? cur[key] : (en[key] !== undefined ? en[key] : bn[key]));
+                if (!key) return;
+                const value = resolveLocalizedString(key);
                 if (value !== undefined) el.textContent = value;
             });
-            // Update title/tooltips
             document.querySelectorAll('[data-lang-title]').forEach(el => {
                 const key = el.dataset.langTitle;
-                const cur = (translations[currentLanguage] || {});
-                const en = (translations['en'] || {});
-                const bn = (translations['bn'] || {});
-                const value = (cur[key] !== undefined ? cur[key] : (en[key] !== undefined ? en[key] : bn[key]));
+                if (!key) return;
+                const value = resolveLocalizedString(key);
                 if (value !== undefined) el.title = value;
             });
-            // Update aria-labels
             document.querySelectorAll('[data-lang-aria-label]').forEach(el => {
                 const key = el.dataset.langAriaLabel;
-                const cur = (translations[currentLanguage] || {});
-                const en = (translations['en'] || {});
-                const bn = (translations['bn'] || {});
-                const value = (cur[key] !== undefined ? cur[key] : (en[key] !== undefined ? en[key] : bn[key]));
+                if (!key) return;
+                const value = resolveLocalizedString(key);
                 if (value !== undefined) el.setAttribute('aria-label', value);
             });
             document.querySelectorAll('[data-lang-placeholder]').forEach(el => {
                 const key = el.dataset.langPlaceholder;
-                const cur = (translations[currentLanguage] || {});
-                const en = (translations['en'] || {});
-                const bn = (translations['bn'] || {});
-                const value = (cur[key] !== undefined ? cur[key] : (en[key] !== undefined ? en[key] : bn[key]));
+                if (!key) return;
+                const value = resolveLocalizedString(key);
                 if (value !== undefined) el.placeholder = value;
             });
-            DOMElements.searchInput.placeholder = translations[currentLanguage]['search-placeholder'];
-            DOMElements.searchInputMobile.placeholder = translations[currentLanguage]['search-placeholder'];
-            DOMElements.chatInput.placeholder = translations[currentLanguage]['chat-placeholder'];
+            if (DOMElements.searchInput) DOMElements.searchInput.placeholder = resolveLocalizedString('search-placeholder');
+            if (DOMElements.searchInputMobile) DOMElements.searchInputMobile.placeholder = resolveLocalizedString('search-placeholder');
+            if (DOMElements.chatInput) DOMElements.chatInput.placeholder = resolveLocalizedString('chat-placeholder');
         }
 
-        function setLanguage() {
-            currentLanguage = 'bn';
-            try { localStorage.setItem('lang', 'bn'); } catch (e) {}
-            document.documentElement.setAttribute('lang', 'bn');
-            document.documentElement.classList.add('lang-bn');
-            document.documentElement.classList.remove('lang-en');
+        function refreshLanguageUIState() {
+            const currentLabel = getLanguageLabel(currentLanguage);
+            document.querySelectorAll('[data-lang-option]').forEach(button => {
+                const isActive = button.dataset.langOption === currentLanguage;
+                button.classList.toggle('language-option-active', isActive);
+                const indicator = button.querySelector('.lang-active-indicator');
+                if (indicator) indicator.classList.toggle('hidden', !isActive);
+                button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+                if (button.getAttribute('role') === 'menuitemradio') {
+                    button.setAttribute('aria-checked', isActive ? 'true' : 'false');
+                }
+            });
+            const langSwitch = document.getElementById('lang-switch');
+            if (langSwitch) {
+                langSwitch.checked = currentLanguage === 'bn';
+            }
+            const flagIcon = document.getElementById('flag-icon');
+            if (flagIcon) {
+                const flagAsset = LANGUAGE_FLAG_ASSETS[currentLanguage];
+                if (flagAsset?.src) flagIcon.src = flagAsset.src;
+                if (flagAsset?.alt) flagIcon.alt = flagAsset.alt;
+            }
+            const currentNameEl = document.getElementById('language-current-name');
+            if (currentNameEl) currentNameEl.textContent = currentLabel;
+        }
 
+        function setLanguage(languageCode = DEFAULT_LANGUAGE, options = {}) {
+            const { silent = false, persist = true, force = false } = options;
+            const normalizedInput = typeof languageCode === 'string' ? languageCode.toLowerCase() : languageCode;
+            const normalized = SUPPORTED_LANGUAGES.includes(normalizedInput) ? normalizedInput : DEFAULT_LANGUAGE;
+            const previousLanguage = currentLanguage;
+            currentLanguage = normalized;
+
+            if (persist) {
+                try {
+                    localStorage.setItem(LANGUAGE_STORAGE_KEY, normalized);
+                    localStorage.removeItem('lang');
+                } catch (error) {
+                    console.warn('Language preference save failed:', error);
+                }
+            }
+
+            applyLanguageAttributes(normalized);
             updateTextContent();
-            renderProducts(currentDisplayedProducts); // Re-render products with new language
+            renderProducts(currentDisplayedProducts);
             renderFlashSaleSection(productsData);
             renderMegaSaleSection(productsData);
-            // Refresh language-aware dynamic content (e.g., Side Promo titles from Firestore)
-            try { fetchRightPromoFromFirestore && fetchRightPromoFromFirestore(); } catch (e) {}
+            try { fetchRightPromoFromFirestore && fetchRightPromoFromFirestore(); } catch (_) {}
             if (typeof renderTopCategoryStrip === 'function') {
-                try { renderTopCategoryStrip(); } catch (e) {}
+                try { renderTopCategoryStrip(); } catch (_) {}
+            }
+            if (currentCategory && typeof renderSubCategories === 'function') {
+                try { renderSubCategories(currentCategory); } catch (_) {}
             }
             const detailsPage = document.getElementById('product-details-page');
-            if(detailsPage && !detailsPage.classList.contains('hidden')) {
+            if (detailsPage && !detailsPage.classList.contains('hidden')) {
                 const addToCartBtn = document.getElementById('add-to-cart-details');
                 const productId = addToCartBtn ? addToCartBtn.dataset.productId : null;
-                if(productId) showProductDetails(productId);
+                if (productId) showProductDetails(productId);
             }
 
-            // Close menu if open
-            const langMenu = document.getElementById('lang-menu');
-            if (langMenu) langMenu.classList.add('hidden');
+            refreshLanguageUIState();
+            setupHeaderShortcuts();
+
+            const langMenu = document.getElementById('language-menu');
+            if (langMenu) {
+                langMenu.classList.add('hidden');
+            }
+
+            if (!silent && (force || previousLanguage !== normalized)) {
+                showToast('language-switch-toast', true, { language: getLanguageLabel(normalized, normalized) });
+            }
         }
         window.setLanguage = setLanguage;
+
+        function setupLanguageControls() {
+            const langSwitch = document.getElementById('lang-switch');
+            if (langSwitch && langSwitch.dataset.boundLanguageSwitch !== 'true') {
+                langSwitch.addEventListener('change', (event) => {
+                    event.preventDefault();
+                    const targetLang = event.target.checked ? 'bn' : 'en';
+                    setLanguage(targetLang);
+                });
+                langSwitch.dataset.boundLanguageSwitch = 'true';
+            }
+
+            document.querySelectorAll('[data-lang-option]').forEach(button => {
+                if (button.dataset.boundLanguageOption === 'true') return;
+                button.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    const langCode = button.dataset.langOption;
+                    if (!langCode) return;
+                    setLanguage(langCode);
+                    if (typeof closeDrawer === 'function' && button.closest('#nav-drawer')) {
+                        closeDrawer();
+                    }
+                });
+                button.dataset.boundLanguageOption = 'true';
+            });
+
+            refreshLanguageUIState();
+        }
+
+        function setupHeaderShortcuts() {
+            const supportBtn = document.getElementById('emergency-contact-header');
+            if (supportBtn && supportBtn.dataset.boundShortcut !== 'true') {
+                supportBtn.addEventListener('click', () => {
+                    try { showPage('support-page'); } catch (error) { console.error('Support shortcut failed:', error); }
+                });
+                supportBtn.dataset.boundShortcut = 'true';
+            }
+
+            const profileBtn = document.getElementById('profile-icon');
+            if (profileBtn) {
+                if (!profileBtn.dataset.boundShortcut && !profileBtn.hasAttribute('onclick')) {
+                    profileBtn.addEventListener('click', () => {
+                        try { openDrawer('profile-drawer'); } catch (error) { console.error('Profile shortcut failed:', error); }
+                    });
+                }
+                profileBtn.dataset.boundShortcut = 'true';
+            }
+
+            const darkToggle = document.getElementById('dark-mode-toggle');
+            if (darkToggle && darkToggle.dataset.boundShortcut !== 'true') {
+                darkToggle.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    try { toggleDarkMode(); } catch (error) { console.error('Dark mode toggle failed:', error); }
+                });
+                darkToggle.dataset.boundShortcut = 'true';
+            }
+        }
 
         function showPage(pageId) {
             // Stop chat listener when leaving the chat page
@@ -2421,6 +2850,9 @@
                 }
                 // Re-apply translations on newly visible page
                 updateTextContent();
+            }
+            if (pageId !== 'product-details-page') {
+                try { clearProductDetailsFlashTimer(); } catch (_) {}
             }
             // Toggle global breadcrumb visibility - show only on product details
             try {
@@ -3080,7 +3512,7 @@
                 }
 
                 const card = document.createElement('article');
-                card.className = 'flash-sale-card product-card relative flex flex-col bg-white dark:bg-gray-900 rounded-3xl shadow-lg border border-theme-pink/30 overflow-hidden';
+                card.className = 'flash-sale-card product-card relative flex flex-col bg-white dark:bg-gray-900 rounded-3xl shadow-lg border border-theme-pink/30 overflow-hidden transform transition-transform hover:-translate-y-2 hover:shadow-2xl';
                 card.dataset.productId = productId;
                 card.innerHTML = `
                     <div class="relative">
@@ -3195,10 +3627,11 @@
                 const heartClass = isWished ? 'fas text-theme-pink' : 'far text-gray-400';
                 const isOutOfStock = Number(product.stock) <= 0;
                 const badgeText = mega.label || localeStrings['mega-sale-badge'] || 'Mega Sale';
-                const priceValue = Number(product.price) || 0;
-                const originalValue = Number.isFinite(mega.originalPrice) && mega.originalPrice > priceValue
+                const priceValue = Number(mega.price ?? product.price) || 0;
+                const originalCandidate = Number.isFinite(mega.originalPrice)
                     ? Number(mega.originalPrice)
-                    : (Number(product.originalPrice) > priceValue ? Number(product.originalPrice) : null);
+                    : (Number.isFinite(product.originalPrice) ? Number(product.originalPrice) : null);
+                const originalValue = originalCandidate && originalCandidate > priceValue ? originalCandidate : null;
 
                 let priceHtml = `<span class="text-2xl font-bold text-price-black">৳${priceValue.toFixed(2)}</span>`;
                 if (originalValue && originalValue > priceValue) {
@@ -3221,7 +3654,7 @@
                 const buttonDisabled = isOutOfStock ? 'disabled' : '';
 
                 const card = document.createElement('article');
-                card.className = 'mega-sale-card product-card relative flex flex-col bg-white dark:bg-gray-900 rounded-3xl shadow-lg border border-theme-purple/20 overflow-hidden';
+                card.className = 'mega-sale-card product-card relative flex flex-col bg-white dark:bg-gray-900 rounded-3xl shadow-lg border border-theme-purple/20 overflow-hidden transform transition-transform hover:-translate-y-2 hover:shadow-2xl';
                 card.dataset.productId = productId;
                 card.innerHTML = `
                     <div class="relative">
@@ -3254,8 +3687,14 @@
 
         function getCategoryLabel(cat) {
             if (!cat) return '';
-            const slug = String(cat).toLowerCase();
+            const canonical = resolveCategoryId(cat);
+            const fromGroups = HEADER_CATEGORY_GROUPS.find(group => group.id === canonical);
+            if (fromGroups) {
+                const localized = fromGroups.label?.[currentLanguage] || fromGroups.label?.en || fromGroups.label?.bn;
+                if (localized) return localized;
+            }
             // Map common slugs to existing translation keys
+            const slug = String(cat).toLowerCase();
             const keyMap = {
                 'books-stationery': 'cat-books',
                 'sports-outdoors': 'cat-sports',
@@ -3272,25 +3711,230 @@
             return slug.split(/[-_]/g).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
         }
 
+        function getSubCategoryLabel(categoryId, subValue) {
+            if (!categoryId || !subValue) return subValue || '';
+            const canonical = resolveCategoryId(categoryId);
+            const resolved = resolveSubCategoryValue(canonical, subValue);
+            const group = HEADER_CATEGORY_GROUPS.find(g => g.id === canonical);
+            const items = Array.isArray(group?.items) ? group.items : [];
+            const match = items.find(item => {
+                return slugifyCategoryText(item?.value) === slugifyCategoryText(resolved);
+            });
+            if (match) {
+                return match.label?.[currentLanguage] || match.label?.en || match.label?.bn || subValue;
+            }
+            return resolved;
+        }
+
         // Curated top categories to always show (merged with categories found in products)
-        const TOP_CATEGORIES = [
-            'electronics',
-            'fashion',
-            'groceries',
-            'beauty',
-            'home-garden',
-            'kids-toys',
-            'sports-outdoors',
-            'books-stationery',
-            'automotive',
-            'health-beauty',
-            'accessories',
-            'footwear',
-            'watches',
-            'jewelry',
-            'bags',
-            'appliances'
+        const HEADER_CATEGORY_GROUPS = [
+            {
+                id: 'electronics',
+                label: { en: 'Electronics', bn: 'ইলেকট্রনিক্স' },
+                items: [
+                    { value: 'Mobile Phone', label: { en: 'Mobile Phone', bn: 'মোবাইল ফোন' } },
+                    { value: 'Laptop & Computer', label: { en: 'Laptop & Computer', bn: 'ল্যাপটপ ও কম্পিউটার' } },
+                    { value: 'Tablet', label: { en: 'Tablet', bn: 'ট্যাবলেট' } },
+                    { value: 'TV & Home Theater', label: { en: 'TV & Home Theater', bn: 'টিভি ও হোম থিয়েটার' } },
+                    { value: 'Headphone & Speaker', label: { en: 'Headphone & Speaker', bn: 'হেডফোন ও স্পিকার' } },
+                    { value: 'Camera & Accessories', label: { en: 'Camera & Accessories', bn: 'ক্যামেরা ও এক্সেসরিজ' } },
+                    { value: 'Wearable Smart Watch', label: { en: 'Wearable Smart Watch', bn: 'স্মার্ট ওয়াচ' } },
+                    { value: 'Gaming Console', label: { en: 'Gaming Console', bn: 'গেমিং কনসোল' } }
+                ]
+            },
+            {
+                id: 'fashion',
+                label: { en: 'Fashion', bn: 'ফ্যাশন' },
+                items: [
+                    { value: "Men's Clothing", label: { en: "Men's Clothing", bn: 'পুরুষদের পোশাক' } },
+                    { value: "Women's Clothing", label: { en: "Women's Clothing", bn: 'নারীদের পোশাক' } },
+                    { value: "Kids' Clothing", label: { en: "Kids' Clothing", bn: 'শিশুদের পোশাক' } },
+                    { value: 'Shoes & Sandals', label: { en: 'Shoes & Sandals', bn: 'জুতা ও স্যান্ডেল' } },
+                    { value: 'Watch & Jewelry', label: { en: 'Watch & Jewelry', bn: 'ঘড়ি ও জুয়েলারি' } },
+                    { value: 'Bags & Accessories', label: { en: 'Bags & Accessories', bn: 'ব্যাগ ও এক্সেসরিজ' } },
+                    { value: 'Traditional Wear', label: { en: 'Traditional Wear', bn: 'ঐতিহ্যবাহী পোশাক' } }
+                ]
+            },
+            {
+                id: 'home-garden',
+                label: { en: 'Home & Garden', bn: 'হোম অ্যান্ড গার্ডেন' },
+                items: [
+                    { value: 'Furniture', label: { en: 'Furniture', bn: 'ফার্নিচার' } },
+                    { value: 'Kitchen Items', label: { en: 'Kitchen Items', bn: 'রান্নাঘরের সামগ্রী' } },
+                    { value: 'Home Decor', label: { en: 'Home Decor', bn: 'হোম ডেকর' } },
+                    { value: 'Lighting', label: { en: 'Lighting', bn: 'লাইটিং' } },
+                    { value: 'Garden Tools', label: { en: 'Garden Tools', bn: 'বাগানের যন্ত্র' } },
+                    { value: 'Home Appliances', label: { en: 'Home Appliances', bn: 'হোম অ্যাপ্লায়েন্স' } },
+                    { value: 'Storage & Organizer', label: { en: 'Storage & Organizer', bn: 'স্টোরেজ ও অর্গানাইজার' } }
+                ]
+            },
+            {
+                id: 'health-beauty',
+                label: { en: 'Health & Beauty', bn: 'স্বাস্থ্য ও সৌন্দর্য' },
+                items: [
+                    { value: 'Skincare', label: { en: 'Skincare', bn: 'স্কিনকেয়ার' } },
+                    { value: 'Haircare', label: { en: 'Haircare', bn: 'হেয়ারকেয়ার' } },
+                    { value: 'Makeup', label: { en: 'Makeup', bn: 'মেকআপ' } },
+                    { value: 'Perfume', label: { en: 'Perfume', bn: 'পারফিউম' } },
+                    { value: 'Health Supplement', label: { en: 'Health Supplement', bn: 'স্বাস্থ্য সাপ্লিমেন্ট' } },
+                    { value: 'Fitness Equipment', label: { en: 'Fitness Equipment', bn: 'ফিটনেস সরঞ্জাম' } },
+                    { value: 'Personal Care', label: { en: 'Personal Care', bn: 'পার্সোনাল কেয়ার' } },
+                    { value: 'Oral Care', label: { en: 'Oral Care', bn: 'ওরাল কেয়ার' } }
+                ]
+            },
+            {
+                id: 'sports-outdoors',
+                label: { en: 'Sports & Outdoors', bn: 'খেলাধুলা ও আউটডোর' },
+                items: [
+                    { value: 'Sports Apparel', label: { en: 'Sports Apparel', bn: 'স্পোর্টস পোশাক' } },
+                    { value: 'Sports Shoes', label: { en: 'Sports Shoes', bn: 'স্পোর্টস জুতা' } },
+                    { value: 'Fitness Gear', label: { en: 'Fitness Gear', bn: 'ফিটনেস গিয়ার' } },
+                    { value: 'Cycles', label: { en: 'Cycles', bn: 'সাইকেল' } },
+                    { value: 'Gym Equipment', label: { en: 'Gym Equipment', bn: 'জিম সরঞ্জাম' } },
+                    { value: 'Outdoor Camping Gear', label: { en: 'Outdoor Camping Gear', bn: 'ক্যাম্পিং সরঞ্জাম' } },
+                    { value: 'Football, Cricket, Badminton Items', label: { en: 'Football, Cricket, Badminton Items', bn: 'ফুটবল, ক্রিকেট, ব্যাডমিন্টন সামগ্রী' } }
+                ]
+            },
+            {
+                id: 'books-stationery',
+                label: { en: 'Books & Stationery', bn: 'বই ও স্টেশনারি' },
+                items: [
+                    { value: 'Educational Books', label: { en: 'Educational Books', bn: 'শিক্ষামূলক বই' } },
+                    { value: 'Story Books', label: { en: 'Story Books', bn: 'গল্পের বই' } },
+                    { value: 'Religious Books', label: { en: 'Religious Books', bn: 'ধর্মীয় বই' } },
+                    { value: 'Office Stationery', label: { en: 'Office Stationery', bn: 'অফিস স্টেশনারি' } },
+                    { value: 'School Stationery', label: { en: 'School Stationery', bn: 'স্কুল স্টেশনারি' } },
+                    { value: 'Notebook & Diary', label: { en: 'Notebook & Diary', bn: 'নোটবুক ও ডায়েরি' } },
+                    { value: 'Arts & Crafts Supplies', label: { en: 'Arts & Crafts Supplies', bn: 'আর্টস ও ক্রাফটস' } }
+                ]
+            },
+            {
+                id: 'kids-toys',
+                label: { en: 'Kids & Toys', bn: 'বাচ্চা ও খেলনা' },
+                items: [
+                    { value: 'Educational Toys', label: { en: 'Educational Toys', bn: 'শিক্ষামূলক খেলনা' } },
+                    { value: 'Soft Toys', label: { en: 'Soft Toys', bn: 'নরম খেলনা' } },
+                    { value: 'Dolls & Action Figures', label: { en: 'Dolls & Action Figures', bn: 'পুতুল ও অ্যাকশন ফিগার' } },
+                    { value: 'Games & Puzzles', label: { en: 'Games & Puzzles', bn: 'গেমস ও পাজল' } },
+                    { value: 'Outdoor Toys', label: { en: 'Outdoor Toys', bn: 'বাইরের খেলনা' } },
+                    { value: 'Remote Control Toys', label: { en: 'Remote Control Toys', bn: 'রিমোট কন্ট্রোল খেলনা' } },
+                    { value: 'Lego & Building Blocks', label: { en: 'Lego & Building Blocks', bn: 'লেগো ও ব্লক' } }
+                ]
+            },
+            {
+                id: 'cars',
+                label: { en: 'Cars & Bikes', bn: 'গাড়ি ও বাইক' },
+                items: [
+                    { value: 'Car Accessories', label: { en: 'Car Accessories', bn: 'গাড়ির এক্সেসরিজ' } },
+                    { value: 'Bike Accessories', label: { en: 'Bike Accessories', bn: 'বাইকের এক্সেসরিজ' } },
+                    { value: 'Helmets & Riding Gear', label: { en: 'Helmets & Riding Gear', bn: 'হেলমেট ও রাইডিং গিয়ার' } },
+                    { value: 'Tires & Wheels', label: { en: 'Tires & Wheels', bn: 'টায়ার ও হুইল' } },
+                    { value: 'Car Care Products', label: { en: 'Car Care Products', bn: 'গাড়ির যত্ন সামগ্রী' } },
+                    { value: 'Motor Oil & Lubricants', label: { en: 'Motor Oil & Lubricants', bn: 'মটর তেল ও লুব্রিক্যান্ট' } },
+                    { value: 'Electric Scooters & Bikes', label: { en: 'Electric Scooters & Bikes', bn: 'ইলেকট্রিক স্কুটার ও বাইক' } }
+                ]
+            }
         ];
+
+        const CATEGORY_SYNONYM_OVERRIDES = {
+            'electronics': ['electronics', 'Electronic Devices', 'ইলেকট্রনিক্স'],
+            'fashion': ['fashion', 'Clothing', 'ফ্যাশন'],
+            'home-garden': ['home & garden', 'home and garden', 'home', 'garden'],
+            'health-beauty': ['health & beauty', 'beauty', 'স্বাস্থ্য ও সৌন্দর্য'],
+            'sports-outdoors': ['sports', 'sports & outdoors', 'outdoor', 'খেলাধুলা'],
+            'books-stationery': ['books', 'books & stationery', 'stationery', 'বই'],
+            'kids-toys': ['kids', 'kids & toys', 'toys', 'খেলনা'],
+            'cars': ['cars & bikes', 'cars', 'bikes', 'automotive', 'car']
+        };
+
+        function slugifyCategoryText(text) {
+            return String(text || '').toLowerCase().replace(/[^a-z0-9]+/g, '');
+        }
+
+        const CATEGORY_ALIAS_MAP = (() => {
+            const map = {};
+            const register = (canonical, value) => {
+                if (!canonical || !value) return;
+                const key = slugifyCategoryText(value);
+                if (!key) return;
+                map[key] = canonical;
+            };
+            HEADER_CATEGORY_GROUPS.forEach(group => {
+                const canonical = group.id;
+                register(canonical, canonical);
+                register(canonical, group.label?.en);
+                register(canonical, group.label?.bn);
+                if (Array.isArray(group.aliases)) {
+                    group.aliases.forEach(alias => register(canonical, alias));
+                }
+            });
+            Object.entries(CATEGORY_SYNONYM_OVERRIDES).forEach(([canonical, values]) => {
+                values.forEach(value => register(canonical, value));
+            });
+            return map;
+        })();
+
+        function resolveCategoryId(raw) {
+            if (!raw) return null;
+            const slug = slugifyCategoryText(raw);
+            return CATEGORY_ALIAS_MAP[slug] || raw;
+        }
+
+        function getCategoryMatchValues(categoryId) {
+            const canonical = resolveCategoryId(categoryId);
+            if (!canonical) return [];
+            const values = new Set();
+            values.add(canonical);
+            const group = HEADER_CATEGORY_GROUPS.find(g => g.id === canonical);
+            if (group) {
+                if (group.label?.en) values.add(group.label.en);
+                if (group.label?.bn) values.add(group.label.bn);
+                if (Array.isArray(group.aliases)) {
+                    group.aliases.forEach(alias => values.add(alias));
+                }
+            }
+            (CATEGORY_SYNONYM_OVERRIDES[canonical] || []).forEach(alias => values.add(alias));
+            return Array.from(values);
+        }
+
+        function matchesCategoryName(value, categoryId) {
+            if (!value || !categoryId) return false;
+            const normalized = slugifyCategoryText(value);
+            return getCategoryMatchValues(categoryId).some(candidate => slugifyCategoryText(candidate) === normalized);
+        }
+
+        function resolveSubCategoryValue(categoryId, input) {
+            const canonical = resolveCategoryId(categoryId);
+            if (!canonical || !input) return input;
+            const group = HEADER_CATEGORY_GROUPS.find(g => g.id === canonical);
+            if (!group) return input;
+            const slug = slugifyCategoryText(input);
+            const match = group.items.find(item => {
+                return [item?.value, item?.label?.en, item?.label?.bn].some(v => slugifyCategoryText(v) === slug);
+            });
+            return match ? match.value : input;
+        }
+
+        function getSubCategoryMatchValues(categoryId, subValue) {
+            const canonical = resolveCategoryId(categoryId);
+            const base = resolveSubCategoryValue(canonical, subValue);
+            const group = HEADER_CATEGORY_GROUPS.find(g => g.id === canonical);
+            if (!group) return [base];
+            const slug = slugifyCategoryText(base);
+            const match = group.items.find(item => slugifyCategoryText(item.value) === slug);
+            if (!match) return [base];
+            const set = new Set();
+            set.add(match.value);
+            if (match.label?.en) set.add(match.label.en);
+            if (match.label?.bn) set.add(match.label.bn);
+            return Array.from(set);
+        }
+
+        function matchesSubCategoryName(value, categoryId, targetValue) {
+            if (!value || !categoryId || !targetValue) return false;
+            const normalized = slugifyCategoryText(value);
+            return getSubCategoryMatchValues(categoryId, targetValue).some(candidate => slugifyCategoryText(candidate) === normalized);
+        }
 
         // Font Awesome icon mapping for categories (use small icon size)
         function getCategoryIconClass(cat) {
@@ -3319,7 +3963,7 @@
 
         function updateCategoryHeader(category, subCategory = null) {
             const categoryName = category ? getCategoryLabel(category) : '';
-            const subCategoryName = subCategory ? subCategory.charAt(0).toUpperCase() + subCategory.slice(1) : '';
+            const subCategoryName = subCategory ? getSubCategoryLabel(category, subCategory) : '';
             
             currentCategory = category;
             currentSubCategory = subCategory;
@@ -3330,8 +3974,16 @@
                 title = subCategoryName ? subCategoryName : categoryName;
             }
 
+            if (DOMElements.categoryHeader) {
+                DOMElements.categoryHeader.classList.toggle('hidden', !category);
+            }
+
             DOMElements.currentCategoryTitle.textContent = title;
-            DOMElements.currentCategoryTitle.dataset.lang = category ? (subCategory ? 'N/A' : 'current-category-title') : 'featured-products';
+            if (category) {
+                delete DOMElements.currentCategoryTitle.dataset.lang;
+            } else {
+                DOMElements.currentCategoryTitle.dataset.lang = 'featured-products';
+            }
 
             // Update Breadcrumb
             let breadcrumbHtml = `<a href="javascript:void(0);" onclick="renderAllProducts()" class="text-theme-blue hover:underline">${translations[currentLanguage]['all-products']}</a>`;
@@ -3342,10 +3994,12 @@
             if (subCategory) {
                 breadcrumbHtml += ` <span class="mx-1">/</span> <span class="font-semibold text-dark dark:text-gray-100">${subCategoryName}</span>`;
             }
-            DOMElements.categoryPath.innerHTML = breadcrumbHtml;
+            if (DOMElements.breadcrumb) {
+                DOMElements.breadcrumb.innerHTML = breadcrumbHtml;
+            }
             
             // Render subcategory buttons if a main category is selected
-            if (category && !subCategory) {
+            if (category) {
                 renderSubCategories(category);
             } else {
                 DOMElements.subcategoryButtons.innerHTML = '';
@@ -3357,64 +4011,40 @@
         }
         
         function renderSubCategories(category) {
-            // Get all unique subcategories for the current category
-            const subCategories = productsData
-                .filter(p => p.category === category && p.subCategory)
-                .map(p => p.subCategory)
-                .filter((value, index, self) => self.indexOf(value) === index) // Unique values
-                .sort();
+            const container = DOMElements.subcategoryButtons;
+            if (!container) return;
 
-            let buttonsHtml = '';
+            const canonical = resolveCategoryId(category);
+            const group = HEADER_CATEGORY_GROUPS.find(g => g.id === canonical);
+            const subCategories = Array.isArray(group?.items) ? group.items : [];
 
-          if (subCategories.length > 0) {
-              buttonsHtml = subCategories.map(subCat => {
-                    const subCatName = subCat.charAt(0).toUpperCase() + subCat.slice(1);
-                    const isActive = currentSubCategory === subCat ? 'variant-btn-active bg-theme-blue/30' : '';
-                    return `<button class="px-4 py-2 text-sm bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 font-semibold rounded-full hover:bg-gray-300 transition-colors ${isActive}" onclick="filterSubCategory('${category}', '${subCat}')">
-                        ${subCatName}
-                    </button>`;
-                 }).join('');
-                 
-                 // Add an 'All' button for the current category
-                 const allActive = currentSubCategory === null ? 'variant-btn-active bg-theme-blue/30' : '';
-              const categoryName = getCategoryLabel(category);
-              const allWord = translations[currentLanguage]['all-in-category'] || (currentLanguage==='bn'?'সকল':'All in');
-              const allLabel = `${allWord} ${categoryName}`;
-              buttonsHtml = `<button class="px-4 py-2 text-sm bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 font-semibold rounded-full hover:bg-gray-300 transition-colors ${allActive}" onclick="filterProducts('${category}')">${allLabel}</button>` + buttonsHtml;
-            } 
+            if (subCategories.length === 0) {
+                container.innerHTML = '';
+                return;
+            }
 
-            DOMElements.subcategoryButtons.innerHTML = buttonsHtml;
-            // Ensure language is updated for the new 'All' button
-            updateTextContent();
+            const allActive = currentSubCategory === null;
+            const categoryName = getCategoryLabel(canonical);
+            const allWord = translations[currentLanguage]['all-in-category'] || (currentLanguage === 'bn' ? 'সকল' : 'All in');
+            const allLabel = `${allWord} ${categoryName}`;
+
+            const buttonBase = 'px-4 py-2 text-sm bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 font-semibold rounded-full hover:bg-gray-300 transition-colors';
+            const activeClass = ' variant-btn-active bg-theme-blue/30 text-theme-purple dark:text-theme-blue';
+
+            let buttonsHtml = `<button class="${buttonBase}${allActive ? activeClass : ''}" onclick="filterProducts('${canonical}')">${allLabel}</button>`;
+
+            buttonsHtml += subCategories.map(item => {
+                const value = item?.value || item?.label?.en || item?.label?.bn || '';
+                if (!value) return '';
+                const label = item?.label?.[currentLanguage] || item?.label?.en || item?.label?.bn || value;
+                const safeValue = String(value).replace(/'/g, "\\'");
+                const isActive = slugifyCategoryText(currentSubCategory) === slugifyCategoryText(value);
+                return `<button class="${buttonBase}${isActive ? activeClass : ''}" onclick="filterSubCategory('${canonical}', '${safeValue}')">${label}</button>`;
+            }).join('');
+
+            container.innerHTML = buttonsHtml;
         }
 
-        // Action when clicking a main category (e.g., Electronics)
-        window.filterProducts = (category) => {
-            const filtered = productsData.filter(p => p.category === category);
-            // Reset filters when switching main category (preserve sort)
-            resetFiltersOnCategoryChange();
-            
-            updateCategoryHeader(category, null); // Set only main category
-            renderProducts(filtered); 
-            
-            showPage('home-page');
-            // Scroll to the top category strip so the subcategory dropdown is visible
-            scrollToElement('top-category-strip');
-        };
-
-        // Action when clicking a sub-category button (e.g., Mobile)
-        window.filterSubCategory = (category, subCategory) => {
-            const filtered = productsData.filter(p => p.category === category && p.subCategory === subCategory);
-            // Reset filters when switching subcategory (preserve sort)
-            resetFiltersOnCategoryChange();
-            
-            updateCategoryHeader(category, subCategory); // Set main and sub category
-            renderProducts(filtered); 
-            
-            showPage('home-page');
-            scrollToElement('products');
-        };
-        
         // --- END CATEGORY & SUB-CATEGORY LOGIC ---
 
         // --- SORTING & FILTERING UI/LOGIC ---
@@ -3437,10 +4067,10 @@
                             <option value="newest">Newest</option>
                           </select>
                         </div>
-                        <div class="flex items-center gap-2">
-                          <button id="toggle-filters-btn" class="px-3 py-1.5 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700">Filters</button>
-                          <button id="clear-filters-btn" class="px-2 py-1 text-sm text-red-600 hover:text-red-700">Clear</button>
-                        </div>
+                                                <div class="flex items-center gap-2">
+                                                    <button id="toggle-filters-btn" class="px-3 py-1.5 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700">Filters</button>
+                                                    <button id="clear-filters-btn" class="px-2 py-1 text-sm text-red-600 hover:text-red-700" onclick="clearAllFilters()">Clear</button>
+                                                </div>
                     `;
                     list.parentNode.insertBefore(toolbar, list);
 
@@ -3492,11 +4122,7 @@
                         p.classList.toggle('hidden');
                     });
 
-                    const clearBtn = document.getElementById('clear-filters-btn');
-                    clearBtn.addEventListener('click', () => {
-                        resetFiltersOnCategoryChange(false);
-                        renderProducts(lastBaseProducts);
-                    });
+                    // Clear button uses global handler via inline onclick
                 }
                 // Always ensure the product list uses a responsive grid with 6 columns on large screens
                 try {
@@ -3516,12 +4142,30 @@
             } catch (e) { console.warn('ensureListingToolbar failed', e); }
         }
 
-        function resetFiltersOnCategoryChange(showMsg = false) {
+        function resetFiltersOnCategoryChange(options = {}) {
+            let showMsg = false;
+            let hidePanel = true;
+            if (typeof options === 'boolean') {
+                showMsg = options;
+            } else if (options && typeof options === 'object') {
+                showMsg = !!options.showMsg;
+                hidePanel = options.hidePanel !== false;
+            }
             activeFilters = { brands: new Set(), priceMin: null, priceMax: null, sizes: new Set(), colors: new Set() };
-            const p = document.getElementById('filters-panel');
-            if (p) p.classList.add('hidden');
+            const panel = document.getElementById('filters-panel');
+            if (panel && hidePanel) panel.classList.add('hidden');
             if (showMsg) showToast('Filters cleared');
         }
+
+        window.clearAllFilters = () => {
+            resetFiltersOnCategoryChange({ showMsg: false, hidePanel: false });
+            activeFilters = { brands: new Set(), priceMin: null, priceMax: null, sizes: new Set(), colors: new Set() };
+            renderProducts(lastBaseProducts);
+            renderFiltersUI();
+            const panel = document.getElementById('filters-panel');
+            if (panel) panel.classList.remove('hidden');
+            showToast('Filters cleared');
+        };
 
         function deriveAvailableFilters(base) {
             const brands = new Set();
@@ -3581,16 +4225,19 @@
                 const v = e.target.value;
                 if (e.target.checked) activeFilters.brands.add(v); else activeFilters.brands.delete(v);
                 renderProducts(lastBaseProducts);
+                renderFiltersUI();
             }));
             sizesEl.querySelectorAll('button[data-size]').forEach(btn => btn.addEventListener('click', () => {
                 const v = btn.dataset.size;
                 if (activeFilters.sizes.has(v)) activeFilters.sizes.delete(v); else activeFilters.sizes.add(v);
                 renderProducts(lastBaseProducts);
+                renderFiltersUI();
             }));
             colorsEl.querySelectorAll('button[data-color]').forEach(btn => btn.addEventListener('click', () => {
                 const v = btn.dataset.color;
                 if (activeFilters.colors.has(v)) activeFilters.colors.delete(v); else activeFilters.colors.add(v);
                 renderProducts(lastBaseProducts);
+                renderFiltersUI();
             }));
             const onPriceChange = () => {
                 const minV = parseFloat(minEl.value);
@@ -3598,6 +4245,7 @@
                 activeFilters.priceMin = isNaN(minV) ? null : minV;
                 activeFilters.priceMax = isNaN(maxV) ? null : maxV;
                 renderProducts(lastBaseProducts);
+                renderFiltersUI();
             };
             minEl.onchange = onPriceChange;
             maxEl.onchange = onPriceChange;
@@ -3719,67 +4367,72 @@
             const listEl = document.getElementById('top-category-strip-list');
             if (!listEl) return;
 
-            // Derive unique categories from loaded products
-            const productCats = Array.from(new Set((productsData || []).map(p => p.category).filter(Boolean)));
-            // Merge curated + product categories, preserve order and uniqueness
-            const uniqueCategories = Array.from(new Set([...
-                TOP_CATEGORIES,
-                ...productCats
-            ]));
+            const chipBase = 'shrink-0 inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold border transition-colors whitespace-nowrap';
+            const activeCls = 'bg-theme-pink text-white border-theme-pink shadow-md';
+            const idleCls = 'bg-white text-gray-700 dark:bg-gray-900 dark:text-gray-200 border-gray-200 dark:border-gray-700 hover:bg-theme-pink/10 hover:text-theme-purple';
+            const subIdleCls = 'bg-white text-gray-700 dark:bg-gray-900 dark:text-gray-200 border-gray-200 dark:border-gray-700 hover:bg-theme-blue/10 hover:text-theme-blue';
+            const subActiveCls = 'bg-theme-blue text-white border-theme-blue shadow-md';
 
-            // Chip classes
-            const chipBase = 'shrink-0 inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium border transition-colors';
-            const activeCls = 'bg-theme-pink text-white border-transparent';
-            const idleCls = 'bg-white text-gray-700 dark:bg-gray-900 dark:text-gray-200 border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800';
+            const buttons = [];
+            const allActive = !currentCategory;
+            const activeCategoryId = currentCategory ? resolveCategoryId(currentCategory) : null;
 
-            // Build HTML
-            const isAllActive = !currentCategory;
-            let html = '';
-            html += `<button class="${chipBase} ${isAllActive ? activeCls : idleCls}" onclick="renderAllProducts()" data-lang="all-products">${translations[currentLanguage]['all-products'] || 'All Products'}</button>`;
+            buttons.push(`
+                <button type="button" class="${chipBase} ${allActive ? activeCls : idleCls}" onclick="renderAllProducts()">
+                    <i class="fas fa-layer-group text-xs"></i>
+                    <span>${translations[currentLanguage]['all-products'] || 'All Products'}</span>
+                </button>
+            `);
 
-            uniqueCategories.forEach(cat => {
-                const isActive = currentCategory === cat;
-                const label = getCategoryLabel(cat);
-                const safeCat = String(cat).replace(/'/g, "\\'");
-                const iconClass = getCategoryIconClass(cat);
-                html += `<button class="${chipBase} ${isActive ? activeCls : idleCls}" onclick="filterProducts('${safeCat}')">
-                    <i class="fas ${iconClass} mr-2 text-xs sm:text-sm"></i>
-                    <span>${label}</span>
-                </button>`;
-            });
+            const renderCategoryButton = (group, isActiveOverride = false) => {
+                const isActive = isActiveOverride || activeCategoryId === resolveCategoryId(group.id);
+                const iconClass = getCategoryIconClass(group.id);
+                const label = group.label?.[currentLanguage] || group.label?.en || group.label?.bn || group.id;
+                return `
+                    <button type="button" class="${chipBase} ${isActive ? activeCls : idleCls}" onclick="filterProducts('${group.id}')" aria-pressed="${isActive}">
+                        <i class="fas ${iconClass} text-xs"></i>
+                        <span>${label}</span>
+                    </button>
+                `;
+            };
 
-            // Append subcategory dropdown inline if a category is active
-            if (currentCategory) {
-                const subs = Array.from(new Set((productsData || [])
-                    .filter(p => p.category === currentCategory && p.subCategory)
-                    .map(p => p.subCategory))).sort();
-                if (subs.length > 0) {
-                    const selected = currentSubCategory || '';
-                    const allLabel = `${translations[currentLanguage]['all-in-category'] || (currentLanguage==='bn'?'সকল':'All in')} ${getCategoryLabel(currentCategory)}`;
-                    const options = [`<option value="" ${selected === '' ? 'selected' : ''}>${allLabel}</option>`]
-                        .concat(subs.map(s => {
-                            const label = s.charAt(0).toUpperCase() + s.slice(1);
-                            return `<option value="${s}" ${selected === s ? 'selected' : ''}>${label}</option>`;
-                        })).join('');
-                    html += `<select id="top-subcategory-select" class="shrink-0 px-3 py-1.5 rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-sm text-gray-700 dark:text-gray-200">${options}</select>`;
+            if (!activeCategoryId) {
+                HEADER_CATEGORY_GROUPS.forEach(group => {
+                    buttons.push(renderCategoryButton(group, false));
+                });
+            } else {
+                const activeGroup = HEADER_CATEGORY_GROUPS.find(g => g.id === activeCategoryId);
+                if (activeGroup) {
+                    buttons.push(renderCategoryButton(activeGroup, true));
+                } else {
+                    HEADER_CATEGORY_GROUPS.forEach(group => {
+                        buttons.push(renderCategoryButton(group, false));
+                    });
                 }
             }
 
-            listEl.innerHTML = html;
-
-            const selectEl = document.getElementById('top-subcategory-select');
-            if (selectEl) {
-                // Auto-focus so users see and can use it immediately
-                try { selectEl.focus(); } catch (e) {}
-                selectEl.onchange = (e) => {
-                    const val = e.target.value;
-                    if (!val) {
-                        window.filterProducts(currentCategory);
-                    } else {
-                        window.filterSubCategory(currentCategory, val);
-                    }
-                };
+            if (currentCategory) {
+                const group = HEADER_CATEGORY_GROUPS.find(g => g.id === resolveCategoryId(currentCategory));
+                if (group && Array.isArray(group.items) && group.items.length > 0) {
+                    buttons.push(`<span class="shrink-0 text-gray-400 dark:text-gray-500 text-lg">›</span>`);
+                    group.items.forEach(item => {
+                        const value = item?.value || item?.label?.en || item?.label?.bn;
+                        if (!value) return;
+                        const label = item?.label?.[currentLanguage] || item?.label?.en || item?.label?.bn || value;
+                        const safeValue = String(value).replace(/'/g, "\\'");
+                        const isActive = slugifyCategoryText(currentSubCategory) === slugifyCategoryText(value);
+                        buttons.push(`
+                            <button type="button" class="${chipBase} ${isActive ? subActiveCls : subIdleCls}" onclick="filterSubCategory('${resolveCategoryId(currentCategory)}', '${safeValue}')" aria-pressed="${isActive}">
+                                <i class="fas fa-angle-right text-xs"></i>
+                                <span>${label}</span>
+                            </button>
+                        `);
+                    });
+                }
             }
+
+            renderFiltersUI();
+            listEl.innerHTML = buttons.join('');
         }
         // --- END TOP CATEGORY STRIP ---
         
@@ -4001,6 +4654,116 @@
 
             const detailsPage = document.getElementById('product-details-page');
             if(!detailsPage) return;
+
+            const saleHighlightWrap = detailsPage.querySelector('#product-sale-highlight');
+            const saleBadgeWrap = detailsPage.querySelector('#product-sale-badges');
+            const saleCountdownWrap = detailsPage.querySelector('#product-sale-countdown-wrapper');
+            const saleCountdownLabelEl = detailsPage.querySelector('#product-sale-countdown-label');
+            const saleCountdownValueEl = detailsPage.querySelector('#product-sale-countdown');
+
+            if (saleHighlightWrap) saleHighlightWrap.classList.add('hidden');
+            if (saleBadgeWrap) saleBadgeWrap.innerHTML = '';
+            if (saleCountdownWrap) saleCountdownWrap.classList.add('hidden');
+            if (saleCountdownLabelEl) {
+                delete saleCountdownLabelEl.dataset.lang;
+                saleCountdownLabelEl.textContent = '';
+            }
+            if (saleCountdownValueEl) saleCountdownValueEl.textContent = '';
+            clearProductDetailsFlashTimer();
+
+            const localeStringsForDetails = translations[currentLanguage] || translations.en || {};
+            const saleBadges = [];
+            const flashInfoDetails = (product.flashSale && product.flashSale.enabled) ? product.flashSale : null;
+            const megaInfoDetails = (product.megaSale && product.megaSale.enabled) ? product.megaSale : null;
+            let detailFlashStatus = null;
+            let detailFlashTarget = null;
+
+            const toMs = (value) => {
+                if (!value) return null;
+                if (value instanceof Date) return value.getTime();
+                if (typeof value?.toDate === 'function') {
+                    try { return value.toDate().getTime(); } catch (_) { return null; }
+                }
+                if (typeof value === 'number' && Number.isFinite(value)) return value;
+                if (typeof value === 'string') {
+                    const parsed = Date.parse(value);
+                    return Number.isNaN(parsed) ? null : parsed;
+                }
+                if (typeof value === 'object' && typeof value.seconds === 'number') {
+                    return value.seconds * 1000 + (value.nanoseconds || 0) / 1e6;
+                }
+                return null;
+            };
+
+            if (flashInfoDetails) {
+                const startMs = toMs(flashInfoDetails.start);
+                const endMs = toMs(flashInfoDetails.end);
+                const nowMs = Date.now();
+                const isActive = (!startMs || startMs <= nowMs) && (!endMs || endMs > nowMs);
+                const isUpcoming = !!startMs && startMs > nowMs;
+
+                if (isActive) {
+                    detailFlashStatus = 'active';
+                    detailFlashTarget = Number.isFinite(endMs) ? endMs : null;
+                } else if (isUpcoming) {
+                    detailFlashStatus = 'upcoming';
+                    detailFlashTarget = Number.isFinite(startMs) ? startMs : null;
+                }
+
+                if (detailFlashStatus) {
+                    const flashLabelKey = detailFlashStatus === 'upcoming' ? 'flash-sale-upcoming' : 'flash-sale-badge';
+                    const flashLabel = escapeHtml(flashInfoDetails.label || resolveLocalizedString(flashLabelKey));
+                    saleBadges.push(`
+                        <span class="inline-flex items-center justify-center uppercase text-[11px] font-semibold tracking-[0.3em] bg-theme-purple text-white px-3 py-1 rounded-full shadow">${flashLabel}</span>
+                    `);
+                }
+            }
+
+            if (megaInfoDetails) {
+                const megaLabel = escapeHtml(megaInfoDetails.label || resolveLocalizedString('mega-sale-badge') || 'Mega Sale');
+                saleBadges.push(`
+                    <span class="inline-flex items-center gap-2 bg-theme-blue text-white text-[11px] font-semibold tracking-wide px-3 py-1 rounded-full shadow">${megaLabel}</span>
+                `);
+                if (Number.isFinite(megaInfoDetails.discountPercent) && megaInfoDetails.discountPercent > 0) {
+                    saleBadges.push(`
+                        <span class="inline-flex items-center bg-white text-theme-blue text-xs font-semibold px-2.5 py-1 rounded-full shadow-sm border border-theme-blue/30">-${Math.round(megaInfoDetails.discountPercent)}%</span>
+                    `);
+                }
+            }
+
+            if (saleBadgeWrap && saleBadges.length) {
+                saleBadgeWrap.innerHTML = saleBadges.join('');
+            }
+
+            if (detailFlashStatus && saleCountdownWrap && saleCountdownLabelEl && saleCountdownValueEl) {
+                const labelKey = detailFlashStatus === 'active' ? 'flash-sale-countdown-label' : 'flash-sale-countdown-starts';
+                saleCountdownLabelEl.dataset.lang = labelKey;
+                saleCountdownLabelEl.textContent = localeStringsForDetails[labelKey] || resolveLocalizedString(labelKey);
+
+                if (Number.isFinite(detailFlashTarget)) {
+                    const updateCountdown = () => {
+                        const diff = detailFlashTarget - Date.now();
+                        if (diff <= 0) {
+                            saleCountdownValueEl.textContent = '00:00:00';
+                            clearProductDetailsFlashTimer();
+                            return;
+                        }
+                        saleCountdownValueEl.textContent = formatCountdown(diff);
+                    };
+                    updateCountdown();
+                    saleCountdownWrap.classList.remove('hidden');
+                    productDetailsFlashTimerId = setInterval(updateCountdown, 1000);
+                } else {
+                    saleCountdownValueEl.textContent = '--:--:--';
+                    saleCountdownWrap.classList.remove('hidden');
+                }
+            }
+
+            if (saleHighlightWrap) {
+                const hasBadgeMarkup = saleBadges.length > 0 && saleBadgeWrap && saleBadgeWrap.innerHTML.trim().length > 0;
+                const hasCountdown = saleCountdownWrap && !saleCountdownWrap.classList.contains('hidden');
+                saleHighlightWrap.classList.toggle('hidden', !(hasBadgeMarkup || hasCountdown));
+            }
             
             // Update global breadcrumb: Home > Category > Subcategory > Product Name
             try {
@@ -4513,15 +5276,37 @@
                     }
                     discountPercent = Math.max(0, discountPercent);
 
-                    const megaFlag = resolveBooleanField(data, MEGA_FLAG_KEYS);
-                    const megaLabelRaw = getNormalizedString(getFirstAvailableValue(data, MEGA_LABEL_KEYS));
-                    const megaSaleEnabled = megaFlag || (discountPercent >= MEGA_DISCOUNT_THRESHOLD && isOffer);
+                    const megaConfig = (data.megaSale && typeof data.megaSale === 'object') ? data.megaSale : {};
+                    const megaFlagInfo = resolveBooleanFieldDetailed(data, MEGA_FLAG_KEYS);
+                    const megaConfigInfo = resolveBooleanFieldDetailed(megaConfig, ['enabled']);
+                    const explicitMegaTrue = (megaFlagInfo.explicit && megaFlagInfo.value) || (megaConfigInfo.explicit && megaConfigInfo.value);
+                    const explicitMegaFalse = (megaFlagInfo.explicit && !megaFlagInfo.value) || (megaConfigInfo.explicit && !megaConfigInfo.value);
+                    const megaLabelRaw = getNormalizedString(
+                        getFirstAvailableValue(megaConfig, ['label', 'title', 'badge']) ??
+                        getFirstAvailableValue(data, MEGA_LABEL_KEYS)
+                    );
+                    const megaConfigDiscount = resolveNumberField(megaConfig, ['discountPercent', 'discount', 'percent']);
+                    const megaConfigPrice = resolveNumberField(megaConfig, ['price', 'dealPrice', 'salePrice']);
+                    const megaConfigOriginal = resolveNumberField(megaConfig, ['originalPrice', 'compareAt', 'original']);
+
+                    const effectiveDiscountPercent = Number.isFinite(megaConfigDiscount)
+                        ? megaConfigDiscount
+                        : discountPercent;
+                    const effectiveMegaPrice = Number.isFinite(megaConfigPrice)
+                        ? megaConfigPrice
+                        : Number(effectivePrice) || 0;
+                    const effectiveMegaOriginal = Number.isFinite(megaConfigOriginal)
+                        ? megaConfigOriginal
+                        : (discountReference || null);
+
+                    const megaSaleEnabled = explicitMegaTrue || (!explicitMegaFalse && discountPercent >= MEGA_DISCOUNT_THRESHOLD && isOffer);
                     const megaSale = megaSaleEnabled ? {
+                        ...megaConfig,
                         enabled: true,
-                        label: megaLabelRaw || null,
-                        discountPercent,
-                        price: Number(effectivePrice) || 0,
-                        originalPrice: discountReference || null
+                        label: megaLabelRaw || megaConfig.label || null,
+                        discountPercent: Number.isFinite(effectiveDiscountPercent) ? effectiveDiscountPercent : null,
+                        price: Number.isFinite(effectiveMegaPrice) ? effectiveMegaPrice : null,
+                        originalPrice: Number.isFinite(effectiveMegaOriginal) ? effectiveMegaOriginal : null
                     } : null;
 
                     return {
@@ -6244,20 +7029,26 @@
 
         // --- GLOBAL FUNCTIONS for onclick ---
         window.renderAllProducts = () => {
-            updateCategoryHeader(null, null); // Reset header to All Products
+            resetFiltersOnCategoryChange(false);
+            updateCategoryHeader(null, null);
             renderProducts(productsData);
             showPage('home-page');
+            scrollToElement('top-category-strip');
         };
         window.filterProducts = (category) => {
-            const filtered = productsData.filter(p => p.category === category);
-            updateCategoryHeader(category, null);
+            resetFiltersOnCategoryChange(false);
+            const canonical = resolveCategoryId(category);
+            const filtered = productsData.filter(p => matchesCategoryName(p.category, canonical));
+            updateCategoryHeader(canonical, null);
             renderProducts(filtered);
             showPage('home-page');
-            scrollToElement('products');
+            scrollToElement('top-category-strip');
         };
         window.filterSubCategory = (category, subCategory) => {
-            const filtered = productsData.filter(p => p.category === category && p.subCategory === subCategory);
-            updateCategoryHeader(category, subCategory);
+            const canonical = resolveCategoryId(category);
+            const resolvedSub = resolveSubCategoryValue(canonical, subCategory);
+            const filtered = productsData.filter(p => matchesCategoryName(p.category, canonical) && matchesSubCategoryName(p.subCategory, canonical, resolvedSub));
+            updateCategoryHeader(canonical, resolvedSub);
             renderProducts(filtered);
             showPage('home-page');
             scrollToElement('products');
@@ -6617,8 +7408,9 @@
                     `;
                 }).join('');
                 
+                const invoiceLabel = resolveLocalizedString('download-invoice');
                 const invoiceButton = status === 'delivered' 
-                    ? `<button class="download-invoice-btn bg-green-500 text-white py-2 px-4 rounded-lg font-semibold hover:bg-green-600 transition-colors" data-order-id="${order.id}">Download Invoice</button>`
+                    ? `<button class="download-invoice-btn bg-green-500 text-white py-2 px-4 rounded-lg font-semibold hover:bg-green-600 transition-colors" data-order-id="${order.id}">${invoiceLabel}</button>`
                     : '';
 
                 // Final Card structure based on user image
@@ -6898,7 +7690,7 @@
         async function downloadInvoice(orderDocId) {
             const order = userOrders.find(o => o.id === orderDocId);
             if (!order) {
-                showToast("Error: Order data not found for invoice.", false);
+                showToast('invoice-missing-order', false);
                 return;
             }
 
@@ -7032,7 +7824,7 @@
             doc.text("Thank you for shopping with TangailBuzz!", pageWidth - marginX, y, { align: "right" });
 
             doc.save(`Invoice_${order.orderId}.pdf`);
-            showToast("Invoice downloaded successfully!");
+            showToast('invoice-download-success');
         }
 
         // --- INITIALIZATION & EVENT LISTENERS ---
@@ -7047,7 +7839,13 @@
             
             // 2. Load Product/Banner Data
             // Initialize language from storage
-            setLanguage();
+            setLanguage(currentLanguage, { silent: true, persist: false, force: true });
+            try {
+                setupLanguageControls();
+            } catch (error) {
+                console.error('Language control setup failed:', error);
+            }
+            setupHeaderShortcuts();
             DOMElements.productList.innerHTML = `<div class="loader"></div>`;
             await fetchProductsFromFirestore();
             await fetchBannersFromFirestore();
@@ -7066,11 +7864,6 @@
             DOMElements.confirmOrderBtn.addEventListener('click', handlePlaceOrder);
             DOMElements.couponForm.addEventListener('submit', handleApplyCoupon);
             
-            // Dark Mode Toggle Listener
-            if (DOMElements.darkModeToggle) {
-                DOMElements.darkModeToggle.addEventListener('click', toggleDarkMode);
-            }
-            
             // Confirmation Modal Listeners
             DOMElements.confirmOkBtn.addEventListener('click', handleConfirmClick);
             DOMElements.confirmCancelBtn.addEventListener('click', handleCancelClick);
@@ -7078,11 +7871,7 @@
             // Emergency Contact Button
             if(DOMElements.emergencyContactBtn) DOMElements.emergencyContactBtn.addEventListener('click', handleEmergencyChatClick);
             if(DOMElements.chatForm) DOMElements.chatForm.addEventListener('submit', sendChatMessage);
-            const headerEmergencyBtn = document.getElementById('emergency-contact-header');
-            // Header Support button should open the Support page (with Chat, Email, Phone options)
-            if (headerEmergencyBtn) headerEmergencyBtn.addEventListener('click', () => {
-                showPage('support-page');
-            });
+            // Header shortcuts already wired in setupHeaderShortcuts()
 
             if(document.getElementById('my-orders-btn')) document.getElementById('my-orders-btn').addEventListener('click', () => { showPage('my-orders-page'); closeDrawer(); });
             if(DOMElements.myOrdersBtnProfile) DOMElements.myOrdersBtnProfile.addEventListener('click', () => { showPage('my-orders-page'); closeDrawer(); });
@@ -7268,5 +8057,6 @@
         }
         
     </script>
+
 </body>
 </html>
