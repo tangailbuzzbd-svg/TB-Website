@@ -559,6 +559,50 @@
         html.dark .toggle-knob {
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
         }
+
+        /* Mobile layout refinements */
+        @media (max-width: 640px) {
+            header .container {
+                gap: 0.75rem;
+            }
+
+            #banner-slider {
+                min-height: 200px;
+                height: auto;
+            }
+
+            #right-promo-link {
+                min-height: 200px;
+                height: auto;
+            }
+
+            .modal-overlay > div {
+                width: calc(100% - 2rem);
+                max-height: 90vh;
+                overflow-y: auto;
+            }
+
+            footer {
+                padding-top: 2.5rem;
+                padding-bottom: 2.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #top-category-strip .bg-white {
+                padding: 0.75rem;
+            }
+
+            .flash-sale-animated-bg > * {
+                text-align: left;
+            }
+        }
+
+        @media (min-width: 400px) and (max-width: 639.98px) {
+            #product-list {
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            }
+        }
 </style>
 </head>
 <body class="bg-theme-light text-dark font-sans leading-relaxed transition-colors duration-300 dark:bg-gray-900 dark:text-gray-100">
@@ -608,9 +652,9 @@
 
     <!-- Header Section -->
     <header class="bg-gradient-to-r from-theme-blue to-theme-purple text-white py-2 sticky top-0 z-40 shadow-2xl flex-shrink-0">
-        <div class="container mx-auto px-4 flex items-center justify-between">
+        <div class="container mx-auto px-4 flex flex-col md:flex-row items-stretch md:items-center md:justify-between gap-3 md:gap-4">
             <!-- Left side: Hamburger (mobile) and Logo -->
-            <div class="flex items-center space-x-4">
+            <div class="flex items-center justify-between md:justify-start w-full md:w-auto gap-3 sm:gap-4">
                  <!-- Hamburger Menu for Mobile -->
                 <button id="hamburger-btn" class="md:hidden text-2xl text-white"> <!-- Adjusted text color -->
                     <i class="fas fa-bars"></i>
@@ -638,7 +682,7 @@
             </nav>
 
             <!-- Right side: Actions -->
-            <div class="flex items-center space-x-2 sm:space-x-4">
+            <div class="flex w-full md:w-auto items-center justify-end gap-3 sm:gap-4 flex-wrap md:flex-nowrap">
                 <!-- Search -->
                 <div class="hidden md:block relative flex-grow md:flex-grow-0">
                     <div class="flex items-stretch rounded-full overflow-hidden shadow-md bg-white dark:bg-gray-900"> <!-- Search BG remains white/dark -->
@@ -804,7 +848,7 @@
 
 
     <!-- Mobile Navigation Drawer (Left) -->
-    <div id="nav-drawer" class="drawer left fixed top-0 left-0 h-full w-64 bg-white dark:bg-gray-800 shadow-lg z-50 p-6">
+    <div id="nav-drawer" class="drawer left fixed top-0 left-0 h-full w-full sm:w-72 bg-white dark:bg-gray-800 shadow-lg z-50 p-6">
         <button onclick="closeDrawer()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl">×</button>
     <h3 class="text-2xl font-bold text-theme-purple mb-8">মেনু</h3>
         <nav>
