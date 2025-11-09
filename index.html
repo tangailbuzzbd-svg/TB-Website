@@ -126,10 +126,216 @@
         .rating-star:hover, .rating-star.selected {
             color: #fca311; /* Amber/Yellow for selection/hover */
         }
-        .tracker-node p {
-                margin: 0;
-                font-size: 11px;
+        .tracker-step-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 1.75rem;
+            margin-top: 1.5rem;
+            padding: 1.6rem 1.4rem;
+            border-radius: 1.5rem;
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(129, 140, 248, 0.06), rgba(14, 165, 233, 0.05));
+            box-shadow: 0 18px 36px -24px rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(10px);
+        }
+
+        html.dark .tracker-step-container {
+            border-color: rgba(148, 163, 184, 0.3);
+            background: linear-gradient(135deg, rgba(17, 24, 39, 0.92), rgba(59, 130, 246, 0.18), rgba(236, 72, 153, 0.12));
+            box-shadow: 0 26px 46px -28px rgba(2, 6, 23, 0.85);
+        }
+
+        .tracker-node {
+            --circle-size: 48px;
+            position: relative;
+            display: grid;
+            grid-template-columns: var(--circle-size) 1fr;
+            gap: 1.1rem;
+            align-items: flex-start;
+        }
+
+        .tracker-node__indicator {
+            position: relative;
+            width: var(--circle-size);
+            min-height: var(--circle-size);
+        }
+
+        .tracker-circle {
+            position: relative;
+            width: var(--circle-size);
+            height: var(--circle-size);
+            border-radius: 9999px;
+            border: 2px solid rgba(148, 163, 184, 0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1.05rem;
+            background: rgba(255, 255, 255, 0.96);
+            color: rgba(71, 85, 105, 0.85);
+            box-shadow: 0 16px 32px -20px rgba(15, 23, 42, 0.6);
+        }
+
+        .tracker-circle i {
+            font-size: 1.05rem;
+        }
+
+        html.dark .tracker-circle {
+            background: rgba(17, 24, 39, 0.92);
+            color: rgba(148, 163, 184, 0.85);
+            border-color: rgba(148, 163, 184, 0.38);
+            box-shadow: 0 18px 34px -22px rgba(0, 0, 0, 0.85);
+        }
+
+        .tracker-badge {
+            position: absolute;
+            right: -0.4rem;
+            bottom: -0.35rem;
+            width: 22px;
+            height: 22px;
+            border-radius: 9999px;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.95), rgba(34, 197, 94, 0.9));
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            box-shadow: 0 10px 18px -12px rgba(16, 185, 129, 0.75);
+        }
+
+        .tracker-node__indicator .tracker-line {
+            position: absolute;
+            left: calc(var(--circle-size) / 2 - 1px);
+            top: calc(var(--circle-size) + 0.4rem);
+            bottom: calc(-1.75rem);
+            width: 2px;
+            border-radius: 999px;
+            background: linear-gradient(180deg, rgba(148, 163, 184, 0.3), rgba(148, 163, 184, 0));
+        }
+
+        .tracker-node:last-of-type .tracker-line {
+            display: none;
+        }
+
+        .tracker-content {
+            padding-top: 0.2rem;
+        }
+
+        .tracker-title {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        html.dark .tracker-title {
+            color: #e2e8f0;
+        }
+
+        .tracker-subtitle {
+            margin: 0.2rem 0 0;
+            font-size: 0.88rem;
+            color: #64748b;
+        }
+
+        html.dark .tracker-subtitle {
+            color: #94a3b8;
+        }
+
+        .tracker-date {
+            margin: 0.6rem 0 0;
+            font-size: 0.72rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #1e293b;
+            opacity: 0.75;
+        }
+
+        html.dark .tracker-date {
+            color: #cbd5f5;
+            opacity: 0.7;
+        }
+
+        .tracker-node--complete .tracker-circle {
+            border-color: rgba(34, 197, 94, 0.55);
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.95), rgba(34, 197, 94, 0.9));
+            color: #ffffff;
+            box-shadow: 0 22px 40px -22px rgba(16, 185, 129, 0.75);
+        }
+
+        .tracker-node--complete .tracker-line {
+            background: linear-gradient(180deg, rgba(34, 197, 94, 0.85), rgba(59, 130, 246, 0.75));
+        }
+
+        .tracker-node--complete .tracker-title {
+            color: #15803d;
+        }
+
+        html.dark .tracker-node--complete .tracker-title {
+            color: #4ade80;
+        }
+
+        .tracker-node--upcoming .tracker-circle {
+            background: rgba(255, 255, 255, 0.96);
+            color: rgba(148, 163, 184, 0.75);
+        }
+
+        html.dark .tracker-node--upcoming .tracker-circle {
+            background: rgba(17, 24, 39, 0.92);
+            color: rgba(148, 163, 184, 0.65);
+        }
+
+        .tracker-node--current .tracker-circle {
+            border-color: rgba(37, 99, 235, 0.5);
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.92), rgba(14, 165, 233, 0.9));
+            color: #ffffff;
+            box-shadow: 0 24px 44px -24px rgba(37, 99, 235, 0.75);
+        }
+
+        .tracker-node--current .tracker-circle::after {
+            content: '';
+            position: absolute;
+            inset: -6px;
+            border-radius: 9999px;
+            border: 2px solid rgba(59, 130, 246, 0.35);
+            animation: trackerPulse 1.9s ease-in-out infinite;
+        }
+
+        .tracker-node--current .tracker-line {
+            background: linear-gradient(180deg, rgba(59, 130, 246, 0.9), rgba(14, 165, 233, 0.75));
+        }
+
+        .tracker-node--current .tracker-title {
+            color: #1d4ed8;
+        }
+
+        html.dark .tracker-node--current .tracker-title {
+            color: #60a5fa;
+        }
+
+        .tracker-node--current .tracker-subtitle {
+            color: #1d4ed8;
+        }
+
+        html.dark .tracker-node--current .tracker-subtitle {
+            color: #60a5fa;
+        }
+
+        @keyframes trackerPulse {
+            0% {
+                opacity: 0.45;
+                transform: scale(0.92);
             }
+            50% {
+                opacity: 0;
+                transform: scale(1.18);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(1.28);
+            }
+        }
         .language-toggle-container {
             display: flex;
             align-items: center;
@@ -7134,56 +7340,84 @@
             const renderTrackerSteps = (order) => {
                 const status = normalizeStatus(order?.status || 'N/A');
                 if (status === 'cancelled') return '';
-                
-                const currentStatusIndex = normalizedStatuses.indexOf(status);
-                
-                let html = '';
-                
-                // Use a standard flex container to lay out nodes and connectors
-                html += `<div class="tracker-step-container w-full pt-4 pb-4">`;
 
-                // Render nodes and connectors
-                // Helper: parse various timestamp shapes into a Date
+                const currentStatusIndex = normalizedStatuses.indexOf(status);
+
+                const stepDetails = {
+                    pending: {
+                        title: 'Order Received',
+                        description: 'We\'ve received your order and will verify the details shortly.',
+                        icon: 'fa-receipt'
+                    },
+                    confirmed: {
+                        title: 'Order Confirmed',
+                        description: 'Our team confirmed the order and is preparing your package.',
+                        icon: 'fa-clipboard-check'
+                    },
+                    shipped: {
+                        title: 'Shipped',
+                        description: 'Your package left the warehouse and is with the courier partner.',
+                        icon: 'fa-box-open'
+                    },
+                    'out for delivery': {
+                        title: 'Out for Delivery',
+                        description: 'A delivery executive is on the way to your location.',
+                        icon: 'fa-truck-fast'
+                    },
+                    delivered: {
+                        title: 'Delivered',
+                        description: 'The parcel reached you successfully. Enjoy your purchase!',
+                        icon: 'fa-house-user'
+                    }
+                };
+
                 const parseToDate = (val) => {
                     try {
                         if (!val) return null;
                         if (typeof val?.toDate === 'function') return val.toDate();
-                        if (typeof val === 'number') { const ms = val < 1e12 ? val * 1000 : val; return new Date(ms); }
-                        if (typeof val === 'object' && typeof val.seconds === 'number') return new Date(val.seconds * 1000);
-                        if (typeof val === 'string') { const d = new Date(val); return isNaN(d.getTime()) ? null : d; }
+                        if (typeof val === 'number') {
+                            const ms = val < 1e12 ? val * 1000 : val;
+                            return new Date(ms);
+                        }
+                        if (typeof val === 'object' && typeof val.seconds === 'number') {
+                            return new Date(val.seconds * 1000);
+                        }
+                        if (typeof val === 'string') {
+                            const d = new Date(val);
+                            return isNaN(d.getTime()) ? null : d;
+                        }
                     } catch {}
                     return null;
                 };
-                // Helper: resolve timestamp for a given step name from multiple fields
+
                 const resolveStepDate = (o, stepName) => {
                     if (!o) return null;
-                    const norm = normalizeStatus(stepName); // e.g., 'out for delivery'
-                    const camel = norm.replace(/\s+(.)/g, (m, g1) => g1.toUpperCase()); // 'outForDelivery'
+                    const norm = normalizeStatus(stepName);
+                    const camel = norm.replace(/\s+(.)/g, (m, g1) => g1.toUpperCase());
                     const pascal = camel.charAt(0).toUpperCase() + camel.slice(1);
                     const upper = stepName.toUpperCase();
-                    // Common direct fields
                     const candidates = [
                         o?.statusTimestamps?.[norm], o?.statusTimestamps?.[stepName], o?.statusTimestamps?.[camel], o?.statusTimestamps?.[pascal],
                         o?.[`${camel}At`], o?.[`${pascal}At`], o?.[`${norm}At`], o?.[`${stepName}At`],
                         o?.[norm], o?.[camel], o?.[pascal], o?.[stepName], o?.[upper],
                     ];
-                    // Special-case aliases
                     if (norm === 'pending') candidates.push(o?.createdAt);
-                    if (norm === 'delivered') candidates.push(
-                        o?.deliveredAt, o?.deliveredTime, o?.deliveredOn, o?.deliveredDate, o?.deliveryCompletedAt, o?.completedAt,
-                        o?.delivered_at, o?.deliveredTimestamp, o?.deliveredDateTime
-                    );
-                    // Nested common containers
+                    if (norm === 'delivered') {
+                        candidates.push(
+                            o?.deliveredAt, o?.deliveredTime, o?.deliveredOn, o?.deliveredDate, o?.deliveryCompletedAt, o?.completedAt,
+                            o?.delivered_at, o?.deliveredTimestamp, o?.deliveredDateTime
+                        );
+                    }
                     candidates.push(
                         o?.delivery?.[`${camel}At`], o?.delivery?.[camel], o?.delivery?.deliveredAt,
                         o?.timeline?.[`${camel}At`], o?.timeline?.[camel], o?.timeline?.deliveredAt
                     );
-                    // History arrays
+
                     const findInHistory = (arr) => {
                         if (!Array.isArray(arr)) return null;
-                        for (const e of arr) {
-                            const st = normalizeStatus(e?.status || e?.state || e?.label);
-                            if (st === norm) return e.timestamp || e.time || e.at || e.date || e.when;
+                        for (const entry of arr) {
+                            const st = normalizeStatus(entry?.status || entry?.state || entry?.label);
+                            if (st === norm) return entry.timestamp || entry.time || entry.at || entry.date || entry.when;
                         }
                         return null;
                     };
@@ -7191,47 +7425,50 @@
                     candidates.push(findInHistory(o?.statusLogs));
                     candidates.push(findInHistory(o?.logs));
 
-                    // Pick first truthy and parse
-                    for (const c of candidates) {
-                        const d = parseToDate(c);
-                        if (d instanceof Date && !isNaN(d.getTime())) return d;
+                    for (const candidate of candidates) {
+                        const parsed = parseToDate(candidate);
+                        if (parsed instanceof Date && !isNaN(parsed.getTime())) return parsed;
                     }
                     return null;
                 };
 
-                statuses.forEach((step, index) => {
-                    const isStepComplete = currentStatusIndex >= index;
-                    const connectorActive = currentStatusIndex > index; // Connector between this step and next is active only if we've progressed past this step
-                    const isLastStep = index === statuses.length - 1;
-                    
-                    const circleClass = isStepComplete ? 'bg-green-500 border-green-500 text-white' : 'bg-white dark:bg-gray-700 border-gray-400 text-gray-500';
-                    const labelColor = isStepComplete ? 'text-gray-700 dark:text-gray-100' : 'text-gray-500';
-                    const stepDate = isStepComplete ? resolveStepDate(order, step) : null;
-                    const stepDateHtml = stepDate ? `<p class="text-[10px] mt-1 ${isLastStep ? 'text-green-700' : 'text-gray-500'}">${stepDate.toLocaleDateString('en-GB')} at ${stepDate.toLocaleTimeString('en-US')}</p>` : '';
-                    
-                    // Render Node (Circle + Label)
-                    html += `
-                        <div class="tracker-node">
-                            <div class="tracker-circle rounded-full border-2 flex items-center justify-center ${circleClass} shadow-md relative z-10">
-                                <i class="fas fa-check text-xs"></i>
-                            </div>
-                            <p class="text-xs mt-2 ${labelColor}">${step}</p>
-                            ${stepDateHtml}
-                        </div>`;
-                    
-                    // Render Connector Line (Appears between nodes)
-                    if (!isLastStep) {
-                        const connectorClass = connectorActive ? 'active' : '';
+                let html = `<div class="tracker-step-container">`;
 
-                        // Connector line is rendered in the gap between two fixed-width tracker-node elements
-                        html += `
-                            <div class="tracker-connector ${connectorClass}">
-                                <div class="tracker-connector-line"></div>
-                            </div>`;
+                statuses.forEach((step, index) => {
+                    const normalizedStep = normalizeStatus(step);
+                    const detail = stepDetails[normalizedStep] || { title: step, description: '' };
+                    const stepDate = resolveStepDate(order, step);
+                    let stepDateHtml = '';
+                    if (stepDate instanceof Date && !isNaN(stepDate.getTime())) {
+                        const datePart = stepDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+                        const timePart = stepDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+                        stepDateHtml = `<p class="tracker-date">${datePart} &bull; ${timePart}</p>`;
                     }
+
+                    const isStepComplete = currentStatusIndex > index || (currentStatusIndex >= normalizedStatuses.length - 1 && normalizedStep === 'delivered' && status === 'delivered');
+                    const isCurrentStep = !isStepComplete && ((currentStatusIndex === index) || (currentStatusIndex < 0 && index === 0));
+                    const stateClass = isStepComplete ? 'tracker-node--complete' : (isCurrentStep ? 'tracker-node--current' : 'tracker-node--upcoming');
+                    const iconClass = detail.icon || 'fa-circle';
+                    const iconHtml = `<i class="fas ${iconClass}"></i>`;
+                    const completionBadge = isStepComplete ? '<span class="tracker-badge"><i class="fas fa-check"></i></span>' : '';
+                    const subtitleHtml = detail.description ? `<p class="tracker-subtitle">${detail.description}</p>` : '';
+                    const connectorHtml = index === statuses.length - 1 ? '' : '<span class="tracker-line"></span>';
+
+                    html += `
+                        <div class="tracker-node ${stateClass}">
+                            <div class="tracker-node__indicator">
+                                <span class="tracker-circle">${iconHtml}${completionBadge}</span>
+                                ${connectorHtml}
+                            </div>
+                            <div class="tracker-content">
+                                <p class="tracker-title">${detail.title}</p>
+                                ${subtitleHtml}
+                                ${stepDateHtml}
+                            </div>
+                        </div>`;
                 });
-                
-                html += `</div>`; // Close tracker-step-container
+
+                html += '</div>';
                 return html;
             }
 
