@@ -560,6 +560,273 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
         }
 
+        /* Auth drawer styling */
+        .auth-card {
+            position: relative;
+            background: #f9fafb;
+            border: 1px solid #e2e8f0;
+            border-radius: 1.125rem;
+            padding: 1.75rem;
+            box-shadow: 0 18px 36px -28px rgba(15, 23, 42, 0.4);
+            max-width: 420px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .auth-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            width: 6px;
+            border-radius: 1.125rem 0 0 1.125rem;
+            background: linear-gradient(180deg, #2563eb, #9333ea);
+        }
+
+        html.dark .auth-card {
+            background: #111827;
+            border-color: #1f2937;
+            box-shadow: 0 20px 40px -28px rgba(0, 0, 0, 0.7);
+        }
+
+        html.dark .auth-card::before {
+            background: linear-gradient(180deg, #4f46e5, #ec4899);
+        }
+
+        .auth-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .auth-header h4 {
+            margin: 0;
+            color: #0f172a;
+        }
+
+        html.dark .auth-header h4 {
+            color: #e2e8f0;
+        }
+
+        .auth-subtitle {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #475569;
+        }
+
+        html.dark .auth-subtitle {
+            color: #cbd5f5;
+        }
+
+        .auth-hero-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 9999px;
+            background: #eef2ff;
+            color: #2563eb;
+            font-size: 1rem;
+        }
+
+        html.dark .auth-hero-icon {
+            background: rgba(37, 99, 235, 0.16);
+            color: #93c5fd;
+        }
+
+        .auth-tabs {
+            display: flex;
+            gap: 0.75rem;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        html.dark .auth-tabs {
+            border-bottom-color: #1f2937;
+        }
+
+        .auth-tab {
+            position: relative;
+            flex: 1;
+            border: none;
+            background: transparent;
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 0.5rem 0;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .auth-tab i {
+            font-size: 0.85rem;
+        }
+
+        .auth-tab:hover {
+            color: #2563eb;
+        }
+
+        html.dark .auth-tab {
+            color: #94a3b8;
+        }
+
+        html.dark .auth-tab:hover {
+            color: #93c5fd;
+        }
+
+        .auth-tab-active {
+            color: #2563eb;
+        }
+
+        .auth-tab-active::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: -0.55rem;
+            height: 3px;
+            border-radius: 999px;
+            background: #2563eb;
+        }
+
+        html.dark .auth-tab-active {
+            color: #a5b4fc;
+        }
+
+        html.dark .auth-tab-active::after {
+            background: #6366f1;
+        }
+
+        .auth-divider {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin: 1.75rem 0 1.25rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #94a3b8;
+        }
+
+        .auth-divider::before,
+        .auth-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #e2e8f0;
+        }
+
+        html.dark .auth-divider {
+            color: #cbd5f5;
+        }
+
+        html.dark .auth-divider::before,
+        html.dark .auth-divider::after {
+            background: #1f2937;
+        }
+
+        .auth-social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.65rem;
+            width: 100%;
+            padding: 0.7rem 1rem;
+            border-radius: 0.75rem;
+            border: 1px solid #d0d7e2;
+            background: #ffffff;
+            font-weight: 600;
+            color: #0f172a;
+            transition: border-color 0.2s ease, background-color 0.2s ease;
+        }
+
+        .auth-social-btn:hover {
+            border-color: #2563eb;
+            background: #eef2ff;
+        }
+
+        html.dark .auth-social-btn {
+            background: #1f2937;
+            border-color: #334155;
+            color: #e2e8f0;
+        }
+
+        html.dark .auth-social-btn:hover {
+            border-color: #6366f1;
+            background: rgba(99, 102, 241, 0.12);
+        }
+
+        .auth-social-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .auth-social-icon.google {
+            color: #ea4335;
+        }
+
+        .auth-social-icon.facebook {
+            color: #1877f2;
+        }
+
+        html.dark .auth-social-icon.google {
+            color: #f7998f;
+        }
+
+        html.dark .auth-social-icon.facebook {
+            color: #93c5fd;
+        }
+
+        .auth-meta-note {
+            font-size: 0.78rem;
+            text-align: center;
+            color: #64748b;
+        }
+
+        html.dark .auth-meta-note {
+            color: #cbd5f5;
+        }
+
+        .auth-link {
+            color: #2563eb;
+            font-weight: 600;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .auth-link:hover {
+            text-decoration: underline;
+        }
+
+        html.dark .auth-link {
+            color: #93c5fd;
+        }
+
+        .auth-error {
+            min-height: 1.125rem;
+            color: #dc2626;
+            font-weight: 600;
+        }
+
+        html.dark .auth-error {
+            color: #fca5a5;
+        }
+
         /* Mobile layout refinements */
         @media (max-width: 640px) {
             header .container {
@@ -929,72 +1196,108 @@
             <h3 id="profile-drawer-title" class="text-3xl font-bold text-theme-purple text-center" data-lang="your-account">আপনার অ্যাকাউন্ট</h3>
 
             <div id="auth-options" class="space-y-6">
-                <form id="login-form" class="space-y-4 text-left">
-                    <div class="space-y-1">
-                        <label for="login-email" class="block text-sm font-semibold text-gray-700 dark:text-gray-200" data-lang="email">ইমেইল</label>
-                        <input id="login-email" type="email" autocomplete="email" class="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-theme-blue" required>
+                <div class="auth-card space-y-6">
+                    <header class="auth-header">
+                        <span class="auth-hero-icon" aria-hidden="true">
+                            <i class="fas fa-shield-alt"></i>
+                        </span>
+                        <div class="space-y-1">
+                            <h4 id="auth-card-heading" class="text-2xl font-bold" data-lang="auth-login-heading">পুনরায় স্বাগতম</h4>
+                            <p id="auth-subtitle" class="auth-subtitle" data-lang="auth-login-subtitle">অর্ডার, উইশলিস্ট ও ঠিকানা পরিচালনা করতে লগইন করুন।</p>
+                        </div>
+                    </header>
+                    <div class="auth-tabs" role="tablist">
+                        <button type="button" class="auth-tab auth-tab-active" data-auth-tab="login" aria-selected="true">
+                            <i class="fas fa-sign-in-alt"></i>
+                            <span data-lang="auth-login-tab">লগইন</span>
+                        </button>
+                        <button type="button" class="auth-tab" data-auth-tab="register" aria-selected="false">
+                            <i class="fas fa-user-plus"></i>
+                            <span data-lang="auth-register-tab">রেজিস্টার</span>
+                        </button>
+                        <button type="button" class="auth-tab" data-auth-tab="reset" aria-selected="false">
+                            <i class="fas fa-unlock-alt"></i>
+                            <span data-lang="auth-reset-tab">রিসেট</span>
+                        </button>
                     </div>
-                    <div class="space-y-1">
-                        <label for="login-password" class="block text-sm font-semibold text-gray-700 dark:text-gray-200" data-lang="password">পাসওয়ার্ড</label>
-                        <input id="login-password" type="password" autocomplete="current-password" class="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-theme-blue" required>
-                    </div>
-                    <button type="submit" class="w-full py-3 rounded-full bg-theme-blue text-white font-semibold hover:bg-theme-purple transition-colors" data-lang="login">লগইন করুন</button>
-                    <div class="flex items-center justify-between text-sm">
-                        <a id="show-register-form" href="#" class="text-theme-blue font-semibold hover:underline" data-lang="create-account">অ্যাকাউন্ট তৈরি করুন</a>
-                        <a id="show-reset-form" href="#" class="text-theme-blue hover:underline" data-lang="forgot-password">পাসওয়ার্ড ভুলে গেছেন?</a>
-                    </div>
-                </form>
 
-                <form id="register-form" class="hidden space-y-4 text-left">
-                    <div class="space-y-1">
-                        <label for="register-name" class="block text-sm font-semibold text-gray-700 dark:text-gray-200" data-lang="full-name">পূর্ণ নাম</label>
-                        <input id="register-name" type="text" autocomplete="name" class="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-theme-blue" required>
-                    </div>
-                    <div class="space-y-1">
-                        <label for="register-mobile" class="block text-sm font-semibold text-gray-700 dark:text-gray-200" data-lang="mobile-number">মোবাইল নম্বর</label>
-                        <input id="register-mobile" type="tel" autocomplete="tel" class="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-theme-blue">
-                    </div>
-                    <div class="space-y-1">
-                        <label for="register-location" class="block text-sm font-semibold text-gray-700 dark:text-gray-200" data-lang="location">অবস্থান</label>
-                        <input id="register-location" type="text" autocomplete="address-level2" class="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-theme-blue">
-                    </div>
-                    <div class="space-y-1">
-                        <label for="register-email" class="block text-sm font-semibold text-gray-700 dark:text-gray-200" data-lang="email">ইমেইল</label>
-                        <input id="register-email" type="email" autocomplete="email" class="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-theme-blue" required>
-                    </div>
-                    <div class="space-y-1">
-                        <label for="register-password" class="block text-sm font-semibold text-gray-700 dark:text-gray-200" data-lang="password">পাসওয়ার্ড</label>
-                        <input id="register-password" type="password" autocomplete="new-password" class="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-theme-blue" required>
-                    </div>
-                    <button type="submit" class="w-full py-3 rounded-full bg-theme-blue text-white font-semibold hover:bg-theme-purple transition-colors" data-lang="register">রেজিস্টার করুন</button>
-                    <p class="text-sm text-center text-gray-600 dark:text-gray-300">
-                        <span data-lang="have-account">ইতোমধ্যে অ্যাকাউন্ট আছে?</span>
-                        <a id="show-login-form" href="#" class="text-theme-blue font-semibold hover:underline" data-lang="login">লগইন করুন</a>
-                    </p>
-                </form>
+                    <div class="space-y-6">
+                        <form id="login-form" class="space-y-4 text-left">
+                            <div class="space-y-1">
+                                <label for="login-email" class="block text-sm font-semibold text-gray-700 dark:text-gray-200" data-lang="email">ইমেইল</label>
+                                <input id="login-email" type="email" autocomplete="email" class="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-theme-blue" required>
+                            </div>
+                            <div class="space-y-1">
+                                <label for="login-password" class="block text-sm font-semibold text-gray-700 dark:text-gray-200" data-lang="password">পাসওয়ার্ড</label>
+                                <input id="login-password" type="password" autocomplete="current-password" class="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-theme-blue" required>
+                            </div>
+                            <button type="submit" class="w-full py-3 rounded-lg bg-theme-blue text-white font-semibold hover:bg-theme-purple transition-colors" data-lang="login">লগইন করুন</button>
+                            <div class="flex flex-wrap items-center justify-between gap-3 text-xs sm:text-sm text-gray-600 dark:text-gray-300">
+                                <div class="flex items-center gap-2">
+                                    <span data-lang="auth-new-here">নতুন সদস্য?</span>
+                                    <button id="show-register-form" type="button" class="auth-link" data-lang="create-account">অ্যাকাউন্ট তৈরি করুন</button>
+                                </div>
+                                <button id="show-reset-form" type="button" class="auth-link" data-lang="forgot-password">পাসওয়ার্ড ভুলে গেছেন?</button>
+                            </div>
+                        </form>
 
-                <form id="reset-form" class="hidden space-y-4 text-left">
-                    <p class="text-sm text-gray-600 dark:text-gray-300" data-lang="reset-password-desc">আপনার নিবন্ধিত ইমেইল দিন, আমরা একটি রিসেট লিঙ্ক পাঠাবো।</p>
-                    <div class="space-y-1">
-                        <label for="reset-email" class="block text-sm font-semibold text-gray-700 dark:text-gray-200" data-lang="email">ইমেইল</label>
-                        <input id="reset-email" type="email" autocomplete="email" class="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-theme-blue" required>
-                    </div>
-                    <button type="submit" class="w-full py-3 rounded-full bg-theme-blue text-white font-semibold hover:bg-theme-purple transition-colors" data-lang="send-reset-link">রিসেট লিঙ্ক পাঠান</button>
-                    <a id="show-login-from-reset" href="#" class="block text-center text-sm text-theme-blue font-semibold hover:underline" data-lang="back-to-login">লগইনে ফিরে যান</a>
-                </form>
+                        <form id="register-form" class="hidden space-y-4 text-left">
+                            <div class="space-y-1">
+                                <label for="register-name" class="block text-sm font-semibold text-gray-700 dark:text-gray-200" data-lang="full-name">পূর্ণ নাম</label>
+                                <input id="register-name" type="text" autocomplete="name" class="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-theme-blue" required>
+                            </div>
+                            <div class="space-y-1">
+                                <label for="register-mobile" class="block text-sm font-semibold text-gray-700 dark:text-gray-200" data-lang="mobile-number">মোবাইল নম্বর</label>
+                                <input id="register-mobile" type="tel" autocomplete="tel" class="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-theme-blue">
+                            </div>
+                            <div class="space-y-1">
+                                <label for="register-location" class="block text-sm font-semibold text-gray-700 dark:text-gray-200" data-lang="location">অবস্থান</label>
+                                <input id="register-location" type="text" autocomplete="address-level2" class="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-theme-blue">
+                            </div>
+                            <div class="space-y-1">
+                                <label for="register-email" class="block text-sm font-semibold text-gray-700 dark:text-gray-200" data-lang="email">ইমেইল</label>
+                                <input id="register-email" type="email" autocomplete="email" class="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-theme-blue" required>
+                            </div>
+                            <div class="space-y-1">
+                                <label for="register-password" class="block text-sm font-semibold text-gray-700 dark:text-gray-200" data-lang="password">পাসওয়ার্ড</label>
+                                <input id="register-password" type="password" autocomplete="new-password" class="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-theme-blue" required>
+                            </div>
+                            <button type="submit" class="w-full py-3 rounded-lg bg-theme-blue text-white font-semibold hover:bg-theme-purple transition-colors" data-lang="register">রেজিস্টার করুন</button>
+                            <p class="text-xs sm:text-sm text-center text-gray-600 dark:text-gray-300">
+                                <span data-lang="auth-have-account">ইতোমধ্যে অ্যাকাউন্ট আছে?</span>
+                                <button id="show-login-form" type="button" class="auth-link" data-lang="login">লগইন করুন</button>
+                            </p>
+                        </form>
 
-                <div class="space-y-3">
-                    <button id="login-google-btn" type="button" class="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-full border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                        <i class="fab fa-google text-lg text-red-500"></i>
-                        <span data-lang="login-google">গুগল দিয়ে লগইন করুন</span>
-                    </button>
-                    <button id="login-facebook-btn" type="button" class="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-full border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                        <i class="fab fa-facebook text-lg text-blue-600"></i>
-                        <span data-lang="login-facebook">ফেসবুক দিয়ে লগইন করুন</span>
-                    </button>
+                        <form id="reset-form" class="hidden space-y-4 text-left">
+                            <p class="text-sm text-gray-600 dark:text-gray-300" data-lang="reset-password-desc">আপনার নিবন্ধিত ইমেইল দিন, আমরা একটি রিসেট লিঙ্ক পাঠাবো।</p>
+                            <div class="space-y-1">
+                                <label for="reset-email" class="block text-sm font-semibold text-gray-700 dark:text-gray-200" data-lang="email">ইমেইল</label>
+                                <input id="reset-email" type="email" autocomplete="email" class="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-theme-blue" required>
+                            </div>
+                            <button type="submit" class="w-full py-3 rounded-lg bg-theme-blue text-white font-semibold hover:bg-theme-purple transition-colors" data-lang="send-reset-link">রিসেট লিঙ্ক পাঠান</button>
+                            <button id="show-login-from-reset" type="button" class="auth-link mx-auto block text-sm" data-lang="back-to-login">লগইনে ফিরে যান</button>
+                        </form>
+                    </div>
+
+                    <div class="auth-divider">
+                        <span id="auth-social-divider" data-lang="auth-social-divider">অথবা চালিয়ে যান</span>
+                    </div>
+
+                    <div class="grid gap-3">
+                        <button id="login-google-btn" type="button" class="auth-social-btn">
+                            <span class="auth-social-icon google"><i class="fab fa-google"></i></span>
+                            <span data-lang="login-google">গুগল দিয়ে লগইন করুন</span>
+                        </button>
+                        <button id="login-facebook-btn" type="button" class="auth-social-btn">
+                            <span class="auth-social-icon facebook"><i class="fab fa-facebook-f"></i></span>
+                            <span data-lang="login-facebook">ফেসবুক দিয়ে লগইন করুন</span>
+                        </button>
+                    </div>
+
+                    <p id="auth-security-note" class="auth-meta-note" data-lang="auth-security-note">আপনার তথ্য এনক্রিপ্টেড এবং নিরাপদে সংরক্ষিত থাকে।</p>
+                    <p id="auth-error" class="auth-error text-center"></p>
                 </div>
-
-                <p id="auth-error" class="text-sm text-red-600 text-center"></p>
             </div>
 
             <div id="user-profile-view" class="hidden space-y-6">
@@ -1066,43 +1369,43 @@
                 </header>
                 <div id="addresses-list" class="space-y-3"></div>
                 <form id="address-form" class="space-y-4 p-4 border border-gray-200 dark:border-gray-700 rounded-2xl bg-gray-50 dark:bg-gray-900/40">
-                    <h5 id="address-form-title" class="text-base font-semibold text-gray-900 dark:text-gray-100">নতুন ঠিকানা যোগ করুন</h5>
+                    <h5 id="address-form-title" class="text-base font-semibold text-gray-900 dark:text-gray-100" data-lang="address-form-title">নতুন ঠিকানা যোগ করুন</h5>
                     <input type="hidden" id="address-id-hidden">
                     <div class="space-y-3">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-200">পূর্ণ নাম</label>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-200" data-lang="full-name">পূর্ণ নাম</label>
                             <input id="addr-name" type="text" class="w-full mt-1 px-3 py-2 border rounded-lg bg-white dark:bg-gray-700" required>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-200">মোবাইল</label>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-200" data-lang="mobile-number">মোবাইল নম্বর</label>
                             <input id="addr-mobile" type="tel" class="w-full mt-1 px-3 py-2 border rounded-lg bg-white dark:bg-gray-700" required>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-200">ঠিকানা লাইন ১</label>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-200" data-lang="address-line1">ঠিকানা লাইন ১</label>
                             <input id="addr-line1" type="text" class="w-full mt-1 px-3 py-2 border rounded-lg bg-white dark:bg-gray-700" required>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-200">ঠিকানা লাইন ২ (ঐচ্ছিক)</label>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-200" data-lang="address-line2-optional">ঠিকানা লাইন ২ (ঐচ্ছিক)</label>
                             <input id="addr-line2" type="text" class="w-full mt-1 px-3 py-2 border rounded-lg bg-white dark:bg-gray-700">
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-200">শহর</label>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-200" data-lang="city">শহর</label>
                                 <input id="addr-city" type="text" class="w-full mt-1 px-3 py-2 border rounded-lg bg-white dark:bg-gray-700" required>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-200">এলাকা/জেলা</label>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-200" data-lang="area-district">এলাকা/জেলা</label>
                                 <input id="addr-area" type="text" class="w-full mt-1 px-3 py-2 border rounded-lg bg-white dark:bg-gray-700">
                             </div>
                         </div>
                     </div>
                     <label class="inline-flex items-center gap-2">
                         <input id="addr-default" type="checkbox" class="w-4 h-4">
-                        <span class="text-sm text-gray-700 dark:text-gray-200">ডিফল্ট হিসেবে নির্ধারণ করুন</span>
+                        <span class="text-sm text-gray-700 dark:text-gray-200" data-lang="set-as-default">ডিফল্ট হিসেবে নির্ধারণ করুন</span>
                     </label>
                     <div class="flex gap-3 pt-2">
-                        <button id="save-address-btn" type="submit" class="flex-1 py-2 bg-theme-blue text-white rounded-full font-semibold hover:bg-theme-purple transition-colors">ঠিকানা সংরক্ষণ করুন</button>
-                        <button id="cancel-address-btn" type="button" class="flex-1 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100 rounded-full font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">বাতিল</button>
+                        <button id="save-address-btn" type="submit" class="flex-1 py-2 bg-theme-blue text-white rounded-full font-semibold hover:bg-theme-purple transition-colors" data-lang="save-address">ঠিকানা সংরক্ষণ করুন</button>
+                        <button id="cancel-address-btn" type="button" class="flex-1 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100 rounded-full font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors" data-lang="cancel">বাতিল</button>
                     </div>
                 </form>
             </section>
@@ -2386,6 +2689,7 @@
         let selectedVariants = {};
         let discountAmount = 0;
         let appliedCouponCode = null;
+        let currentAuthForm = 'login';
     let confirmResolver = null; // Used for the custom confirmation modal
         let chatUnsubscribe = () => {}; // For real-time chat updates
         let allCoupons = []; // Stores all active coupon data
@@ -2422,7 +2726,7 @@
                 'mega-sale-nav': 'Mega Sale',
                 'add-product-nav': 'Add Product',
                 'search-placeholder': 'Search for products...', 'featured-products': 'Featured Products', 'shop-by-category': 'Shop by Category', 'cat-electronics': 'Electronics', 'cat-fashion': 'Fashion', 'cat-home-garden': 'Home & Garden', 'cat-health-beauty': 'Health & Beauty', 'cat-sports': 'Sports & Outdoors', 'cat-books': 'Books & Stationery', 'cat-kids': 'Kids & Toys', 'cat-cars': 'Cars & Bikes', 'why-choose-us': 'Why Choose Us', 'feature-delivery-title': 'Fast Delivery', 'feature-delivery-desc': 'We deliver to your doorstep within 2-3 business days.', 'feature-payment-title': 'Secure Payment', 'feature-payment-desc': 'All transactions are encrypted for your security and privacy.', 'feature-return-title': 'Easy Returns', 'feature-return-desc': 'Return products within 30 days for a full refund if you\'re not satisfied.', 'feature-support-title': '24/7 Support', 'feature-support-desc': 'Our customer support team is available for you day and night.', 'add-to-cart': 'Add to Cart', 'added-to-cart': 'Added!', 'no-products': 'No products found matching your criteria.', 'back-to-products': 'Back to All Products', 'returnable': '30-Day Returnable', 'not-returnable': 'Not Returnable', 'secure-payments': 'Secure Payments', 'size': 'Size:', 'storage': 'Storage:', 'color': 'Color:', 'product-description': 'Product Description', 'product-specifications': 'Product Specifications', 'specifications': 'Specification', 'value': 'Value', 'no-specs': 'No specifications available for this product.', 'product-reviews': 'Product Reviews', 'no-reviews': 'There are no reviews for this product yet.', 'cart': 'Your Cart', 'cart-empty': 'Your cart is empty.', 'total': 'Total:', 'checkout': 'Checkout', 'your-wishlist': 'Your Wishlist', 'wishlist-empty': 'Your wishlist is empty. Add some products!', 'your-account': 'Your Account', 'signin-google': 'Sign in with Google', 'logout': 'Logout', 'toast-cart-added': 'Product added to cart!', 'toast-wishlist-added': 'Product added to wishlist!', 'toast-wishlist-removed': 'Product removed from wishlist!', 'toast-login-success': 'Successfully logged in!', 'toast-logout-success': 'Successfully logged out!',
-                'toast-register-success': 'Account created successfully!', 'login': 'Login', 'register': 'Register Account', 'toast-select-variant': 'Please select all required options!', 'select-variants': 'Select Options', 'buy-now': 'Buy Now', 'payment-method': 'Select Payment Method', 'cod': 'Cash on Delivery', 'online-payment': 'Online Payment', 'confirm-order': 'Confirm Order', 'order-placed-success': 'Your order has been placed successfully!', 'order-placed-fail': 'Failed to place order. Please try again.', 'cart-is-empty': 'Your cart is empty. Cannot checkout.', 'mobile-banking': 'Mobile Banking', 'payment-instruction-bkash': 'Please send {amount} Taka to this Bkash number: +8801863205976 from your app.', 'payment-instruction-nagad': 'Please send {amount} Taka to this Nagad number: +8801863205976 from your app.', 'payment-instruction-cod': 'Our delivery person will collect the payment upon delivery.', 'profile-updated': 'Profile updated successfully!', 'profile-update-fail': 'Failed to update profile.', 'toast-storage-permission-error': 'Storage permission denied. Check Firebase rules.', 'toast-update-profile': 'Please update your location and mobile number in your profile before ordering.', 'emergency-contact': 'Support', 'message-sent': 'Message sent successfully!', 'out-of-stock': 'Out of Stock', 'toast-out-of-stock': 'Sorry, this product is currently out of stock.', 'subtotal': 'Subtotal', 'delivery-charge': 'Delivery Charge', 'my-orders': 'My Orders',
+                'toast-register-success': 'Account created successfully!', 'login': 'Login', 'register': 'Register Account', 'auth-login-heading': 'Welcome Back', 'auth-register-heading': 'Create Your Account', 'auth-reset-heading': 'Reset Password', 'auth-login-subtitle': 'Sign in to manage your orders, wishlist, and saved addresses.', 'auth-register-subtitle': 'Create a free TangailBuzz account in minutes.', 'auth-reset-subtitle': 'Enter your email and we will send a secure reset link.', 'auth-login-tab': 'Log In', 'auth-register-tab': 'Sign Up', 'auth-reset-tab': 'Reset', 'auth-social-divider': 'Or Continue With', 'auth-security-note': 'Your credentials are encrypted and never shared.', 'auth-new-here': 'New Here?', 'auth-have-account': 'Already Have an Account?', 'create-account': 'Create Account', 'forgot-password': 'Forgot Password?', 'reset-password-desc': 'Enter your registered email so we can send a secure reset link.', 'send-reset-link': 'Send Reset Link', 'back-to-login': 'Back to Login', 'login-google': 'Sign In with Google', 'login-facebook': 'Sign In with Facebook', 'full-name': 'Full Name', 'mobile-number': 'Mobile Number', 'location': 'Location', 'upload-photo': 'Upload Photo', 'remove-photo': 'Remove Photo', 'save-changes': 'Save Changes', 'cancel': 'Cancel', 'account-options': 'Account Options', 'edit-profile': 'Edit Profile', 'manage-address': 'Manage Addresses', 'delete-account': 'Delete Account', 'saved-addresses': 'Saved Addresses', 'manage-address-help': 'Manage your delivery addresses.', 'address-form-title': 'Add New Address', 'address-line1': 'Address Line 1', 'address-line2-optional': 'Address Line 2 (Optional)', 'city': 'City', 'area-district': 'Area / District', 'set-as-default': 'Set as Default', 'save-address': 'Save Address', 'toast-select-variant': 'Please select all required options!', 'select-variants': 'Select Options', 'buy-now': 'Buy Now', 'payment-method': 'Select Payment Method', 'cod': 'Cash on Delivery', 'online-payment': 'Online Payment', 'confirm-order': 'Confirm Order', 'order-placed-success': 'Your order has been placed successfully!', 'order-placed-fail': 'Failed to place order. Please try again.', 'cart-is-empty': 'Your cart is empty. Cannot checkout.', 'mobile-banking': 'Mobile Banking', 'payment-instruction-bkash': 'Please send {amount} Taka to this Bkash number: +8801863205976 from your app.', 'payment-instruction-nagad': 'Please send {amount} Taka to this Nagad number: +8801863205976 from your app.', 'payment-instruction-cod': 'Our delivery person will collect the payment upon delivery.', 'profile-updated': 'Profile updated successfully!', 'profile-update-fail': 'Failed to update profile.', 'toast-storage-permission-error': 'Storage permission denied. Check Firebase rules.', 'toast-update-profile': 'Please update your location and mobile number in your profile before ordering.', 'emergency-contact': 'Support', 'message-sent': 'Message sent successfully!', 'out-of-stock': 'Out of Stock', 'toast-out-of-stock': 'Sorry, this product is currently out of stock.', 'subtotal': 'Subtotal', 'delivery-charge': 'Delivery Charge', 'my-orders': 'My Orders',
                 'delete-account-confirm': 'Are you sure you want to delete your account? This action cannot be undone. All data will be lost.',
                 'account-deleted': 'Your account has been successfully deleted.',
                 'delete-account-failed': 'Failed to delete account. Please try again.',
@@ -2546,7 +2850,7 @@
             },
             bn: {
                 'deliver-to': 'ডেলিভারি লোকেশন', 'home': 'হোম', 'products': 'পণ্য', 'categories': 'ক্যাটাগরি', 'offers': 'অফার', 'search-placeholder': 'পণ্য খুঁজুন...', 'featured-products': 'বৈশিষ্ট্যযুক্ত পণ্য', 'shop-by-category': 'ক্যাটাগরি অনুসারে কেনাকাটা করুন', 'cat-electronics': 'ইলেকট্রনিক্স', 'cat-fashion': 'ফ্যাশন', 'cat-home-garden': 'হোম অ্যান্ড গার্ডেন', 'cat-health-beauty': 'স্বাস্থ্য ও সৌন্দর্য', 'cat-sports': 'খেলাধুলা ও আউটডোর', 'cat-books': 'বই ও স্টেশনারি', 'cat-kids': 'বাচ্চা ও খেলনা', 'cat-cars': 'গাড়ি ও বাইক', 'why-choose-us': 'আমাদেরকে কেন বেছে নিবেন', 'feature-delivery-title': 'দ্রুত ডেলিভারি', 'feature-delivery-desc': 'আমরা ২-৩ কার্যদিবসের মধ্যে আপনার দোরগোড়ায় পণ্য পৌঁছে দিই।', 'feature-payment-title': 'নিরাপদ পেমেন্ট', 'feature-payment-desc': 'আপনার নিরাপত্তা ও গোপনীয়তার জন্য সকল লেনদেন এনক্রিপ্টেড।', 'feature-return-title': 'সহজ রিটার্ন', 'feature-return-desc': 'পছন্দ না হলে ৩০ দিনের মধ্যে পণ্য ফেরত দিন এবং সম্পূর্ণ মূল্য ফেরত পান।', 'feature-support-title': '২৪/৭ সাপোর্ট', 'feature-support-desc': 'আমাদের গ্রাহক সহায়তা দল দিনরাত আপনার জন্য উপলব্ধ।', 'add-to-cart': 'কার্টে যোগ করুন', 'added-to-cart': 'যোগ হয়েছে!', 'no-products': 'আপনার অনুসন্ধানের সাথে মেলে এমন কোনো পণ্য পাওয়া যায়নি।', 'back-to-products': 'সকল পণ্যে ফিরে যান', 'returnable': '৩০-দিনের মধ্যে ফেরতযোগ্য', 'not-returnable': 'ফেরতযোগ্য নয়', 'secure-payments': 'নিরাপদ পেমেন্ট', 'size': 'সাইজ:', 'storage': 'স্টোরেজ:', 'color': 'রঙ:', 'product-description': 'পণ্যের বিবরণ', 'product-specifications': 'পণ্যের স্পেসিফিকেশন', 'specifications': 'স্পেসিফিকেশন', 'value': 'মান', 'no-specs': 'এই পণ্যের জন্য কোন স্পেসিফিকেশন উপলব্ধ নেই।', 'product-reviews': 'পণ্যের রিভিউ', 'no-reviews': 'এই পণ্যের জন্য এখনো কোনো রিভিউ নেই।', 'cart': 'আপনার কার্ট', 'cart-empty': 'আপনার কার্ট খালি।', 'total': 'মোট মূল্য:', 'checkout': 'চেকআউট করুন', 'your-wishlist': 'আপনার উইশলিস্ট', 'wishlist-empty': 'আপনার উইশলিস্ট খালি। কিছু পণ্য যোগ করুন!', 'your-account': 'আপনার অ্যাকাউন্ট', 'signin-google': 'Google দিয়ে সাইন ইন করুন', 'logout': 'লগআউট', 'toast-cart-added': 'পণ্য কার্টে যোগ করা হয়েছে!', 'toast-wishlist-added': 'পণ্য উইশলিস্টে যোগ করা হয়েছে!', 'toast-wishlist-removed': 'পণ্য উইশলিস্ট থেকে সরানো হয়েছে!', 'toast-login-success': 'সফলভাবে লগইন হয়েছে!', 'toast-logout-success': 'সফলভাবে লগআউট হয়েছে!',
-                'toast-register-success': 'অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে!', 'login': 'লগইন', 'register': 'অ্যাকাউন্ট রেজিস্টার', 'toast-select-variant': 'অনুগ্রহ করে সব অপশন সিলেক্ট করুন!', 'select-variants': 'অপশন নির্বাচন করুন', 'buy-now': 'এখনই কিনুন', 'payment-method': 'পেমেন্ট পদ্ধতি নির্বাচন করুন', 'cod': 'ক্যাশ অন ডেলিভারি', 'online-payment': 'অনলাইন পেমেন্ট', 'confirm-order': 'অর্ডার নিশ্চিত করুন', 'order-placed-success': 'আপনার অর্ডারটি সফলভাবে সম্পন্ন হয়েছে!', 'order-placed-fail': 'অর্ডার করতে ব্যর্থ হয়েছে। আবার চেষ্টা করুন।', 'cart-is-empty': 'আপনার কার্ট খালি। চেকআউট করা সম্ভব নয়।', 'mobile-banking': 'মোবাইল ব্যাংকিং', 'payment-instruction-bkash': 'অনুগ্রহ করে আপনার অ্যাপ থেকে এই বিকাশ নম্বরে ৳{amount} পাঠান: +8801863205976।', 'payment-instruction-nagad': 'অনুগ্রহ করে আপনার অ্যাপ থেকে এই নগদ নম্বরে ৳{amount} পাঠান: +8801863205976।', 'payment-instruction-cod': 'আমাদের ডেলিভারি প্রতিনিধি পণ্য পৌঁছানোর সময় আপনার থেকে টাকা সংগ্রহ করবে।', 'profile-updated': 'প্রোফাইল সফলভাবে আপডেট হয়েছে!', 'profile-update-fail': 'প্রোফাইল আপডেট করতে ব্যর্থ হয়েছে।', 'toast-storage-permission-error': 'স্টোরেজ পারমিশন সমস্যা। অনুগ্রহ করে Firebase রুলস চেক করুন।', 'toast-update-profile': 'অর্ডার করার পূর্বে অনুগ্রহ করে আপনার প্রোফাইলে ঠিকানা ও মোবাইল নম্বর আপডেট করুন।', 'emergency-contact': 'সাপোর্ট', 'message-sent': 'আপনার বার্তা সফলভাবে পাঠানো হয়েছে!', 'out-of-stock': 'স্টক শেষ', 'toast-out-of-stock': 'দুঃখিত, এই পণ্যটি বর্তমানে স্টক আউট।', 'subtotal': 'মোট', 'delivery-charge': 'ডেলিভারি চার্জ', 'my-orders': 'আমার অর্ডার',
+                'toast-register-success': 'অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে!', 'login': 'লগইন', 'register': 'অ্যাকাউন্ট রেজিস্টার', 'auth-login-heading': 'পুনরায় স্বাগতম', 'auth-register-heading': 'আপনার অ্যাকাউন্ট তৈরি করুন', 'auth-reset-heading': 'পাসওয়ার্ড রিসেট করুন', 'auth-login-subtitle': 'অর্ডার, উইশলিস্ট ও ঠিকানা পরিচালনা করতে লগইন করুন।', 'auth-register-subtitle': 'কয়েক মিনিটেই বিনামূল্যে TangailBuzz অ্যাকাউন্ট তৈরি করুন।', 'auth-reset-subtitle': 'আপনার ইমেইল দিন, আমরা একটি নিরাপদ রিসেট লিঙ্ক পাঠাবো।', 'auth-login-tab': 'লগইন', 'auth-register-tab': 'রেজিস্টার', 'auth-reset-tab': 'রিসেট', 'auth-social-divider': 'অথবা চালিয়ে যান', 'auth-security-note': 'আপনার তথ্য এনক্রিপ্টেড এবং নিরাপদে সংরক্ষিত থাকে।', 'auth-new-here': 'নতুন সদস্য?', 'auth-have-account': 'ইতোমধ্যে অ্যাকাউন্ট আছে?', 'create-account': 'অ্যাকাউন্ট তৈরি করুন', 'forgot-password': 'পাসওয়ার্ড ভুলে গেছেন?', 'reset-password-desc': 'আপনার নিবন্ধিত ইমেইল দিন, আমরা একটি নিরাপদ রিসেট লিঙ্ক পাঠাবো।', 'send-reset-link': 'রিসেট লিঙ্ক পাঠান', 'back-to-login': 'লগইনে ফিরে যান', 'login-google': 'গুগল দিয়ে লগইন করুন', 'login-facebook': 'ফেসবুক দিয়ে লগইন করুন', 'full-name': 'পূর্ণ নাম', 'mobile-number': 'মোবাইল নম্বর', 'location': 'অবস্থান', 'upload-photo': 'ছবি আপলোড করুন', 'remove-photo': 'ছবি সরান', 'save-changes': 'পরিবর্তন সংরক্ষণ করুন', 'cancel': 'বাতিল', 'account-options': 'অ্যাকাউন্ট অপশন', 'edit-profile': 'প্রোফাইল সম্পাদনা', 'manage-address': 'ঠিকানা ম্যানেজ করুন', 'delete-account': 'অ্যাকাউন্ট মুছুন', 'saved-addresses': 'সংরক্ষিত ঠিকানাসমূহ', 'manage-address-help': 'আপনার ডেলিভারি ঠিকানাগুলো পরিচালনা করুন।', 'address-form-title': 'নতুন ঠিকানা যোগ করুন', 'address-line1': 'ঠিকানা লাইন ১', 'address-line2-optional': 'ঠিকানা লাইন ২ (ঐচ্ছিক)', 'city': 'শহর', 'area-district': 'এলাকা/জেলা', 'set-as-default': 'ডিফল্ট হিসেবে নির্ধারণ করুন', 'save-address': 'ঠিকানা সংরক্ষণ করুন', 'toast-select-variant': 'অনুগ্রহ করে সব অপশন সিলেক্ট করুন!', 'select-variants': 'অপশন নির্বাচন করুন', 'buy-now': 'এখনই কিনুন', 'payment-method': 'পেমেন্ট পদ্ধতি নির্বাচন করুন', 'cod': 'ক্যাশ অন ডেলিভারি', 'online-payment': 'অনলাইন পেমেন্ট', 'confirm-order': 'অর্ডার নিশ্চিত করুন', 'order-placed-success': 'আপনার অর্ডারটি সফলভাবে সম্পন্ন হয়েছে!', 'order-placed-fail': 'অর্ডার করতে ব্যর্থ হয়েছে। আবার চেষ্টা করুন।', 'cart-is-empty': 'আপনার কার্ট খালি। চেকআউট করা সম্ভব নয়।', 'mobile-banking': 'মোবাইল ব্যাংকিং', 'payment-instruction-bkash': 'অনুগ্রহ করে আপনার অ্যাপ থেকে এই বিকাশ নম্বরে ৳{amount} পাঠান: +8801863205976।', 'payment-instruction-nagad': 'অনুগ্রহ করে আপনার অ্যাপ থেকে এই নগদ নম্বরে ৳{amount} পাঠান: +8801863205976।', 'payment-instruction-cod': 'আমাদের ডেলিভারি প্রতিনিধি পণ্য পৌঁছানোর সময় আপনার থেকে টাকা সংগ্রহ করবে।', 'profile-updated': 'প্রোফাইল সফলভাবে আপডেট হয়েছে!', 'profile-update-fail': 'প্রোফাইল আপডেট করতে ব্যর্থ হয়েছে।', 'toast-storage-permission-error': 'স্টোরেজ পারমিশন সমস্যা। অনুগ্রহ করে Firebase রুলস চেক করুন।', 'toast-update-profile': 'অর্ডার করার পূর্বে অনুগ্রহ করে আপনার প্রোফাইলে ঠিকানা ও মোবাইল নম্বর আপডেট করুন।', 'emergency-contact': 'সাপোর্ট', 'message-sent': 'আপনার বার্তা সফলভাবে পাঠানো হয়েছে!', 'out-of-stock': 'স্টক শেষ', 'toast-out-of-stock': 'দুঃখিত, এই পণ্যটি বর্তমানে স্টক আউট।', 'subtotal': 'মোট', 'delivery-charge': 'ডেলিভারি চার্জ', 'my-orders': 'আমার অর্ডার',
                 'delete-account-confirm': 'আপনি কি নিশ্চিত যে আপনি আপনার অ্যাকাউন্টটি মুছে ফেলতে চান? এই কাজটি ফিরিয়ে আনা যাবে না। আপনার সমস্ত ডেটা হারানো হবে।',
                 'account-deleted': 'আপনার অ্যাকাউন্ট সফলভাবে মুছে ফেলা হয়েছে।',
                 'delete-account-failed': 'অ্যাকাউন্ট মুছে ফেলার চেষ্টা ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।',
@@ -2698,6 +3002,7 @@
         const DOMElements = {
             toast: document.getElementById('toast-notification'), toastMessage: document.getElementById('toast-message'), productList: document.getElementById('product-list'), flashSaleSection: document.getElementById('flash-sale-section'), flashSaleGrid: document.getElementById('flash-sale-grid'), flashSaleEmpty: document.getElementById('flash-sale-empty'), flashSaleMasterCountdown: document.getElementById('flash-sale-master-countdown'), flashSaleCountdownLabel: document.getElementById('flash-sale-countdown-label'), megaSaleSection: document.getElementById('mega-sale-section'), megaSaleGrid: document.getElementById('mega-sale-grid'), megaSaleEmpty: document.getElementById('mega-sale-empty'), cartCount: document.getElementById('cart-count'), cartItems: document.getElementById('cart-items'), cartSubtotal: document.getElementById('cart-subtotal'), deliveryCharge: document.getElementById('delivery-charge'), cartTotal: document.getElementById('cart-total'), wishlistItems: document.getElementById('wishlist-items'), authOptions: document.getElementById('auth-options'), 
             userProfileView: document.getElementById('user-profile-view'), userPhoto: document.getElementById('user-photo'), userName: document.getElementById('user-name'), userEmail: document.getElementById('user-email'), userMobile: document.getElementById('user-mobile'), userLocation: document.getElementById('user-location'),
+            authCardHeading: document.getElementById('auth-card-heading'), authSubtitle: document.getElementById('auth-subtitle'), authHeroIcon: document.querySelector('.auth-hero-icon i'), authTabs: Array.from(document.querySelectorAll('.auth-tab')),
             loginBtn: document.getElementById('login-google-btn'), loginFacebookBtn: document.getElementById('login-facebook-btn'), logoutBtn: document.getElementById('logout-btn'), 
             editProfileBtn: document.getElementById('edit-profile-btn'), editProfileForm: document.getElementById('edit-profile-form'), saveProfileBtn: document.getElementById('save-profile-btn'), cancelEditBtn: document.getElementById('cancel-edit-btn'),
             myOrdersBtnProfile: document.getElementById('my-orders-btn-profile'), 
@@ -2733,7 +3038,6 @@
             // Coupon Elements
             couponForm: document.getElementById('coupon-form'),
             couponInput: document.getElementById('coupon-input'),
-            applyCouponBtn: document.getElementById('apply-coupon-btn'),
             
             // Dark Mode Elements
             darkModeToggle: document.getElementById('dark-mode-toggle'),
@@ -2758,7 +3062,6 @@
             addrCity: document.getElementById('addr-city'),
             addrArea: document.getElementById('addr-area'),
             addrDefault: document.getElementById('addr-default'),
-            saveAddressBtn: document.getElementById('save-address-btn'),
             cancelAddressBtn: document.getElementById('cancel-address-btn'),
             // Payment modal address elements
             shippingAddressSection: document.getElementById('shipping-address-section'),
@@ -2966,8 +3269,6 @@
                 if (flagAsset?.src) flagIcon.src = flagAsset.src;
                 if (flagAsset?.alt) flagIcon.alt = flagAsset.alt;
             }
-            const currentNameEl = document.getElementById('language-current-name');
-            if (currentNameEl) currentNameEl.textContent = currentLabel;
         }
 
         function setLanguage(languageCode = DEFAULT_LANGUAGE, options = {}) {
@@ -3003,6 +3304,10 @@
                 const addToCartBtn = document.getElementById('add-to-cart-details');
                 const productId = addToCartBtn ? addToCartBtn.dataset.productId : null;
                 if (productId) showProductDetails(productId);
+            }
+
+            if (typeof toggleAuthForms === 'function') {
+                toggleAuthForms(currentAuthForm);
             }
 
             refreshLanguageUIState();
@@ -6425,31 +6730,75 @@
         }
 
         function toggleAuthForms(formToShow) {
-            DOMElements.authError.textContent = '';
-            // Hide all
-            DOMElements.loginForm.classList.add('hidden');
-            DOMElements.registerForm.classList.add('hidden');
+            const normalized = formToShow === 'register' || formToShow === 'reset' ? formToShow : 'login';
+            let effectiveForm = normalized;
+            let focusSelector = '#login-email';
+
+            if (DOMElements.authError) {
+                DOMElements.authError.textContent = '';
+            }
+
+            if (DOMElements.loginForm) DOMElements.loginForm.classList.add('hidden');
+            if (DOMElements.registerForm) DOMElements.registerForm.classList.add('hidden');
             if (DOMElements.resetForm) DOMElements.resetForm.classList.add('hidden');
 
-            if (formToShow === 'register') {
-                DOMElements.registerForm.classList.remove('hidden');
-                DOMElements.profileDrawerTitle.textContent = translations[currentLanguage]['register'] || 'Register';
-            } else if (formToShow === 'reset') {
+            if (normalized === 'register') {
+                if (DOMElements.registerForm) {
+                    DOMElements.registerForm.classList.remove('hidden');
+                    focusSelector = '#register-name';
+                }
+                DOMElements.profileDrawerTitle.textContent = resolveLocalizedString('register', {}, currentLanguage) || 'Register';
+            } else if (normalized === 'reset') {
                 if (DOMElements.resetForm) {
-                    // Prefill email from login form if present
-                    const loginEmail = document.getElementById('login-email')?.value || '';
-                    if (loginEmail) DOMElements.resetEmail.value = loginEmail;
+                    const loginEmail = DOMElements.loginForm?.querySelector('#login-email')?.value || '';
+                    if (loginEmail && DOMElements.resetEmail) {
+                        DOMElements.resetEmail.value = loginEmail;
+                    }
                     DOMElements.resetForm.classList.remove('hidden');
-                    DOMElements.profileDrawerTitle.textContent = 'Reset Password';
+                    focusSelector = '#reset-email';
+                    DOMElements.profileDrawerTitle.textContent = resolveLocalizedString('auth-reset-heading', {}, currentLanguage) || 'Reset Password';
                 } else {
-                    // fallback to login
-                    DOMElements.loginForm.classList.remove('hidden');
-                    DOMElements.profileDrawerTitle.textContent = translations[currentLanguage]['login'] || 'Login';
+                    if (DOMElements.loginForm) DOMElements.loginForm.classList.remove('hidden');
+                    DOMElements.profileDrawerTitle.textContent = resolveLocalizedString('login', {}, currentLanguage) || 'Login';
+                    effectiveForm = 'login';
+                    focusSelector = '#login-email';
                 }
             } else {
-                DOMElements.loginForm.classList.remove('hidden');
-                DOMElements.profileDrawerTitle.textContent = translations[currentLanguage]['login'] || 'Login';
+                if (DOMElements.loginForm) DOMElements.loginForm.classList.remove('hidden');
+                DOMElements.profileDrawerTitle.textContent = resolveLocalizedString('login', {}, currentLanguage) || 'Login';
+                focusSelector = '#login-email';
             }
+
+            currentAuthForm = effectiveForm;
+
+            const headingKey = effectiveForm === 'register' ? 'auth-register-heading' : effectiveForm === 'reset' ? 'auth-reset-heading' : 'auth-login-heading';
+            const subtitleKey = effectiveForm === 'register' ? 'auth-register-subtitle' : effectiveForm === 'reset' ? 'auth-reset-subtitle' : 'auth-login-subtitle';
+            const iconClass = effectiveForm === 'register' ? 'fas fa-user-plus' : effectiveForm === 'reset' ? 'fas fa-key' : 'fas fa-shield-alt';
+
+            if (DOMElements.authCardHeading) {
+                DOMElements.authCardHeading.textContent = resolveLocalizedString(headingKey, {}, currentLanguage) || DOMElements.authCardHeading.textContent;
+            }
+            if (DOMElements.authSubtitle) {
+                DOMElements.authSubtitle.textContent = resolveLocalizedString(subtitleKey, {}, currentLanguage) || DOMElements.authSubtitle.textContent;
+            }
+            if (DOMElements.authHeroIcon) {
+                DOMElements.authHeroIcon.className = iconClass;
+            }
+
+            if (DOMElements.authTabs && DOMElements.authTabs.length > 0) {
+                DOMElements.authTabs.forEach((tab) => {
+                    const isActive = tab.dataset?.authTab === effectiveForm;
+                    tab.classList.toggle('auth-tab-active', isActive);
+                    tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
+                });
+            }
+
+            requestAnimationFrame(() => {
+                const targetInput = document.querySelector(focusSelector);
+                if (targetInput) {
+                    targetInput.focus();
+                }
+            });
         }
 
         async function handleRegister(e) {
@@ -8190,6 +8539,17 @@
                     DOMElements.editPhotoPreview.src = 'https://placehold.co/96x96/6a0dad/white?text=User';
                 });
             }
+
+            if (DOMElements.authTabs && DOMElements.authTabs.length > 0) {
+                DOMElements.authTabs.forEach((tab) => {
+                    tab.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        toggleAuthForms(tab.dataset?.authTab || 'login');
+                    });
+                });
+            }
+
+            toggleAuthForms(currentAuthForm);
 
             DOMElements.showRegisterLink.addEventListener('click', (e) => {
                 e.preventDefault();
