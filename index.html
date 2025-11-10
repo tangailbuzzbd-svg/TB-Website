@@ -106,8 +106,14 @@
         .drawer.left {
              transform: translateX(-100%);
         }
+        .drawer.bottom {
+            transform: translateY(100%);
+        }
         .drawer.active {
             transform: translateX(0);
+        }
+        .drawer.bottom.active {
+            transform: translateY(0);
         }
         #product-image-container:hover #product-image {
             transform-origin: var(--x-pos) var(--y-pos);
@@ -1148,6 +1154,28 @@
         </nav>
     </div>
 
+    <!-- Mobile Categories Drawer -->
+    <div id="mobile-categories-drawer" class="drawer bottom fixed bottom-0 left-0 right-0 z-50 max-h-[80vh] bg-white dark:bg-gray-900 rounded-t-3xl shadow-2xl flex flex-col">
+        <div class="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-gray-700">
+            <div class="flex items-center gap-3">
+                <button id="mobile-categories-back" type="button" class="hidden p-2 rounded-full bg-gray-100 text-gray-600 hover:text-gray-900 dark:bg-gray-800 dark:text-gray-200 dark:hover:text-white transition-colors" data-lang-aria-label="back-to-categories" aria-label="Back to categories">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h3 id="mobile-categories-title" class="text-lg font-semibold text-theme-purple" data-lang="all-categories">All Categories</h3>
+            </div>
+            <button type="button" class="text-2xl text-gray-500 hover:text-gray-800 dark:text-gray-300 dark:hover:text-white transition-colors" onclick="closeDrawer()" aria-label="Close">
+                ×
+            </button>
+        </div>
+        <div class="p-5 overflow-y-auto flex-1 space-y-5">
+            <div id="mobile-categories-list" class="grid grid-cols-2 gap-3"></div>
+            <div id="mobile-subcategories-container" class="hidden space-y-4">
+                <p id="mobile-subcategories-lead" class="text-sm text-gray-500 dark:text-gray-300" data-lang="choose-subcategory">Choose a subcategory</p>
+                <div id="mobile-subcategories-list" class="grid grid-cols-1 gap-2"></div>
+            </div>
+        </div>
+    </div>
+
     <!-- Cart Drawer (Right) -->
     <div id="cart-drawer" class="drawer fixed top-0 right-0 h-full w-full max-w-sm bg-white dark:bg-gray-800 shadow-lg z-50 flex flex-col">
         <div class="p-6 border-b flex justify-between items-center">
@@ -2176,10 +2204,14 @@
     </footer>
 
     <nav id="mobile-footer-nav" class="md:hidden fixed bottom-0 left-0 right-0 z-30 bg-white/95 dark:bg-gray-900/95 backdrop-blur border-t border-gray-200 dark:border-gray-700 shadow-xl">
-        <div class="grid grid-cols-3">
+        <div class="grid grid-cols-4">
             <button id="mobile-nav-home" type="button" data-mobile-nav="home" class="mobile-nav-btn flex flex-col items-center justify-center gap-1 py-2 text-xs font-semibold text-gray-500 transition-colors" data-lang-aria-label="home" aria-label="Home" aria-pressed="true">
                 <i class="fas fa-home text-lg"></i>
                 <span data-lang="home">হোম</span>
+            </button>
+            <button id="mobile-nav-categories" type="button" data-mobile-nav="categories" class="mobile-nav-btn flex flex-col items-center justify-center gap-1 py-2 text-xs font-semibold text-gray-500 transition-colors" data-lang-aria-label="categories" aria-label="Categories" aria-pressed="false">
+                <i class="fas fa-th-large text-lg"></i>
+                <span data-lang="categories">ক্যাটাগরি</span>
             </button>
             <button id="mobile-nav-cart" type="button" data-mobile-nav="cart" class="mobile-nav-btn flex flex-col items-center justify-center gap-1 py-2 text-xs font-semibold text-gray-500 transition-colors" data-lang-aria-label="cart" aria-label="Cart" aria-pressed="false">
                 <i class="fas fa-shopping-cart text-lg"></i>
@@ -2747,6 +2779,7 @@
         // --- Category Tracking State ---
         let currentCategory = null; // Tracks current main category filter
         let currentSubCategory = null; // Tracks current sub category filter
+    let mobileCategoriesActiveCategory = null; // Tracks currently focused main category in mobile drawer
         // --- End Category Tracking State ---
         
         // --- User Blocking Logic ---
@@ -2784,6 +2817,9 @@
                 'model-id': 'Product ID: {id}', // FIX: Changed 'Model:' to 'Product ID:'
                 'available-coupons': 'Available Coupons', 'min-spend': 'Min Spend', 'discount-value': 'Discount', 'tap-to-copy': 'Tap to Copy', 'copied': 'Copied!',
                 'all-products': 'All Products',
+                'all-categories': 'All Categories',
+                'choose-subcategory': 'Choose a subcategory',
+                'back-to-categories': 'Back to categories',
                 'browse-everything': 'Browse everything in one place',
                 'current-category-title': '{category}',
                 'sub-category-filter': 'Filter by Sub-Category:',
@@ -2908,6 +2944,9 @@
                 'model-id': 'প্রোডাক্ট আইডি: {id}', // FIX: Changed 'মডেল আইডি:' to 'প্রোডাক্ট আইডি:'
                 'available-coupons': 'উপলব্ধ কুপন', 'min-spend': 'সর্বনিম্ন খরচ', 'discount-value': 'ডিসকাউন্ট', 'tap-to-copy': 'কপি করুন', 'copied': 'কপি হয়েছে!',
                 'all-products': 'সকল পণ্য',
+                'all-categories': 'সব ক্যাটাগরি',
+                'choose-subcategory': 'সাব ক্যাটাগরি নির্বাচন করুন',
+                'back-to-categories': 'ক্যাটাগরিতে ফিরে যান',
                 'browse-everything': 'এক জায়গায় সবকিছু দেখুন',
                 // Hero
                 'hero-title': 'আপনার স্টাইল খুঁজুন। শপ করুন বাজ়ে।',
@@ -3086,8 +3125,16 @@
             darkModeIconMobile: document.getElementById('dark-mode-icon-mobile'),
             mobileFooterNav: document.getElementById('mobile-footer-nav'),
             mobileNavHomeBtn: document.getElementById('mobile-nav-home'),
+            mobileNavCategoriesBtn: document.getElementById('mobile-nav-categories'),
             mobileNavCartBtn: document.getElementById('mobile-nav-cart'),
             mobileNavProfileBtn: document.getElementById('mobile-nav-profile'),
+            mobileCategoriesDrawer: document.getElementById('mobile-categories-drawer'),
+            mobileCategoriesTitle: document.getElementById('mobile-categories-title'),
+            mobileCategoriesBackBtn: document.getElementById('mobile-categories-back'),
+            mobileCategoriesList: document.getElementById('mobile-categories-list'),
+            mobileSubcategoriesContainer: document.getElementById('mobile-subcategories-container'),
+            mobileSubcategoriesList: document.getElementById('mobile-subcategories-list'),
+            mobileSubcategoriesLead: document.getElementById('mobile-subcategories-lead'),
 
             // New Category Elements
             categoryHeader: document.getElementById('category-header'),
@@ -3378,6 +3425,13 @@
             if (currentCategory && typeof renderSubCategories === 'function') {
                 try { renderSubCategories(currentCategory); } catch (_) {}
             }
+            if (DOMElements.mobileCategoriesDrawer && DOMElements.mobileCategoriesDrawer.classList.contains('active')) {
+                if (mobileCategoriesActiveCategory) {
+                    showMobileSubcategories(mobileCategoriesActiveCategory);
+                } else {
+                    renderMobileCategoriesMainView();
+                }
+            }
             const detailsPage = document.getElementById('product-details-page');
             if (detailsPage && !detailsPage.classList.contains('hidden')) {
                 const addToCartBtn = document.getElementById('add-to-cart-details');
@@ -3586,6 +3640,7 @@
             currentMobileNavKey = typeof activeKey === 'string' ? activeKey : null;
             const mapping = {
                 home: DOMElements.mobileNavHomeBtn,
+                categories: DOMElements.mobileNavCategoriesBtn,
                 cart: DOMElements.mobileNavCartBtn,
                 profile: DOMElements.mobileNavProfileBtn,
             };
@@ -3603,7 +3658,7 @@
 
         function setupMobileFooterNav() {
             if (!DOMElements.mobileFooterNav) return;
-            const { mobileNavHomeBtn, mobileNavCartBtn, mobileNavProfileBtn } = DOMElements;
+            const { mobileNavHomeBtn, mobileNavCategoriesBtn, mobileNavCartBtn, mobileNavProfileBtn } = DOMElements;
 
             if (mobileNavHomeBtn && mobileNavHomeBtn.dataset.bound !== 'true') {
                 mobileNavHomeBtn.addEventListener('click', () => {
@@ -3611,6 +3666,13 @@
                     showPage('home-page');
                 });
                 mobileNavHomeBtn.dataset.bound = 'true';
+            }
+
+            if (mobileNavCategoriesBtn && mobileNavCategoriesBtn.dataset.bound !== 'true') {
+                mobileNavCategoriesBtn.addEventListener('click', () => {
+                    openMobileCategoriesDrawer();
+                });
+                mobileNavCategoriesBtn.dataset.bound = 'true';
             }
 
             if (mobileNavCartBtn && mobileNavCartBtn.dataset.bound !== 'true') {
@@ -3627,7 +3689,142 @@
                 mobileNavProfileBtn.dataset.bound = 'true';
             }
 
+            setupMobileCategoryDrawer();
             setActiveMobileNav(baseMobileNavKey);
+        }
+
+        // --- Mobile categories drawer logic ---
+        function setMobileCategoriesTitleFromKey(key) {
+            const titleEl = DOMElements.mobileCategoriesTitle;
+            if (!titleEl) return;
+            titleEl.dataset.lang = key;
+            titleEl.textContent = resolveLocalizedString(key);
+        }
+
+        function setMobileCategoriesTitleText(text) {
+            const titleEl = DOMElements.mobileCategoriesTitle;
+            if (!titleEl) return;
+            delete titleEl.dataset.lang;
+            titleEl.textContent = text;
+        }
+
+        function renderMobileCategoriesMainView() {
+            const listEl = DOMElements.mobileCategoriesList;
+            if (!listEl) return;
+
+            mobileCategoriesActiveCategory = null;
+            const subContainer = DOMElements.mobileSubcategoriesContainer;
+            if (subContainer) subContainer.classList.add('hidden');
+            listEl.classList.remove('hidden');
+
+            if (DOMElements.mobileSubcategoriesLead) {
+                DOMElements.mobileSubcategoriesLead.dataset.lang = 'choose-subcategory';
+                DOMElements.mobileSubcategoriesLead.textContent = resolveLocalizedString('choose-subcategory');
+            }
+
+            const cardClass = 'flex flex-col items-center justify-center gap-2 px-4 py-5 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-center text-gray-700 dark:text-gray-100 text-sm font-semibold shadow-sm hover:border-theme-blue hover:text-theme-blue transition-colors';
+            const iconWrapClass = 'inline-flex items-center justify-center w-12 h-12 rounded-full bg-theme-purple/10 text-theme-purple dark:bg-theme-blue/10 dark:text-theme-blue text-xl';
+
+            const cards = HEADER_CATEGORY_GROUPS.map(group => {
+                const iconClass = getCategoryIconClass(group.id);
+                const label = getCategoryLabel(group.id);
+                return `<button type="button" class="${cardClass}" data-category="${group.id}"><span class="${iconWrapClass}"><i class="fas ${iconClass}"></i></span><span>${label}</span></button>`;
+            }).join('');
+
+            listEl.innerHTML = cards || `<p class="col-span-2 text-center text-sm text-gray-500 dark:text-gray-300">${resolveLocalizedString('categories')}</p>`;
+
+            listEl.querySelectorAll('[data-category]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const categoryId = btn.dataset.category;
+                    showMobileSubcategories(categoryId);
+                });
+            });
+
+            if (DOMElements.mobileCategoriesBackBtn) {
+                DOMElements.mobileCategoriesBackBtn.classList.add('hidden');
+            }
+            setMobileCategoriesTitleFromKey('all-categories');
+        }
+
+        function showMobileSubcategories(categoryId) {
+            const subContainer = DOMElements.mobileSubcategoriesContainer;
+            const subList = DOMElements.mobileSubcategoriesList;
+            const mainList = DOMElements.mobileCategoriesList;
+            if (!subContainer || !subList || !mainList) return;
+
+            const canonical = resolveCategoryId(categoryId);
+            const group = HEADER_CATEGORY_GROUPS.find(g => g.id === canonical);
+            if (!group) {
+                filterProducts(canonical);
+                closeDrawer();
+                return;
+            }
+
+            const items = Array.isArray(group.items) ? group.items : [];
+            const categoryLabel = getCategoryLabel(canonical);
+
+            if (!items.length) {
+                filterProducts(canonical);
+                closeDrawer();
+                return;
+            }
+
+            mobileCategoriesActiveCategory = canonical;
+            mainList.classList.add('hidden');
+            subContainer.classList.remove('hidden');
+
+            const buttonClass = 'flex items-center gap-3 px-4 py-3 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm font-semibold text-gray-700 dark:text-gray-100 shadow-sm hover:border-theme-blue hover:text-theme-blue transition-colors';
+            const allWord = translations[currentLanguage]?.['all-in-category'] || (currentLanguage === 'bn' ? 'সকল' : 'All in');
+            const allLabel = `${allWord} ${categoryLabel}`;
+
+            const parts = [`<button type="button" class="${buttonClass}" data-subcategory="__all__">${allLabel}</button>`];
+
+            items.forEach(item => {
+                const rawValue = item?.value || item?.label?.en || item?.label?.bn;
+                if (!rawValue) return;
+                const display = item?.label?.[currentLanguage] || item?.label?.en || item?.label?.bn || rawValue;
+                const encoded = encodeURIComponent(String(rawValue));
+                parts.push(`<button type="button" class="${buttonClass}" data-subcategory="${encoded}">${display}</button>`);
+            });
+
+            subList.innerHTML = parts.join('');
+
+            subList.querySelectorAll('[data-subcategory]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const value = btn.dataset.subcategory;
+                    if (value === '__all__') {
+                        filterProducts(canonical);
+                    } else {
+                        const decoded = decodeURIComponent(value);
+                        filterSubCategory(canonical, decoded);
+                    }
+                    closeDrawer();
+                });
+            });
+
+            if (DOMElements.mobileCategoriesBackBtn) {
+                DOMElements.mobileCategoriesBackBtn.classList.remove('hidden');
+            }
+            if (DOMElements.mobileSubcategoriesLead) {
+                DOMElements.mobileSubcategoriesLead.dataset.lang = 'choose-subcategory';
+                DOMElements.mobileSubcategoriesLead.textContent = resolveLocalizedString('choose-subcategory');
+            }
+            setMobileCategoriesTitleText(categoryLabel);
+        }
+
+        function setupMobileCategoryDrawer() {
+            const backBtn = DOMElements.mobileCategoriesBackBtn;
+            if (backBtn && backBtn.dataset.bound !== 'true') {
+                backBtn.addEventListener('click', () => {
+                    renderMobileCategoriesMainView();
+                });
+                backBtn.dataset.bound = 'true';
+            }
+        }
+
+        function openMobileCategoriesDrawer() {
+            renderMobileCategoriesMainView();
+            openDrawer('mobile-categories-drawer');
         }
 
         function handleProfileQuickAction(action) {
@@ -7297,6 +7494,8 @@
                 setActiveMobileNav('cart');
             } else if (drawerId === 'profile-drawer') {
                 setActiveMobileNav('profile');
+            } else if (drawerId === 'mobile-categories-drawer') {
+                setActiveMobileNav('categories');
             } else {
                 setActiveMobileNav(baseMobileNavKey);
             }
