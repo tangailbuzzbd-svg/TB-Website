@@ -3138,8 +3138,8 @@
         }
         applyDarkMode(initialTheme);
 
-    let baseMobileNavKey = 'home';
-    let currentMobileNavKey = 'home';
+        let baseMobileNavKey = 'home';
+        let currentMobileNavKey = 'home';
 
         // --- Error Handling & UI Helpers ---
         // Safe toast display with localization fallback.
@@ -3497,6 +3497,17 @@
                 // Re-apply translations on newly visible page
                 updateTextContent();
             }
+            if (pageId === 'home-page') {
+                baseMobileNavKey = 'home';
+            } else if (pageId === 'cart-page') {
+                baseMobileNavKey = 'cart';
+            } else {
+                baseMobileNavKey = null;
+            }
+
+            if (!document.querySelector('.drawer.active')) {
+                setActiveMobileNav(baseMobileNavKey);
+            }
             if (pageId !== 'product-details-page') {
                 try { clearProductDetailsFlashTimer(); } catch (_) {}
             }
@@ -3560,6 +3571,20 @@
                 if (matches.length === 0) {
                     resultsBox.innerHTML = '';
                     resultsBox.classList.add('hidden');
+                    return;
+                }
+
+                const itemCls = 'block w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-gray-800 dark:text-gray-200';
+                const html = matches.map(p => {
+                    const title = (p.name || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                    return `<button type="button" class="${itemCls}" onclick="(function(){ hideSearchResults(); showProductDetails('${p.id}'); })()">${title}</button>`;
+                }).join('');
+
+                resultsBox.innerHTML = html;
+                resultsBox.classList.remove('hidden');
+            } catch (e) { /* noop */ }
+        }
+
         function setActiveMobileNav(activeKey) {
             currentMobileNavKey = typeof activeKey === 'string' ? activeKey : null;
             const mapping = {
@@ -3574,6 +3599,8 @@
                 btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
                 btn.classList.toggle('text-theme-blue', isActive);
                 btn.classList.toggle('text-gray-500', !isActive);
+                btn.classList.toggle('dark:text-theme-blue', isActive);
+                btn.classList.toggle('dark:text-gray-300', !isActive);
             });
         }
 
@@ -3608,6 +3635,7 @@
 
         function handleProfileQuickAction(action) {
             if (!action) return;
+
             switch (action) {
                 case 'edit': {
                     const profileDrawer = document.getElementById('profile-drawer');
@@ -3619,10 +3647,13 @@
                         toggleAuthForms('login');
                         return;
                     }
-                    if (DOMElements.editProfileBtn) {
-                        DOMElements.editProfileBtn.click();
+                    if (DOMElements.addressesSection) DOMElements.addressesSection.classList.add('hidden');
+                    if (DOMElements.profileDrawerTitle) {
                         DOMElements.profileDrawerTitle.dataset.lang = 'edit-profile';
                         updateTextContent();
+                    }
+                    if (DOMElements.editProfileBtn) {
+                        DOMElements.editProfileBtn.click();
                     }
                     break;
                 }
@@ -3657,20 +3688,6 @@
             }
         }
 
-                    return;
-                }
-
-                const itemCls = 'block w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-gray-800 dark:text-gray-200';
-                const html = matches.map(p => {
-                    const title = (p.name || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-                    return `<button type="button" class="${itemCls}" onclick="(function(){ hideSearchResults(); showProductDetails('${p.id}'); })()">${title}</button>`;
-                }).join('');
-
-                resultsBox.innerHTML = html;
-                resultsBox.classList.remove('hidden');
-            } catch (e) { /* noop */ }
-        }
-
         function renderStars(rating) {
             const fullStars = Math.floor(rating);
             const halfStar = rating % 1 >= 0.5;
@@ -3698,6 +3715,10 @@
         function openManageAddresses() {
             if (!currentUser || currentUser.isAnonymous) { openDrawer('profile-drawer'); return; }
             openDrawer('profile-drawer');
+            if (DOMElements.profileDrawerTitle) {
+                DOMElements.profileDrawerTitle.dataset.lang = 'manage-address';
+                updateTextContent();
+            }
             if (DOMElements.userProfileView) DOMElements.userProfileView.classList.remove('hidden');
             if (DOMElements.editProfileForm) DOMElements.editProfileForm.classList.add('hidden');
             if (DOMElements.addressesSection) DOMElements.addressesSection.classList.remove('hidden');
@@ -7249,6 +7270,10 @@
                 showToast('profile-updated');
                 DOMElements.editProfileForm.classList.add('hidden');
                 DOMElements.userProfileView.classList.remove('hidden');
+                if (DOMElements.profileDrawerTitle) {
+                    DOMElements.profileDrawerTitle.dataset.lang = 'your-account';
+                    updateTextContent();
+                }
 
             } catch(error) {
                 console.error("Full error object:", error);
@@ -7267,58 +7292,69 @@
         // --- DRAWER & MODAL LOGIC ---
         function openDrawer(drawerId) {
             closeDrawer(); // Stop chat listener when closing drawers
-            
+
             const drawer = document.getElementById(drawerId);
-            if (drawer) {
-                if (drawerId === 'profile-drawer') {
-                    if (!currentUser || currentUser.isAnonymous) {
-                       toggleAuthForms('login');
-                    } else {
-                       DOMElements.profileDrawerTitle.dataset.lang = "your-account";
-                       DOMElements.userProfileView.classList.remove('hidden');
-                       DOMElements.editProfileForm.classList.add('hidden');
-                       updateTextContent();
-                    }
-                    const fullSection = document.getElementById('profile-full-section');
-                    if (fullSection && window.innerWidth < 768) {
-                        fullSection.classList.add('hidden');
-                    }
-                    const toggleBtn = drawer.querySelector('.mobile-profile-toggle');
-                    if (toggleBtn) {
-                        const icons = toggleBtn.querySelectorAll('i');
-                        if (icons.length > 1) {
-                            icons[icons.length - 1].classList.remove('fa-minus');
-                            icons[icons.length - 1].classList.add('fa-plus');
-                        }
+            if (!drawer) return;
+
+            if (drawerId === 'cart-drawer') {
+                setActiveMobileNav('cart');
+            } else if (drawerId === 'profile-drawer') {
+                setActiveMobileNav('profile');
+            } else {
+                setActiveMobileNav(baseMobileNavKey);
+            }
+
+            if (drawerId === 'profile-drawer') {
+                if (!currentUser || currentUser.isAnonymous) {
+                    toggleAuthForms('login');
+                } else {
+                    if (DOMElements.profileDrawerTitle) DOMElements.profileDrawerTitle.dataset.lang = 'your-account';
+                    if (DOMElements.userProfileView) DOMElements.userProfileView.classList.remove('hidden');
+                    if (DOMElements.editProfileForm) DOMElements.editProfileForm.classList.add('hidden');
+                    if (DOMElements.addressesSection) DOMElements.addressesSection.classList.add('hidden');
+                    updateTextContent();
+                }
+
+                if (DOMElements.profileFullSection && window.innerWidth < 768) {
+                    DOMElements.profileFullSection.classList.add('hidden');
+                }
+
+                if (DOMElements.mobileProfileToggleBtn) {
+                    DOMElements.mobileProfileToggleBtn.setAttribute('aria-expanded', 'false');
+                    const icon = DOMElements.mobileProfileToggleBtn.querySelector('i');
+                    if (icon) {
+                        icon.classList.add('fa-plus');
+                        icon.classList.remove('fa-minus');
                     }
                 }
-                DOMElements.drawerOverlay.classList.remove('hidden');
-                drawer.classList.add('active');
-                if(drawerId === 'cart-drawer') {
-                    updateCartUI();
-                    // Coupons list removed; only apply coupon option remains
-                }
+            }
+
+            DOMElements.drawerOverlay.classList.remove('hidden');
+            drawer.classList.add('active');
+            if (drawerId === 'cart-drawer') {
+                updateCartUI();
+                // Coupons list removed; only apply coupon option remains
             }
         }
         window.openDrawer = openDrawer;
 
         function toggleMobileProfileDetails(triggerBtn) {
-            const section = document.getElementById('profile-full-section');
-            if (!section) return;
-            const isHidden = section.classList.contains('hidden');
-            if (isHidden) {
+            const section = DOMElements.profileFullSection;
+            const toggleButton = triggerBtn || DOMElements.mobileProfileToggleBtn;
+            if (!section || !toggleButton) return;
+
+            const willShow = section.classList.contains('hidden');
+            if (willShow) {
                 section.classList.remove('hidden');
             } else {
                 section.classList.add('hidden');
             }
-            if (triggerBtn) {
-                const icons = triggerBtn.querySelectorAll('i');
-                if (icons.length > 1) {
-                    const indicator = icons[icons.length - 1];
-                    const nowHidden = section.classList.contains('hidden');
-                    indicator.classList.toggle('fa-plus', nowHidden);
-                    indicator.classList.toggle('fa-minus', !nowHidden);
-                }
+
+            toggleButton.setAttribute('aria-expanded', willShow ? 'true' : 'false');
+            const icon = toggleButton.querySelector('i');
+            if (icon) {
+                icon.classList.toggle('fa-plus', !willShow);
+                icon.classList.toggle('fa-minus', willShow);
             }
         }
         window.toggleMobileProfileDetails = toggleMobileProfileDetails;
@@ -7326,6 +7362,7 @@
         function closeDrawer() {
             DOMElements.drawerOverlay.classList.add('hidden');
             document.querySelectorAll('.drawer').forEach(d => d.classList.remove('active'));
+            setActiveMobileNav(baseMobileNavKey);
             chatUnsubscribe(); // Ensure chat listener stops when drawer closes
         }
         window.closeDrawer = closeDrawer;
@@ -8664,6 +8701,8 @@
                 console.error('Language control setup failed:', error);
             }
             setupHeaderShortcuts();
+            setupMobileFooterNav();
+            setupProfileQuickActions();
             DOMElements.productList.innerHTML = `<div class="loader"></div>`;
             await fetchProductsFromFirestore();
             await fetchBannersFromFirestore();
@@ -8716,6 +8755,10 @@
             DOMElements.cancelEditBtn.addEventListener('click', () => {
                 DOMElements.editProfileForm.classList.add('hidden');
                 DOMElements.userProfileView.classList.remove('hidden');
+                if (DOMElements.profileDrawerTitle) {
+                    DOMElements.profileDrawerTitle.dataset.lang = 'your-account';
+                    updateTextContent();
+                }
             });
 
             // Remove Photo handler
