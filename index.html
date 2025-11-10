@@ -1316,12 +1316,31 @@
                     </div>
                 </div>
 
-                <button type="button" class="mobile-profile-toggle md:hidden w-full flex items-center justify-between px-4 py-2 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100 font-semibold">
+                <button id="mobile-profile-toggle" type="button" class="mobile-profile-toggle md:hidden w-full flex items-center justify-between px-4 py-2 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100 font-semibold" aria-expanded="false">
                     <span data-lang="account-options">অ্যাকাউন্ট অপশন</span>
-                    <i class="fas fa-plus text-xs"></i>
+                    <i class="fas fa-plus text-xs transition-transform"></i>
                 </button>
 
-                <div id="profile-full-section" class="space-y-4">
+                <div id="profile-quick-actions" class="md:hidden grid grid-cols-2 gap-3">
+                    <button type="button" class="profile-quick-action flex flex-col items-center justify-center gap-2 px-3 py-3 rounded-2xl bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 shadow-sm text-xs font-semibold text-gray-700 dark:text-gray-100 transition-colors hover:border-theme-blue hover:text-theme-blue" data-action="edit" data-lang-title="edit-profile" data-lang-aria-label="edit-profile">
+                        <i class="fas fa-user-cog text-lg text-theme-blue"></i>
+                        <span data-lang="edit-profile">প্রোফাইল সম্পাদনা</span>
+                    </button>
+                    <button type="button" class="profile-quick-action flex flex-col items-center justify-center gap-2 px-3 py-3 rounded-2xl bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 shadow-sm text-xs font-semibold text-gray-700 dark:text-gray-100 transition-colors hover:border-theme-blue hover:text-theme-blue" data-action="orders" data-lang-title="my-orders" data-lang-aria-label="my-orders">
+                        <i class="fas fa-boxes text-lg text-theme-blue"></i>
+                        <span data-lang="my-orders">আমার অর্ডার</span>
+                    </button>
+                    <button type="button" class="profile-quick-action flex flex-col items-center justify-center gap-2 px-3 py-3 rounded-2xl bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 shadow-sm text-xs font-semibold text-gray-700 dark:text-gray-100 transition-colors hover:border-theme-blue hover:text-theme-blue" data-action="addresses" data-lang-title="manage-address" data-lang-aria-label="manage-address">
+                        <i class="fas fa-map-marker-alt text-lg text-theme-blue"></i>
+                        <span data-lang="manage-address">ঠিকানা ম্যানেজ করুন</span>
+                    </button>
+                    <button type="button" class="profile-quick-action flex flex-col items-center justify-center gap-2 px-3 py-3 rounded-2xl bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 shadow-sm text-xs font-semibold text-gray-700 dark:text-gray-100 transition-colors hover:border-theme-blue hover:text-theme-blue" data-action="support" data-lang-title="emergency-contact" data-lang-aria-label="emergency-contact">
+                        <i class="fas fa-headset text-lg text-theme-blue"></i>
+                        <span data-lang="emergency-contact">সাপোর্ট</span>
+                    </button>
+                </div>
+
+                <div id="profile-full-section" class="space-y-4 hidden md:block">
                     <div class="space-y-3">
                         <button id="edit-profile-btn" type="button" class="w-full px-4 py-3 rounded-full bg-theme-blue text-white font-semibold hover:bg-theme-purple transition-colors" data-lang="edit-profile">প্রোফাইল সম্পাদনা</button>
                         <button id="my-orders-btn-profile" type="button" class="w-full px-4 py-3 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100 font-semibold hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors" data-lang="my-orders">আমার অর্ডার</button>
@@ -1465,7 +1484,7 @@
 
 
     <!-- Main Content Container -->
-    <main id="main-content-container" class="flex-1 overflow-x-hidden">
+    <main id="main-content-container" class="flex-1 overflow-x-hidden pb-24 md:pb-0">
 
         <!-- Home Page -->
         <div id="home-page" class="page">
@@ -2158,6 +2177,23 @@
              </div>
         </div>
     </footer>
+
+    <nav id="mobile-footer-nav" class="md:hidden fixed bottom-0 left-0 right-0 z-30 bg-white/95 dark:bg-gray-900/95 backdrop-blur border-t border-gray-200 dark:border-gray-700 shadow-xl">
+        <div class="grid grid-cols-3">
+            <button id="mobile-nav-home" type="button" data-mobile-nav="home" class="mobile-nav-btn flex flex-col items-center justify-center gap-1 py-2 text-xs font-semibold text-gray-500 transition-colors" data-lang-aria-label="home" aria-label="Home" aria-pressed="true">
+                <i class="fas fa-home text-lg"></i>
+                <span data-lang="home">হোম</span>
+            </button>
+            <button id="mobile-nav-cart" type="button" data-mobile-nav="cart" class="mobile-nav-btn flex flex-col items-center justify-center gap-1 py-2 text-xs font-semibold text-gray-500 transition-colors" data-lang-aria-label="cart" aria-label="Cart" aria-pressed="false">
+                <i class="fas fa-shopping-cart text-lg"></i>
+                <span data-lang="cart-short">কার্ট</span>
+            </button>
+            <button id="mobile-nav-profile" type="button" data-mobile-nav="profile" class="mobile-nav-btn flex flex-col items-center justify-center gap-1 py-2 text-xs font-semibold text-gray-500 transition-colors" data-lang-aria-label="account" aria-label="Account" aria-pressed="false">
+                <i class="fas fa-user-circle text-lg"></i>
+                <span data-lang="profile">প্রোফাইল</span>
+            </button>
+        </div>
+    </nav>
 
     </main> <!-- End Main Content Container -->
 
@@ -3010,6 +3046,8 @@
             authCardHeading: document.getElementById('auth-card-heading'), authSubtitle: document.getElementById('auth-subtitle'), authHeroIcon: document.querySelector('.auth-hero-icon i'), authTabs: Array.from(document.querySelectorAll('.auth-tab')),
             loginBtn: document.getElementById('login-google-btn'), loginFacebookBtn: document.getElementById('login-facebook-btn'), logoutBtn: document.getElementById('logout-btn'), 
             editProfileBtn: document.getElementById('edit-profile-btn'), editProfileForm: document.getElementById('edit-profile-form'), saveProfileBtn: document.getElementById('save-profile-btn'), cancelEditBtn: document.getElementById('cancel-edit-btn'),
+            profileFullSection: document.getElementById('profile-full-section'), mobileProfileToggleBtn: document.getElementById('mobile-profile-toggle'),
+            profileQuickActions: Array.from(document.querySelectorAll('.profile-quick-action')),
             myOrdersBtnProfile: document.getElementById('my-orders-btn-profile'), 
             ordersList: document.getElementById('orders-list'),
             editPhotoPreview: document.getElementById('edit-photo-preview'), editPhotoInput: document.getElementById('edit-photo-input'), editNameInput: document.getElementById('edit-name-input'), editMobileInput: document.getElementById('edit-mobile-input'), editLocationInput: document.getElementById('edit-location-input'),
@@ -3049,6 +3087,10 @@
             darkModeIcon: document.getElementById('dark-mode-icon'),
             darkModeToggleMobile: document.getElementById('dark-mode-toggle-mobile'),
             darkModeIconMobile: document.getElementById('dark-mode-icon-mobile'),
+            mobileFooterNav: document.getElementById('mobile-footer-nav'),
+            mobileNavHomeBtn: document.getElementById('mobile-nav-home'),
+            mobileNavCartBtn: document.getElementById('mobile-nav-cart'),
+            mobileNavProfileBtn: document.getElementById('mobile-nav-profile'),
 
             // New Category Elements
             categoryHeader: document.getElementById('category-header'),
@@ -3095,6 +3137,9 @@
             console.warn('Theme preference load failed:', error);
         }
         applyDarkMode(initialTheme);
+
+    let baseMobileNavKey = 'home';
+    let currentMobileNavKey = 'home';
 
         // --- Error Handling & UI Helpers ---
         // Safe toast display with localization fallback.
@@ -3515,6 +3560,103 @@
                 if (matches.length === 0) {
                     resultsBox.innerHTML = '';
                     resultsBox.classList.add('hidden');
+        function setActiveMobileNav(activeKey) {
+            currentMobileNavKey = typeof activeKey === 'string' ? activeKey : null;
+            const mapping = {
+                home: DOMElements.mobileNavHomeBtn,
+                cart: DOMElements.mobileNavCartBtn,
+                profile: DOMElements.mobileNavProfileBtn,
+            };
+
+            Object.entries(mapping).forEach(([key, btn]) => {
+                if (!btn) return;
+                const isActive = key === currentMobileNavKey;
+                btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+                btn.classList.toggle('text-theme-blue', isActive);
+                btn.classList.toggle('text-gray-500', !isActive);
+            });
+        }
+
+        function setupMobileFooterNav() {
+            if (!DOMElements.mobileFooterNav) return;
+            const { mobileNavHomeBtn, mobileNavCartBtn, mobileNavProfileBtn } = DOMElements;
+
+            if (mobileNavHomeBtn && mobileNavHomeBtn.dataset.bound !== 'true') {
+                mobileNavHomeBtn.addEventListener('click', () => {
+                    closeDrawer();
+                    showPage('home-page');
+                });
+                mobileNavHomeBtn.dataset.bound = 'true';
+            }
+
+            if (mobileNavCartBtn && mobileNavCartBtn.dataset.bound !== 'true') {
+                mobileNavCartBtn.addEventListener('click', () => {
+                    openDrawer('cart-drawer');
+                });
+                mobileNavCartBtn.dataset.bound = 'true';
+            }
+
+            if (mobileNavProfileBtn && mobileNavProfileBtn.dataset.bound !== 'true') {
+                mobileNavProfileBtn.addEventListener('click', () => {
+                    openDrawer('profile-drawer');
+                });
+                mobileNavProfileBtn.dataset.bound = 'true';
+            }
+
+            setActiveMobileNav(baseMobileNavKey);
+        }
+
+        function handleProfileQuickAction(action) {
+            if (!action) return;
+            switch (action) {
+                case 'edit': {
+                    const profileDrawer = document.getElementById('profile-drawer');
+                    const isDrawerActive = profileDrawer?.classList.contains('active');
+                    if (!isDrawerActive) {
+                        openDrawer('profile-drawer');
+                    }
+                    if (!currentUser || currentUser.isAnonymous) {
+                        toggleAuthForms('login');
+                        return;
+                    }
+                    if (DOMElements.editProfileBtn) {
+                        DOMElements.editProfileBtn.click();
+                        DOMElements.profileDrawerTitle.dataset.lang = 'edit-profile';
+                        updateTextContent();
+                    }
+                    break;
+                }
+                case 'orders':
+                    closeDrawer();
+                    showPage('my-orders-page');
+                    break;
+                case 'addresses':
+                    openManageAddresses();
+                    break;
+                case 'support':
+                    closeDrawer();
+                    showPage('support-page');
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        function setupProfileQuickActions() {
+            if (DOMElements.mobileProfileToggleBtn && DOMElements.mobileProfileToggleBtn.dataset.bound !== 'true') {
+                DOMElements.mobileProfileToggleBtn.addEventListener('click', () => toggleMobileProfileDetails(DOMElements.mobileProfileToggleBtn));
+                DOMElements.mobileProfileToggleBtn.dataset.bound = 'true';
+            }
+
+            if (Array.isArray(DOMElements.profileQuickActions)) {
+                DOMElements.profileQuickActions.forEach((btn) => {
+                    if (!btn || btn.dataset.bound === 'true') return;
+                    btn.addEventListener('click', () => handleProfileQuickAction(btn.dataset.action));
+                    btn.dataset.bound = 'true';
+                });
+            }
+        }
+
                     return;
                 }
 
