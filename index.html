@@ -2284,6 +2284,7 @@
     const flashSaleCountdowns = new Map();
     let flashSaleIntervalId = null;
     let productDetailsFlashTimerId = null;
+    let productsUnsubscribe = () => {};
 
     const FLASH_FLAG_KEYS = ['flashSale', 'flash_sale', 'flashsell', 'flashSell', 'flash_selling', 'flash_sale_enabled', 'flashSaleEnabled'];
     const FLASH_PRICE_KEYS = ['flashPrice', 'flash_price', 'flashsale_price', 'flashSalePrice'];
@@ -6130,188 +6131,215 @@
 
         // --- Firestore Database Logic ---
         
-        async function fetchProductsFromFirestore() {
-            try {
-                const querySnapshot = await getDocs(collection(db, "products"));
-                productsData = querySnapshot.docs.map(doc => {
-                    const data = doc.data() || {};
-                    const modelID = data.model1 || data.model || doc.id;
+        function fetchProductsFromFirestore() {
+            productsUnsubscribe();
+            return new Promise((resolve, reject) => {
+                let initialResolved = false;
+                try {
+                    const productsRef = collection(db, "products");
+                    productsUnsubscribe = onSnapshot(productsRef, (querySnapshot) => {
+                        try {
+                            productsData = querySnapshot.docs.map(docSnap => {
+                                const data = docSnap.data() || {};
+                                const modelID = data.model1 || data.model || docSnap.id;
 
-                    let categoryValue = data.category ?? data.Category ?? data.cat ?? data.categoryName ?? 'general';
-                    if (typeof categoryValue === 'string') categoryValue = categoryValue.trim().toLowerCase();
+                                let categoryValue = data.category ?? data.Category ?? data.cat ?? data.categoryName ?? 'general';
+                                if (typeof categoryValue === 'string') categoryValue = categoryValue.trim().toLowerCase();
 
-                    let rawSub = data.subCategory ?? data.subcategory ?? data.sub_category ?? data.subCat ?? data.subcat ?? data.sub ?? null;
-                    let normalizedSub = null;
-                    if (Array.isArray(rawSub)) {
-                        normalizedSub = rawSub.length ? String(rawSub[0]).trim().toLowerCase() : null;
-                    } else if (typeof rawSub === 'string') {
-                        const first = rawSub.split(',')[0];
-                        normalizedSub = first ? first.trim().toLowerCase() : null;
-                    } else if (rawSub && typeof rawSub === 'object' && rawSub.name) {
-                        normalizedSub = String(rawSub.name).trim().toLowerCase();
-                    }
+                                let rawSub = data.subCategory ?? data.subcategory ?? data.sub_category ?? data.subCat ?? data.subcat ?? data.sub ?? null;
+                                let normalizedSub = null;
+                                if (Array.isArray(rawSub)) {
+                                    normalizedSub = rawSub.length ? String(rawSub[0]).trim().toLowerCase() : null;
+                                } else if (typeof rawSub === 'string') {
+                                    const first = rawSub.split(',')[0];
+                                    normalizedSub = first ? first.trim().toLowerCase() : null;
+                                } else if (rawSub && typeof rawSub === 'object' && rawSub.name) {
+                                    normalizedSub = String(rawSub.name).trim().toLowerCase();
+                                }
 
-                    let basePrice = resolveNumberField(data, REGULAR_PRICE_KEYS);
-                    if (!(basePrice > 0)) basePrice = null;
+                                let basePrice = resolveNumberField(data, REGULAR_PRICE_KEYS);
+                                if (!(basePrice > 0)) basePrice = null;
 
-                    let offerPrice = resolveNumberField(data, OFFER_PRICE_KEYS);
-                    if (!(offerPrice > 0)) offerPrice = null;
+                                let offerPrice = resolveNumberField(data, OFFER_PRICE_KEYS);
+                                if (!(offerPrice > 0)) offerPrice = null;
 
-                    const hasOfferFlag = resolveBooleanField(data, OFFER_FLAG_KEYS);
-                    const flashEnabled = resolveBooleanField(data, FLASH_FLAG_KEYS);
-                    let flashPrice = resolveNumberField(data, FLASH_PRICE_KEYS);
-                    if (!(flashPrice > 0)) flashPrice = null;
+                                const hasOfferFlag = resolveBooleanField(data, OFFER_FLAG_KEYS);
+                                const flashEnabled = resolveBooleanField(data, FLASH_FLAG_KEYS);
+                                let flashPrice = resolveNumberField(data, FLASH_PRICE_KEYS);
+                                if (!(flashPrice > 0)) flashPrice = null;
 
-                    const flashStartRaw = getFirstAvailableValue(data, FLASH_START_KEYS);
-                    const flashEndRaw = getFirstAvailableValue(data, FLASH_END_KEYS);
-                    let flashStartDate = parseFirestoreDate(flashStartRaw);
-                    let flashEndDate = parseFirestoreDate(flashEndRaw);
-                    const flashDurationHours = resolveNumberField(data, FLASH_DURATION_KEYS);
-                    if (!flashEndDate && flashDurationHours && flashDurationHours > 0 && flashStartDate instanceof Date) {
-                        flashEndDate = new Date(flashStartDate.getTime() + flashDurationHours * 3600000);
-                    }
+                                const flashStartRaw = getFirstAvailableValue(data, FLASH_START_KEYS);
+                                const flashEndRaw = getFirstAvailableValue(data, FLASH_END_KEYS);
+                                let flashStartDate = parseFirestoreDate(flashStartRaw);
+                                let flashEndDate = parseFirestoreDate(flashEndRaw);
+                                const flashDurationHours = resolveNumberField(data, FLASH_DURATION_KEYS);
+                                if (!flashEndDate && flashDurationHours && flashDurationHours > 0 && flashStartDate instanceof Date) {
+                                    flashEndDate = new Date(flashStartDate.getTime() + flashDurationHours * 3600000);
+                                }
 
-                    const nowTs = Date.now();
-                    const flashStartTs = flashStartDate instanceof Date ? flashStartDate.getTime() : null;
-                    const flashEndTs = flashEndDate instanceof Date ? flashEndDate.getTime() : null;
-                    const flashIsActive = flashEnabled && (!flashStartTs || flashStartTs <= nowTs) && (!flashEndTs || flashEndTs > nowTs);
-                    const flashIsUpcoming = flashEnabled && !flashIsActive && flashStartTs && flashStartTs > nowTs;
+                                const nowTs = Date.now();
+                                const flashStartTs = flashStartDate instanceof Date ? flashStartDate.getTime() : null;
+                                const flashEndTs = flashEndDate instanceof Date ? flashEndDate.getTime() : null;
+                                const flashIsActive = flashEnabled && (!flashStartTs || flashStartTs <= nowTs) && (!flashEndTs || flashEndTs > nowTs);
+                                const flashIsUpcoming = flashEnabled && !flashIsActive && flashStartTs && flashStartTs > nowTs;
 
-                    let effectivePrice = basePrice && basePrice > 0 ? basePrice : null;
-                    let originalPriceValue = null;
-                    let isOffer = false;
+                                let effectivePrice = basePrice && basePrice > 0 ? basePrice : null;
+                                let originalPriceValue = null;
+                                let isOffer = false;
 
-                    if (flashIsActive && flashPrice && flashPrice > 0) {
-                        if (basePrice && basePrice > flashPrice) {
-                            originalPriceValue = basePrice;
+                                if (flashIsActive && flashPrice && flashPrice > 0) {
+                                    if (basePrice && basePrice > flashPrice) {
+                                        originalPriceValue = basePrice;
+                                    }
+                                    effectivePrice = flashPrice;
+                                    isOffer = !!originalPriceValue;
+                                } else if (hasOfferFlag && offerPrice && basePrice && offerPrice < basePrice) {
+                                    effectivePrice = offerPrice;
+                                    originalPriceValue = basePrice;
+                                    isOffer = true;
+                                } else if (!effectivePrice && offerPrice && offerPrice > 0) {
+                                    effectivePrice = offerPrice;
+                                    if (basePrice && basePrice > offerPrice) {
+                                        originalPriceValue = basePrice;
+                                        isOffer = true;
+                                    }
+                                } else if (!effectivePrice && flashPrice && flashPrice > 0) {
+                                    effectivePrice = flashPrice;
+                                    if (basePrice && basePrice > flashPrice) {
+                                        originalPriceValue = basePrice;
+                                        isOffer = true;
+                                    }
+                                }
+
+                                if (!effectivePrice || effectivePrice <= 0) {
+                                    const fallbackPrice = Number(data.price) || Number(data.Price) || 0;
+                                    effectivePrice = basePrice || offerPrice || flashPrice || fallbackPrice || 0;
+                                }
+
+                                if (!originalPriceValue && basePrice && basePrice > effectivePrice) {
+                                    originalPriceValue = basePrice;
+                                    if (basePrice !== effectivePrice) {
+                                        isOffer = true;
+                                    }
+                                }
+
+                                const flashSale = flashEnabled ? {
+                                    enabled: true,
+                                    price: flashPrice,
+                                    start: flashStartDate || null,
+                                    end: flashEndDate || null,
+                                    isActive: flashIsActive,
+                                    isUpcoming: flashIsUpcoming,
+                                    label: getNormalizedString(data.flashSaleLabel || data.flash_sale_label || data.flashsellLabel || data.flashSellLabel || '') || null
+                                } : null;
+
+                                const discountReference = originalPriceValue || (basePrice && basePrice > effectivePrice ? basePrice : null);
+                                let discountPercent = 0;
+                                if (discountReference && discountReference > 0 && discountReference > effectivePrice) {
+                                    discountPercent = Math.round(((discountReference - effectivePrice) / discountReference) * 100);
+                                }
+                                discountPercent = Math.max(0, discountPercent);
+
+                                const megaConfig = (data.megaSale && typeof data.megaSale === 'object') ? data.megaSale : {};
+                                const megaFlagInfo = resolveBooleanFieldDetailed(data, MEGA_FLAG_KEYS);
+                                const megaConfigInfo = resolveBooleanFieldDetailed(megaConfig, ['enabled']);
+                                const explicitMegaTrue = (megaFlagInfo.explicit && megaFlagInfo.value) || (megaConfigInfo.explicit && megaConfigInfo.value);
+                                const explicitMegaFalse = (megaFlagInfo.explicit && !megaFlagInfo.value) || (megaConfigInfo.explicit && !megaConfigInfo.value);
+                                const megaLabelRaw = getNormalizedString(
+                                    getFirstAvailableValue(megaConfig, ['label', 'title', 'badge']) ??
+                                    getFirstAvailableValue(data, MEGA_LABEL_KEYS)
+                                );
+                                const megaConfigDiscount = resolveNumberField(megaConfig, ['discountPercent', 'discount', 'percent']);
+                                const megaConfigPrice = resolveNumberField(megaConfig, ['price', 'dealPrice', 'salePrice']);
+                                const megaConfigOriginal = resolveNumberField(megaConfig, ['originalPrice', 'compareAt', 'original']);
+
+                                const effectiveDiscountPercent = Number.isFinite(megaConfigDiscount)
+                                    ? megaConfigDiscount
+                                    : discountPercent;
+                                const effectiveMegaPrice = Number.isFinite(megaConfigPrice)
+                                    ? megaConfigPrice
+                                    : Number(effectivePrice) || 0;
+                                const effectiveMegaOriginal = Number.isFinite(megaConfigOriginal)
+                                    ? megaConfigOriginal
+                                    : (discountReference || null);
+
+                                const megaSaleEnabled = explicitMegaTrue || (!explicitMegaFalse && discountPercent >= MEGA_DISCOUNT_THRESHOLD && isOffer);
+                                const megaSale = megaSaleEnabled ? {
+                                    ...megaConfig,
+                                    enabled: true,
+                                    label: megaLabelRaw || megaConfig.label || null,
+                                    discountPercent: Number.isFinite(effectiveDiscountPercent) ? effectiveDiscountPercent : null,
+                                    price: Number.isFinite(effectiveMegaPrice) ? effectiveMegaPrice : null,
+                                    originalPrice: Number.isFinite(effectiveMegaOriginal) ? effectiveMegaOriginal : null
+                                } : null;
+
+                                return {
+                                    id: docSnap.id,
+                                    modelID,
+                                    name: data.name || "No Name Provided",
+                                    brand: data.brand || "No Brand",
+                                    price: Number(effectivePrice) || 0,
+                                    basePrice: basePrice || originalPriceValue || Number(effectivePrice) || 0,
+                                    originalPrice: originalPriceValue && originalPriceValue > effectivePrice ? originalPriceValue : null,
+                                    isOffer,
+                                    rating: data.rating || 0,
+                                    ratingCount: data.ratingCount || 0,
+                                    image: data.imageUrl || '',
+                                    imageUrl: data.imageUrl || '',
+                                    description: data.details || '',
+                                    fullDescription: data.details || '',
+                                    category: categoryValue,
+                                    subCategory: normalizedSub,
+                                    isReturnable: data.isRefundable === true,
+                                    specifications: data.specification || {},
+                                    reviews: data.reviews || [],
+                                    thumbnails: data.thumbnails || [],
+                                    sizes: data.variants && typeof data.variants.size === 'string' ? data.variants.size.split(',').map(s => s.trim()) : (Array.isArray(data.sizes) ? data.sizes : []),
+                                    storage: data.storage || [],
+                                    colors: data.variants && typeof data.variants.color === 'string' ? data.variants.color.split(',').map(c => c.trim()) : (Array.isArray(data.colors) ? data.colors : []),
+                                    stock: data.stock !== undefined ? Number(data.stock) : 1,
+                                    warrantyText: data.warranty || null,
+                                    flashSale,
+                                    megaSale,
+                                    discountPercent
+                                };
+                            });
+
+                            renderFlashSaleSection(productsData);
+                            renderMegaSaleSection(productsData);
+
+                            if (productsData.length === 0) {
+                                DOMElements.productList.innerHTML = `<p class="col-span-full text-center text-gray-500">No products found in the database.</p>`;
+                            } else {
+                                renderProducts(productsData);
+                            }
+
+                            try { updateCartUI(); } catch (_) {}
+                        } catch (processingError) {
+                            console.error("Error processing product snapshot: ", processingError);
+                            DOMElements.productList.innerHTML = `<p class="col-span-full text-center text-red-500">Error processing products. Check console for details.</p>`;
+                        } finally {
+                            if (!initialResolved) {
+                                initialResolved = true;
+                                resolve();
+                            }
                         }
-                        effectivePrice = flashPrice;
-                        isOffer = !!originalPriceValue;
-                    } else if (hasOfferFlag && offerPrice && basePrice && offerPrice < basePrice) {
-                        effectivePrice = offerPrice;
-                        originalPriceValue = basePrice;
-                        isOffer = true;
-                    } else if (!effectivePrice && offerPrice && offerPrice > 0) {
-                        effectivePrice = offerPrice;
-                        if (basePrice && basePrice > offerPrice) {
-                            originalPriceValue = basePrice;
-                            isOffer = true;
+                    }, (error) => {
+                        console.error("Error fetching products from Firestore: ", error);
+                        renderFlashSaleSection([]);
+                        renderMegaSaleSection([]);
+                        DOMElements.productList.innerHTML = `<p class="col-span-full text-center text-red-500">Error loading products. Check console for details.</p>`;
+                        if (!initialResolved) {
+                            initialResolved = true;
+                            reject(error);
                         }
-                    } else if (!effectivePrice && flashPrice && flashPrice > 0) {
-                        effectivePrice = flashPrice;
-                        if (basePrice && basePrice > flashPrice) {
-                            originalPriceValue = basePrice;
-                            isOffer = true;
-                        }
-                    }
-
-                    if (!effectivePrice || effectivePrice <= 0) {
-                        const fallbackPrice = Number(data.price) || Number(data.Price) || 0;
-                        effectivePrice = basePrice || offerPrice || flashPrice || fallbackPrice || 0;
-                    }
-
-                    if (!originalPriceValue && basePrice && basePrice > effectivePrice) {
-                        originalPriceValue = basePrice;
-                        if (basePrice !== effectivePrice) {
-                            isOffer = true;
-                        }
-                    }
-
-                    const flashSale = flashEnabled ? {
-                        enabled: true,
-                        price: flashPrice,
-                        start: flashStartDate || null,
-                        end: flashEndDate || null,
-                        isActive: flashIsActive,
-                        isUpcoming: flashIsUpcoming,
-                        label: getNormalizedString(data.flashSaleLabel || data.flash_sale_label || data.flashsellLabel || data.flashSellLabel || '') || null
-                    } : null;
-
-                    const discountReference = originalPriceValue || (basePrice && basePrice > effectivePrice ? basePrice : null);
-                    let discountPercent = 0;
-                    if (discountReference && discountReference > 0 && discountReference > effectivePrice) {
-                        discountPercent = Math.round(((discountReference - effectivePrice) / discountReference) * 100);
-                    }
-                    discountPercent = Math.max(0, discountPercent);
-
-                    const megaConfig = (data.megaSale && typeof data.megaSale === 'object') ? data.megaSale : {};
-                    const megaFlagInfo = resolveBooleanFieldDetailed(data, MEGA_FLAG_KEYS);
-                    const megaConfigInfo = resolveBooleanFieldDetailed(megaConfig, ['enabled']);
-                    const explicitMegaTrue = (megaFlagInfo.explicit && megaFlagInfo.value) || (megaConfigInfo.explicit && megaConfigInfo.value);
-                    const explicitMegaFalse = (megaFlagInfo.explicit && !megaFlagInfo.value) || (megaConfigInfo.explicit && !megaConfigInfo.value);
-                    const megaLabelRaw = getNormalizedString(
-                        getFirstAvailableValue(megaConfig, ['label', 'title', 'badge']) ??
-                        getFirstAvailableValue(data, MEGA_LABEL_KEYS)
-                    );
-                    const megaConfigDiscount = resolveNumberField(megaConfig, ['discountPercent', 'discount', 'percent']);
-                    const megaConfigPrice = resolveNumberField(megaConfig, ['price', 'dealPrice', 'salePrice']);
-                    const megaConfigOriginal = resolveNumberField(megaConfig, ['originalPrice', 'compareAt', 'original']);
-
-                    const effectiveDiscountPercent = Number.isFinite(megaConfigDiscount)
-                        ? megaConfigDiscount
-                        : discountPercent;
-                    const effectiveMegaPrice = Number.isFinite(megaConfigPrice)
-                        ? megaConfigPrice
-                        : Number(effectivePrice) || 0;
-                    const effectiveMegaOriginal = Number.isFinite(megaConfigOriginal)
-                        ? megaConfigOriginal
-                        : (discountReference || null);
-
-                    const megaSaleEnabled = explicitMegaTrue || (!explicitMegaFalse && discountPercent >= MEGA_DISCOUNT_THRESHOLD && isOffer);
-                    const megaSale = megaSaleEnabled ? {
-                        ...megaConfig,
-                        enabled: true,
-                        label: megaLabelRaw || megaConfig.label || null,
-                        discountPercent: Number.isFinite(effectiveDiscountPercent) ? effectiveDiscountPercent : null,
-                        price: Number.isFinite(effectiveMegaPrice) ? effectiveMegaPrice : null,
-                        originalPrice: Number.isFinite(effectiveMegaOriginal) ? effectiveMegaOriginal : null
-                    } : null;
-
-                    return {
-                        id: doc.id,
-                        modelID,
-                        name: data.name || "No Name Provided",
-                        brand: data.brand || "No Brand",
-                        price: Number(effectivePrice) || 0,
-                        basePrice: basePrice || originalPriceValue || Number(effectivePrice) || 0,
-                        originalPrice: originalPriceValue && originalPriceValue > effectivePrice ? originalPriceValue : null,
-                        isOffer,
-                        rating: data.rating || 0,
-                        ratingCount: data.ratingCount || 0,
-                        image: data.imageUrl || '',
-                        imageUrl: data.imageUrl || '',
-                        description: data.details || '',
-                        fullDescription: data.details || '',
-                        category: categoryValue,
-                        subCategory: normalizedSub,
-                        isReturnable: data.isRefundable === true,
-                        specifications: data.specification || {},
-                        reviews: data.reviews || [],
-                        thumbnails: data.thumbnails || [],
-                        sizes: data.variants && typeof data.variants.size === 'string' ? data.variants.size.split(',').map(s => s.trim()) : (Array.isArray(data.sizes) ? data.sizes : []),
-                        storage: data.storage || [],
-                        colors: data.variants && typeof data.variants.color === 'string' ? data.variants.color.split(',').map(c => c.trim()) : (Array.isArray(data.colors) ? data.colors : []),
-                        stock: data.stock !== undefined ? Number(data.stock) : 1,
-                        warrantyText: data.warranty || null,
-                        flashSale,
-                        megaSale,
-                        discountPercent
-                    };
-                });
-                renderFlashSaleSection(productsData);
-                renderMegaSaleSection(productsData);
-
-                if (productsData.length === 0) {
-                    DOMElements.productList.innerHTML = `<p class="col-span-full text-center text-gray-500">No products found in the database.</p>`;
-                } else {
-                     renderProducts(productsData);
+                    });
+                } catch (setupError) {
+                    console.error("Error initializing product listener: ", setupError);
+                    DOMElements.productList.innerHTML = `<p class="col-span-full text-center text-red-500">Error loading products. Check console for details.</p>`;
+                    reject(setupError);
                 }
-            } catch (error) {
-                console.error("Error fetching products from Firestore: ", error);
-                renderFlashSaleSection([]);
-                renderMegaSaleSection([]);
-                DOMElements.productList.innerHTML = `<p class="col-span-full text-center text-red-500">Error loading products. Check console for details.</p>`;
-            }
+            });
         }
         
         async function fetchBannersFromFirestore() {
