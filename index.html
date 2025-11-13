@@ -501,6 +501,107 @@
         html.dark .flash-sale-heading-animated {
             box-shadow: 0 8px 22px rgba(255, 167, 68, 0.45);
         }
+        .variant-btn {
+            padding: 0.7rem 1.8rem;
+            border: 1.5px solid rgba(209, 213, 219, 0.9);
+            border-radius: 9999px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            background: #ffffff;
+            color: #374151;
+            transition: transform 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 2.75rem;
+            min-width: 7.5rem;
+            box-shadow: 0 6px 18px -16px rgba(15, 23, 42, 0.35);
+        }
+        .variant-btn:hover {
+            border-color: rgba(255, 130, 59, 0.55);
+            color: #ff823b;
+            transform: translateY(-2px);
+            box-shadow: 0 14px 26px -18px rgba(255, 130, 59, 0.45);
+        }
+        .variant-btn:focus-visible,
+        .color-variant:focus-visible {
+            outline: 3px solid rgba(255, 130, 59, 0.45);
+            outline-offset: 2px;
+        }
+        .variant-btn-active {
+            border-color: #ff823b;
+            color: #ff823b;
+            background: #ffffff;
+            box-shadow: 0 18px 32px -20px rgba(255, 130, 59, 0.6);
+        }
+        html.dark .variant-btn {
+            background: rgba(17, 24, 39, 0.92);
+            color: #e5e7eb;
+            border-color: rgba(148, 163, 184, 0.55);
+            box-shadow: 0 6px 18px -16px rgba(8, 47, 73, 0.55);
+        }
+        html.dark .variant-btn:hover {
+            border-color: rgba(255, 130, 59, 0.65);
+            color: #fca26a;
+            background: rgba(17, 24, 39, 0.98);
+            box-shadow: 0 16px 30px -22px rgba(252, 162, 106, 0.5);
+        }
+        html.dark .variant-btn-active {
+            border-color: rgba(255, 130, 59, 0.9);
+            color: #fdb58a;
+            background: rgba(17, 24, 39, 0.96);
+            box-shadow: 0 20px 34px -20px rgba(252, 165, 106, 0.55);
+        }
+        .color-variant {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 9999px;
+            border: 2px solid rgba(148, 163, 184, 0.4);
+            box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.18);
+            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+        }
+        .color-variant:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255, 130, 59, 0.65);
+        }
+        .color-variant-active {
+            border-color: rgba(255, 130, 59, 0.85) !important;
+            box-shadow: 0 0 0 4px rgba(255, 130, 59, 0.22);
+        }
+        html.dark .color-variant {
+            box-shadow: inset 0 0 0 2px rgba(17, 24, 39, 0.85);
+        }
+        html.dark .color-variant-active {
+            box-shadow: 0 0 0 4px rgba(255, 130, 59, 0.32);
+        }
+        .variant-info-box {
+            margin-top: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: 1rem;
+            background: rgba(99, 102, 241, 0.08);
+            border: 1px solid rgba(99, 102, 241, 0.18);
+            font-size: 0.88rem;
+            line-height: 1.55;
+            color: #1f2937;
+        }
+        html.dark .variant-info-box {
+            background: rgba(37, 99, 235, 0.14);
+            border-color: rgba(129, 140, 248, 0.28);
+            color: #d1d5db;
+        }
+        .variant-info-box strong {
+            display: inline-block;
+            margin-right: 0.35rem;
+            color: #312e81;
+        }
+        html.dark .variant-info-box strong {
+            color: #c7d2fe;
+        }
         @keyframes flashRibbonGlow {
             0% {
                 background-position: 0% 50%;
@@ -2363,6 +2464,127 @@
         return null;
     };
 
+    const normalizeVariantList = (...sources) => {
+        const results = [];
+        const seen = new Set();
+
+        const pushValue = (raw) => {
+            if (raw === undefined || raw === null) return;
+
+            if (Array.isArray(raw)) {
+                raw.forEach(pushValue);
+                return;
+            }
+
+            if (typeof raw === 'string') {
+                const trimmed = raw.trim();
+                if (!trimmed) return;
+
+                if ((trimmed.startsWith('[') && trimmed.endsWith(']')) || (trimmed.startsWith('{') && trimmed.endsWith('}'))) {
+                    try {
+                        const parsed = JSON.parse(trimmed);
+                        pushValue(parsed);
+                        return;
+                    } catch (_) {
+                        // fall through to manual parsing
+                    }
+                }
+
+                trimmed.split(/[,\n\r\t|/]+/).forEach(part => {
+                    const value = part.trim();
+                    if (!value) return;
+                    const slug = value.toLowerCase();
+                    if (!seen.has(slug)) {
+                        seen.add(slug);
+                        results.push(value);
+                    }
+                });
+                return;
+            }
+
+            if (typeof raw === 'object') {
+                Object.values(raw).forEach(pushValue);
+                return;
+            }
+
+            const value = String(raw).trim();
+            if (!value) return;
+            const slug = value.toLowerCase();
+            if (!seen.has(slug)) {
+                seen.add(slug);
+                results.push(value);
+            }
+        };
+
+        sources.forEach(pushValue);
+        return results;
+    };
+
+    const assembleVariantOptions = (raw = {}) => {
+        const variantsNode = raw?.variants || raw?.Variants || raw?.variant || null;
+        return {
+            sizes: normalizeVariantList(
+                variantsNode?.size,
+                variantsNode?.Size,
+                variantsNode?.sizes,
+                variantsNode?.Sizes,
+                raw?.size,
+                raw?.Size,
+                raw?.sizes,
+                raw?.Sizes,
+                raw?.sizeOptions,
+                raw?.sizeOption,
+                raw?.options?.size,
+                raw?.options?.sizes,
+                raw?.variantOptions?.size,
+                raw?.variantOptions?.sizes
+            ),
+            storage: normalizeVariantList(
+                variantsNode?.storage,
+                variantsNode?.Storage,
+                variantsNode?.capacity,
+                variantsNode?.Capacity,
+                raw?.storage,
+                raw?.Storage,
+                raw?.storageOptions,
+                raw?.storageOption,
+                raw?.capacity,
+                raw?.Capacity,
+                raw?.options?.storage,
+                raw?.options?.Storage,
+                raw?.variantOptions?.storage,
+                raw?.variantOptions?.Storage
+            ),
+            colors: normalizeVariantList(
+                variantsNode?.color,
+                variantsNode?.Color,
+                variantsNode?.colors,
+                variantsNode?.Colours,
+                variantsNode?.colour,
+                raw?.color,
+                raw?.Color,
+                raw?.colors,
+                raw?.Colors,
+                raw?.colours,
+                raw?.Colours,
+                raw?.colour,
+                raw?.colourOptions,
+                raw?.colorOptions,
+                raw?.colorOption,
+                raw?.options?.color,
+                raw?.options?.colors,
+                raw?.variantOptions?.color,
+                raw?.variantOptions?.colors
+            ),
+        };
+    };
+
+    const ensureProductVariantArrays = (product = {}) => {
+        if (!product || typeof product !== 'object') return product;
+        const assembled = assembleVariantOptions(product);
+        return { ...product, ...assembled };
+    };
+
     const getFirstAvailableValue = (obj, keys) => {
         for (const key of keys) {
             if (obj && Object.prototype.hasOwnProperty.call(obj, key)) {
@@ -2832,6 +3054,13 @@
                 'review-login-prompt': 'Please log in to submit a review.',
                 'review-success': 'Review submitted successfully! Thank you.',
                 'review-failed': 'Failed to submit review. Please try again.',
+                'variant-available-sizes': 'Available Sizes',
+                'variant-available-storage': 'Available Variants',
+                'variant-available-colors': 'Available Colors',
+                'variant-instruction-size': 'Pick the size that fits you best.',
+                'variant-instruction-storage': 'Select the variant or storage you prefer.',
+                'variant-instruction-color': 'Choose the color you like most.',
+                'variant-instruction-final': 'Use the option buttons above before completing your order.',
                 // Category helpers
                 'all-in-category': 'All in',
                 // Footer
@@ -2965,6 +3194,13 @@
                 'review-login-prompt': 'অনুগ্রহ করে রিভিউ দেওয়ার জন্য লগইন করুন।',
                 'review-success': 'রিভিউ সফলভাবে জমা দেওয়া হয়েছে! ধন্যবাদ।',
                 'review-failed': 'রিভিউ জমা দিতে ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।',
+                'variant-available-sizes': 'উপলব্ধ সাইজ',
+                'variant-available-storage': 'উপলব্ধ ভ্যারিয়েন্ট',
+                'variant-available-colors': 'উপলব্ধ রঙ',
+                'variant-instruction-size': 'সঠিক ফিটের জন্য আপনার সাইজ বেছে নিন।',
+                'variant-instruction-storage': 'আপনার পছন্দের ভ্যারিয়েন্ট বা অপশন নির্বাচন করুন।',
+                'variant-instruction-color': 'আপনার পছন্দের রঙটি নির্বাচন করুন।',
+                'variant-instruction-final': 'অর্ডার সম্পন্ন করার আগে উপরের অপশনগুলো থেকে নির্বাচন করুন।',
                 // Category helpers
                 'all-in-category': 'সকল',
                 // Footer
@@ -5555,7 +5791,7 @@
                         const ref = doc(db, 'products', String(productId));
                         const snap = await getDoc(ref);
                         if (snap && snap.exists()) {
-                            product = { id: snap.id, ...snap.data() };
+                            product = ensureProductVariantArrays({ id: snap.id, ...snap.data() });
                             // Cache it for later to speed up next visit
                             if (Array.isArray(productsData)) {
                                 productsData.push(product);
@@ -5572,7 +5808,7 @@
                                 const qs1 = await getDocs(q1);
                                 if (!qs1.empty) {
                                     const d = qs1.docs[0];
-                                    product = { id: d.id, ...d.data() };
+                                    product = ensureProductVariantArrays({ id: d.id, ...d.data() });
                                 }
                             }
                             if (!product && fallbackSku) {
@@ -5580,7 +5816,7 @@
                                 const qs1b = await getDocs(q1b);
                                 if (!qs1b.empty) {
                                     const d = qs1b.docs[0];
-                                    product = { id: d.id, ...d.data() };
+                                    product = ensureProductVariantArrays({ id: d.id, ...d.data() });
                                 }
                             }
                             if (!product && fallbackModel) {
@@ -5588,7 +5824,7 @@
                                 const qs2 = await getDocs(q2);
                                 if (!qs2.empty) {
                                     const d = qs2.docs[0];
-                                    product = { id: d.id, ...d.data() };
+                                    product = ensureProductVariantArrays({ id: d.id, ...d.data() });
                                 }
                             }
                             if (!product && fallbackName) {
@@ -5596,7 +5832,7 @@
                                 const qs3 = await getDocs(q3);
                                 if (!qs3.empty) {
                                     const d = qs3.docs[0];
-                                    product = { id: d.id, ...d.data() };
+                                    product = ensureProductVariantArrays({ id: d.id, ...d.data() });
                                 }
                             }
                             if (product && Array.isArray(productsData)) {
@@ -5610,6 +5846,14 @@
                 if (!product) {
                     if (typeof showToast === 'function') showToast('Product not found', false);
                     return;
+                }
+
+                product = ensureProductVariantArrays(product);
+                if (Array.isArray(productsData)) {
+                    const idx = productsData.findIndex(p => p.id === product.id);
+                    if (idx !== -1) {
+                        productsData[idx] = { ...productsData[idx], ...product };
+                    }
                 }
 
             const detailsPage = document.getElementById('product-details-page');
@@ -6065,6 +6309,44 @@
             const infoDetails = document.getElementById('product-info-details');
             const returnableText = product.isReturnable ? translations[currentLanguage]['returnable'] : translations[currentLanguage]['not-returnable'];
             const returnableIcon = product.isReturnable ? 'fas fa-undo text-green-500' : 'fas fa-ban text-red-500';
+            const variantConfig = [
+                { key: 'sizes', type: 'size' },
+                { key: 'storage', type: 'storage' },
+                { key: 'colors', type: 'color' }
+            ];
+
+            const variantLabelMap = {
+                size: translations[currentLanguage]['variant-available-sizes'] || (currentLanguage === 'bn' ? 'উপলব্ধ সাইজ' : 'Available Sizes'),
+                storage: translations[currentLanguage]['variant-available-storage'] || (currentLanguage === 'bn' ? 'উপলব্ধ ভ্যারিয়েন্ট/স্টোরেজ' : 'Available Variants'),
+                color: translations[currentLanguage]['variant-available-colors'] || (currentLanguage === 'bn' ? 'উপলব্ধ রঙ' : 'Available Colors')
+            };
+
+            const variantInstructionMap = {
+                size: translations[currentLanguage]['variant-instruction-size'] || (currentLanguage === 'bn' ? 'সঠিক ফিটের জন্য আপনার সাইজ বেছে নিন।' : 'Pick the size that fits you best.'),
+                storage: translations[currentLanguage]['variant-instruction-storage'] || (currentLanguage === 'bn' ? 'আপনার প্রয়োজনীয় ভ্যারিয়েন্ট বা স্টোরেজ নির্বাচন করুন।' : 'Select the variant or storage you prefer.'),
+                color: translations[currentLanguage]['variant-instruction-color'] || (currentLanguage === 'bn' ? 'আপনার পছন্দের রঙটি নির্বাচন করুন।' : 'Choose the color you like most.')
+            };
+
+            const variantInfoLines = [];
+            const variantInstructionLines = [];
+
+            variantConfig.forEach(({ key, type }) => {
+                const rawOptions = Array.isArray(product[key]) ? product[key] : [];
+                const options = rawOptions.map(opt => escapeHtml(opt)).filter(opt => opt);
+                if (!options.length) return;
+
+                const labelText = escapeHtml(variantLabelMap[type] || '');
+                const instructionText = escapeHtml(variantInstructionMap[type] || '');
+                variantInfoLines.push(`<p><strong>${labelText}:</strong> ${options.join(', ')}</p>`);
+                if (instructionText) variantInstructionLines.push(`<p>${instructionText}</p>`);
+            });
+
+            const finalPromptRaw = translations[currentLanguage]['variant-instruction-final'] || (currentLanguage === 'bn' ? 'অর্ডার সম্পন্ন করার আগে উপরের বাটন থেকে প্রয়োজনীয় অপশন নির্বাচন করুন।' : 'Use the option buttons above before completing your order.');
+            const finalPrompt = escapeHtml(finalPromptRaw);
+            const variantInfoHtml = variantInfoLines.length
+                ? `<div class="variant-info-box">${variantInfoLines.join('')}<div class="mt-2">${variantInstructionLines.join('')}<p class="font-semibold mt-2">${finalPrompt}</p></div></div>`
+                : '';
+
             infoDetails.innerHTML = `
                 <div class="flex items-center space-x-2">
                     <i class="${returnableIcon}"></i>
@@ -6073,7 +6355,8 @@
                 <div class="flex items-center space-x-2">
                     <i class="fas fa-lock text-green-500"></i>
                     <span class="text-sm text-gray-600 dark:text-gray-300" data-lang="secure-payments">${translations[currentLanguage]['secure-payments']}</span>
-                </div>`;
+                </div>
+                ${variantInfoHtml}`;
         }
 
         function renderAllVariants(product) {
@@ -6084,32 +6367,57 @@
 
         function renderVariantOptions(variantType, options) {
             const containerDiv = document.getElementById(`${variantType}-options`);
+            const container = document.getElementById(`${variantType}-variants-container`);
+            if (!containerDiv || !container) return;
+
             if (!options || options.length === 0) {
                 containerDiv.classList.add('hidden');
+                container.innerHTML = '';
                 return;
             }
+
+            const accessibleLabels = {
+                size: currentLanguage === 'bn' ? 'সাইজ নির্বাচন' : 'Select size',
+                storage: currentLanguage === 'bn' ? 'ভ্যারিয়েন্ট নির্বাচন' : 'Select variant',
+                color: currentLanguage === 'bn' ? 'রঙ নির্বাচন' : 'Select color'
+            };
+
             containerDiv.classList.remove('hidden');
-            const container = document.getElementById(`${variantType}-variants-container`);
             container.innerHTML = options.map(option => {
+                const rawValue = option === undefined || option === null ? '' : String(option).trim();
+                const safeValue = escapeHtml(rawValue);
+                const encodedValue = encodeURIComponent(rawValue);
                 if (variantType === 'color') {
-                    return `<button class="w-8 h-8 rounded-full border-2 border-gray-300" style="background-color: ${String(option).toLowerCase()}" data-variant-type="color" data-value="${option}"></button>`;
+                    const sanitizedColor = rawValue.replace(/[^#a-zA-Z0-9(),.%\s-]/g, '');
+                    const label = `${accessibleLabels.color}${safeValue ? `: ${safeValue}` : ''}`;
+                    return `<button type="button" class="color-variant" style="background:${sanitizedColor || '#d1d5db'};" data-variant-type="color" data-value="${encodedValue}" aria-label="${label}" aria-pressed="false" title="${label}"></button>`;
                 }
-                return `<button class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100 transition-colors text-dark" data-variant-type="${variantType}" data-value="${option}">${option}</button>`;
+                const label = `${accessibleLabels[variantType]}${safeValue ? `: ${safeValue}` : ''}`;
+                return `<button type="button" class="variant-btn" data-variant-type="${variantType}" data-value="${encodedValue}" aria-label="${label}" aria-pressed="false">${safeValue || '-'}</button>`;
             }).join('');
         }
         function handleVariantSelection(e) {
             const button = e.target.closest('button[data-variant-type]');
             if (!button) return;
 
-            const { variantType, value } = button.dataset;
+            const { variantType } = button.dataset;
+            const decodedValue = (() => {
+                try {
+                    return decodeURIComponent(button.dataset.value || '');
+                } catch (_) {
+                    return button.dataset.value || '';
+                }
+            })();
             const container = button.parentElement;
             
             container.querySelectorAll('button').forEach(btn => {
                 btn.classList.remove(variantType === 'color' ? 'color-variant-active' : 'variant-btn-active');
+                btn.setAttribute('aria-pressed', 'false');
             });
             button.classList.add(variantType === 'color' ? 'color-variant-active' : 'variant-btn-active');
+            button.setAttribute('aria-pressed', 'true');
             
-            selectedVariants[variantType] = value;
+            selectedVariants[variantType] = decodedValue;
 
             // Clear missing highlight when user selects a variant
             const labelEl = document.querySelector(`#${variantType}-options label`);
@@ -6241,6 +6549,8 @@
                                 }
                                 discountPercent = Math.max(0, discountPercent);
 
+                                const { sizes: sizeOptions, storage: storageOptions, colors: colorOptions } = assembleVariantOptions(data);
+
                                 const megaConfig = (data.megaSale && typeof data.megaSale === 'object') ? data.megaSale : {};
                                 const megaFlagInfo = resolveBooleanFieldDetailed(data, MEGA_FLAG_KEYS);
                                 const megaConfigInfo = resolveBooleanFieldDetailed(megaConfig, ['enabled']);
@@ -6295,9 +6605,9 @@
                                     specifications: data.specification || {},
                                     reviews: data.reviews || [],
                                     thumbnails: data.thumbnails || [],
-                                    sizes: data.variants && typeof data.variants.size === 'string' ? data.variants.size.split(',').map(s => s.trim()) : (Array.isArray(data.sizes) ? data.sizes : []),
-                                    storage: data.storage || [],
-                                    colors: data.variants && typeof data.variants.color === 'string' ? data.variants.color.split(',').map(c => c.trim()) : (Array.isArray(data.colors) ? data.colors : []),
+                                    sizes: sizeOptions,
+                                    storage: storageOptions,
+                                    colors: colorOptions,
                                     stock: data.stock !== undefined ? Number(data.stock) : 1,
                                     warrantyText: data.warranty || null,
                                     flashSale,
@@ -6554,18 +6864,19 @@
             }
             
             const requiredVariants = getRequiredVariants(product);
-            
+
             if (fromCard && requiredVariants.length > 0) {
                  showProductDetails(productId);
                  showToast('toast-select-variant', false);
+                 setTimeout(() => highlightMissingVariantUI(requiredVariants), 200);
                  return Promise.reject("Variants not selected");
             }
-            
-            for(const variant of requiredVariants) {
-                if (!selectedVariants[variant]) {
-                    showToast('toast-select-variant', false);
-                    return Promise.reject("Variants not selected");
-                }
+
+            const missingVariants = requiredVariants.filter(variant => !selectedVariants[variant]);
+            if (missingVariants.length > 0) {
+                showToast('toast-select-variant', false);
+                if (!fromCard) highlightMissingVariantUI(missingVariants);
+                return Promise.reject("Variants not selected");
             }
 
             // Only include variant keys that are actually applicable to this product
@@ -7675,9 +7986,16 @@
 
         function openVariantModal(productId, action = 'add') {
             try {
-                const product = (productsData || []).find(p => p.id === productId);
-                if (!product) return;
-                currentVariantModal = { productId, action, selected: {} };
+                const rawProduct = (productsData || []).find(p => p.id === productId);
+                if (!rawProduct) return;
+                const product = ensureProductVariantArrays(rawProduct);
+                if (Array.isArray(productsData)) {
+                    const idx = productsData.findIndex(p => p.id === productId);
+                    if (idx !== -1) {
+                        productsData[idx] = { ...productsData[idx], ...product };
+                    }
+                }
+                currentVariantModal = { productId, action, selected: { ...selectedVariants } };
 
                 // Fill product summary
                 const img = document.getElementById('vm-product-image');
@@ -7688,9 +8006,9 @@
                 if (priceEl) priceEl.textContent = `৳${Number(product.price || 0).toFixed(2)}`;
 
                 // Render options
-                renderVariantOptionsModal('size', product.sizes);
-                renderVariantOptionsModal('storage', product.storage);
-                renderVariantOptionsModal('color', product.colors);
+                renderVariantOptionsModal('size', product.sizes, currentVariantModal.selected.size);
+                renderVariantOptionsModal('storage', product.storage, currentVariantModal.selected.storage);
+                renderVariantOptionsModal('color', product.colors, currentVariantModal.selected.color);
 
                 const modal = document.getElementById('variant-modal');
                 if (modal) {
@@ -7711,7 +8029,7 @@
         }
         window.closeVariantModal = closeVariantModal;
 
-        function renderVariantOptionsModal(variantType, options) {
+    function renderVariantOptionsModal(variantType, options, selectedValue = '') {
             const wrapper = document.getElementById(`vm-${variantType}-options`);
             const container = document.getElementById(`vm-${variantType}-variants-container`);
             if (!wrapper || !container) return;
@@ -7720,12 +8038,26 @@
                 container.innerHTML = '';
                 return;
             }
+            const accessibleLabels = {
+                size: currentLanguage === 'bn' ? 'সাইজ নির্বাচন' : 'Select size',
+                storage: currentLanguage === 'bn' ? 'ভ্যারিয়েন্ট নির্বাচন' : 'Select variant',
+                color: currentLanguage === 'bn' ? 'রঙ নির্বাচন' : 'Select color'
+            };
+
             wrapper.classList.remove('hidden');
             container.innerHTML = options.map(option => {
+                const rawValue = option === undefined || option === null ? '' : String(option).trim();
+                const safeValue = escapeHtml(rawValue);
+                const encodedValue = encodeURIComponent(rawValue);
                 if (variantType === 'color') {
-                    return `<button class="w-8 h-8 rounded-full border-2 border-gray-300" style="background-color: ${String(option).toLowerCase()}" data-vm-variant-type="color" data-value="${option}"></button>`;
+                    const sanitizedColor = rawValue.replace(/[^#a-zA-Z0-9(),.%\s-]/g, '');
+                    const label = `${accessibleLabels.color}${safeValue ? `: ${safeValue}` : ''}`;
+                    const isActive = selectedValue && rawValue === selectedValue;
+                    return `<button type="button" class="color-variant${isActive ? ' color-variant-active' : ''}" style="background:${sanitizedColor || '#d1d5db'};" data-vm-variant-type="color" data-value="${encodedValue}" aria-label="${label}" aria-pressed="${isActive ? 'true' : 'false'}" title="${label}"></button>`;
                 }
-                return `<button class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100 transition-colors text-dark" data-vm-variant-type="${variantType}" data-value="${option}">${option}</button>`;
+                const label = `${accessibleLabels[variantType]}${safeValue ? `: ${safeValue}` : ''}`;
+                const isActive = selectedValue && rawValue === selectedValue;
+                return `<button type="button" class="variant-btn${isActive ? ' variant-btn-active' : ''}" data-vm-variant-type="${variantType}" data-value="${encodedValue}" aria-label="${label}" aria-pressed="${isActive ? 'true' : 'false'}">${safeValue || '-'}</button>`;
             }).join('');
         }
 
@@ -7745,11 +8077,21 @@
             const btn = e.target.closest('button[data-vm-variant-type]');
             if (!btn || !currentVariantModal) return;
             const { vmVariantType } = { vmVariantType: btn.dataset.vmVariantType };
-            const value = btn.dataset.value;
+            const decodedValue = (() => {
+                try {
+                    return decodeURIComponent(btn.dataset.value || '');
+                } catch (_) {
+                    return btn.dataset.value || '';
+                }
+            })();
             const container = btn.parentElement;
-            container.querySelectorAll('button').forEach(b => b.classList.remove(vmVariantType === 'color' ? 'color-variant-active' : 'variant-btn-active'));
+            container.querySelectorAll('button').forEach(b => {
+                b.classList.remove(vmVariantType === 'color' ? 'color-variant-active' : 'variant-btn-active');
+                b.setAttribute('aria-pressed', 'false');
+            });
             btn.classList.add(vmVariantType === 'color' ? 'color-variant-active' : 'variant-btn-active');
-            currentVariantModal.selected[vmVariantType] = value;
+            btn.setAttribute('aria-pressed', 'true');
+            currentVariantModal.selected[vmVariantType] = decodedValue;
             const labelEl = document.querySelector(`#vm-${vmVariantType}-options label`);
             if (labelEl) labelEl.classList.remove('text-red-600', 'animate-pulse');
         });
@@ -9083,29 +9425,62 @@
             // --- END Wishlist Remove Delegation ---
             
             const detailsPage = document.getElementById('product-details-page');
-            detailsPage.querySelector('#add-to-cart-details').addEventListener('click', (e) => addToCartInDb(e.target.dataset.productId, false));
-            detailsPage.querySelector('.buy-now').addEventListener('click', (e) => {
-                const productId = detailsPage.querySelector('#add-to-cart-details').dataset.productId;
-                // Pre-check variants and guide the user if any required option is missing
-                const product = (productsData || []).find(p => p.id === productId);
-                const required = product ? getRequiredVariants(product) : [];
-                const missing = required.filter(t => !selectedVariants[t]);
-                if (missing.length > 0) {
-                    showToast('toast-select-variant', false);
-                    highlightMissingVariantUI(missing);
-                    return;
+            if (detailsPage) {
+                const detailsAddBtn = detailsPage.querySelector('#add-to-cart-details');
+                if (detailsAddBtn) {
+                    detailsAddBtn.addEventListener('click', (e) => {
+                        const productId = e.currentTarget.dataset.productId;
+                        if (!productId) return;
+                        const product = (productsData || []).find(p => p.id === productId);
+                        const required = product ? getRequiredVariants(product) : [];
+                        const missing = required.filter(t => !selectedVariants[t]);
+                        if (missing.length > 0) {
+                            showToast('toast-select-variant', false);
+                            highlightMissingVariantUI(missing);
+                            return;
+                        }
+                        addToCartInDb(productId, false).catch(err => {
+                            if (String(err || '').toLowerCase().includes('variant')) {
+                                highlightMissingVariantUI(required);
+                            }
+                        });
+                    });
                 }
-                addToCartInDb(productId).then(() => {
-                   openPaymentModal();
-                }).catch(err => {
-                   if (String(err || '').toLowerCase().includes('variant')) {
-                       showToast('toast-select-variant', false);
-                       highlightMissingVariantUI(required);
-                   }
-                   console.log("Could not proceed to buy now:", err);
-                });
-            });
-            detailsPage.querySelector('#wishlist-details').addEventListener('click', (e) => toggleWishlistInDb(e.target.closest('.wishlist').dataset.productId));
+
+                const buyNowBtn = detailsPage.querySelector('.buy-now');
+                if (buyNowBtn) {
+                    buyNowBtn.addEventListener('click', () => {
+                        const productId = detailsAddBtn?.dataset.productId || '';
+                        if (!productId) return;
+                        const product = (productsData || []).find(p => p.id === productId);
+                        const required = product ? getRequiredVariants(product) : [];
+                        const missing = required.filter(t => !selectedVariants[t]);
+                        if (missing.length > 0) {
+                            showToast('toast-select-variant', false);
+                            highlightMissingVariantUI(missing);
+                            return;
+                        }
+                        addToCartInDb(productId).then(() => {
+                            openPaymentModal();
+                        }).catch(err => {
+                            if (String(err || '').toLowerCase().includes('variant')) {
+                                showToast('toast-select-variant', false);
+                                highlightMissingVariantUI(required);
+                            }
+                            console.log("Could not proceed to buy now:", err);
+                        });
+                    });
+                }
+
+                const wishlistButton = detailsPage.querySelector('#wishlist-details');
+                if (wishlistButton) {
+                    wishlistButton.addEventListener('click', (e) => {
+                        const productId = e.currentTarget.dataset.productId;
+                        if (!productId) return;
+                        toggleWishlistInDb(productId);
+                    });
+                }
+            }
         });
 
         function initializeSlider() {
