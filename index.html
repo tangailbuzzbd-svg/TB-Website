@@ -1901,8 +1901,8 @@
                     </button>
                     <div class="flex flex-col lg:flex-row gap-8 items-center lg:items-start">
                         <!-- Main Product Image & Thumbnails -->
-                        <div class="w-full lg:w-1/2 flex flex-col items-center space-y-4">
-                             <div id="product-image-container" class="relative w-full rounded-2xl shadow-lg overflow-hidden">
+                    <div class="w-full lg:w-1/2 flex flex-col items-center space-y-4">
+                        <div id="product-image-container" class="relative w-full rounded-2xl shadow-lg overflow-hidden cursor-zoom-in" role="button" tabindex="0" aria-label="Open product image gallery">
                                  <!-- Mouse events for handleImageZoom use 'var(--x-pos)' and 'var(--y-pos)' set in JS/CSS -->
                                 <img id="product-image" class="w-full h-auto object-contain transition-transform duration-200 ease-out" src="" alt="Product Image">
                             </div>
@@ -1965,12 +1965,10 @@
                                 <!-- Details will be rendered here dynamically -->
                             </div>
 
-                            <div class="mt-6 space-y-2">
-                                <div class="grid grid-cols-2 gap-2">
-                                    <button id="add-to-cart-details" class="add-to-cart w-full bg-theme-blue text-white text-xs md:text-sm py-1.5 px-3 md:py-2 md:px-4 rounded-full hover:bg-theme-purple transition-colors shadow" data-lang="add-to-cart">কার্টে যোগ করুন</button>
-                                    <button class="buy-now w-full bg-white border border-theme-blue text-theme-blue text-xs md:text-sm py-1.5 px-3 md:py-2 md:px-4 rounded-full hover:bg-gray-100 transition-colors shadow" data-lang="buy-now">এখনই কিনুন</button>
-                                </div>
-                                <button id="wishlist-details" class="wishlist text-gray-400 hover:text-theme-pink text-3xl transition-colors self-start"><i class="far fa-heart"></i></button>
+                            <div class="mt-6 flex flex-wrap items-center gap-2">
+                                <button id="add-to-cart-details" class="add-to-cart flex-1 min-w-[140px] bg-theme-blue text-white text-xs md:text-sm py-1.5 px-3 md:py-2 md:px-4 rounded-full hover:bg-theme-purple transition-colors shadow" data-lang="add-to-cart">কার্টে যোগ করুন</button>
+                                <button class="buy-now flex-1 min-w-[140px] bg-white border border-theme-blue text-theme-blue text-xs md:text-sm py-1.5 px-3 md:py-2 md:px-4 rounded-full hover:bg-gray-100 transition-colors shadow" data-lang="buy-now">এখনই কিনুন</button>
+                                <button id="wishlist-details" class="wishlist flex items-center justify-center w-12 h-12 border border-theme-blue text-theme-blue rounded-full transition-colors hover:bg-theme-blue hover:text-white" aria-label="Add to wishlist" data-lang-aria-label="wishlist"><i class="far fa-heart text-xl"></i></button>
                             </div>
                         </div>
                     </div>
@@ -2027,6 +2025,28 @@
                 </div>
             </section>
         </div>
+
+                <!-- Product Image Gallery Modal -->
+                <div id="image-gallery-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+                    <div class="relative w-full max-w-4xl bg-white dark:bg-gray-900 rounded-3xl shadow-2xl overflow-hidden">
+                        <div class="relative bg-black">
+                            <button id="gallery-close-btn" type="button" class="absolute top-4 right-4 text-white text-2xl leading-none hover:text-theme-pink transition-colors" aria-label="Close gallery">
+                                <i class="fas fa-times"></i>
+                            </button>
+                            <button id="gallery-prev-btn" type="button" class="absolute left-3 top-1/2 -translate-y-1/2 bg-white/85 text-gray-800 w-10 h-10 rounded-full flex items-center justify-center shadow-lg hover:bg-white focus:outline-none focus:ring-2 focus:ring-theme-pink" aria-label="Previous image">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <img id="gallery-modal-image" class="w-full max-h-[70vh] object-contain select-none" src="" alt="Product image preview">
+                            <button id="gallery-next-btn" type="button" class="absolute right-3 top-1/2 -translate-y-1/2 bg-white/85 text-gray-800 w-10 h-10 rounded-full flex items-center justify-center shadow-lg hover:bg-white focus:outline-none focus:ring-2 focus:ring-theme-pink" aria-label="Next image">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                        <div class="flex items-center justify-center gap-4 px-6 py-3 bg-gray-100 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+                            <span id="gallery-modal-counter" class="text-sm font-semibold text-gray-600 dark:text-gray-300">0 / 0</span>
+                        </div>
+                        <div id="gallery-modal-thumbnails" class="flex gap-2 px-4 py-4 overflow-x-auto bg-gray-50 dark:bg-gray-900/60"></div>
+                    </div>
+                </div>
 
         <!-- Wishlist Page -->
         <div id="wishlist-page" class="hidden page">
@@ -2387,6 +2407,26 @@
     let flashSaleIntervalId = null;
     let productDetailsFlashTimerId = null;
     let productsUnsubscribe = () => {};
+    const requestProductFrame = (typeof window !== 'undefined' && typeof window.requestAnimationFrame === 'function')
+        ? window.requestAnimationFrame.bind(window)
+        : (fn) => setTimeout(fn, 16);
+    const cancelProductFrame = (typeof window !== 'undefined' && typeof window.cancelAnimationFrame === 'function')
+        ? window.cancelAnimationFrame.bind(window)
+        : clearTimeout;
+    const productsState = {
+        cache: new Map(),
+        initialLoadDone: false,
+        pendingRenderId: null,
+    };
+    const PRODUCTS_CACHE_STORAGE_KEY = 'tb_products_cache_v2';
+    const PRODUCTS_CACHE_VERSION = 1;
+    const PRODUCTS_CACHE_MAX_AGE_MS = 10 * 60 * 1000; // 10 minutes
+    const PRODUCT_IMAGE_FALLBACK = 'https://placehold.co/400x400/f5f7fa/6a0dad?text=Image';
+    let currentGalleryImages = [];
+    let currentGalleryIndex = 0;
+    let currentGalleryAltText = 'Product Image';
+    let isGalleryModalOpen = false;
+    let galleryKeyListenerAttached = false;
 
     const FLASH_FLAG_KEYS = ['flashSale', 'flash_sale', 'flashsell', 'flashSell', 'flash_selling', 'flash_sale_enabled', 'flashSaleEnabled'];
     const FLASH_PRICE_KEYS = ['flashPrice', 'flash_price', 'flashsale_price', 'flashSalePrice'];
@@ -2585,6 +2625,234 @@
         return { ...product, ...assembled };
     };
 
+    const normalizeProductDoc = (docSnap) => {
+        try {
+            const data = docSnap.data() || {};
+            const modelID = data.model1 || data.model || docSnap.id;
+
+            let categoryValue = data.category ?? data.Category ?? data.cat ?? data.categoryName ?? 'general';
+            if (typeof categoryValue === 'string') categoryValue = categoryValue.trim().toLowerCase();
+
+            let rawSub = data.subCategory ?? data.subcategory ?? data.sub_category ?? data.subCat ?? data.subcat ?? data.sub ?? null;
+            let normalizedSub = null;
+            if (Array.isArray(rawSub)) {
+                normalizedSub = rawSub.length ? String(rawSub[0]).trim().toLowerCase() : null;
+            } else if (typeof rawSub === 'string') {
+                const first = rawSub.split(',')[0];
+                normalizedSub = first ? first.trim().toLowerCase() : null;
+            } else if (rawSub && typeof rawSub === 'object' && rawSub.name) {
+                normalizedSub = String(rawSub.name).trim().toLowerCase();
+            }
+
+            let basePrice = resolveNumberField(data, REGULAR_PRICE_KEYS);
+            if (!(basePrice > 0)) basePrice = null;
+
+            let offerPrice = resolveNumberField(data, OFFER_PRICE_KEYS);
+            if (!(offerPrice > 0)) offerPrice = null;
+
+            const hasOfferFlag = resolveBooleanField(data, OFFER_FLAG_KEYS);
+            const flashEnabled = resolveBooleanField(data, FLASH_FLAG_KEYS);
+            let flashPrice = resolveNumberField(data, FLASH_PRICE_KEYS);
+            if (!(flashPrice > 0)) flashPrice = null;
+
+            const flashStartRaw = getFirstAvailableValue(data, FLASH_START_KEYS);
+            const flashEndRaw = getFirstAvailableValue(data, FLASH_END_KEYS);
+            let flashStartDate = parseFirestoreDate(flashStartRaw);
+            let flashEndDate = parseFirestoreDate(flashEndRaw);
+            const flashDurationHours = resolveNumberField(data, FLASH_DURATION_KEYS);
+            if (!flashEndDate && flashDurationHours && flashDurationHours > 0 && flashStartDate instanceof Date) {
+                flashEndDate = new Date(flashStartDate.getTime() + flashDurationHours * 3600000);
+            }
+
+            const nowTs = Date.now();
+            const flashStartTs = flashStartDate instanceof Date ? flashStartDate.getTime() : null;
+            const flashEndTs = flashEndDate instanceof Date ? flashEndDate.getTime() : null;
+            const flashIsActive = flashEnabled && (!flashStartTs || flashStartTs <= nowTs) && (!flashEndTs || flashEndTs > nowTs);
+            const flashIsUpcoming = flashEnabled && !flashIsActive && flashStartTs && flashStartTs > nowTs;
+
+            let effectivePrice = basePrice && basePrice > 0 ? basePrice : null;
+            let originalPriceValue = null;
+            let isOffer = false;
+
+            if (flashIsActive && flashPrice && flashPrice > 0) {
+                if (basePrice && basePrice > flashPrice) {
+                    originalPriceValue = basePrice;
+                }
+                effectivePrice = flashPrice;
+                isOffer = !!originalPriceValue;
+            } else if (hasOfferFlag && offerPrice && basePrice && offerPrice < basePrice) {
+                effectivePrice = offerPrice;
+                originalPriceValue = basePrice;
+                isOffer = true;
+            } else if (!effectivePrice && offerPrice && offerPrice > 0) {
+                effectivePrice = offerPrice;
+                if (basePrice && basePrice > offerPrice) {
+                    originalPriceValue = basePrice;
+                    isOffer = true;
+                }
+            } else if (!effectivePrice && flashPrice && flashPrice > 0) {
+                effectivePrice = flashPrice;
+                if (basePrice && basePrice > flashPrice) {
+                    originalPriceValue = basePrice;
+                    isOffer = true;
+                }
+            }
+
+            if (!effectivePrice || effectivePrice <= 0) {
+                const fallbackPrice = Number(data.price) || Number(data.Price) || 0;
+                effectivePrice = basePrice || offerPrice || flashPrice || fallbackPrice || 0;
+            }
+
+            if (!originalPriceValue && basePrice && basePrice > effectivePrice) {
+                originalPriceValue = basePrice;
+                if (basePrice !== effectivePrice) {
+                    isOffer = true;
+                }
+            }
+
+            const flashSale = flashEnabled ? {
+                enabled: true,
+                price: flashPrice,
+                start: flashStartDate || null,
+                end: flashEndDate || null,
+                isActive: flashIsActive,
+                isUpcoming: flashIsUpcoming,
+                label: getNormalizedString(data.flashSaleLabel || data.flash_sale_label || data.flashsellLabel || data.flashSellLabel || '') || null
+            } : null;
+
+            const discountReference = originalPriceValue || (basePrice && basePrice > effectivePrice ? basePrice : null);
+            let discountPercent = 0;
+            if (discountReference && discountReference > 0 && discountReference > effectivePrice) {
+                discountPercent = Math.round(((discountReference - effectivePrice) / discountReference) * 100);
+            }
+            discountPercent = Math.max(0, discountPercent);
+
+            const { sizes: sizeOptions, storage: storageOptions, colors: colorOptions } = assembleVariantOptions(data);
+
+            const megaConfig = (data.megaSale && typeof data.megaSale === 'object') ? data.megaSale : {};
+            const megaFlagInfo = resolveBooleanFieldDetailed(data, MEGA_FLAG_KEYS);
+            const megaConfigInfo = resolveBooleanFieldDetailed(megaConfig, ['enabled']);
+            const explicitMegaTrue = (megaFlagInfo.explicit && megaFlagInfo.value) || (megaConfigInfo.explicit && megaConfigInfo.value);
+            const explicitMegaFalse = (megaFlagInfo.explicit && !megaFlagInfo.value) || (megaConfigInfo.explicit && !megaConfigInfo.value);
+            const megaLabelRaw = getNormalizedString(
+                getFirstAvailableValue(megaConfig, ['label', 'title', 'badge']) ??
+                getFirstAvailableValue(data, MEGA_LABEL_KEYS)
+            );
+            const megaConfigDiscount = resolveNumberField(megaConfig, ['discountPercent', 'discount', 'percent']);
+            const megaConfigPrice = resolveNumberField(megaConfig, ['price', 'dealPrice', 'salePrice']);
+            const megaConfigOriginal = resolveNumberField(megaConfig, ['originalPrice', 'compareAt', 'original']);
+
+            const effectiveDiscountPercent = Number.isFinite(megaConfigDiscount)
+                ? megaConfigDiscount
+                : discountPercent;
+            const effectiveMegaPrice = Number.isFinite(megaConfigPrice)
+                ? megaConfigPrice
+                : Number(effectivePrice) || 0;
+            const effectiveMegaOriginal = Number.isFinite(megaConfigOriginal)
+                ? megaConfigOriginal
+                : (discountReference || null);
+
+            const megaSaleEnabled = explicitMegaTrue || (!explicitMegaFalse && discountPercent >= MEGA_DISCOUNT_THRESHOLD && isOffer);
+            const megaSale = megaSaleEnabled ? {
+                ...megaConfig,
+                enabled: true,
+                label: megaLabelRaw || megaConfig.label || null,
+                discountPercent: Number.isFinite(effectiveDiscountPercent) ? effectiveDiscountPercent : null,
+                price: Number.isFinite(effectiveMegaPrice) ? effectiveMegaPrice : null,
+                originalPrice: Number.isFinite(effectiveMegaOriginal) ? effectiveMegaOriginal : null
+            } : null;
+
+            return {
+                id: docSnap.id,
+                modelID,
+                name: data.name || "No Name Provided",
+                brand: data.brand || "No Brand",
+                price: Number(effectivePrice) || 0,
+                basePrice: basePrice || originalPriceValue || Number(effectivePrice) || 0,
+                originalPrice: originalPriceValue && originalPriceValue > effectivePrice ? originalPriceValue : null,
+                isOffer,
+                rating: data.rating || 0,
+                ratingCount: data.ratingCount || 0,
+                image: data.imageUrl || '',
+                imageUrl: data.imageUrl || '',
+                description: data.details || '',
+                fullDescription: data.details || '',
+                category: categoryValue,
+                subCategory: normalizedSub,
+                isReturnable: data.isRefundable === true,
+                specifications: data.specification || {},
+                reviews: data.reviews || [],
+                thumbnails: data.thumbnails || [],
+                sizes: sizeOptions,
+                storage: storageOptions,
+                colors: colorOptions,
+                stock: data.stock !== undefined ? Number(data.stock) : 1,
+                warrantyText: data.warranty || null,
+                flashSale,
+                megaSale,
+                discountPercent
+            };
+        } catch (error) {
+            console.error('normalizeProductDoc failed', error);
+            return null;
+        }
+    };
+
+
+    const resetProductsState = () => {
+        productsState.cache.clear();
+        productsState.initialLoadDone = false;
+        if (productsState.pendingRenderId !== null) {
+            cancelProductFrame(productsState.pendingRenderId);
+            productsState.pendingRenderId = null;
+        }
+        productsData = [];
+    };
+
+    const performProductsRender = () => {
+        productsState.pendingRenderId = null;
+        const productList = Array.from(productsState.cache.values());
+        productsData = productList;
+
+        try { renderFlashSaleSection(productList); } catch (err) { console.warn('renderFlashSaleSection failed', err); }
+        try { renderMegaSaleSection(productList); } catch (err) { console.warn('renderMegaSaleSection failed', err); }
+
+        if (!productList.length) {
+            DOMElements.productList.innerHTML = `<p class="col-span-full text-center text-gray-500">No products found in the database.</p>`;
+        } else {
+            renderProducts(productList);
+        }
+
+        try { updateCartUI(); } catch (_) {}
+    };
+
+    const scheduleProductsRender = ({ immediate = false } = {}) => {
+        if (immediate) {
+            if (productsState.pendingRenderId !== null) {
+                cancelProductFrame(productsState.pendingRenderId);
+                productsState.pendingRenderId = null;
+            }
+            performProductsRender();
+            return;
+        }
+
+        if (productsState.pendingRenderId !== null) return;
+        productsState.pendingRenderId = requestProductFrame(() => {
+            performProductsRender();
+        });
+    };
+
+    const handleProductsError = (error) => {
+        console.error('Error loading products from Firestore:', error);
+        if (!productsState.cache.size) {
+            renderFlashSaleSection([]);
+            renderMegaSaleSection([]);
+            if (DOMElements.productList) {
+                DOMElements.productList.innerHTML = `<p class="col-span-full text-center text-red-500">Error loading products. Check console for details.</p>`;
+            }
+        }
+    };
+
     const getFirstAvailableValue = (obj, keys) => {
         for (const key of keys) {
             if (obj && Object.prototype.hasOwnProperty.call(obj, key)) {
@@ -2624,6 +2892,67 @@
             return new Date(ms);
         }
         return null;
+    };
+
+    const readProductsCache = () => {
+        if (typeof localStorage === 'undefined') return null;
+        try {
+            const raw = localStorage.getItem(PRODUCTS_CACHE_STORAGE_KEY);
+            if (!raw) return null;
+            const payload = JSON.parse(raw);
+            if (!payload || typeof payload !== 'object') return null;
+            if (payload.version !== PRODUCTS_CACHE_VERSION) return null;
+            if (!Array.isArray(payload.items)) return null;
+            const timestamp = Number(payload.timestamp);
+            if (!Number.isFinite(timestamp)) return null;
+            if (PRODUCTS_CACHE_MAX_AGE_MS && Date.now() - timestamp > PRODUCTS_CACHE_MAX_AGE_MS) return null;
+            return payload;
+        } catch (error) {
+            console.warn('Failed to read product cache', error);
+            return null;
+        }
+    };
+
+    const persistProductsCache = (items) => {
+        if (typeof localStorage === 'undefined') return;
+        if (!Array.isArray(items)) return;
+        try {
+            const serializableItems = items.map((item) => {
+                if (!item || typeof item !== 'object') return item;
+                const clone = { ...item };
+                if (clone.flashSale && typeof clone.flashSale === 'object') {
+                    clone.flashSale = {
+                        ...clone.flashSale,
+                        start: clone.flashSale.start instanceof Date ? clone.flashSale.start.toISOString() : clone.flashSale.start ?? null,
+                        end: clone.flashSale.end instanceof Date ? clone.flashSale.end.toISOString() : clone.flashSale.end ?? null,
+                    };
+                }
+                return clone;
+            });
+            const payload = {
+                version: PRODUCTS_CACHE_VERSION,
+                timestamp: Date.now(),
+                items: serializableItems,
+            };
+            localStorage.setItem(PRODUCTS_CACHE_STORAGE_KEY, JSON.stringify(payload));
+        } catch (error) {
+            console.warn('Failed to persist product cache', error);
+        }
+    };
+
+    const rehydrateCachedProduct = (rawProduct) => {
+        if (!rawProduct || typeof rawProduct !== 'object') return null;
+        const product = { ...rawProduct };
+        if (product.flashSale && typeof product.flashSale === 'object') {
+            const flashSale = { ...product.flashSale };
+            flashSale.start = parseFirestoreDate(flashSale.start);
+            flashSale.end = parseFirestoreDate(flashSale.end);
+            product.flashSale = flashSale;
+        }
+        if (product.megaSale && typeof product.megaSale === 'object') {
+            product.megaSale = { ...product.megaSale };
+        }
+        return product;
     };
 
     const formatCountdown = (ms) => {
@@ -4377,6 +4706,13 @@
             // Ensure toolbar and filters UI are present
             ensureListingToolbar();
 
+            const isInitialLoadPending = !productsState.initialLoadDone && productsState.cache.size === 0;
+            if (isInitialLoadPending && lastBaseProducts.length === 0) {
+                DOMElements.productList.innerHTML = `<div class="loader"></div>`;
+                renderPagination(0);
+                return;
+            }
+
             // Reset page when base set changes
             const key = Array.isArray(lastBaseProducts) ? lastBaseProducts.map(p => p && p.id).join('|') : '';
             if (key !== lastRenderKey) { currentPage = 1; lastRenderKey = key; }
@@ -4397,16 +4733,20 @@
 
             DOMElements.productList.innerHTML = '';
             if (pageItems.length === 0) {
-                 DOMElements.productList.innerHTML = `<p class="col-span-full text-center text-gray-500">${translations[currentLanguage]['no-products']}</p>`;
-                 renderPagination(0);
-                 return;
+                if (isInitialLoadPending) {
+                    DOMElements.productList.innerHTML = `<div class="loader"></div>`;
+                } else {
+                    DOMElements.productList.innerHTML = `<p class="col-span-full text-center text-gray-500">${translations[currentLanguage]['no-products']}</p>`;
+                }
+                renderPagination(0);
+                return;
             }
             const fragment = document.createDocumentFragment();
             pageItems.forEach(product => {
                 const productCard = document.createElement('div');
                 const isWished = localWishlistCache.has(product.id);
                 const heartClass = isWished ? 'fas text-theme-pink' : 'far text-gray-400';
-                const imageUrl = product.imageUrl || 'https://placehold.co/400x400/f5f7fa/6a0dad?text=Image';
+                const imageUrl = product.imageUrl || PRODUCT_IMAGE_FALLBACK;
                 const localeStrings = translations[currentLanguage] || translations.en || {};
                 const basePrice = Number(product.basePrice) || Number(product.originalPrice) || Number(product.price) || 0;
                 const nowMs = Date.now();
@@ -4670,7 +5010,7 @@
                 const { product, status, displayPrice, comparePrice, countdownTarget } = deal;
                 const productId = product.id;
                 const safeName = escapeHtml(product.name || '');
-                const imageUrl = product.imageUrl || 'https://placehold.co/400x400/f5f7fa/6a0dad?text=Image';
+                const imageUrl = product.imageUrl || PRODUCT_IMAGE_FALLBACK;
                 const ratingHtml = renderStars(product.rating || 0);
                 const ratingCount = product.ratingCount || 0;
                 const badgeKey = status === 'upcoming' ? 'flash-sale-upcoming' : 'flash-sale-badge';
@@ -4816,7 +5156,7 @@
             visibleDeals.forEach(({ product, mega, discount }) => {
                 const productId = product.id;
                 const safeName = escapeHtml(product.name || '');
-                const imageUrl = product.imageUrl || 'https://placehold.co/400x400/f5f7fa/6a0dad?text=Image';
+                const imageUrl = product.imageUrl || PRODUCT_IMAGE_FALLBACK;
                 const ratingHtml = renderStars(product.rating || 0);
                 const ratingCount = product.ratingCount || 0;
                 const isWished = localWishlistCache.has(productId);
@@ -6047,7 +6387,7 @@
 
 
             const productImageEl = detailsPage.querySelector('#product-image');
-            if (productImageEl) productImageEl.src = product.imageUrl || 'https://placehold.co/400x400/f5f7fa/6a0dad?text=Image';
+            if (productImageEl) productImageEl.alt = product.name || 'Product Image';
 
             const productRatingEl = detailsPage.querySelector('#product-rating-details');
             if (productRatingEl) productRatingEl.textContent = product.rating || 0;
@@ -6117,7 +6457,7 @@
                 }
             }
 
-            renderThumbnails(product.thumbnails || []);
+            prepareProductGallery(product);
             renderSpecifications(product.specifications || {});
             renderReviews(product.reviews || []);
             renderPriceDetails(product);
@@ -6137,12 +6477,260 @@
     // Expose to global for inline onclick usage in product cards and suggestions
     window.showProductDetails = showProductDetails;
 
-    function renderThumbnails(thumbnails) {
-            const container = document.getElementById('thumbnail-container');
-            container.innerHTML = thumbnails.map(src => 
-                `<img src="${src}" class="w-16 h-16 rounded-lg object-cover cursor-pointer hover:ring-2 hover:ring-theme-pink transition-all" onclick="document.getElementById('product-image').src='${src}'">`
-            ).join('');
+    function prepareProductGallery(product = {}) {
+        if (isGalleryModalOpen) {
+            closeImageGallery();
         }
+
+        const nextImages = [];
+        const seen = new Set();
+        const pushImage = (src) => {
+            if (!src) return;
+            const trimmed = String(src).trim();
+            if (!trimmed || seen.has(trimmed)) return;
+            seen.add(trimmed);
+            nextImages.push(trimmed);
+        };
+        const spreadSources = (source) => {
+            if (!source) return;
+            if (Array.isArray(source)) {
+                source.forEach(spreadSources);
+                return;
+            }
+            if (typeof source === 'string') {
+                source.split(/[|,\n\r]+/).forEach((part) => pushImage(part));
+                return;
+            }
+            if (typeof source === 'object') {
+                Object.values(source).forEach(spreadSources);
+                return;
+            }
+            pushImage(source);
+        };
+
+        pushImage(product?.imageUrl);
+        pushImage(product?.image);
+        spreadSources(product?.thumbnails);
+        spreadSources(product?.gallery);
+        spreadSources(product?.galleryImages);
+        spreadSources(product?.images);
+
+        if (!nextImages.length) {
+            pushImage(PRODUCT_IMAGE_FALLBACK);
+        }
+
+        currentGalleryImages = nextImages;
+        currentGalleryAltText = product?.name || 'Product Image';
+        setMainImage(0, { updateThumbnails: false, updateModal: false });
+        renderThumbnails();
+    }
+
+    function renderThumbnails() {
+        const container = document.getElementById('thumbnail-container');
+        if (!container) return;
+
+        if (!Array.isArray(currentGalleryImages) || currentGalleryImages.length <= 1) {
+            container.innerHTML = '';
+            container.classList.add('hidden');
+            return;
+        }
+
+        container.classList.remove('hidden');
+        const markup = currentGalleryImages.map((src, index) => {
+            if (!src) return '';
+            const safeSrc = escapeHtml(src);
+            const safeAlt = escapeHtml(`${currentGalleryAltText || 'Product Image'} ${index + 1}`);
+            return `
+                <button type="button" class="thumbnail-item relative flex-shrink-0 rounded-xl overflow-hidden border border-transparent shadow-none opacity-70 transition-all focus:outline-none focus:ring-2 focus:ring-theme-blue" data-gallery-index="${index}" aria-label="View image ${index + 1}">
+                    <img src="${safeSrc}" alt="${safeAlt}" class="w-16 h-16 object-cover pointer-events-none">
+                </button>
+            `;
+        }).filter(Boolean).join('');
+        container.innerHTML = markup;
+        refreshThumbnailSelection();
+    }
+
+    function refreshThumbnailSelection() {
+        const container = document.getElementById('thumbnail-container');
+        if (!container) return;
+        container.querySelectorAll('.thumbnail-item').forEach((btn) => {
+            const idx = Number(btn.dataset.galleryIndex);
+            const isActive = idx === currentGalleryIndex;
+            btn.classList.toggle('border-theme-pink', isActive);
+            btn.classList.toggle('border-transparent', !isActive);
+            btn.classList.toggle('shadow-md', isActive);
+            btn.classList.toggle('shadow-none', !isActive);
+            btn.classList.toggle('opacity-100', isActive);
+            btn.classList.toggle('opacity-70', !isActive);
+        });
+    }
+
+    function setMainImage(index = 0, options = {}) {
+        if (!Array.isArray(currentGalleryImages) || !currentGalleryImages.length) return;
+        const length = currentGalleryImages.length;
+        let nextIndex = Number.isFinite(index) ? index : 0;
+        if (nextIndex < 0) nextIndex = 0;
+        if (nextIndex >= length) nextIndex = length - 1;
+        currentGalleryIndex = nextIndex;
+
+        const productImageEl = document.getElementById('product-image');
+        if (productImageEl) {
+            productImageEl.src = currentGalleryImages[currentGalleryIndex];
+            const baseAlt = currentGalleryAltText || 'Product Image';
+            productImageEl.alt = `${baseAlt} (${currentGalleryIndex + 1}/${length})`;
+        }
+
+        if (options.updateThumbnails !== false) {
+            refreshThumbnailSelection();
+        }
+
+        const shouldUpdateModal = options.updateModal ?? isGalleryModalOpen;
+        if (shouldUpdateModal) {
+            updateGalleryModalImage();
+        }
+    }
+
+    function stepGalleryImage(offset = 0) {
+        if (!Array.isArray(currentGalleryImages) || !currentGalleryImages.length) return;
+        const length = currentGalleryImages.length;
+        if (!length) return;
+        const nextIndex = (currentGalleryIndex + offset + length) % length;
+        setMainImage(nextIndex);
+    }
+
+    function openImageGallery(startIndex = currentGalleryIndex) {
+        if (!Array.isArray(currentGalleryImages) || !currentGalleryImages.length) return;
+        const modal = document.getElementById('image-gallery-modal');
+        if (!modal) return;
+
+        const length = currentGalleryImages.length;
+        currentGalleryIndex = Math.min(Math.max(startIndex, 0), length - 1);
+        isGalleryModalOpen = true;
+
+        modal.classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+
+        renderGalleryModalThumbnails();
+        setMainImage(currentGalleryIndex, { updateModal: true });
+        attachGalleryKeyListener();
+    }
+
+    function closeImageGallery() {
+        const modal = document.getElementById('image-gallery-modal');
+        if (modal) {
+            modal.classList.add('hidden');
+        }
+        document.body.classList.remove('overflow-hidden');
+        isGalleryModalOpen = false;
+        detachGalleryKeyListener();
+    }
+
+    function renderGalleryModalThumbnails() {
+        const container = document.getElementById('gallery-modal-thumbnails');
+        if (!container) return;
+
+        if (!Array.isArray(currentGalleryImages) || !currentGalleryImages.length) {
+            container.innerHTML = '';
+            return;
+        }
+
+        const markup = currentGalleryImages.map((src, index) => {
+            if (!src) return '';
+            const safeSrc = escapeHtml(src);
+            const safeAlt = escapeHtml(`${currentGalleryAltText || 'Product Image'} ${index + 1}`);
+            return `
+                <button type="button" class="modal-thumb relative flex-shrink-0 rounded-lg overflow-hidden border border-transparent shadow-none opacity-60 transition-all focus:outline-none focus:ring-2 focus:ring-theme-blue" data-modal-gallery-index="${index}" aria-label="Preview image ${index + 1}">
+                    <img src="${safeSrc}" alt="${safeAlt}" class="w-20 h-20 object-cover pointer-events-none">
+                </button>
+            `;
+        }).filter(Boolean).join('');
+        container.innerHTML = markup;
+        refreshModalThumbnailSelection();
+    }
+
+    function refreshModalThumbnailSelection() {
+        const container = document.getElementById('gallery-modal-thumbnails');
+        if (!container) return;
+
+        container.querySelectorAll('.modal-thumb').forEach((btn) => {
+            const idx = Number(btn.dataset.modalGalleryIndex);
+            const isActive = idx === currentGalleryIndex;
+            btn.classList.toggle('border-theme-pink', isActive);
+            btn.classList.toggle('border-transparent', !isActive);
+            btn.classList.toggle('shadow-md', isActive);
+            btn.classList.toggle('shadow-none', !isActive);
+            btn.classList.toggle('opacity-100', isActive);
+            btn.classList.toggle('opacity-60', !isActive);
+        });
+    }
+
+    function updateGalleryModalImage() {
+        if (!Array.isArray(currentGalleryImages) || !currentGalleryImages.length) return;
+        const modalImage = document.getElementById('gallery-modal-image');
+        if (modalImage) {
+            modalImage.src = currentGalleryImages[currentGalleryIndex];
+            const baseAlt = currentGalleryAltText || 'Product Image';
+            modalImage.alt = `${baseAlt} (${currentGalleryIndex + 1}/${currentGalleryImages.length})`;
+        }
+        const counterEl = document.getElementById('gallery-modal-counter');
+        if (counterEl) {
+            counterEl.textContent = `${currentGalleryIndex + 1} / ${currentGalleryImages.length}`;
+        }
+        refreshModalThumbnailSelection();
+    }
+
+    function handleThumbnailClick(event) {
+        const button = event.target.closest('[data-gallery-index]');
+        if (!button) return;
+        const index = Number(button.dataset.galleryIndex);
+        if (!Number.isFinite(index)) return;
+        setMainImage(index);
+    }
+
+    function handleModalThumbnailClick(event) {
+        const button = event.target.closest('[data-modal-gallery-index]');
+        if (!button) return;
+        const index = Number(button.dataset.modalGalleryIndex);
+        if (!Number.isFinite(index)) return;
+        setMainImage(index, { updateModal: true });
+    }
+
+    function handleImageContainerKeydown(event) {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            openImageGallery();
+        }
+    }
+
+    function handleGalleryKeydown(event) {
+        if (!isGalleryModalOpen) return;
+        if (event.key === 'Escape') {
+            event.preventDefault();
+            closeImageGallery();
+            return;
+        }
+        if (event.key === 'ArrowLeft') {
+            event.preventDefault();
+            stepGalleryImage(-1);
+            return;
+        }
+        if (event.key === 'ArrowRight') {
+            event.preventDefault();
+            stepGalleryImage(1);
+        }
+    }
+
+    function attachGalleryKeyListener() {
+        if (galleryKeyListenerAttached) return;
+        document.addEventListener('keydown', handleGalleryKeydown);
+        galleryKeyListenerAttached = true;
+    }
+
+    function detachGalleryKeyListener() {
+        if (!galleryKeyListenerAttached) return;
+        document.removeEventListener('keydown', handleGalleryKeydown);
+        galleryKeyListenerAttached = false;
+    }
         
         function renderSpecifications(specifications) {
             const container = document.getElementById('product-specifications');
@@ -6442,213 +7030,95 @@
         
         function fetchProductsFromFirestore() {
             productsUnsubscribe();
-            return new Promise((resolve, reject) => {
-                let initialResolved = false;
+            resetProductsState();
+
+            let usedCache = false;
+            const cachedPayload = readProductsCache();
+            if (cachedPayload && Array.isArray(cachedPayload.items) && cachedPayload.items.length) {
+                cachedPayload.items.forEach((item) => {
+                    const hydrated = rehydrateCachedProduct(item);
+                    if (hydrated && hydrated.id) {
+                        productsState.cache.set(hydrated.id, hydrated);
+                    }
+                });
+                if (productsState.cache.size) {
+                    scheduleProductsRender({ immediate: true });
+                    usedCache = true;
+                    console.log('Loaded products from Local Cache (Instant)');
+                }
+            } else if (DOMElements.productList) {
+                DOMElements.productList.innerHTML = `<p class="col-span-full text-center text-gray-500">Loading products...</p>`;
+            }
+
+            return new Promise((resolve) => {
+                let settled = false;
+                const settleOnce = () => {
+                    if (settled) return;
+                    settled = true;
+                    resolve();
+                };
+
                 try {
                     const productsRef = collection(db, "products");
                     productsUnsubscribe = onSnapshot(productsRef, (querySnapshot) => {
                         try {
-                            productsData = querySnapshot.docs.map(docSnap => {
-                                const data = docSnap.data() || {};
-                                const modelID = data.model1 || data.model || docSnap.id;
-
-                                let categoryValue = data.category ?? data.Category ?? data.cat ?? data.categoryName ?? 'general';
-                                if (typeof categoryValue === 'string') categoryValue = categoryValue.trim().toLowerCase();
-
-                                let rawSub = data.subCategory ?? data.subcategory ?? data.sub_category ?? data.subCat ?? data.subcat ?? data.sub ?? null;
-                                let normalizedSub = null;
-                                if (Array.isArray(rawSub)) {
-                                    normalizedSub = rawSub.length ? String(rawSub[0]).trim().toLowerCase() : null;
-                                } else if (typeof rawSub === 'string') {
-                                    const first = rawSub.split(',')[0];
-                                    normalizedSub = first ? first.trim().toLowerCase() : null;
-                                } else if (rawSub && typeof rawSub === 'object' && rawSub.name) {
-                                    normalizedSub = String(rawSub.name).trim().toLowerCase();
-                                }
-
-                                let basePrice = resolveNumberField(data, REGULAR_PRICE_KEYS);
-                                if (!(basePrice > 0)) basePrice = null;
-
-                                let offerPrice = resolveNumberField(data, OFFER_PRICE_KEYS);
-                                if (!(offerPrice > 0)) offerPrice = null;
-
-                                const hasOfferFlag = resolveBooleanField(data, OFFER_FLAG_KEYS);
-                                const flashEnabled = resolveBooleanField(data, FLASH_FLAG_KEYS);
-                                let flashPrice = resolveNumberField(data, FLASH_PRICE_KEYS);
-                                if (!(flashPrice > 0)) flashPrice = null;
-
-                                const flashStartRaw = getFirstAvailableValue(data, FLASH_START_KEYS);
-                                const flashEndRaw = getFirstAvailableValue(data, FLASH_END_KEYS);
-                                let flashStartDate = parseFirestoreDate(flashStartRaw);
-                                let flashEndDate = parseFirestoreDate(flashEndRaw);
-                                const flashDurationHours = resolveNumberField(data, FLASH_DURATION_KEYS);
-                                if (!flashEndDate && flashDurationHours && flashDurationHours > 0 && flashStartDate instanceof Date) {
-                                    flashEndDate = new Date(flashStartDate.getTime() + flashDurationHours * 3600000);
-                                }
-
-                                const nowTs = Date.now();
-                                const flashStartTs = flashStartDate instanceof Date ? flashStartDate.getTime() : null;
-                                const flashEndTs = flashEndDate instanceof Date ? flashEndDate.getTime() : null;
-                                const flashIsActive = flashEnabled && (!flashStartTs || flashStartTs <= nowTs) && (!flashEndTs || flashEndTs > nowTs);
-                                const flashIsUpcoming = flashEnabled && !flashIsActive && flashStartTs && flashStartTs > nowTs;
-
-                                let effectivePrice = basePrice && basePrice > 0 ? basePrice : null;
-                                let originalPriceValue = null;
-                                let isOffer = false;
-
-                                if (flashIsActive && flashPrice && flashPrice > 0) {
-                                    if (basePrice && basePrice > flashPrice) {
-                                        originalPriceValue = basePrice;
+                            if (!productsState.initialLoadDone) {
+                                productsState.cache.clear();
+                                querySnapshot.forEach((docSnap) => {
+                                    const normalized = normalizeProductDoc(docSnap);
+                                    if (normalized) {
+                                        productsState.cache.set(docSnap.id, normalized);
                                     }
-                                    effectivePrice = flashPrice;
-                                    isOffer = !!originalPriceValue;
-                                } else if (hasOfferFlag && offerPrice && basePrice && offerPrice < basePrice) {
-                                    effectivePrice = offerPrice;
-                                    originalPriceValue = basePrice;
-                                    isOffer = true;
-                                } else if (!effectivePrice && offerPrice && offerPrice > 0) {
-                                    effectivePrice = offerPrice;
-                                    if (basePrice && basePrice > offerPrice) {
-                                        originalPriceValue = basePrice;
-                                        isOffer = true;
+                                });
+                                productsState.initialLoadDone = true;
+                                persistProductsCache(Array.from(productsState.cache.values()));
+                                scheduleProductsRender({ immediate: !usedCache });
+                                settleOnce();
+                                return;
+                            }
+
+                            const changes = querySnapshot.docChanges();
+                            if (!changes.length) {
+                                settleOnce();
+                                return;
+                            }
+
+                            let needsRender = false;
+                            changes.forEach((change) => {
+                                const id = change.doc.id;
+                                if (change.type === 'removed') {
+                                    if (productsState.cache.delete(id)) {
+                                        needsRender = true;
                                     }
-                                } else if (!effectivePrice && flashPrice && flashPrice > 0) {
-                                    effectivePrice = flashPrice;
-                                    if (basePrice && basePrice > flashPrice) {
-                                        originalPriceValue = basePrice;
-                                        isOffer = true;
-                                    }
+                                    return;
                                 }
 
-                                if (!effectivePrice || effectivePrice <= 0) {
-                                    const fallbackPrice = Number(data.price) || Number(data.Price) || 0;
-                                    effectivePrice = basePrice || offerPrice || flashPrice || fallbackPrice || 0;
+                                const normalized = normalizeProductDoc(change.doc);
+                                if (normalized) {
+                                    productsState.cache.set(id, normalized);
+                                    needsRender = true;
+                                } else if (productsState.cache.delete(id)) {
+                                    needsRender = true;
                                 }
-
-                                if (!originalPriceValue && basePrice && basePrice > effectivePrice) {
-                                    originalPriceValue = basePrice;
-                                    if (basePrice !== effectivePrice) {
-                                        isOffer = true;
-                                    }
-                                }
-
-                                const flashSale = flashEnabled ? {
-                                    enabled: true,
-                                    price: flashPrice,
-                                    start: flashStartDate || null,
-                                    end: flashEndDate || null,
-                                    isActive: flashIsActive,
-                                    isUpcoming: flashIsUpcoming,
-                                    label: getNormalizedString(data.flashSaleLabel || data.flash_sale_label || data.flashsellLabel || data.flashSellLabel || '') || null
-                                } : null;
-
-                                const discountReference = originalPriceValue || (basePrice && basePrice > effectivePrice ? basePrice : null);
-                                let discountPercent = 0;
-                                if (discountReference && discountReference > 0 && discountReference > effectivePrice) {
-                                    discountPercent = Math.round(((discountReference - effectivePrice) / discountReference) * 100);
-                                }
-                                discountPercent = Math.max(0, discountPercent);
-
-                                const { sizes: sizeOptions, storage: storageOptions, colors: colorOptions } = assembleVariantOptions(data);
-
-                                const megaConfig = (data.megaSale && typeof data.megaSale === 'object') ? data.megaSale : {};
-                                const megaFlagInfo = resolveBooleanFieldDetailed(data, MEGA_FLAG_KEYS);
-                                const megaConfigInfo = resolveBooleanFieldDetailed(megaConfig, ['enabled']);
-                                const explicitMegaTrue = (megaFlagInfo.explicit && megaFlagInfo.value) || (megaConfigInfo.explicit && megaConfigInfo.value);
-                                const explicitMegaFalse = (megaFlagInfo.explicit && !megaFlagInfo.value) || (megaConfigInfo.explicit && !megaConfigInfo.value);
-                                const megaLabelRaw = getNormalizedString(
-                                    getFirstAvailableValue(megaConfig, ['label', 'title', 'badge']) ??
-                                    getFirstAvailableValue(data, MEGA_LABEL_KEYS)
-                                );
-                                const megaConfigDiscount = resolveNumberField(megaConfig, ['discountPercent', 'discount', 'percent']);
-                                const megaConfigPrice = resolveNumberField(megaConfig, ['price', 'dealPrice', 'salePrice']);
-                                const megaConfigOriginal = resolveNumberField(megaConfig, ['originalPrice', 'compareAt', 'original']);
-
-                                const effectiveDiscountPercent = Number.isFinite(megaConfigDiscount)
-                                    ? megaConfigDiscount
-                                    : discountPercent;
-                                const effectiveMegaPrice = Number.isFinite(megaConfigPrice)
-                                    ? megaConfigPrice
-                                    : Number(effectivePrice) || 0;
-                                const effectiveMegaOriginal = Number.isFinite(megaConfigOriginal)
-                                    ? megaConfigOriginal
-                                    : (discountReference || null);
-
-                                const megaSaleEnabled = explicitMegaTrue || (!explicitMegaFalse && discountPercent >= MEGA_DISCOUNT_THRESHOLD && isOffer);
-                                const megaSale = megaSaleEnabled ? {
-                                    ...megaConfig,
-                                    enabled: true,
-                                    label: megaLabelRaw || megaConfig.label || null,
-                                    discountPercent: Number.isFinite(effectiveDiscountPercent) ? effectiveDiscountPercent : null,
-                                    price: Number.isFinite(effectiveMegaPrice) ? effectiveMegaPrice : null,
-                                    originalPrice: Number.isFinite(effectiveMegaOriginal) ? effectiveMegaOriginal : null
-                                } : null;
-
-                                return {
-                                    id: docSnap.id,
-                                    modelID,
-                                    name: data.name || "No Name Provided",
-                                    brand: data.brand || "No Brand",
-                                    price: Number(effectivePrice) || 0,
-                                    basePrice: basePrice || originalPriceValue || Number(effectivePrice) || 0,
-                                    originalPrice: originalPriceValue && originalPriceValue > effectivePrice ? originalPriceValue : null,
-                                    isOffer,
-                                    rating: data.rating || 0,
-                                    ratingCount: data.ratingCount || 0,
-                                    image: data.imageUrl || '',
-                                    imageUrl: data.imageUrl || '',
-                                    description: data.details || '',
-                                    fullDescription: data.details || '',
-                                    category: categoryValue,
-                                    subCategory: normalizedSub,
-                                    isReturnable: data.isRefundable === true,
-                                    specifications: data.specification || {},
-                                    reviews: data.reviews || [],
-                                    thumbnails: data.thumbnails || [],
-                                    sizes: sizeOptions,
-                                    storage: storageOptions,
-                                    colors: colorOptions,
-                                    stock: data.stock !== undefined ? Number(data.stock) : 1,
-                                    warrantyText: data.warranty || null,
-                                    flashSale,
-                                    megaSale,
-                                    discountPercent
-                                };
                             });
 
-                            renderFlashSaleSection(productsData);
-                            renderMegaSaleSection(productsData);
-
-                            if (productsData.length === 0) {
-                                DOMElements.productList.innerHTML = `<p class="col-span-full text-center text-gray-500">No products found in the database.</p>`;
-                            } else {
-                                renderProducts(productsData);
+                            if (needsRender) {
+                                persistProductsCache(Array.from(productsState.cache.values()));
+                                scheduleProductsRender();
                             }
 
-                            try { updateCartUI(); } catch (_) {}
+                            settleOnce();
                         } catch (processingError) {
-                            console.error("Error processing product snapshot: ", processingError);
-                            DOMElements.productList.innerHTML = `<p class="col-span-full text-center text-red-500">Error processing products. Check console for details.</p>`;
-                        } finally {
-                            if (!initialResolved) {
-                                initialResolved = true;
-                                resolve();
-                            }
+                            handleProductsError(processingError);
+                            settleOnce();
                         }
                     }, (error) => {
-                        console.error("Error fetching products from Firestore: ", error);
-                        renderFlashSaleSection([]);
-                        renderMegaSaleSection([]);
-                        DOMElements.productList.innerHTML = `<p class="col-span-full text-center text-red-500">Error loading products. Check console for details.</p>`;
-                        if (!initialResolved) {
-                            initialResolved = true;
-                            reject(error);
-                        }
+                        handleProductsError(error);
+                        settleOnce();
                     });
                 } catch (setupError) {
-                    console.error("Error initializing product listener: ", setupError);
-                    DOMElements.productList.innerHTML = `<p class="col-span-full text-center text-red-500">Error loading products. Check console for details.</p>`;
-                    reject(setupError);
+                    handleProductsError(setupError);
+                    settleOnce();
                 }
             });
         }
@@ -9398,7 +9868,41 @@
             
             document.addEventListener('click', handleProductCardClick); // Delegated click handler
             document.getElementById('product-options').addEventListener('click', handleVariantSelection);
-            document.getElementById('product-image-container').addEventListener('mousemove', handleImageZoom);
+
+            const productImageContainer = document.getElementById('product-image-container');
+            if (productImageContainer) {
+                productImageContainer.addEventListener('mousemove', handleImageZoom);
+                productImageContainer.addEventListener('click', () => openImageGallery());
+                productImageContainer.addEventListener('keydown', handleImageContainerKeydown);
+            }
+
+            const thumbnailContainer = document.getElementById('thumbnail-container');
+            if (thumbnailContainer) {
+                thumbnailContainer.addEventListener('click', handleThumbnailClick);
+            }
+
+            const galleryModal = document.getElementById('image-gallery-modal');
+            if (galleryModal) {
+                galleryModal.addEventListener('click', (event) => {
+                    if (event.target === galleryModal) {
+                        closeImageGallery();
+                    }
+                });
+            }
+
+            const galleryCloseBtn = document.getElementById('gallery-close-btn');
+            if (galleryCloseBtn) galleryCloseBtn.addEventListener('click', closeImageGallery);
+
+            const galleryPrevBtn = document.getElementById('gallery-prev-btn');
+            if (galleryPrevBtn) galleryPrevBtn.addEventListener('click', () => stepGalleryImage(-1));
+
+            const galleryNextBtn = document.getElementById('gallery-next-btn');
+            if (galleryNextBtn) galleryNextBtn.addEventListener('click', () => stepGalleryImage(1));
+
+            const galleryModalThumbs = document.getElementById('gallery-modal-thumbnails');
+            if (galleryModalThumbs) {
+                galleryModalThumbs.addEventListener('click', handleModalThumbnailClick);
+            }
             
             // Review Form Listeners
             document.getElementById('rating-stars').addEventListener('click', handleStarClick);
