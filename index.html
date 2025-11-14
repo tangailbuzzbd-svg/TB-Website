@@ -1007,9 +1007,19 @@
                     <label class="block text-sm font-semibold mb-2" data-lang="size">সাইজ:</label>
                     <div class="flex flex-wrap gap-2" id="vm-size-variants-container"></div>
                 </div>
-                <div id="vm-storage-options" class="hidden">
-                    <label class="block text-sm font-semibold mb-2" data-lang="storage">স্টোরেজ:</label>
-                    <div class="flex flex-wrap gap-2" id="vm-storage-variants-container"></div>
+                <div id="vm-storage-options" class="hidden space-y-3">
+                    <label class="block text-sm font-semibold" data-lang="storage">স্টোরেজ:</label>
+                    <div id="vm-storage-gb-options" class="hidden space-y-1">
+                        <p id="vm-storage-gb-hint" class="text-xs text-gray-500 dark:text-gray-300" data-lang="storage-gb-hint"></p>
+                        <div class="flex flex-wrap gap-2" id="vm-storage-gb-variants-container"></div>
+                    </div>
+                    <div id="vm-storage-tb-options" class="hidden space-y-1">
+                        <p id="vm-storage-tb-hint" class="text-xs text-gray-500 dark:text-gray-300" data-lang="storage-tb-hint"></p>
+                        <div class="flex flex-wrap gap-2" id="vm-storage-tb-variants-container"></div>
+                    </div>
+                    <div id="vm-storage-mixed-options" class="hidden">
+                        <div class="flex flex-wrap gap-2" id="vm-storage-variants-container"></div>
+                    </div>
                 </div>
                 <div id="vm-color-options" class="hidden">
                     <label class="block text-sm font-semibold mb-2" data-lang="color">রঙ:</label>
@@ -1689,7 +1699,10 @@
                     </div>
                     <div class="bg-white/90 dark:bg-gray-900/80 px-2.5 sm:px-3.5 py-1.5 sm:py-2 space-y-1">
                         <div id="flash-sale-empty" class="text-center text-gray-600 dark:text-gray-200 text-[10px] sm:text-xs hidden" data-lang="flash-sale-empty">এখন কোনো ফ্ল্যাশ ডিল নেই। আবারও দেখে যান।</div>
-                        <div id="flash-sale-grid" class="grid grid-cols-1 gap-1.5 sm:grid-cols-2 lg:grid-cols-4"></div>
+                        <div id="flash-sale-grid" class="grid grid-cols-1 gap-1.5 sm:grid-cols-2 lg:grid-cols-5"></div>
+                        <div class="flex justify-center pt-1.5">
+                            <button id="flash-sale-toggle" class="hidden px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-full border border-theme-purple text-theme-purple hover:bg-theme-purple hover:text-white transition-colors" data-lang="see-more">See More</button>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -1716,7 +1729,10 @@
                     </div>
                     <div class="px-5 sm:px-8 py-6 sm:py-7">
                         <div id="mega-sale-empty" class="text-center text-gray-500 dark:text-gray-300 text-sm sm:text-base hidden" data-lang="mega-sale-empty">এখন কোনো মেগা ডিল নেই। আবার দেখে যান।</div>
-                        <div id="mega-sale-grid" class="grid grid-cols-1 gap-5 sm:gap-6 md:grid-cols-2 lg:grid-cols-4"></div>
+                        <div id="mega-sale-grid" class="grid grid-cols-1 gap-5 sm:gap-6 md:grid-cols-2 lg:grid-cols-5"></div>
+                        <div class="flex justify-center pt-4">
+                            <button id="mega-sale-toggle" class="hidden px-4 py-2 text-sm font-semibold rounded-full border border-theme-blue text-theme-blue hover:bg-theme-blue hover:text-white transition-colors" data-lang="see-more">See More</button>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -1950,9 +1966,19 @@
                                     <label class="block text-sm font-semibold mb-2" data-lang="size">সাইজ:</label>
                                     <div class="flex flex-wrap gap-2" id="size-variants-container"></div>
                                 </div>
-                                <div id="storage-options" class="hidden">
-                                    <label class="block text-sm font-semibold mb-2" data-lang="storage">স্টোরেজ:</label>
-                                    <div class="flex flex-wrap gap-2" id="storage-variants-container"></div>
+                                <div id="storage-options" class="hidden space-y-3">
+                                    <label class="block text-sm font-semibold" data-lang="storage">স্টোরেজ:</label>
+                                    <div id="storage-gb-options" class="hidden space-y-1">
+                                        <p id="storage-gb-hint" class="text-xs text-gray-500 dark:text-gray-300" data-lang="storage-gb-hint"></p>
+                                        <div class="flex flex-wrap gap-2" id="storage-gb-variants-container"></div>
+                                    </div>
+                                    <div id="storage-tb-options" class="hidden space-y-1">
+                                        <p id="storage-tb-hint" class="text-xs text-gray-500 dark:text-gray-300" data-lang="storage-tb-hint"></p>
+                                        <div class="flex flex-wrap gap-2" id="storage-tb-variants-container"></div>
+                                    </div>
+                                    <div id="storage-mixed-options" class="hidden">
+                                        <div class="flex flex-wrap gap-2" id="storage-variants-container"></div>
+                                    </div>
                                 </div>
                                 <div id="color-options" class="hidden">
                                     <label class="block text-sm font-semibold mb-2" data-lang="color">রঙ:</label>
@@ -2447,15 +2473,29 @@
         return '';
     };
 
+    const parseBooleanCandidate = (value) => {
+        if (typeof value === 'boolean') return value;
+        if (typeof value === 'number' && Number.isFinite(value)) return value === 1;
+        if (typeof value === 'string') {
+            const normalized = value.trim().toLowerCase();
+            if (['true', '1', 'yes', 'on', 'enabled', 'enable', 'active'].includes(normalized)) return true;
+            if (['false', '0', 'no', 'off', 'disabled', 'disable', 'inactive'].includes(normalized)) return false;
+        }
+        return null;
+    };
+
     const resolveBooleanField = (obj, keys) => {
         for (const key of keys) {
             const candidate = obj?.[key];
-            if (typeof candidate === 'boolean') return candidate;
-            if (typeof candidate === 'number') return candidate === 1;
-            if (typeof candidate === 'string') {
-                const normalized = candidate.trim().toLowerCase();
-                if (['true', '1', 'yes', 'on', 'enabled'].includes(normalized)) return true;
-                if (['false', '0', 'no', 'off', 'disabled'].includes(normalized)) return false;
+            const parsed = parseBooleanCandidate(candidate);
+            if (parsed !== null) return parsed;
+            if (candidate && typeof candidate === 'object') {
+                for (const nestedKey of ['enabled', 'value', 'active', 'isActive']) {
+                    if (nestedKey in candidate) {
+                        const nestedParsed = parseBooleanCandidate(candidate[nestedKey]);
+                        if (nestedParsed !== null) return nestedParsed;
+                    }
+                }
             }
         }
         return false;
@@ -2464,19 +2504,18 @@
     const resolveBooleanFieldDetailed = (obj, keys) => {
         for (const key of keys) {
             const candidate = obj?.[key];
-            if (typeof candidate === 'boolean') {
-                return { value: candidate, explicit: true };
+            const parsed = parseBooleanCandidate(candidate);
+            if (parsed !== null) {
+                return { value: parsed, explicit: true };
             }
-            if (typeof candidate === 'number' && Number.isFinite(candidate)) {
-                return { value: candidate === 1, explicit: true };
-            }
-            if (typeof candidate === 'string') {
-                const normalized = candidate.trim().toLowerCase();
-                if (['true', '1', 'yes', 'on', 'enabled', 'enable', 'active'].includes(normalized)) {
-                    return { value: true, explicit: true };
-                }
-                if (['false', '0', 'no', 'off', 'disabled', 'disable', 'inactive'].includes(normalized)) {
-                    return { value: false, explicit: true };
+            if (candidate && typeof candidate === 'object') {
+                for (const nestedKey of ['enabled', 'value', 'active', 'isActive']) {
+                    if (nestedKey in candidate) {
+                        const nestedParsed = parseBooleanCandidate(candidate[nestedKey]);
+                        if (nestedParsed !== null) {
+                            return { value: nestedParsed, explicit: true };
+                        }
+                    }
                 }
             }
         }
@@ -2560,8 +2599,124 @@
         return results;
     };
 
+    const splitStorageVariants = (all = [], initialGb = [], initialTb = []) => {
+        const gb = [];
+        const tb = [];
+        const mixed = [];
+        const gbSet = new Set();
+        const tbSet = new Set();
+        const mixedSet = new Set();
+        const registry = new Set();
+
+        const pushUnique = (target, value, set) => {
+            if (value === undefined || value === null) return;
+            const trimmed = typeof value === 'string' ? value.trim() : String(value).trim();
+            if (!trimmed) return;
+            const key = trimmed.toLowerCase();
+            if (set.has(key)) return;
+            set.add(key);
+            target.push(trimmed);
+        };
+
+        initialGb.forEach(value => pushUnique(gb, value, gbSet));
+        initialTb.forEach(value => pushUnique(tb, value, tbSet));
+
+        all.forEach(raw => {
+            if (raw === undefined || raw === null) return;
+            const value = typeof raw === 'string' ? raw.trim() : String(raw).trim();
+            if (!value) return;
+            const key = value.toLowerCase();
+            if (registry.has(key)) return;
+            registry.add(key);
+
+            const hasGb = /(gb|gigabyte|giga-byte)/i.test(value);
+            const hasTb = /(tb|terabyte|tera-byte)/i.test(value);
+
+            if (hasGb && !hasTb) {
+                pushUnique(gb, value, gbSet);
+                return;
+            }
+
+            if (hasTb && !hasGb) {
+                pushUnique(tb, value, tbSet);
+                return;
+            }
+
+            if (!mixedSet.has(key)) {
+                mixedSet.add(key);
+                mixed.push(value);
+            }
+        });
+
+        return { gb, tb, mixed };
+    };
+
     const assembleVariantOptions = (raw = {}) => {
         const variantsNode = raw?.variants || raw?.Variants || raw?.variant || null;
+
+        const storageGbExplicit = normalizeVariantList(
+            variantsNode?.storageGb,
+            variantsNode?.StorageGb,
+            variantsNode?.storageGB,
+            variantsNode?.StorageGB,
+            variantsNode?.gb,
+            variantsNode?.GB,
+            variantsNode?.storageGbOptions,
+            variantsNode?.storageGBOptions,
+            raw?.storageGbOptions,
+            raw?.storageGBOptions,
+            raw?.storageGb,
+            raw?.storageGB,
+            raw?.storageGbOption,
+            raw?.storageGBOption,
+            raw?.options?.storageGb,
+            raw?.options?.storageGB,
+            raw?.variantOptions?.storageGb,
+            raw?.variantOptions?.storageGB
+        );
+
+        const storageTbExplicit = normalizeVariantList(
+            variantsNode?.storageTb,
+            variantsNode?.StorageTb,
+            variantsNode?.storageTB,
+            variantsNode?.StorageTB,
+            variantsNode?.tb,
+            variantsNode?.TB,
+            variantsNode?.storageTbOptions,
+            variantsNode?.storageTBOptions,
+            raw?.storageTbOptions,
+            raw?.storageTBOptions,
+            raw?.storageTb,
+            raw?.storageTB,
+            raw?.storageTbOption,
+            raw?.storageTBOption,
+            raw?.options?.storageTb,
+            raw?.options?.storageTB,
+            raw?.variantOptions?.storageTb,
+            raw?.variantOptions?.storageTB
+        );
+
+        const storageAll = normalizeVariantList(
+            storageGbExplicit,
+            storageTbExplicit,
+            variantsNode?.storage,
+            variantsNode?.Storage,
+            variantsNode?.capacity,
+            variantsNode?.Capacity,
+            raw?.storage,
+            raw?.Storage,
+            raw?.storageOptions,
+            raw?.storageOption,
+            raw?.capacity,
+            raw?.Capacity,
+            raw?.options?.storage,
+            raw?.options?.Storage,
+            raw?.variantOptions?.storage,
+            raw?.variantOptions?.Storage
+        );
+
+        const { gb: storageGbOptions, tb: storageTbOptions } = splitStorageVariants(storageAll, storageGbExplicit, storageTbExplicit);
+
         return {
             sizes: normalizeVariantList(
                 variantsNode?.size,
@@ -2579,22 +2734,9 @@
                 raw?.variantOptions?.size,
                 raw?.variantOptions?.sizes
             ),
-            storage: normalizeVariantList(
-                variantsNode?.storage,
-                variantsNode?.Storage,
-                variantsNode?.capacity,
-                variantsNode?.Capacity,
-                raw?.storage,
-                raw?.Storage,
-                raw?.storageOptions,
-                raw?.storageOption,
-                raw?.capacity,
-                raw?.Capacity,
-                raw?.options?.storage,
-                raw?.options?.Storage,
-                raw?.variantOptions?.storage,
-                raw?.variantOptions?.Storage
-            ),
+            storage: storageAll,
+            storageGbOptions,
+            storageTbOptions,
             colors: normalizeVariantList(
                 variantsNode?.color,
                 variantsNode?.Color,
@@ -2727,7 +2869,13 @@
             }
             discountPercent = Math.max(0, discountPercent);
 
-            const { sizes: sizeOptions, storage: storageOptions, colors: colorOptions } = assembleVariantOptions(data);
+            const {
+                sizes: sizeOptions,
+                storage: storageOptions,
+                storageGbOptions,
+                storageTbOptions,
+                colors: colorOptions
+            } = assembleVariantOptions(data);
 
             const megaConfig = (data.megaSale && typeof data.megaSale === 'object') ? data.megaSale : {};
             const megaFlagInfo = resolveBooleanFieldDetailed(data, MEGA_FLAG_KEYS);
@@ -2785,6 +2933,8 @@
                 thumbnails: data.thumbnails || [],
                 sizes: sizeOptions,
                 storage: storageOptions,
+                storageGbOptions,
+                storageTbOptions,
                 colors: colorOptions,
                 stock: data.stock !== undefined ? Number(data.stock) : 1,
                 warrantyText: data.warranty || null,
@@ -2860,6 +3010,13 @@
             }
         }
         return null;
+    };
+
+    // এই ফাংশনটি মিসিং ছিল, এটি যোগ করে দিন
+    const normalizeVariantKey = (val) => {
+        if (val === undefined || val === null) return '';
+        if (typeof val === 'string') return val.trim().toLowerCase();
+        return String(val).trim().toLowerCase();
     };
 
     const parseFirestoreDate = (input) => {
@@ -2952,7 +3109,7 @@
         if (product.megaSale && typeof product.megaSale === 'object') {
             product.megaSale = { ...product.megaSale };
         }
-        return product;
+        return ensureProductVariantArrays(product);
     };
 
     const formatCountdown = (ms) => {
@@ -3313,6 +3470,10 @@
         let discountAmount = 0;
         let appliedCouponCode = null;
         let currentAuthForm = 'login';
+    let flashSaleShowAll = false;
+    let megaSaleShowAll = false;
+    const FLASH_SALE_VISIBLE_LIMIT = 5;
+    const MEGA_SALE_VISIBLE_LIMIT = 5;
     let confirmResolver = null; // Used for the custom confirmation modal
         let chatUnsubscribe = () => {}; // For real-time chat updates
         let allCoupons = []; // Stores all active coupon data
@@ -3390,6 +3551,10 @@
                 'variant-instruction-storage': 'Select the variant or storage you prefer.',
                 'variant-instruction-color': 'Choose the color you like most.',
                 'variant-instruction-final': 'Use the option buttons above before completing your order.',
+                'storage-gb-hint': 'Pick a storage option measured in GB.',
+                'storage-tb-hint': 'Pick a storage capacity measured in TB.',
+                'see-more': 'See More',
+                'see-less': 'Show Less',
                 // Category helpers
                 'all-in-category': 'All in',
                 // Footer
@@ -3530,6 +3695,10 @@
                 'variant-instruction-storage': 'আপনার পছন্দের ভ্যারিয়েন্ট বা অপশন নির্বাচন করুন।',
                 'variant-instruction-color': 'আপনার পছন্দের রঙটি নির্বাচন করুন।',
                 'variant-instruction-final': 'অর্ডার সম্পন্ন করার আগে উপরের অপশনগুলো থেকে নির্বাচন করুন।',
+                'storage-gb-hint': 'GB মাপের স্টোরেজ থেকে পছন্দ করুন।',
+                'storage-tb-hint': 'TB মাপের স্টোরেজ থেকে পছন্দ করুন।',
+                'see-more': 'আরও দেখুন',
+                'see-less': 'কম দেখুন',
                 // Category helpers
                 'all-in-category': 'সকল',
                 // Footer
@@ -3644,7 +3813,7 @@
         }
 
         const DOMElements = {
-            toast: document.getElementById('toast-notification'), toastMessage: document.getElementById('toast-message'), productList: document.getElementById('product-list'), flashSaleSection: document.getElementById('flash-sale-section'), flashSaleGrid: document.getElementById('flash-sale-grid'), flashSaleEmpty: document.getElementById('flash-sale-empty'), flashSaleMasterCountdown: document.getElementById('flash-sale-master-countdown'), flashSaleCountdownLabel: document.getElementById('flash-sale-countdown-label'), megaSaleSection: document.getElementById('mega-sale-section'), megaSaleGrid: document.getElementById('mega-sale-grid'), megaSaleEmpty: document.getElementById('mega-sale-empty'), cartCount: document.getElementById('cart-count'), mobileCartCount: document.getElementById('mobile-cart-count'), cartItems: document.getElementById('cart-items'), cartSubtotal: document.getElementById('cart-subtotal'), deliveryCharge: document.getElementById('delivery-charge'), cartTotal: document.getElementById('cart-total'), wishlistItems: document.getElementById('wishlist-items'), authOptions: document.getElementById('auth-options'), 
+            toast: document.getElementById('toast-notification'), toastMessage: document.getElementById('toast-message'), productList: document.getElementById('product-list'), flashSaleSection: document.getElementById('flash-sale-section'), flashSaleGrid: document.getElementById('flash-sale-grid'), flashSaleEmpty: document.getElementById('flash-sale-empty'), flashSaleMasterCountdown: document.getElementById('flash-sale-master-countdown'), flashSaleCountdownLabel: document.getElementById('flash-sale-countdown-label'), flashSaleToggle: document.getElementById('flash-sale-toggle'), megaSaleSection: document.getElementById('mega-sale-section'), megaSaleGrid: document.getElementById('mega-sale-grid'), megaSaleEmpty: document.getElementById('mega-sale-empty'), megaSaleToggle: document.getElementById('mega-sale-toggle'), cartCount: document.getElementById('cart-count'), mobileCartCount: document.getElementById('mobile-cart-count'), cartItems: document.getElementById('cart-items'), cartSubtotal: document.getElementById('cart-subtotal'), deliveryCharge: document.getElementById('delivery-charge'), cartTotal: document.getElementById('cart-total'), wishlistItems: document.getElementById('wishlist-items'), authOptions: document.getElementById('auth-options'), 
             userProfileView: document.getElementById('user-profile-view'), userPhoto: document.getElementById('user-photo'), userName: document.getElementById('user-name'), userEmail: document.getElementById('user-email'), userMobile: document.getElementById('user-mobile'), userLocation: document.getElementById('user-location'),
             authCardHeading: document.getElementById('auth-card-heading'), authSubtitle: document.getElementById('auth-subtitle'), authHeroIcon: document.querySelector('.auth-hero-icon i'), authTabs: Array.from(document.querySelectorAll('.auth-tab')),
             loginBtn: document.getElementById('login-google-btn'), loginFacebookBtn: document.getElementById('login-facebook-btn'), logoutBtn: document.getElementById('logout-btn'), 
@@ -4744,7 +4913,8 @@
             const fragment = document.createDocumentFragment();
             pageItems.forEach(product => {
                 const productCard = document.createElement('div');
-                const isWished = localWishlistCache.has(product.id);
+                const productId = (product && product.id !== undefined && product.id !== null) ? String(product.id) : '';
+                const isWished = productId ? localWishlistCache.has(productId) : false;
                 const heartClass = isWished ? 'fas text-theme-pink' : 'far text-gray-400';
                 const imageUrl = product.imageUrl || PRODUCT_IMAGE_FALLBACK;
                 const localeStrings = translations[currentLanguage] || translations.en || {};
@@ -4809,7 +4979,7 @@
                 const cartButtonDisabled = isOutOfStock ? 'disabled' : '';
 
                 productCard.className = 'product-card relative bg-white dark:bg-gray-800 rounded-3xl shadow-xl overflow-hidden transform transition-transform hover:-translate-y-2 hover:shadow-2xl flex flex-col';
-                productCard.dataset.productId = product.id;
+                productCard.dataset.productId = productId;
                 productCard.innerHTML = `
                     <div class="relative">
                         ${badgesWrapper}
@@ -4824,8 +4994,8 @@
                         <div class="mt-auto">
                             <div class="mt-2 mb-4">${priceHtml}</div>
                             <div class="flex items-center justify-between">
-                                <button class="add-to-cart text-white py-2 px-4 rounded-full transition-colors shadow-lg ${cartButtonClasses}" ${cartButtonDisabled} data-product-id="${product.id}">${cartButtonText}</button>
-                                <button class="wishlist text-2xl transition-colors" data-product-id="${product.id}"><i class="${heartClass} fa-heart"></i></button>
+                                <button class="add-to-cart text-white py-2 px-4 rounded-full transition-colors shadow-lg ${cartButtonClasses}" ${cartButtonDisabled} data-product-id="${productId}">${cartButtonText}</button>
+                                <button class="wishlist text-2xl transition-colors" data-product-id="${productId}"><i class="${heartClass} fa-heart"></i></button>
                             </div>
                         </div>
                     </div>`;
@@ -4938,6 +5108,7 @@
             const emptyState = DOMElements.flashSaleEmpty;
             const masterCountdown = DOMElements.flashSaleMasterCountdown;
             const countdownLabelEl = DOMElements.flashSaleCountdownLabel;
+            const toggleBtn = DOMElements.flashSaleToggle;
             if (!section || !grid || !masterCountdown || !countdownLabelEl) return;
 
             const localeStrings = translations[currentLanguage] || translations.en || {};
@@ -4986,6 +5157,11 @@
                 masterCountdown.textContent = '--:--:--';
                 countdownLabelEl.dataset.lang = 'flash-sale-countdown-label';
                 countdownLabelEl.textContent = localeStrings['flash-sale-countdown-label'] || countdownLabelEl.textContent;
+                if (toggleBtn) {
+                    toggleBtn.classList.add('hidden');
+                    toggleBtn.setAttribute('aria-expanded', 'false');
+                }
+                flashSaleShowAll = false;
                 return;
             }
 
@@ -4999,7 +5175,25 @@
                 return aTarget - bTarget;
             });
 
-            const visibleDeals = deals.slice(0, 4);
+            const totalDeals = deals.length;
+            const hasExtraDeals = totalDeals > FLASH_SALE_VISIBLE_LIMIT;
+            const showAll = flashSaleShowAll && hasExtraDeals;
+            flashSaleShowAll = showAll;
+            const sliceCount = showAll ? totalDeals : Math.min(FLASH_SALE_VISIBLE_LIMIT, totalDeals);
+            const visibleDeals = deals.slice(0, sliceCount);
+
+            if (toggleBtn) {
+                if (hasExtraDeals) {
+                    toggleBtn.classList.remove('hidden');
+                    const labelKey = showAll ? 'see-less' : 'see-more';
+                    toggleBtn.dataset.lang = labelKey;
+                    toggleBtn.textContent = resolveLocalizedString(labelKey) || (showAll ? 'Show Less' : 'See More');
+                    toggleBtn.setAttribute('aria-expanded', showAll ? 'true' : 'false');
+                } else {
+                    toggleBtn.classList.add('hidden');
+                    toggleBtn.setAttribute('aria-expanded', 'false');
+                }
+            }
 
             grid.innerHTML = '';
             section.classList.remove('hidden');
@@ -5008,7 +5202,7 @@
             let earliestTarget = null;
             visibleDeals.forEach(deal => {
                 const { product, status, displayPrice, comparePrice, countdownTarget } = deal;
-                const productId = product.id;
+                const productId = String(product.id);
                 const safeName = escapeHtml(product.name || '');
                 const imageUrl = product.imageUrl || PRODUCT_IMAGE_FALLBACK;
                 const ratingHtml = renderStars(product.rating || 0);
@@ -5125,6 +5319,7 @@
             const section = DOMElements.megaSaleSection;
             const grid = DOMElements.megaSaleGrid;
             const emptyState = DOMElements.megaSaleEmpty;
+            const toggleBtn = DOMElements.megaSaleToggle;
             if (!section || !grid || !emptyState) return;
 
             const localeStrings = translations[currentLanguage] || translations.en || {};
@@ -5133,7 +5328,6 @@
             const deals = productsArray.map(product => {
                 const mega = product?.megaSale;
                 if (!mega || mega.enabled !== true) return null;
-                if (product?.flashSale?.enabled) return null;
                 const discount = typeof mega.discountPercent === 'number' ? mega.discountPercent : (product?.discountPercent || 0);
                 return { product, mega, discount: Math.max(0, discount || 0) };
             }).filter(Boolean);
@@ -5142,6 +5336,11 @@
                 grid.innerHTML = '';
                 emptyState.classList.remove('hidden');
                 section.classList.add('hidden');
+                if (toggleBtn) {
+                    toggleBtn.classList.add('hidden');
+                    toggleBtn.setAttribute('aria-expanded', 'false');
+                }
+                megaSaleShowAll = false;
                 return;
             }
 
@@ -5149,12 +5348,30 @@
             emptyState.classList.add('hidden');
 
             deals.sort((a, b) => b.discount - a.discount);
-            const visibleDeals = deals.slice(0, 4);
+            const totalDeals = deals.length;
+            const hasExtraDeals = totalDeals > MEGA_SALE_VISIBLE_LIMIT;
+            const showAll = megaSaleShowAll && hasExtraDeals;
+            megaSaleShowAll = showAll;
+            const sliceCount = showAll ? totalDeals : Math.min(MEGA_SALE_VISIBLE_LIMIT, totalDeals);
+            const visibleDeals = deals.slice(0, sliceCount);
+
+            if (toggleBtn) {
+                if (hasExtraDeals) {
+                    toggleBtn.classList.remove('hidden');
+                    const labelKey = showAll ? 'see-less' : 'see-more';
+                    toggleBtn.dataset.lang = labelKey;
+                    toggleBtn.textContent = resolveLocalizedString(labelKey) || (showAll ? 'Show Less' : 'See More');
+                    toggleBtn.setAttribute('aria-expanded', showAll ? 'true' : 'false');
+                } else {
+                    toggleBtn.classList.add('hidden');
+                    toggleBtn.setAttribute('aria-expanded', 'false');
+                }
+            }
 
             grid.innerHTML = '';
 
             visibleDeals.forEach(({ product, mega, discount }) => {
-                const productId = product.id;
+                const productId = String(product.id);
                 const safeName = escapeHtml(product.name || '');
                 const imageUrl = product.imageUrl || PRODUCT_IMAGE_FALLBACK;
                 const ratingHtml = renderStars(product.rating || 0);
@@ -5721,12 +5938,16 @@
         }
 
         function renderFiltersUI() {
-            const active = !!currentCategory || !!currentSubCategory;
             const panel = document.getElementById('filters-panel');
             const toggleBtn = document.getElementById('toggle-filters-btn');
             if (!panel || !toggleBtn) return;
-            toggleBtn.disabled = !active;
-            if (!active) { panel.classList.add('hidden'); return; }
+
+            const hasData = Array.isArray(lastBaseProducts) && lastBaseProducts.length > 0;
+            toggleBtn.disabled = !hasData;
+            if (!hasData) {
+                panel.classList.add('hidden');
+                return;
+            }
 
             const { brands, sizes, colors, minPrice, maxPrice } = deriveAvailableFilters(lastBaseProducts);
             const brandsEl = document.getElementById('filter-brands');
@@ -5788,7 +6009,6 @@
         }
 
         function applyFilters(list) {
-            if (!currentCategory && !currentSubCategory) return list;
             return (list || []).filter(p => {
                 if (activeFilters.brands.size > 0 && (!p.brand || !activeFilters.brands.has(String(p.brand)))) return false;
                 const price = Number(p.price) || 0;
@@ -6073,7 +6293,7 @@
                 });
                 
                 // Manually update the local product data (in productsData array) for immediate UI refresh
-                const productIndex = productsData.findIndex(p => p.id === productId);
+                const productIndex = productsData.findIndex(p => String(p.id) === String(productId));
                 if (productIndex !== -1) {
                     productsData[productIndex].reviews = [...existingReviews, newReview];
                     productsData[productIndex].rating = parseFloat(newAverageRating.toFixed(1));
@@ -6098,11 +6318,17 @@
             const productCard = target.closest('.product-card');
             if (!productCard) return;
 
-            const productId = productCard.dataset.productId;
+            const datasetSource = target.closest('[data-product-id]') || productCard;
+            const rawProductId = datasetSource?.dataset?.productId;
+            const productId = rawProductId !== undefined && rawProductId !== null ? String(rawProductId) : '';
+            if (!productId) {
+                console.warn('Product interaction missing product id', { target });
+                return;
+            }
             
             if (target.closest('.add-to-cart')) {
                 try {
-                    const product = (productsData || []).find(p => p.id === productId);
+                    const product = (productsData || []).find(p => String(p.id) === productId);
                     const required = product ? getRequiredVariants(product) : [];
                     if (required.length > 0) {
                         // Open quick-select modal instead of redirecting to details
@@ -6121,14 +6347,16 @@
         async function showProductDetails(productId, skuEnc = '', modelEnc = '', nameEnc = '') {
             try {
                 selectedVariants = {};
+                const normalizedId = productId !== undefined && productId !== null ? String(productId) : '';
                 const fallbackSku = skuEnc ? decodeURIComponent(skuEnc) : '';
                 const fallbackModel = modelEnc ? decodeURIComponent(modelEnc) : '';
                 const fallbackName = nameEnc ? decodeURIComponent(nameEnc) : '';
 
-                let product = Array.isArray(productsData) ? productsData.find(p => p.id === productId) : null;
+                let product = Array.isArray(productsData) ? productsData.find(p => String(p.id) === normalizedId) : null;
                 if (!product && window.db && typeof window.db === 'object') {
                     try {
-                        const ref = doc(db, 'products', String(productId));
+                        if (!normalizedId) throw new Error('Missing product id');
+                        const ref = doc(db, 'products', normalizedId);
                         const snap = await getDoc(ref);
                         if (snap && snap.exists()) {
                             product = ensureProductVariantArrays({ id: snap.id, ...snap.data() });
@@ -6189,8 +6417,10 @@
                 }
 
                 product = ensureProductVariantArrays(product);
+                const resolvedProductId = product && product.id !== undefined && product.id !== null ? String(product.id) : normalizedId;
+                product.id = resolvedProductId;
                 if (Array.isArray(productsData)) {
-                    const idx = productsData.findIndex(p => p.id === product.id);
+                    const idx = productsData.findIndex(p => String(p.id) === resolvedProductId);
                     if (idx !== -1) {
                         productsData[idx] = { ...productsData[idx], ...product };
                     }
@@ -6334,7 +6564,7 @@
             } catch (e) { console.warn('breadcrumb update failed', e); }
             
             // Populate product details
-            const isWished = localWishlistCache.has(product.id);
+            const isWished = resolvedProductId ? localWishlistCache.has(resolvedProductId) : false;
             const heartClass = isWished ? 'fas text-theme-pink' : 'far text-gray-400';
             
             const productTitleEl = detailsPage.querySelector('#product-title-details');
@@ -6345,18 +6575,19 @@
 
             // --- Model ID Logic ---
             const productModelEl = detailsPage.querySelector('#product-model-details');
-            const modelID = product.modelID || null; 
-
+            const modelIDRaw = product.modelID || null; 
             if (productModelEl) {
-                let displayModelID = '';
-                if (modelID && modelID.trim() !== '') {
-                    displayModelID = translations[currentLanguage]['model-id'].replace('{id}', modelID);
+                const modelTemplate = (translations?.[currentLanguage]?.['model-id']) || (translations?.en?.['model-id']) || 'Product ID: {id}';
+                const modelIdTrimmed = modelIDRaw === undefined || modelIDRaw === null ? '' : String(modelIDRaw).trim();
+                if (modelIdTrimmed) {
                     productModelEl.classList.remove('hidden');
                 } else {
                     productModelEl.classList.add('hidden');
                 }
-                // FIX: Use translation key string and replace {id} with modelID
-                productModelEl.querySelector('#model-text').textContent = translations[currentLanguage]['model-id'].replace('{id}', modelID);
+                const modelTextEl = productModelEl.querySelector('#model-text');
+                if (modelTextEl) {
+                    modelTextEl.textContent = modelTemplate.replace('{id}', modelIdTrimmed || '');
+                }
             }
             // --- END Model ID Logic ---
 
@@ -6365,15 +6596,21 @@
             const warrantyTextFromDB = product.warrantyText || null; 
 
             if (productWarrantyEl) {
-                let displayWarranty = translations[currentLanguage]['no-warranty'];
+                const noWarrantyLabel = (translations?.[currentLanguage]?.['no-warranty']) || (translations?.en?.['no-warranty']) || 'No warranty';
+                let displayWarranty = noWarrantyLabel;
                 let isWarrantyPresent = false;
                 
-                if (warrantyTextFromDB && warrantyTextFromDB.trim() !== '') {
-                    displayWarranty = translations[currentLanguage]['warranty'].replace('{text}', warrantyTextFromDB);
+                const warrantyTrimmed = warrantyTextFromDB === undefined || warrantyTextFromDB === null ? '' : String(warrantyTextFromDB).trim();
+                if (warrantyTrimmed) {
+                    const warrantyTemplate = (translations?.[currentLanguage]?.['warranty']) || (translations?.en?.['warranty']) || 'Warranty: {text}';
+                    displayWarranty = warrantyTemplate.replace('{text}', warrantyTrimmed);
                     isWarrantyPresent = true;
                 }
-                
-                productWarrantyEl.querySelector('#warranty-text').textContent = displayWarranty;
+
+                const warrantyTextEl = productWarrantyEl.querySelector('#warranty-text');
+                if (warrantyTextEl) {
+                    warrantyTextEl.textContent = displayWarranty;
+                }
                 
                 if (isWarrantyPresent) {
                     productWarrantyEl.classList.add('text-green-600');
@@ -6416,10 +6653,10 @@
             }
             
             const addToCartBtn = detailsPage.querySelector('#add-to-cart-details');
-            if (addToCartBtn) addToCartBtn.dataset.productId = productId;
+            if (addToCartBtn) addToCartBtn.dataset.productId = resolvedProductId;
             
             const wishlistBtn = detailsPage.querySelector('#wishlist-details');
-            if (wishlistBtn) wishlistBtn.dataset.productId = productId;
+            if (wishlistBtn) wishlistBtn.dataset.productId = resolvedProductId;
 
             const wishlistIcon = detailsPage.querySelector('#wishlist-details i');
             if (wishlistIcon) wishlistIcon.className = `${heartClass} fa-heart`;
@@ -6463,7 +6700,7 @@
             renderPriceDetails(product);
             renderInfoDetails(product);
             renderAllVariants(product);
-            setupReviewForm(productId); // Setup review form
+            setupReviewForm(resolvedProductId); // Setup review form
             // Render related products based on this product
             try { renderRelatedProducts(product); } catch (e) { console.warn('related products render failed', e); }
 
@@ -6947,13 +7184,27 @@
                 ${variantInfoHtml}`;
         }
 
-        function renderAllVariants(product) {
-            renderVariantOptions('size', product.sizes);
-            renderVariantOptions('storage', product.storage);
-            renderVariantOptions('color', product.colors);
+        function getStorageOptionGroups(product = {}, fallbackList = []) {
+            const all = Array.isArray(product.storage) ? product.storage.filter(Boolean) : Array.isArray(fallbackList) ? fallbackList.filter(Boolean) : [];
+            const gbExplicit = Array.isArray(product.storageGbOptions) ? product.storageGbOptions.filter(Boolean) : [];
+            const tbExplicit = Array.isArray(product.storageTbOptions) ? product.storageTbOptions.filter(Boolean) : [];
+            const { gb, tb, mixed } = splitStorageVariants(all, gbExplicit, tbExplicit);
+            return {
+                gb,
+                tb,
+                mixed,
+                hasAny: gb.length > 0 || tb.length > 0 || mixed.length > 0
+            };
         }
 
-        function renderVariantOptions(variantType, options) {
+        function renderAllVariants(product) {
+            renderSimpleVariantOptions('size', product.sizes);
+            renderStorageVariantOptions(product);
+            renderSimpleVariantOptions('color', product.colors);
+        }
+
+        function renderSimpleVariantOptions(variantType, options) {
+            if (variantType === 'storage') return;
             const containerDiv = document.getElementById(`${variantType}-options`);
             const container = document.getElementById(`${variantType}-variants-container`);
             if (!containerDiv || !container) return;
@@ -6966,7 +7217,6 @@
 
             const accessibleLabels = {
                 size: currentLanguage === 'bn' ? 'সাইজ নির্বাচন' : 'Select size',
-                storage: currentLanguage === 'bn' ? 'ভ্যারিয়েন্ট নির্বাচন' : 'Select variant',
                 color: currentLanguage === 'bn' ? 'রঙ নির্বাচন' : 'Select color'
             };
 
@@ -6984,6 +7234,86 @@
                 return `<button type="button" class="variant-btn" data-variant-type="${variantType}" data-value="${encodedValue}" aria-label="${label}" aria-pressed="false">${safeValue || '-'}</button>`;
             }).join('');
         }
+
+        function renderStorageVariantOptions(product = {}) {
+            const wrapper = document.getElementById('storage-options');
+            const gbWrapper = document.getElementById('storage-gb-options');
+            const tbWrapper = document.getElementById('storage-tb-options');
+            const mixedWrapper = document.getElementById('storage-mixed-options');
+            const gbContainer = document.getElementById('storage-gb-variants-container');
+            const tbContainer = document.getElementById('storage-tb-variants-container');
+            const mixedContainer = document.getElementById('storage-variants-container');
+            const gbHint = document.getElementById('storage-gb-hint');
+            const tbHint = document.getElementById('storage-tb-hint');
+            if (!wrapper || !gbWrapper || !tbWrapper || !mixedWrapper || !gbContainer || !tbContainer || !mixedContainer) return;
+
+            const { gb, tb, mixed, hasAny } = getStorageOptionGroups(product);
+
+            if (!hasAny) {
+                wrapper.classList.add('hidden');
+                gbWrapper.classList.add('hidden');
+                tbWrapper.classList.add('hidden');
+                mixedWrapper.classList.add('hidden');
+                gbContainer.innerHTML = '';
+                tbContainer.innerHTML = '';
+                mixedContainer.innerHTML = '';
+                if (gbHint) gbHint.textContent = '';
+                if (tbHint) tbHint.textContent = '';
+                return;
+            }
+
+            const accessibleLabel = currentLanguage === 'bn' ? 'ভ্যারিয়েন্ট নির্বাচন' : 'Select variant';
+            const selectedStorage = selectedVariants.storage ? String(selectedVariants.storage).trim() : '';
+            const selectedStorageKey = normalizeVariantKey(selectedStorage);
+            const buildButtons = (optionsList) => optionsList.map(option => {
+                const rawValue = option === undefined || option === null ? '' : String(option).trim();
+                const safeValue = escapeHtml(rawValue);
+                const encodedValue = encodeURIComponent(rawValue);
+                const valueKey = normalizeVariantKey(rawValue);
+                const isActive = selectedStorageKey && valueKey && valueKey === selectedStorageKey;
+                const label = `${accessibleLabel}${safeValue ? `: ${safeValue}` : ''}`;
+                return `<button type="button" class="variant-btn${isActive ? ' variant-btn-active' : ''}" data-variant-type="storage" data-value="${encodedValue}" aria-label="${label}" aria-pressed="${isActive ? 'true' : 'false'}">${safeValue || '-'}</button>`;
+            }).join('');
+
+            const gbHintText = translations[currentLanguage]?.['storage-gb-hint'] || (currentLanguage === 'bn' ? 'GB মাপের স্টোরেজ থেকে পছন্দ করুন।' : 'Pick a storage option measured in GB.');
+            const tbHintText = translations[currentLanguage]?.['storage-tb-hint'] || (currentLanguage === 'bn' ? 'TB মাপের স্টোরেজ থেকে পছন্দ করুন।' : 'Pick a storage capacity measured in TB.');
+
+            wrapper.classList.remove('hidden');
+
+            if (gb.length) {
+                gbWrapper.classList.remove('hidden');
+                gbContainer.innerHTML = buildButtons(gb);
+                if (gbHint) {
+                    gbHint.dataset.lang = 'storage-gb-hint';
+                    gbHint.textContent = gbHintText;
+                }
+            } else {
+                gbWrapper.classList.add('hidden');
+                gbContainer.innerHTML = '';
+                if (gbHint) gbHint.textContent = '';
+            }
+
+            if (tb.length) {
+                tbWrapper.classList.remove('hidden');
+                tbContainer.innerHTML = buildButtons(tb);
+                if (tbHint) {
+                    tbHint.dataset.lang = 'storage-tb-hint';
+                    tbHint.textContent = tbHintText;
+                }
+            } else {
+                tbWrapper.classList.add('hidden');
+                tbContainer.innerHTML = '';
+                if (tbHint) tbHint.textContent = '';
+            }
+
+            if (mixed.length) {
+                mixedWrapper.classList.remove('hidden');
+                mixedContainer.innerHTML = buildButtons(mixed);
+            } else {
+                mixedWrapper.classList.add('hidden');
+                mixedContainer.innerHTML = '';
+            }
+        }
         function handleVariantSelection(e) {
             const button = e.target.closest('button[data-variant-type]');
             if (!button) return;
@@ -6997,11 +7327,16 @@
                 }
             })();
             const container = button.parentElement;
-            
-            container.querySelectorAll('button').forEach(btn => {
-                btn.classList.remove(variantType === 'color' ? 'color-variant-active' : 'variant-btn-active');
-                btn.setAttribute('aria-pressed', 'false');
-            });
+            const buttonList = variantType === 'storage'
+                ? document.querySelectorAll('#product-options button[data-variant-type="storage"]')
+                : container?.querySelectorAll('button');
+
+            if (buttonList) {
+                buttonList.forEach(btn => {
+                    btn.classList.remove(variantType === 'color' ? 'color-variant-active' : 'variant-btn-active');
+                    btn.setAttribute('aria-pressed', 'false');
+                });
+            }
             button.classList.add(variantType === 'color' ? 'color-variant-active' : 'variant-btn-active');
             button.setAttribute('aria-pressed', 'true');
             
@@ -7310,7 +7645,10 @@
         function getRequiredVariants(product) {
             const required = [];
             if (product.sizes && product.sizes.length > 0) required.push('size');
-            if (product.storage && product.storage.length > 0) required.push('storage');
+            const storagePresent = (Array.isArray(product.storage) && product.storage.length > 0)
+                || (Array.isArray(product.storageGbOptions) && product.storageGbOptions.length > 0)
+                || (Array.isArray(product.storageTbOptions) && product.storageTbOptions.length > 0);
+            if (storagePresent) required.push('storage');
             if (product.colors && product.colors.length > 0) required.push('color');
             return required;
         }
@@ -7325,7 +7663,7 @@
                 openDrawer('profile-drawer'); 
                 return Promise.reject("User not logged in"); 
             }
-            const product = productsData.find(p => p.id === productId);
+            const product = productsData.find(p => String(p.id) === String(productId));
             if (!product) return Promise.reject("Product not found");
             
             if (Number(product.stock) <= 0) {
@@ -8451,21 +8789,22 @@
         }
         window.closePaymentModal = closePaymentModal;
         
-        // --- Variant Selection Modal Logic ---
-        let currentVariantModal = null; // { productId, action: 'add'|'buy', selected: { size, storage, color } }
+    // --- Variant Selection Modal Logic ---
+    let currentVariantModal = null; // { productId, action: 'add'|'buy', selected: { ... }, product }
 
         function openVariantModal(productId, action = 'add') {
             try {
-                const rawProduct = (productsData || []).find(p => p.id === productId);
+                selectedVariants = {}; // reset any previous selection when reopening the modal
+                const rawProduct = (productsData || []).find(p => String(p.id) === String(productId));
                 if (!rawProduct) return;
                 const product = ensureProductVariantArrays(rawProduct);
                 if (Array.isArray(productsData)) {
-                    const idx = productsData.findIndex(p => p.id === productId);
+                    const idx = productsData.findIndex(p => String(p.id) === String(productId));
                     if (idx !== -1) {
                         productsData[idx] = { ...productsData[idx], ...product };
                     }
                 }
-                currentVariantModal = { productId, action, selected: { ...selectedVariants } };
+                currentVariantModal = { productId, action, selected: { ...selectedVariants }, product };
 
                 // Fill product summary
                 const img = document.getElementById('vm-product-image');
@@ -8500,36 +8839,117 @@
         window.closeVariantModal = closeVariantModal;
 
     function renderVariantOptionsModal(variantType, options, selectedValue = '') {
-            const wrapper = document.getElementById(`vm-${variantType}-options`);
-            const container = document.getElementById(`vm-${variantType}-variants-container`);
-            if (!wrapper || !container) return;
-            if (!options || options.length === 0) {
+        const normalizedSelected = selectedValue === undefined || selectedValue === null ? '' : String(selectedValue).trim();
+
+        if (variantType === 'storage') {
+            const wrapper = document.getElementById('vm-storage-options');
+            const gbWrapper = document.getElementById('vm-storage-gb-options');
+            const tbWrapper = document.getElementById('vm-storage-tb-options');
+            const mixedWrapper = document.getElementById('vm-storage-mixed-options');
+            const gbContainer = document.getElementById('vm-storage-gb-variants-container');
+            const tbContainer = document.getElementById('vm-storage-tb-variants-container');
+            const mixedContainer = document.getElementById('vm-storage-variants-container');
+            const gbHint = document.getElementById('vm-storage-gb-hint');
+            const tbHint = document.getElementById('vm-storage-tb-hint');
+            if (!wrapper || !gbWrapper || !tbWrapper || !mixedWrapper || !gbContainer || !tbContainer || !mixedContainer) return;
+
+            const product = currentVariantModal?.product || {};
+            const { gb, tb, mixed, hasAny } = getStorageOptionGroups(product, options);
+
+            if (!hasAny) {
                 wrapper.classList.add('hidden');
-                container.innerHTML = '';
+                gbWrapper.classList.add('hidden');
+                tbWrapper.classList.add('hidden');
+                mixedWrapper.classList.add('hidden');
+                gbContainer.innerHTML = '';
+                tbContainer.innerHTML = '';
+                mixedContainer.innerHTML = '';
+                if (gbHint) gbHint.textContent = '';
+                if (tbHint) tbHint.textContent = '';
                 return;
             }
-            const accessibleLabels = {
-                size: currentLanguage === 'bn' ? 'সাইজ নির্বাচন' : 'Select size',
-                storage: currentLanguage === 'bn' ? 'ভ্যারিয়েন্ট নির্বাচন' : 'Select variant',
-                color: currentLanguage === 'bn' ? 'রঙ নির্বাচন' : 'Select color'
-            };
 
-            wrapper.classList.remove('hidden');
-            container.innerHTML = options.map(option => {
+            const accessibleLabel = currentLanguage === 'bn' ? 'ভ্যারিয়েন্ট নির্বাচন' : 'Select variant';
+            const buildButtons = (list) => list.map(option => {
                 const rawValue = option === undefined || option === null ? '' : String(option).trim();
                 const safeValue = escapeHtml(rawValue);
                 const encodedValue = encodeURIComponent(rawValue);
-                if (variantType === 'color') {
-                    const sanitizedColor = rawValue.replace(/[^#a-zA-Z0-9(),.%\s-]/g, '');
-                    const label = `${accessibleLabels.color}${safeValue ? `: ${safeValue}` : ''}`;
-                    const isActive = selectedValue && rawValue === selectedValue;
-                    return `<button type="button" class="color-variant${isActive ? ' color-variant-active' : ''}" style="background:${sanitizedColor || '#d1d5db'};" data-vm-variant-type="color" data-value="${encodedValue}" aria-label="${label}" aria-pressed="${isActive ? 'true' : 'false'}" title="${label}"></button>`;
-                }
-                const label = `${accessibleLabels[variantType]}${safeValue ? `: ${safeValue}` : ''}`;
-                const isActive = selectedValue && rawValue === selectedValue;
-                return `<button type="button" class="variant-btn${isActive ? ' variant-btn-active' : ''}" data-vm-variant-type="${variantType}" data-value="${encodedValue}" aria-label="${label}" aria-pressed="${isActive ? 'true' : 'false'}">${safeValue || '-'}</button>`;
+                const isActive = normalizedSelected && rawValue === normalizedSelected;
+                const label = `${accessibleLabel}${safeValue ? `: ${safeValue}` : ''}`;
+                return `<button type="button" class="variant-btn${isActive ? ' variant-btn-active' : ''}" data-vm-variant-type="storage" data-value="${encodedValue}" aria-label="${label}" aria-pressed="${isActive ? 'true' : 'false'}">${safeValue || '-'}</button>`;
             }).join('');
+
+            const gbHintText = translations[currentLanguage]?.['storage-gb-hint'] || (currentLanguage === 'bn' ? 'GB মাপের স্টোরেজ থেকে পছন্দ করুন।' : 'Pick a storage option measured in GB.');
+            const tbHintText = translations[currentLanguage]?.['storage-tb-hint'] || (currentLanguage === 'bn' ? 'TB মাপের স্টোরেজ থেকে পছন্দ করুন।' : 'Pick a storage capacity measured in TB.');
+
+            wrapper.classList.remove('hidden');
+
+            if (gb.length) {
+                gbWrapper.classList.remove('hidden');
+                gbContainer.innerHTML = buildButtons(gb);
+                if (gbHint) {
+                    gbHint.dataset.lang = 'storage-gb-hint';
+                    gbHint.textContent = gbHintText;
+                }
+            } else {
+                gbWrapper.classList.add('hidden');
+                gbContainer.innerHTML = '';
+                if (gbHint) gbHint.textContent = '';
+            }
+
+            if (tb.length) {
+                tbWrapper.classList.remove('hidden');
+                tbContainer.innerHTML = buildButtons(tb);
+                if (tbHint) {
+                    tbHint.dataset.lang = 'storage-tb-hint';
+                    tbHint.textContent = tbHintText;
+                }
+            } else {
+                tbWrapper.classList.add('hidden');
+                tbContainer.innerHTML = '';
+                if (tbHint) tbHint.textContent = '';
+            }
+
+            if (mixed.length) {
+                mixedWrapper.classList.remove('hidden');
+                mixedContainer.innerHTML = buildButtons(mixed);
+            } else {
+                mixedWrapper.classList.add('hidden');
+                mixedContainer.innerHTML = '';
+            }
+
+            return;
         }
+
+        const wrapper = document.getElementById(`vm-${variantType}-options`);
+        const container = document.getElementById(`vm-${variantType}-variants-container`);
+        if (!wrapper || !container) return;
+        if (!options || options.length === 0) {
+            wrapper.classList.add('hidden');
+            container.innerHTML = '';
+            return;
+        }
+        const accessibleLabels = {
+            size: currentLanguage === 'bn' ? 'সাইজ নির্বাচন' : 'Select size',
+            color: currentLanguage === 'bn' ? 'রঙ নির্বাচন' : 'Select color'
+        };
+
+        wrapper.classList.remove('hidden');
+        container.innerHTML = options.map(option => {
+            const rawValue = option === undefined || option === null ? '' : String(option).trim();
+            const safeValue = escapeHtml(rawValue);
+            const encodedValue = encodeURIComponent(rawValue);
+            if (variantType === 'color') {
+                const sanitizedColor = rawValue.replace(/[^#a-zA-Z0-9(),.%\s-]/g, '');
+                const label = `${accessibleLabels.color}${safeValue ? `: ${safeValue}` : ''}`;
+                const isActive = normalizedSelected && rawValue === normalizedSelected;
+                return `<button type="button" class="color-variant${isActive ? ' color-variant-active' : ''}" style="background:${sanitizedColor || '#d1d5db'};" data-vm-variant-type="color" data-value="${encodedValue}" aria-label="${label}" aria-pressed="${isActive ? 'true' : 'false'}" title="${label}"></button>`;
+            }
+            const label = `${accessibleLabels[variantType]}${safeValue ? `: ${safeValue}` : ''}`;
+            const isActive = normalizedSelected && rawValue === normalizedSelected;
+            return `<button type="button" class="variant-btn${isActive ? ' variant-btn-active' : ''}" data-vm-variant-type="${variantType}" data-value="${encodedValue}" aria-label="${label}" aria-pressed="${isActive ? 'true' : 'false'}">${safeValue || '-'}</button>`;
+        }).join('');
+    }
 
         function highlightMissingVariantUIForModal(missingTypes = []) {
             try {
@@ -8555,10 +8975,16 @@
                 }
             })();
             const container = btn.parentElement;
-            container.querySelectorAll('button').forEach(b => {
-                b.classList.remove(vmVariantType === 'color' ? 'color-variant-active' : 'variant-btn-active');
-                b.setAttribute('aria-pressed', 'false');
-            });
+            const buttonList = vmVariantType === 'storage'
+                ? document.querySelectorAll('#variant-modal-options button[data-vm-variant-type="storage"]')
+                : container?.querySelectorAll('button');
+
+            if (buttonList) {
+                buttonList.forEach(b => {
+                    b.classList.remove(vmVariantType === 'color' ? 'color-variant-active' : 'variant-btn-active');
+                    b.setAttribute('aria-pressed', 'false');
+                });
+            }
             btn.classList.add(vmVariantType === 'color' ? 'color-variant-active' : 'variant-btn-active');
             btn.setAttribute('aria-pressed', 'true');
             currentVariantModal.selected[vmVariantType] = decodedValue;
@@ -9631,7 +10057,8 @@
             doc.setFontSize(11);
             doc.setFont("helvetica", "normal");
             doc.setTextColor(51);
-            doc.text(`Name: ${order.userName || 'N/A'}`, marginX, y);
+            const customerName = order.shippingAddress?.name || order.userName || 'Valued Customer';
+            doc.text(`Name: ${customerName}`, marginX, y);
             y += 5;
             doc.text(`Mobile: ${order.userMobile || 'N/A'}`, marginX, y);
             y += 5;
@@ -9869,6 +10296,22 @@
             document.addEventListener('click', handleProductCardClick); // Delegated click handler
             document.getElementById('product-options').addEventListener('click', handleVariantSelection);
 
+            if (DOMElements.flashSaleToggle && DOMElements.flashSaleToggle.dataset.boundToggle !== 'true') {
+                DOMElements.flashSaleToggle.addEventListener('click', () => {
+                    flashSaleShowAll = !flashSaleShowAll;
+                    renderFlashSaleSection(productsData);
+                });
+                DOMElements.flashSaleToggle.dataset.boundToggle = 'true';
+            }
+
+            if (DOMElements.megaSaleToggle && DOMElements.megaSaleToggle.dataset.boundToggle !== 'true') {
+                DOMElements.megaSaleToggle.addEventListener('click', () => {
+                    megaSaleShowAll = !megaSaleShowAll;
+                    renderMegaSaleSection(productsData);
+                });
+                DOMElements.megaSaleToggle.dataset.boundToggle = 'true';
+            }
+
             const productImageContainer = document.getElementById('product-image-container');
             if (productImageContainer) {
                 productImageContainer.addEventListener('mousemove', handleImageZoom);
@@ -9935,7 +10378,7 @@
                     detailsAddBtn.addEventListener('click', (e) => {
                         const productId = e.currentTarget.dataset.productId;
                         if (!productId) return;
-                        const product = (productsData || []).find(p => p.id === productId);
+                        const product = (productsData || []).find(p => String(p.id) === String(productId));
                         const required = product ? getRequiredVariants(product) : [];
                         const missing = required.filter(t => !selectedVariants[t]);
                         if (missing.length > 0) {
@@ -9956,7 +10399,7 @@
                     buyNowBtn.addEventListener('click', () => {
                         const productId = detailsAddBtn?.dataset.productId || '';
                         if (!productId) return;
-                        const product = (productsData || []).find(p => p.id === productId);
+                        const product = (productsData || []).find(p => String(p.id) === String(productId));
                         const required = product ? getRequiredVariants(product) : [];
                         const missing = required.filter(t => !selectedVariants[t]);
                         if (missing.length > 0) {
