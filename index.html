@@ -92,6 +92,352 @@
             height: 40px;
             animation: spin 2s linear infinite;
         }
+        .preloader-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: clamp(1.5rem, 6vw, 3.2rem);
+            background: linear-gradient(135deg, rgba(241, 245, 249, 0.96), rgba(255, 255, 255, 0.92));
+            backdrop-filter: blur(12px);
+            transition: opacity 0.3s ease;
+        }
+        html.dark .preloader-overlay {
+            background: linear-gradient(135deg, rgba(17, 24, 39, 0.94), rgba(15, 23, 42, 0.92));
+        }
+        .preloader-overlay-hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .preloader-inner {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: clamp(2rem, 4vw, 2.9rem);
+            width: 100%;
+            max-width: 1420px;
+            padding: clamp(1.8rem, 3.5vw, 2.8rem);
+            border-radius: 32px;
+            background: rgba(255, 255, 255, 0.78);
+            border: 1px solid rgba(148, 163, 184, 0.22);
+            box-shadow: 0 34px 74px -48px rgba(15, 23, 42, 0.55);
+        }
+        html.dark .preloader-inner {
+            background: rgba(17, 24, 39, 0.78);
+            border-color: rgba(51, 65, 85, 0.42);
+            box-shadow: 0 38px 86px -54px rgba(2, 6, 23, 0.9);
+        }
+        .preloader-orbit {
+            position: relative;
+            --orbit-size: clamp(220px, 42vw, 280px);
+            --logo-size: clamp(44px, 9vw, 60px);
+            --orbit-gap: clamp(12px, 2.8vw, 18px);
+            width: var(--orbit-size);
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            align-self: center;
+        }
+        .preloader-orbit::before {
+            content: '';
+            position: absolute;
+            inset: clamp(18px, 4vw, 28px);
+            border-radius: 50%;
+            border: 1px dashed rgba(148, 163, 184, 0.3);
+            box-shadow: inset 0 0 0 1px rgba(203, 213, 225, 0.18);
+        }
+        html.dark .preloader-orbit::before {
+            border-color: rgba(71, 85, 105, 0.38);
+            box-shadow: inset 0 0 0 1px rgba(51, 65, 85, 0.28);
+        }
+        .preloader-orbit-track {
+            position: absolute;
+            inset: 0;
+            animation: preloaderOrbitSpin 5.8s linear infinite;
+        }
+        .preloader-orbit-logo {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: var(--logo-size);
+            height: var(--logo-size);
+            margin: calc(var(--logo-size) / -2);
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.88);
+            box-shadow: 0 16px 32px -24px rgba(15, 23, 42, 0.55);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: rotate(calc(var(--slot) * 45deg)) translateX(calc((var(--orbit-size) / 2) - (var(--logo-size) / 1.4) - var(--orbit-gap))) rotate(calc(var(--slot) * -45deg));
+        }
+        html.dark .preloader-orbit-logo {
+            background: rgba(17, 24, 39, 0.85);
+            box-shadow: 0 20px 36px -26px rgba(0, 0, 0, 0.75);
+        }
+        .preloader-orbit-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 6px 12px rgba(79, 70, 229, 0.24));
+            animation: preloaderOrbitCounter 5.8s linear infinite;
+        }
+        .preloader-orbit-core {
+            position: relative;
+            z-index: 2;
+            width: clamp(110px, 22vw, 140px);
+            aspect-ratio: 1;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at 30% 30%, rgba(99, 102, 241, 0.24), rgba(79, 70, 229, 0.22), rgba(14, 116, 144, 0.18));
+            box-shadow: 0 24px 48px -36px rgba(37, 99, 235, 0.45);
+        }
+        html.dark .preloader-orbit-core {
+            background: radial-gradient(circle at 30% 30%, rgba(59, 130, 246, 0.28), rgba(79, 70, 229, 0.24), rgba(17, 24, 39, 0.78));
+            box-shadow: 0 28px 60px -40px rgba(30, 64, 175, 0.6);
+        }
+        .preloader-core-logo {
+            width: clamp(72px, 15vw, 105px);
+            opacity: 0.88;
+            filter: drop-shadow(0 12px 22px rgba(79, 70, 229, 0.28));
+            animation: preloaderCorePulse 3.4s ease-in-out infinite;
+        }
+        .preloader-grid {
+            display: grid;
+            width: 100%;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: clamp(1.1rem, 2.4vw, 1.9rem);
+            flex: 1 1 auto;
+        }
+        .preloader-card {
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+            padding: clamp(0.95rem, 2vw, 1.2rem);
+            border-radius: 1.1rem;
+            background: rgba(248, 250, 252, 0.78);
+            border: 1px solid rgba(209, 213, 219, 0.6);
+            box-shadow: 0 18px 34px -30px rgba(15, 23, 42, 0.55);
+        }
+        html.dark .preloader-card {
+            background: rgba(30, 41, 59, 0.78);
+            border-color: rgba(71, 85, 105, 0.45);
+            box-shadow: 0 22px 38px -32px rgba(0, 0, 0, 0.75);
+        }
+        .preloader-shimmer {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(90deg, rgba(226, 232, 240, 0.16) 0%, rgba(203, 213, 225, 0.52) 50%, rgba(226, 232, 240, 0.16) 100%);
+            background-size: 200% 100%;
+            animation: preloaderShimmer 1.25s ease-in-out infinite;
+            border-radius: 0.85rem;
+        }
+        html.dark .preloader-shimmer {
+            background: linear-gradient(90deg, rgba(71, 85, 105, 0.28) 0%, rgba(148, 163, 184, 0.48) 50%, rgba(71, 85, 105, 0.28) 100%);
+        }
+        .preloader-tag {
+            width: 44%;
+            height: 18px;
+            border-radius: 9999px;
+        }
+        .preloader-thumb {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 4 / 5;
+            min-height: 170px;
+            border-radius: 1.05rem;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            isolation: isolate;
+        }
+        .preloader-thumb-bg {
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+        }
+        .preloader-thumb-core {
+            position: relative;
+            z-index: 1;
+            width: clamp(96px, 32%, 132px);
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .preloader-thumb-core::before {
+            content: '';
+            position: absolute;
+            inset: clamp(-18px, -3vw, -12px);
+            border-radius: 9999px;
+            background: radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.22), rgba(236, 72, 153, 0.18), rgba(14, 116, 144, 0.12));
+            filter: blur(14px);
+            opacity: 0.8;
+            z-index: -1;
+        }
+        html.dark .preloader-thumb-core::before {
+            background: radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.24), rgba(129, 140, 248, 0.2), rgba(37, 99, 235, 0.12));
+            filter: blur(16px);
+        }
+        .preloader-thumb-logo {
+            width: 70%;
+            max-width: 92px;
+            opacity: 0.9;
+            filter: drop-shadow(0 10px 20px rgba(79, 70, 229, 0.3));
+            animation: preloaderCorePulse 3.6s ease-in-out infinite;
+        }
+        .preloader-thumb-ring {
+            position: absolute;
+            inset: clamp(-18px, -3vw, -12px);
+            border-radius: 9999px;
+            border: 1.5px dashed rgba(148, 163, 184, 0.35);
+            pointer-events: none;
+        }
+        html.dark .preloader-thumb-ring {
+            border-color: rgba(100, 116, 139, 0.5);
+        }
+        .preloader-thumb-ring::before {
+            content: '';
+            position: absolute;
+            inset: clamp(10px, 2.2vw, 16px);
+            border-radius: inherit;
+            border: 1px solid rgba(79, 70, 229, 0.18);
+            opacity: 0.6;
+        }
+        html.dark .preloader-thumb-ring::before {
+            border-color: rgba(165, 180, 252, 0.22);
+        }
+        .preloader-thumb-ring-track {
+            position: absolute;
+            inset: 0;
+            animation: preloaderThumbRingSpin 3.6s linear infinite;
+        }
+        .preloader-thumb-dot {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            --dot-size: clamp(8px, 2vw, 12px);
+            width: var(--dot-size);
+            height: var(--dot-size);
+            border-radius: 9999px;
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.9), rgba(236, 72, 153, 0.82));
+            box-shadow: 0 6px 12px -6px rgba(79, 70, 229, 0.6);
+            transform: translate(-50%, -50%) rotate(calc(var(--dot-index) * 120deg)) translateX(clamp(36px, 10vw, 58px));
+        }
+        .preloader-thumb-dot:nth-of-type(2) {
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.85), rgba(99, 102, 241, 0.88));
+        }
+        .preloader-thumb-dot:nth-of-type(3) {
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.92), rgba(129, 140, 248, 0.85));
+        }
+        html.dark .preloader-thumb-dot {
+            box-shadow: 0 6px 12px -6px rgba(30, 64, 175, 0.7);
+        }
+        .preloader-lines {
+            display: flex;
+            flex-direction: column;
+            gap: 0.55rem;
+        }
+        .preloader-line {
+            height: 14px;
+            border-radius: 9999px;
+        }
+        .preloader-line-lg {
+            width: 82%;
+        }
+        .preloader-line-md {
+            width: 66%;
+        }
+        .preloader-line-sm {
+            width: 48%;
+        }
+        .preloader-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.9rem;
+            padding-top: 0.2rem;
+        }
+        .preloader-price {
+            width: 38%;
+            height: 20px;
+            border-radius: 9999px;
+        }
+        .preloader-cta {
+            width: 36%;
+            height: 28px;
+            border-radius: 9999px;
+        }
+        @supports not (aspect-ratio: 1) {
+            .preloader-thumb {
+                min-height: 0;
+                padding-top: 125%;
+            }
+            .preloader-thumb-core {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+        }
+        @media (max-width: 640px) {
+            .preloader-inner {
+                padding: 1.4rem;
+                border-radius: 24px;
+                gap: 1.75rem;
+            }
+            .preloader-orbit {
+                --orbit-size: min(220px, 70vw);
+                --logo-size: clamp(38px, 16vw, 52px);
+                --orbit-gap: clamp(10px, 3vw, 14px);
+            }
+            .preloader-grid {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+                gap: 1.1rem;
+            }
+            .preloader-card {
+                padding: 0.95rem;
+            }
+            .preloader-thumb {
+                min-height: 150px;
+            }
+        }
+        @media (max-width: 480px) {
+            .preloader-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+        @keyframes preloaderOrbitSpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes preloaderOrbitCounter {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(-360deg); }
+        }
+        @keyframes preloaderCorePulse {
+            0%, 100% {
+                transform: scale(0.95);
+                opacity: 0.82;
+            }
+            50% {
+                transform: scale(1.05);
+                opacity: 0.95;
+            }
+        }
+        @keyframes preloaderThumbRingSpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes preloaderShimmer {
+            0% { background-position: -150% 0; }
+            100% { background-position: 150% 0; }
+        }
         html.dark .language-option-active {
             background-color: rgba(74, 123, 237, 0.25);
             color: #cbd5f5;
@@ -980,6 +1326,308 @@
 </style>
 </head>
 <body class="bg-theme-light text-dark font-sans leading-relaxed transition-colors duration-300 dark:bg-gray-900 dark:text-gray-100">
+    <!-- Global Preloader -->
+    <div id="preloader" class="preloader-overlay" role="status" aria-label="TangailBuzz content loading">
+        <div class="preloader-inner">
+            <div class="preloader-orbit">
+                <div class="preloader-orbit-core">
+                    <img src="https://firebasestorage.googleapis.com/v0/b/tangailbuzz47.firebasestorage.app/o/LOGO%2Fgdrg_upscaled%20(1).png?alt=media&token=05076826-d4f3-4b22-a569-c4a15fd5c5ad" alt="TangailBuzz logo" class="preloader-core-logo">
+                </div>
+                <div class="preloader-orbit-track">
+                    <div class="preloader-orbit-logo" style="--slot: 0;">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/tangailbuzz47.firebasestorage.app/o/LOGO%2Fgdrg_upscaled%20(1).png?alt=media&token=05076826-d4f3-4b22-a569-c4a15fd5c5ad" alt="TangailBuzz icon">
+                    </div>
+                    <div class="preloader-orbit-logo" style="--slot: 1;">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/tangailbuzz47.firebasestorage.app/o/LOGO%2Fgdrg_upscaled%20(1).png?alt=media&token=05076826-d4f3-4b22-a569-c4a15fd5c5ad" alt="TangailBuzz icon">
+                    </div>
+                    <div class="preloader-orbit-logo" style="--slot: 2;">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/tangailbuzz47.firebasestorage.app/o/LOGO%2Fgdrg_upscaled%20(1).png?alt=media&token=05076826-d4f3-4b22-a569-c4a15fd5c5ad" alt="TangailBuzz icon">
+                    </div>
+                    <div class="preloader-orbit-logo" style="--slot: 3;">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/tangailbuzz47.firebasestorage.app/o/LOGO%2Fgdrg_upscaled%20(1).png?alt=media&token=05076826-d4f3-4b22-a569-c4a15fd5c5ad" alt="TangailBuzz icon">
+                    </div>
+                    <div class="preloader-orbit-logo" style="--slot: 4;">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/tangailbuzz47.firebasestorage.app/o/LOGO%2Fgdrg_upscaled%20(1).png?alt=media&token=05076826-d4f3-4b22-a569-c4a15fd5c5ad" alt="TangailBuzz icon">
+                    </div>
+                    <div class="preloader-orbit-logo" style="--slot: 5;">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/tangailbuzz47.firebasestorage.app/o/LOGO%2Fgdrg_upscaled%20(1).png?alt=media&token=05076826-d4f3-4b22-a569-c4a15fd5c5ad" alt="TangailBuzz icon">
+                    </div>
+                    <div class="preloader-orbit-logo" style="--slot: 6;">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/tangailbuzz47.firebasestorage.app/o/LOGO%2Fgdrg_upscaled%20(1).png?alt=media&token=05076826-d4f3-4b22-a569-c4a15fd5c5ad" alt="TangailBuzz icon">
+                    </div>
+                    <div class="preloader-orbit-logo" style="--slot: 7;">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/tangailbuzz47.firebasestorage.app/o/LOGO%2Fgdrg_upscaled%20(1).png?alt=media&token=05076826-d4f3-4b22-a569-c4a15fd5c5ad" alt="TangailBuzz icon">
+                    </div>
+                </div>
+            </div>
+            <div class="preloader-grid" aria-hidden="true">
+                <div class="preloader-card">
+                    <div class="preloader-tag preloader-shimmer"></div>
+                    <div class="preloader-thumb">
+                        <div class="preloader-thumb-bg preloader-shimmer"></div>
+                        <div class="preloader-thumb-core">
+                            <div class="preloader-thumb-ring">
+                                <div class="preloader-thumb-ring-track">
+                                    <span class="preloader-thumb-dot" style="--dot-index: 0;"></span>
+                                    <span class="preloader-thumb-dot" style="--dot-index: 1;"></span>
+                                    <span class="preloader-thumb-dot" style="--dot-index: 2;"></span>
+                                </div>
+                            </div>
+                            <img src="https://firebasestorage.googleapis.com/v0/b/tangailbuzz47.firebasestorage.app/o/LOGO%2Fgdrg_upscaled%20(1).png?alt=media&token=05076826-d4f3-4b22-a569-c4a15fd5c5ad" alt="TangailBuzz icon" class="preloader-thumb-logo">
+                        </div>
+                    </div>
+                    <div class="preloader-lines">
+                        <div class="preloader-line preloader-line-lg preloader-shimmer"></div>
+                        <div class="preloader-line preloader-line-md preloader-shimmer"></div>
+                    </div>
+                    <div class="preloader-meta">
+                        <div class="preloader-price preloader-shimmer"></div>
+                        <div class="preloader-cta preloader-shimmer"></div>
+                    </div>
+                </div>
+                <div class="preloader-card">
+                    <div class="preloader-tag preloader-shimmer"></div>
+                    <div class="preloader-thumb">
+                        <div class="preloader-thumb-bg preloader-shimmer"></div>
+                        <div class="preloader-thumb-core">
+                            <div class="preloader-thumb-ring">
+                                <div class="preloader-thumb-ring-track">
+                                    <span class="preloader-thumb-dot" style="--dot-index: 0;"></span>
+                                    <span class="preloader-thumb-dot" style="--dot-index: 1;"></span>
+                                    <span class="preloader-thumb-dot" style="--dot-index: 2;"></span>
+                                </div>
+                            </div>
+                            <img src="https://firebasestorage.googleapis.com/v0/b/tangailbuzz47.firebasestorage.app/o/LOGO%2Fgdrg_upscaled%20(1).png?alt=media&token=05076826-d4f3-4b22-a569-c4a15fd5c5ad" alt="TangailBuzz icon" class="preloader-thumb-logo">
+                        </div>
+                    </div>
+                    <div class="preloader-lines">
+                        <div class="preloader-line preloader-line-lg preloader-shimmer"></div>
+                        <div class="preloader-line preloader-line-sm preloader-shimmer"></div>
+                    </div>
+                    <div class="preloader-meta">
+                        <div class="preloader-price preloader-shimmer"></div>
+                        <div class="preloader-cta preloader-shimmer"></div>
+                    </div>
+                </div>
+                <div class="preloader-card">
+                    <div class="preloader-tag preloader-shimmer"></div>
+                    <div class="preloader-thumb">
+                        <div class="preloader-thumb-bg preloader-shimmer"></div>
+                        <div class="preloader-thumb-core">
+                            <div class="preloader-thumb-ring">
+                                <div class="preloader-thumb-ring-track">
+                                    <span class="preloader-thumb-dot" style="--dot-index: 0;"></span>
+                                    <span class="preloader-thumb-dot" style="--dot-index: 1;"></span>
+                                    <span class="preloader-thumb-dot" style="--dot-index: 2;"></span>
+                                </div>
+                            </div>
+                            <img src="https://firebasestorage.googleapis.com/v0/b/tangailbuzz47.firebasestorage.app/o/LOGO%2Fgdrg_upscaled%20(1).png?alt=media&token=05076826-d4f3-4b22-a569-c4a15fd5c5ad" alt="TangailBuzz icon" class="preloader-thumb-logo">
+                        </div>
+                    </div>
+                    <div class="preloader-lines">
+                        <div class="preloader-line preloader-line-lg preloader-shimmer"></div>
+                        <div class="preloader-line preloader-line-md preloader-shimmer"></div>
+                    </div>
+                    <div class="preloader-meta">
+                        <div class="preloader-price preloader-shimmer"></div>
+                        <div class="preloader-cta preloader-shimmer"></div>
+                    </div>
+                </div>
+                <div class="preloader-card">
+                    <div class="preloader-tag preloader-shimmer"></div>
+                    <div class="preloader-thumb">
+                        <div class="preloader-thumb-bg preloader-shimmer"></div>
+                        <div class="preloader-thumb-core">
+                            <div class="preloader-thumb-ring">
+                                <div class="preloader-thumb-ring-track">
+                                    <span class="preloader-thumb-dot" style="--dot-index: 0;"></span>
+                                    <span class="preloader-thumb-dot" style="--dot-index: 1;"></span>
+                                    <span class="preloader-thumb-dot" style="--dot-index: 2;"></span>
+                                </div>
+                            </div>
+                            <img src="https://firebasestorage.googleapis.com/v0/b/tangailbuzz47.firebasestorage.app/o/LOGO%2Fgdrg_upscaled%20(1).png?alt=media&token=05076826-d4f3-4b22-a569-c4a15fd5c5ad" alt="TangailBuzz icon" class="preloader-thumb-logo">
+                        </div>
+                    </div>
+                    <div class="preloader-lines">
+                        <div class="preloader-line preloader-line-lg preloader-shimmer"></div>
+                        <div class="preloader-line preloader-line-sm preloader-shimmer"></div>
+                    </div>
+                    <div class="preloader-meta">
+                        <div class="preloader-price preloader-shimmer"></div>
+                        <div class="preloader-cta preloader-shimmer"></div>
+                    </div>
+                </div>
+                <div class="preloader-card">
+                    <div class="preloader-tag preloader-shimmer"></div>
+                    <div class="preloader-thumb">
+                        <div class="preloader-thumb-bg preloader-shimmer"></div>
+                        <div class="preloader-thumb-core">
+                            <div class="preloader-thumb-ring">
+                                <div class="preloader-thumb-ring-track">
+                                    <span class="preloader-thumb-dot" style="--dot-index: 0;"></span>
+                                    <span class="preloader-thumb-dot" style="--dot-index: 1;"></span>
+                                    <span class="preloader-thumb-dot" style="--dot-index: 2;"></span>
+                                </div>
+                            </div>
+                            <img src="https://firebasestorage.googleapis.com/v0/b/tangailbuzz47.firebasestorage.app/o/LOGO%2Fgdrg_upscaled%20(1).png?alt=media&token=05076826-d4f3-4b22-a569-c4a15fd5c5ad" alt="TangailBuzz icon" class="preloader-thumb-logo">
+                        </div>
+                    </div>
+                    <div class="preloader-lines">
+                        <div class="preloader-line preloader-line-lg preloader-shimmer"></div>
+                        <div class="preloader-line preloader-line-md preloader-shimmer"></div>
+                    </div>
+                    <div class="preloader-meta">
+                        <div class="preloader-price preloader-shimmer"></div>
+                        <div class="preloader-cta preloader-shimmer"></div>
+                    </div>
+                </div>
+                <div class="preloader-card">
+                    <div class="preloader-tag preloader-shimmer"></div>
+                    <div class="preloader-thumb">
+                        <div class="preloader-thumb-bg preloader-shimmer"></div>
+                        <div class="preloader-thumb-core">
+                            <div class="preloader-thumb-ring">
+                                <div class="preloader-thumb-ring-track">
+                                    <span class="preloader-thumb-dot" style="--dot-index: 0;"></span>
+                                    <span class="preloader-thumb-dot" style="--dot-index: 1;"></span>
+                                    <span class="preloader-thumb-dot" style="--dot-index: 2;"></span>
+                                </div>
+                            </div>
+                            <img src="https://firebasestorage.googleapis.com/v0/b/tangailbuzz47.firebasestorage.app/o/LOGO%2Fgdrg_upscaled%20(1).png?alt=media&token=05076826-d4f3-4b22-a569-c4a15fd5c5ad" alt="TangailBuzz icon" class="preloader-thumb-logo">
+                        </div>
+                    </div>
+                    <div class="preloader-lines">
+                        <div class="preloader-line preloader-line-lg preloader-shimmer"></div>
+                        <div class="preloader-line preloader-line-sm preloader-shimmer"></div>
+                    </div>
+                    <div class="preloader-meta">
+                        <div class="preloader-price preloader-shimmer"></div>
+                        <div class="preloader-cta preloader-shimmer"></div>
+                    </div>
+                </div>
+                <div class="preloader-card">
+                    <div class="preloader-tag preloader-shimmer"></div>
+                    <div class="preloader-thumb">
+                        <div class="preloader-thumb-bg preloader-shimmer"></div>
+                        <div class="preloader-thumb-core">
+                            <div class="preloader-thumb-ring">
+                                <div class="preloader-thumb-ring-track">
+                                    <span class="preloader-thumb-dot" style="--dot-index: 0;"></span>
+                                    <span class="preloader-thumb-dot" style="--dot-index: 1;"></span>
+                                    <span class="preloader-thumb-dot" style="--dot-index: 2;"></span>
+                                </div>
+                            </div>
+                            <img src="https://firebasestorage.googleapis.com/v0/b/tangailbuzz47.firebasestorage.app/o/LOGO%2Fgdrg_upscaled%20(1).png?alt=media&token=05076826-d4f3-4b22-a569-c4a15fd5c5ad" alt="TangailBuzz icon" class="preloader-thumb-logo">
+                        </div>
+                    </div>
+                    <div class="preloader-lines">
+                        <div class="preloader-line preloader-line-lg preloader-shimmer"></div>
+                        <div class="preloader-line preloader-line-md preloader-shimmer"></div>
+                    </div>
+                    <div class="preloader-meta">
+                        <div class="preloader-price preloader-shimmer"></div>
+                        <div class="preloader-cta preloader-shimmer"></div>
+                    </div>
+                </div>
+                <div class="preloader-card">
+                    <div class="preloader-tag preloader-shimmer"></div>
+                    <div class="preloader-thumb">
+                        <div class="preloader-thumb-bg preloader-shimmer"></div>
+                        <div class="preloader-thumb-core">
+                            <div class="preloader-thumb-ring">
+                                <div class="preloader-thumb-ring-track">
+                                    <span class="preloader-thumb-dot" style="--dot-index: 0;"></span>
+                                    <span class="preloader-thumb-dot" style="--dot-index: 1;"></span>
+                                    <span class="preloader-thumb-dot" style="--dot-index: 2;"></span>
+                                </div>
+                            </div>
+                            <img src="https://firebasestorage.googleapis.com/v0/b/tangailbuzz47.firebasestorage.app/o/LOGO%2Fgdrg_upscaled%20(1).png?alt=media&token=05076826-d4f3-4b22-a569-c4a15fd5c5ad" alt="TangailBuzz icon" class="preloader-thumb-logo">
+                        </div>
+                    </div>
+                    <div class="preloader-lines">
+                        <div class="preloader-line preloader-line-lg preloader-shimmer"></div>
+                        <div class="preloader-line preloader-line-sm preloader-shimmer"></div>
+                    </div>
+                    <div class="preloader-meta">
+                        <div class="preloader-price preloader-shimmer"></div>
+                        <div class="preloader-cta preloader-shimmer"></div>
+                    </div>
+                </div>
+                <div class="preloader-card">
+                    <div class="preloader-tag preloader-shimmer"></div>
+                    <div class="preloader-thumb">
+                        <div class="preloader-thumb-bg preloader-shimmer"></div>
+                        <div class="preloader-thumb-core">
+                            <div class="preloader-thumb-ring">
+                                <div class="preloader-thumb-ring-track">
+                                    <span class="preloader-thumb-dot" style="--dot-index: 0;"></span>
+                                    <span class="preloader-thumb-dot" style="--dot-index: 1;"></span>
+                                    <span class="preloader-thumb-dot" style="--dot-index: 2;"></span>
+                                </div>
+                            </div>
+                            <img src="https://firebasestorage.googleapis.com/v0/b/tangailbuzz47.firebasestorage.app/o/LOGO%2Fgdrg_upscaled%20(1).png?alt=media&token=05076826-d4f3-4b22-a569-c4a15fd5c5ad" alt="TangailBuzz icon" class="preloader-thumb-logo">
+                        </div>
+                    </div>
+                    <div class="preloader-lines">
+                        <div class="preloader-line preloader-line-lg preloader-shimmer"></div>
+                        <div class="preloader-line preloader-line-md preloader-shimmer"></div>
+                    </div>
+                    <div class="preloader-meta">
+                        <div class="preloader-price preloader-shimmer"></div>
+                        <div class="preloader-cta preloader-shimmer"></div>
+                    </div>
+                </div>
+                <div class="preloader-card">
+                    <div class="preloader-tag preloader-shimmer"></div>
+                    <div class="preloader-thumb">
+                        <div class="preloader-thumb-bg preloader-shimmer"></div>
+                        <div class="preloader-thumb-core">
+                            <div class="preloader-thumb-ring">
+                                <div class="preloader-thumb-ring-track">
+                                    <span class="preloader-thumb-dot" style="--dot-index: 0;"></span>
+                                    <span class="preloader-thumb-dot" style="--dot-index: 1;"></span>
+                                    <span class="preloader-thumb-dot" style="--dot-index: 2;"></span>
+                                </div>
+                            </div>
+                            <img src="https://firebasestorage.googleapis.com/v0/b/tangailbuzz47.firebasestorage.app/o/LOGO%2Fgdrg_upscaled%20(1).png?alt=media&token=05076826-d4f3-4b22-a569-c4a15fd5c5ad" alt="TangailBuzz icon" class="preloader-thumb-logo">
+                        </div>
+                    </div>
+                    <div class="preloader-lines">
+                        <div class="preloader-line preloader-line-lg preloader-shimmer"></div>
+                        <div class="preloader-line preloader-line-sm preloader-shimmer"></div>
+                    </div>
+                    <div class="preloader-meta">
+                        <div class="preloader-price preloader-shimmer"></div>
+                        <div class="preloader-cta preloader-shimmer"></div>
+                    </div>
+                </div>
+                <div class="preloader-card">
+                    <div class="preloader-tag preloader-shimmer"></div>
+                    <div class="preloader-thumb">
+                        <div class="preloader-thumb-bg preloader-shimmer"></div>
+                        <div class="preloader-thumb-core">
+                            <div class="preloader-thumb-ring">
+                                <div class="preloader-thumb-ring-track">
+                                    <span class="preloader-thumb-dot" style="--dot-index: 0;"></span>
+                                    <span class="preloader-thumb-dot" style="--dot-index: 1;"></span>
+                                    <span class="preloader-thumb-dot" style="--dot-index: 2;"></span>
+                                </div>
+                            </div>
+                            <img src="https://firebasestorage.googleapis.com/v0/b/tangailbuzz47.firebasestorage.app/o/LOGO%2Fgdrg_upscaled%20(1).png?alt=media&token=05076826-d4f3-4b22-a569-c4a15fd5c5ad" alt="TangailBuzz icon" class="preloader-thumb-logo">
+                        </div>
+                    </div>
+                    <div class="preloader-lines">
+                        <div class="preloader-line preloader-line-lg preloader-shimmer"></div>
+                        <div class="preloader-line preloader-line-md preloader-shimmer"></div>
+                    </div>
+                    <div class="preloader-meta">
+                        <div class="preloader-price preloader-shimmer"></div>
+                        <div class="preloader-cta preloader-shimmer"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     
     <!-- Blocked User Banner -->
     <div id="blocked-account-banner" class="hidden fixed top-0 left-0 w-full bg-red-600 text-white text-center p-3 z-[9999] font-semibold"></div>
@@ -2397,6 +3045,29 @@
         const db = getFirestore(app);
         const storage = getStorage(app);
 
+    const PRELOADER_FADE_MS = 300;
+    const preloaderEl = document.getElementById('preloader');
+    const preloaderState = { windowReady: false, dataReady: false, hidden: false };
+
+    const tryHidePreloader = (force = false) => {
+        if (!preloaderEl || preloaderState.hidden) return;
+        if (!force && !(preloaderState.windowReady && preloaderState.dataReady)) return;
+        preloaderState.hidden = true;
+        preloaderEl.classList.add('preloader-overlay-hidden');
+        setTimeout(() => { preloaderEl.style.display = 'none'; }, PRELOADER_FADE_MS);
+    };
+
+    window.addEventListener('load', () => {
+        preloaderState.windowReady = true;
+        tryHidePreloader();
+    });
+
+    const markPreloaderDataReady = () => {
+        if (preloaderState.dataReady) return;
+        preloaderState.dataReady = true;
+        tryHidePreloader();
+    };
+
     let currentUser = null;
         let currentUserData = null; // To hold Firestore data for the user
         let userOrders = [];
@@ -2974,6 +3645,8 @@
         }
 
         try { updateCartUI(); } catch (_) {}
+
+        markPreloaderDataReady();
     };
 
     const scheduleProductsRender = ({ immediate = false } = {}) => {
@@ -3001,6 +3674,8 @@
                 DOMElements.productList.innerHTML = `<p class="col-span-full text-center text-red-500">Error loading products. Check console for details.</p>`;
             }
         }
+
+        markPreloaderDataReady();
     };
 
     const getFirstAvailableValue = (obj, keys) => {
