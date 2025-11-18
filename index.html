@@ -25,7 +25,7 @@
                         light: '#f8f9fa',
                         dark: '#212529',
                         success: '#28a745',
-                        'theme-purple': '#6a0dad',
+                            'theme-purple': '#6a0dad',
                         'theme-pink': '#e5367a',
                         'theme-blue': '#4a7bed',
                         'theme-light': '#f5f7fa',
@@ -55,7 +55,7 @@
                     },
                 }
             }
-        }
+        };
     </script>
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -955,31 +955,72 @@
             box-shadow: 0 20px 34px -20px rgba(252, 165, 106, 0.55);
         }
         .color-variant {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 2.5rem;
-            height: 2.5rem;
-            border-radius: 9999px;
-            border: 2px solid rgba(148, 163, 184, 0.4);
-            box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.18);
-            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-            cursor: pointer;
-        }
-        .color-variant:hover {
-            transform: translateY(-2px);
-            border-color: rgba(255, 130, 59, 0.65);
-        }
-        .color-variant-active {
-            border-color: rgba(255, 130, 59, 0.85) !important;
-            box-shadow: 0 0 0 4px rgba(255, 130, 59, 0.22);
-        }
-        html.dark .color-variant {
-            box-shadow: inset 0 0 0 2px rgba(17, 24, 39, 0.85);
-        }
-        html.dark .color-variant-active {
-            box-shadow: 0 0 0 4px rgba(255, 130, 59, 0.32);
-        }
+                    display: inline-flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 0.35rem;
+                    padding: 0.4rem 0.5rem 0.35rem;
+                    border-radius: 1rem;
+                    border: 1px solid transparent;
+                    background: transparent;
+                    cursor: pointer;
+                    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+                    min-width: 3.25rem;
+            text-align: center;
+                }
+                .color-variant:hover {
+                    transform: translateY(-2px);
+                }
+                .color-variant-swatch {
+                    display: inline-flex;
+                    width: 2.35rem;
+                    height: 2.35rem;
+                    border-radius: 9999px;
+                    border: 2px solid rgba(148, 163, 184, 0.45);
+                    box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.12);
+                    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+                    background-size: 140%;
+                    background-position: center;
+                    background-repeat: no-repeat;
+                }
+                .color-variant:hover .color-variant-swatch {
+                    border-color: rgba(255, 130, 59, 0.65);
+                    box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.18);
+                }
+                .color-variant-active .color-variant-swatch {
+                    border-color: rgba(255, 130, 59, 0.85) !important;
+                    box-shadow: 0 0 0 4px rgba(255, 130, 59, 0.22);
+                }
+                .color-variant-active {
+                    border-color: rgba(255, 130, 59, 0.35);
+                    background: rgba(255, 130, 59, 0.08);
+                }
+                .color-variant-label {
+                    font-size: 0.7rem;
+                    font-weight: 600;
+                    letter-spacing: 0.02em;
+                    color: #4b5563;
+                    text-transform: capitalize;
+                }
+                .color-variant-active .color-variant-label {
+                    color: #ff823b;
+                }
+                html.dark .color-variant-swatch {
+                    box-shadow: inset 0 0 0 2px rgba(17, 24, 39, 0.85);
+                }
+                html.dark .color-variant-active .color-variant-swatch {
+                    box-shadow: 0 0 0 4px rgba(255, 130, 59, 0.32);
+                }
+                html.dark .color-variant-active {
+                    background: rgba(255, 130, 59, 0.18);
+                    border-color: rgba(255, 130, 59, 0.45);
+                }
+                html.dark .color-variant-label {
+                    color: #d1d5db;
+                }
+                html.dark .color-variant-active .color-variant-label {
+                    color: #fca26a;
+                }
         .variant-info-box {
             margin-top: 0.75rem;
             padding: 0.75rem 1rem;
@@ -1745,6 +1786,10 @@
                 <div id="vm-size-options" class="hidden">
                     <label class="block text-sm font-semibold mb-2" data-lang="size">সাইজ:</label>
                     <div class="flex flex-wrap gap-2" id="vm-size-variants-container"></div>
+                </div>
+                <div id="vm-ram-options" class="hidden">
+                    <label class="block text-sm font-semibold mb-2" data-lang="ram">র‌্যাম:</label>
+                    <div class="flex flex-wrap gap-2" id="vm-ram-variants-container"></div>
                 </div>
                 <div id="vm-storage-options" class="hidden space-y-3">
                     <label class="block text-sm font-semibold" data-lang="storage">স্টোরেজ:</label>
@@ -2728,6 +2773,10 @@
                                     <label class="block text-sm font-semibold mb-2" data-lang="size">সাইজ:</label>
                                     <div class="flex flex-wrap gap-2" id="size-variants-container"></div>
                                 </div>
+                                <div id="ram-options" class="hidden">
+                                    <label class="block text-sm font-semibold mb-2" data-lang="ram">র‌্যাম:</label>
+                                    <div class="flex flex-wrap gap-2" id="ram-variants-container"></div>
+                                </div>
                                 <div id="storage-options" class="hidden space-y-3">
                                     <label class="block text-sm font-semibold" data-lang="storage">স্টোরেজ:</label>
                                     <div id="storage-gb-options" class="hidden space-y-1">
@@ -2932,6 +2981,56 @@
             </section>
         </div>
 
+        <!-- Secure Payment Page -->
+        <div id="secure-payment-page" class="hidden page">
+            <section class="container mx-auto px-4 py-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-10 relative after:content-[''] after:absolute after:bottom-[-10px] after:left-1/2 after:-translate-x-1/2 after:w-20 after:h-1 after:bg-theme-pink after:rounded-full">নিরাপদ পেমেন্ট পলিসি</h2>
+                <div class="bg-white dark:bg-gray-800 p-8 md:p-12 rounded-3xl shadow-xl space-y-6">
+                    <div class="flex items-start gap-4">
+                        <div class="text-4xl" aria-hidden="true">🔒</div>
+                        <div class="space-y-4 text-gray-700 dark:text-gray-300">
+                            <p class="text-lg leading-relaxed">
+                                আপনার সকল পেমেন্ট তথ্য ১০০% সুরক্ষিত। আমরা বাংলাদেশের স্বনামধন্য পেমেন্ট গেটওয়ের মাধ্যমে পেমেন্ট প্রসেস করি এবং আপনার কার্ড বা অ্যাকাউন্টের কোনো তথ্য সংরক্ষণ করি না। SSL এনক্রিপশনের মাধ্যমে আপনার লেনদেন সম্পূর্ণ সুরক্ষিত।
+                            </p>
+                            <p class="text-lg leading-relaxed">
+                                Tangail Buzz-এ আপনার কেনাকাটার অভিজ্ঞতাকে সহজ এবং সর্বোচ্চ নিরাপদ করা আমাদের প্রধান লক্ষ্য। আমরা আপনার ব্যক্তিগত এবং পেমেন্ট তথ্যের গোপনীয়তাকে অত্যন্ত গুরুত্ব সহকারে দেখি।
+                            </p>
+                        </div>
+                    </div>
+                    <div class="space-y-6">
+                        <div>
+                            <h3 class="text-xl font-semibold text-theme-purple">১. SSL এনক্রিপশন (SSL Encryption)</h3>
+                            <p>
+                                আমাদের সম্পূর্ণ ওয়েবসাইটটি SSL (Secure Sockets Layer) সার্টিফিকেট দ্বারা সুরক্ষিত। এর মানে হলো, আপনি যখন আপনার পেমেন্টের তথ্য (যেমন - কার্ড নম্বর, পিন, বা মোবাইল ব্যাংকিং তথ্য) প্রবেশ করান, তখন সেই তথ্যগুলো সম্পূর্ণ এনক্রিপ্টেড অবস্থায় আমাদের কাছে আসে। এটি আপনার তথ্যকে হ্যাকারদের থেকে সুরক্ষিত রাখে।
+                            </p>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-theme-purple">২. বিশ্বস্ত পেমেন্ট গেটওয়ে (Trusted Payment Gateway)</h3>
+                            <p>
+                                আমরা বাংলাদেশের সবচেয়ে নির্ভরযোগ্য এবং জনপ্রিয় পেমেন্ট গেটওয়ে (যেমন: বিকাশ, নগদ, রকেট, উপায় এবং সকল প্রধান ব্যাংক) ব্যবহার করি। আপনার পেমেন্টের পুরো প্রক্রিয়াটি সরাসরি এই বিশ্বস্ত গেটওয়ের সুরক্ষিত সার্ভারে সম্পন্ন হয়।
+                            </p>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-theme-purple">৩. কোনো তথ্য সংরক্ষণ করা হয় না (No Data Stored)</h3>
+                            <p>
+                                আমরা আপনার ক্রেডিট/ডেবিট কার্ড বা মোবাইল ব্যাংকিং অ্যাকাউন্টের কোনো সংবেদনশীল তথ্য (যেমন - কার্ড নম্বর, CVV, বা পিন) আমাদের সার্ভারে সংরক্ষণ করি না। প্রতিটি লেনদেন সরাসরি পেমেন্ট প্রোভাইডারের মাধ্যমে প্রসেস করা হয়।
+                            </p>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-theme-purple">৪. আমাদের পেমেন্ট পার্টনার (Our Payment Partners)</h3>
+                            <p>আপনি নিচের যেকোনো মাধ্যমে সম্পূর্ণ আত্মবিশ্বাসের সাথে পেমেন্ট করতে পারেন:</p>
+                            <ul class="list-disc list-inside space-y-1 mt-2">
+                                <li>মোবাইল ব্যাংকিং: বিকাশ, নগদ, রকেট, ইত্যাদি।</li>
+                                <li>কার্ডস: ভিসা (Visa), মাস্টারকার্ড (MasterCard), আমেরিকান এক্সপ্রেস (American Express) এবং অন্যান্য সকল প্রধান ব্যাংক কার্ড।</li>
+                                <li>ইন্টারনেট ব্যাংকিং: বিভিন্ন ব্যাংকের অনলাইন পেমেন্ট সুবিধা।</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p class="font-semibold text-theme-purple text-lg">Tangail Buzz-এ সম্পূর্ণ নির্ভাবনায় শপিং করুন!</p>
+                </div>
+            </section>
+        </div>
+
         <!-- Shipping Info Page -->
         <div id="shipping-info-page" class="hidden page">
             <section class="container mx-auto px-4 py-16">
@@ -3073,6 +3172,7 @@
                     <ul class="list-none text-gray-400 text-sm space-y-2">
                         <li><a href="javascript:void(0);" onclick="showPage('faq-page')" class="hover:text-theme-pink transition-colors" data-lang="footer-faq">FAQ</a></li>
                         <li><a href="javascript:void(0);" onclick="showPage('return-policy-page')" class="hover:text-theme-pink transition-colors" data-lang="footer-return-policy">Return Policy</a></li>
+                        <li><a href="javascript:void(0);" onclick="showPage('secure-payment-page')" class="hover:text-theme-pink transition-colors" data-lang="footer-secure-payment">Secure Payment</a></li>
                         <li><a href="javascript:void(0);" onclick="showPage('shipping-info-page')" class="hover:text-theme-pink transition-colors" data-lang="footer-shipping-info">Shipping Info</a></li>
                         <li><a href="javascript:void(0);" onclick="showPage('privacy-policy-page')" class="hover:text-theme-pink transition-colors" data-lang="footer-privacy-policy">Privacy Policy</a></li>
                         <li><a href="javascript:void(0);" onclick="showPage('terms-page')" class="hover:text-theme-pink transition-colors" data-lang="footer-terms">Terms &amp; Conditions</a></li>
@@ -3441,6 +3541,78 @@
         return { gb, tb, mixed };
     };
 
+    const separateRamFromStorage = (values = []) => {
+        const storageList = [];
+        const ramList = [];
+        const storageSeen = new Set();
+        const ramSeen = new Set();
+
+        const pushUnique = (target, set, value) => {
+            if (!value) return;
+            const trimmed = String(value).trim();
+            if (!trimmed) return;
+            const key = trimmed.toLowerCase();
+            if (set.has(key)) return;
+            set.add(key);
+            target.push(trimmed);
+        };
+
+        const formatCapacity = (amount, unit = 'GB') => {
+            if (amount === undefined || amount === null) return '';
+            const numeric = String(amount).trim();
+            if (!numeric) return '';
+            const normalizedUnit = unit ? unit.toUpperCase() : 'GB';
+            return `${numeric.replace(/[^0-9.]/g, '')}${normalizedUnit}`;
+        };
+
+        values.forEach(raw => {
+            if (raw === undefined || raw === null) return;
+            const value = typeof raw === 'string' ? raw.trim() : String(raw).trim();
+            if (!value) return;
+
+            let handled = false;
+            const matches = Array.from(value.matchAll(/(\d+(?:\.\d+)?)\s*(GB|TB)/gi));
+            if (matches.length >= 2) {
+                const [first, ...rest] = matches;
+                const ramToken = formatCapacity(first[1], first[2]);
+                pushUnique(ramList, ramSeen, ramToken);
+                rest.forEach(m => {
+                    const storageToken = formatCapacity(m[1], m[2]);
+                    pushUnique(storageList, storageSeen, storageToken);
+                });
+                handled = true;
+            } else if (matches.length === 1) {
+                const token = formatCapacity(matches[0][1], matches[0][2]);
+                if (/ram/i.test(value) && !/rom/i.test(value)) {
+                    pushUnique(ramList, ramSeen, token);
+                } else {
+                    pushUnique(storageList, storageSeen, token);
+                }
+                handled = true;
+            } else {
+                const combo = value.match(/^(\d+)\s*[\/xX\-+&]\s*(\d+)(?:\s*(GB|TB))?/i);
+                if (combo) {
+                    const ramToken = formatCapacity(combo[1], 'GB');
+                    const storageUnit = combo[3] || 'GB';
+                    const storageToken = formatCapacity(combo[2], storageUnit);
+                    pushUnique(ramList, ramSeen, ramToken);
+                    pushUnique(storageList, storageSeen, storageToken);
+                    handled = true;
+                }
+            }
+
+            if (!handled) {
+                if (/ram/i.test(value) && !/rom/i.test(value)) {
+                    pushUnique(ramList, ramSeen, value);
+                } else {
+                    pushUnique(storageList, storageSeen, value);
+                }
+            }
+        });
+
+        return { storageOnly: storageList, ramOnly: ramList };
+    };
+
     const assembleVariantOptions = (raw = {}) => {
         const variantsNode = raw?.variants || raw?.Variants || raw?.variant || null;
 
@@ -3505,7 +3677,8 @@
             raw?.variantOptions?.Storage
         );
 
-        const { gb: storageGbOptions, tb: storageTbOptions } = splitStorageVariants(storageAll, storageGbExplicit, storageTbExplicit);
+        const { storageOnly, ramOnly } = separateRamFromStorage(storageAll);
+        const { gb: storageGbOptions, tb: storageTbOptions } = splitStorageVariants(storageOnly, storageGbExplicit, storageTbExplicit);
 
         return {
             sizes: normalizeVariantList(
@@ -3524,7 +3697,7 @@
                 raw?.variantOptions?.size,
                 raw?.variantOptions?.sizes
             ),
-            storage: storageAll,
+            storage: storageOnly,
             storageGbOptions,
             storageTbOptions,
             colors: normalizeVariantList(
@@ -3548,6 +3721,25 @@
                 raw?.variantOptions?.color,
                 raw?.variantOptions?.colors
             ),
+            ram: normalizeVariantList(
+                variantsNode?.ram,
+                variantsNode?.Ram,
+                variantsNode?.RAM,
+                variantsNode?.memory,
+                variantsNode?.Memory,
+                raw?.ram,
+                raw?.Ram,
+                raw?.RAM,
+                raw?.memory,
+                raw?.Memory,
+                raw?.ramOptions,
+                raw?.ramOption,
+                raw?.options?.ram,
+                raw?.options?.Ram,
+                raw?.variantOptions?.ram,
+                raw?.variantOptions?.Ram,
+                ramOnly
+            ),
         };
     };
 
@@ -3555,6 +3747,78 @@
         if (!product || typeof product !== 'object') return product;
         const assembled = assembleVariantOptions(product);
         return { ...product, ...assembled };
+    };
+
+    const normalizeCategoryValue = (value) => {
+        if (!value && value !== 0) return '';
+        return String(value).trim().toLowerCase();
+    };
+
+    const DEFAULT_VARIANT_ORDER = ['size', 'ram', 'storage', 'color'];
+
+    const CATEGORY_VARIANT_ORDER = {
+        electronics: ['color', 'ram', 'storage'],
+        electronic: ['color', 'ram', 'storage'],
+        mobile: ['color', 'ram', 'storage'],
+        mobiles: ['color', 'ram', 'storage'],
+        smartphone: ['color', 'ram', 'storage'],
+        smartphones: ['color', 'ram', 'storage'],
+        tablet: ['color', 'ram', 'storage'],
+        tablets: ['color', 'ram', 'storage'],
+        laptop: ['ram', 'storage', 'color'],
+        laptops: ['ram', 'storage', 'color'],
+        computer: ['ram', 'storage', 'color'],
+        computers: ['ram', 'storage', 'color'],
+        appliance: ['storage', 'color'],
+        appliances: ['storage', 'color'],
+        fashion: ['size', 'color'],
+        clothing: ['size', 'color'],
+        apparel: ['size', 'color'],
+        garments: ['size', 'color'],
+        footwear: ['size', 'color'],
+        shoes: ['size', 'color'],
+        dress: ['size', 'color'],
+        dresses: ['size', 'color'],
+        saree: ['color'],
+        sarees: ['color'],
+        watch: ['color', 'size'],
+        watches: ['color', 'size'],
+        accessory: ['color', 'size'],
+        accessories: ['color', 'size'],
+        furniture: ['size', 'color'],
+        bedding: ['size', 'color'],
+        kitchen: ['size', 'color']
+    };
+
+    const getVariantTypesForProduct = (product = {}) => {
+        const normalizedCategory = normalizeCategoryValue(product.category);
+        const normalizedSubCategory = normalizeCategoryValue(product.subCategory || product.subcategory || product.sub);
+        const categoryOrder = CATEGORY_VARIANT_ORDER[normalizedSubCategory] || CATEGORY_VARIANT_ORDER[normalizedCategory] || DEFAULT_VARIANT_ORDER;
+        const result = [];
+        const pushUnique = (type) => {
+            if (!type) return;
+            if (!result.includes(type)) result.push(type);
+        };
+        categoryOrder.forEach(pushUnique);
+        DEFAULT_VARIANT_ORDER.forEach(pushUnique);
+        return result;
+    };
+
+    const hasOptionsForVariant = (product = {}, variantType) => {
+        switch (variantType) {
+            case 'size':
+                return Array.isArray(product.sizes) && product.sizes.length > 0;
+            case 'ram':
+                return Array.isArray(product.ram) && product.ram.length > 0;
+            case 'storage':
+                return (Array.isArray(product.storage) && product.storage.length > 0)
+                    || (Array.isArray(product.storageGbOptions) && product.storageGbOptions.length > 0)
+                    || (Array.isArray(product.storageTbOptions) && product.storageTbOptions.length > 0);
+            case 'color':
+                return Array.isArray(product.colors) && product.colors.length > 0;
+            default:
+                return false;
+        }
     };
 
     const normalizeProductDoc = (docSnap) => {
@@ -3659,13 +3923,15 @@
             }
             discountPercent = Math.max(0, discountPercent);
 
+            const assembledVariants = assembleVariantOptions(data);
             const {
                 sizes: sizeOptions,
                 storage: storageOptions,
                 storageGbOptions,
                 storageTbOptions,
-                colors: colorOptions
-            } = assembleVariantOptions(data);
+                colors: colorOptions,
+                ram: ramOptions
+            } = assembledVariants;
 
             const megaConfig = (data.megaSale && typeof data.megaSale === 'object') ? data.megaSale : {};
             const megaFlagInfo = resolveBooleanFieldDetailed(data, MEGA_FLAG_KEYS);
@@ -3725,6 +3991,7 @@
                 storage: storageOptions,
                 storageGbOptions,
                 storageTbOptions,
+                ram: ramOptions,
                 colors: colorOptions,
                 stock: data.stock !== undefined ? Number(data.stock) : 1,
                 warrantyText: data.warranty || null,
@@ -3813,6 +4080,171 @@
         if (val === undefined || val === null) return '';
         if (typeof val === 'string') return val.trim().toLowerCase();
         return String(val).trim().toLowerCase();
+    };
+
+    const COLOR_SWATCH_MAP = Object.freeze({
+        'black': '#111827',
+        'midnight black': '#0b1120',
+        'jet black': '#050505',
+        'charcoal': '#111827',
+        'graphite': '#1f2937',
+        'dark gray': '#4b5563',
+        'gray': '#9ca3af',
+        'light gray': '#e5e7eb',
+        'silver': '#d1d5db',
+        'white': '#f9fafb',
+        'off white': '#f3f4f6',
+        'cream': '#fef3c7',
+        'beige': '#f5f5dc',
+        'gold': '#f59e0b',
+        'rose gold': '#f6c7b8',
+        'champagne': '#f1e4d3',
+        'brown': '#92400e',
+        'coffee': '#78350f',
+        'chocolate': '#7b341e',
+        'sand': '#f4e1c1',
+        'yellow': '#facc15',
+        'mustard': '#eab308',
+        'orange': '#f97316',
+        'deep orange': '#ea580c',
+        'peach': '#fb923c',
+        'coral': '#fb7185',
+        'red': '#ef4444',
+        'maroon': '#7f1d1d',
+        'wine': '#581c87',
+        'pink': '#ec4899',
+        'hot pink': '#db2777',
+        'magenta': '#d946ef',
+        'lavender': '#c4b5fd',
+        'purple': '#8b5cf6',
+        'violet': '#7c3aed',
+        'navy': '#1e3a8a',
+        'blue': '#1d4ed8',
+        'royal blue': '#2563eb',
+        'dark blue': '#1e3a8a',
+        'light blue': '#60a5fa',
+        'sky blue': '#38bdf8',
+        'teal': '#0f766e',
+        'cyan': '#0ea5e9',
+        'turquoise': '#14b8a6',
+        'aqua': '#22d3ee',
+        'mint': '#99f6e4',
+        'green': '#15803d',
+        'dark green': '#166534',
+        'olive': '#4d7c0f',
+        'light green': '#4ade80',
+        'lime': '#84cc16',
+        'forest green': '#14532d',
+        'multi color': null,
+        'multicolor': null,
+        'মাল্টি কালার': null,
+        'কালো': '#111827',
+        'সাদা': '#f9fafb',
+        'লাল': '#ef4444',
+        'নীল': '#2563eb',
+        'আকাশী': '#38bdf8',
+        'সবুজ': '#15803d',
+        'হলুদ': '#facc15',
+        'কমলা': '#f97316',
+        'বেগুনি': '#8b5cf6',
+        'গোলাপী': '#ec4899',
+        'মেরুন': '#7f1d1d',
+        'ধূসর': '#9ca3af',
+        'সোনালী': '#f59e0b'
+    });
+
+    const COLOR_TOKEN_SPLIT_REGEX = /[\/,&+|]+/;
+
+    const normalizeColorToken = (value) => {
+        if (!value) return '';
+        return value.toLowerCase().replace(/[_\s-]+/g, ' ').trim();
+    };
+
+    const colorStyleTester = typeof document !== 'undefined' && typeof document.createElement === 'function'
+        ? document.createElement('span')
+        : null;
+
+    const isValidCssColor = (value) => {
+        if (!value) return false;
+        const candidate = String(value).trim();
+        if (!candidate) return false;
+        if (typeof CSS !== 'undefined' && typeof CSS.supports === 'function') {
+            try {
+                if (CSS.supports('color', candidate)) return true;
+            } catch (_) {}
+        }
+        if (!colorStyleTester) return false;
+        colorStyleTester.style.color = '';
+        colorStyleTester.style.color = candidate;
+        return colorStyleTester.style.color !== '';
+    };
+
+    const buildColorGradient = (colors) => {
+        if (!Array.isArray(colors) || colors.length === 0) {
+            return 'background:#d1d5db;';
+        }
+        if (colors.length === 1) {
+            return `background:${colors[0]};`;
+        }
+        const limited = colors.slice(0, 4);
+        const step = 100 / limited.length;
+        const stops = limited.map((color, index) => {
+            const start = Math.round(step * index);
+            const end = index === limited.length - 1 ? 100 : Math.round(step * (index + 1));
+            return `${color} ${start}% ${end}%`;
+        }).join(', ');
+        return `background:linear-gradient(135deg, ${stops});`;
+    };
+
+    const resolveColorSwatchStyle = (rawValue) => {
+        if (rawValue === undefined || rawValue === null) {
+            return 'background:#d1d5db;';
+        }
+        const original = String(rawValue).trim();
+        if (!original) {
+            return 'background:#d1d5db;';
+        }
+
+        const directHexMatches = original.match(/#([0-9a-f]{3,8})\b/gi);
+        if (directHexMatches && directHexMatches.length) {
+            return buildColorGradient(directHexMatches.map(match => match.toLowerCase()));
+        }
+
+        if (isValidCssColor(original)) {
+            return `background:${original};`;
+        }
+
+        const normalizedName = normalizeColorToken(original);
+        if (normalizedName && Object.prototype.hasOwnProperty.call(COLOR_SWATCH_MAP, normalizedName)) {
+            const mapped = COLOR_SWATCH_MAP[normalizedName];
+            if (mapped) {
+                return `background:${mapped};`;
+            }
+        }
+
+        const tokens = original.split(COLOR_TOKEN_SPLIT_REGEX).map(token => token.trim()).filter(Boolean);
+        if (tokens.length) {
+            const resolved = tokens.map(token => {
+                const normalized = normalizeColorToken(token);
+                if (normalized && Object.prototype.hasOwnProperty.call(COLOR_SWATCH_MAP, normalized)) {
+                    const mapped = COLOR_SWATCH_MAP[normalized];
+                    if (mapped) return mapped;
+                }
+                if (isValidCssColor(token)) {
+                    return token;
+                }
+                const tokenHex = token.match(/#([0-9a-f]{3,8})\b/gi);
+                if (tokenHex && tokenHex.length) {
+                    return tokenHex[0].toLowerCase();
+                }
+                return null;
+            }).filter(Boolean);
+            if (resolved.length) {
+                return buildColorGradient(resolved);
+            }
+        }
+
+        return 'background:linear-gradient(135deg,#9ca3af 0%,#d1d5db 100%);';
     };
 
     const parseFirestoreDate = (input) => {
@@ -4308,7 +4740,7 @@
                 'flash-sale-nav': 'Flash Sale',
                 'mega-sale-nav': 'Mega Sale',
                 'add-product-nav': 'Add Product',
-                'search-placeholder': 'Search for products...', 'featured-products': 'Featured Products', 'shop-by-category': 'Shop by Category', 'cat-electronics': 'Electronics', 'cat-fashion': 'Fashion', 'cat-home-garden': 'Home & Garden', 'cat-health-beauty': 'Health & Beauty', 'cat-sports': 'Sports & Outdoors', 'cat-books': 'Books & Stationery', 'cat-kids': 'Kids & Toys', 'cat-cars': 'Cars & Bikes', 'why-choose-us': 'Why Choose Us', 'feature-delivery-title': 'Fast Delivery', 'feature-delivery-desc': 'We deliver to your doorstep within 2-3 business days.', 'feature-payment-title': 'Secure Payment', 'feature-payment-desc': 'All transactions are encrypted for your security and privacy.', 'feature-return-title': 'Easy Returns', 'feature-return-desc': 'Return products within 30 days for a full refund if you\'re not satisfied.', 'feature-support-title': '24/7 Support', 'feature-support-desc': 'Our customer support team is available for you day and night.', 'add-to-cart': 'Add to Cart', 'added-to-cart': 'Added!', 'no-products': 'No products found matching your criteria.', 'back-to-products': 'Back to All Products', 'returnable': '30-Day Returnable', 'not-returnable': 'Not Returnable', 'secure-payments': 'Secure Payments', 'size': 'Size:', 'storage': 'Storage:', 'color': 'Color:', 'product-description': 'Product Description', 'product-specifications': 'Product Specifications', 'specifications': 'Specification', 'value': 'Value', 'no-specs': 'No specifications available for this product.', 'product-reviews': 'Product Reviews', 'no-reviews': 'There are no reviews for this product yet.', 'cart': 'Your Cart', 'cart-empty': 'Your cart is empty.', 'total': 'Total:', 'checkout': 'Checkout', 'your-wishlist': 'Your Wishlist', 'wishlist-empty': 'Your wishlist is empty. Add some products!', 'your-account': 'Your Account', 'signin-google': 'Sign in with Google', 'logout': 'Logout', 'toast-cart-added': 'Product added to cart!', 'toast-wishlist-added': 'Product added to wishlist!', 'toast-wishlist-removed': 'Product removed from wishlist!', 'toast-login-success': 'Successfully logged in!', 'toast-logout-success': 'Successfully logged out!',
+                'search-placeholder': 'Search for products...', 'featured-products': 'Featured Products', 'shop-by-category': 'Shop by Category', 'cat-electronics': 'Electronics', 'cat-fashion': 'Fashion', 'cat-home-garden': 'Home & Garden', 'cat-health-beauty': 'Health & Beauty', 'cat-sports': 'Sports & Outdoors', 'cat-books': 'Books & Stationery', 'cat-kids': 'Kids & Toys', 'cat-cars': 'Cars & Bikes', 'why-choose-us': 'Why Choose Us', 'feature-delivery-title': 'Fast Delivery', 'feature-delivery-desc': 'We deliver to your doorstep within 2-3 business days.', 'feature-payment-title': 'Secure Payment', 'feature-payment-desc': 'All transactions are encrypted for your security and privacy.', 'feature-return-title': 'Easy Returns', 'feature-return-desc': 'Return products within 30 days for a full refund if you\'re not satisfied.', 'feature-support-title': '24/7 Support', 'feature-support-desc': 'Our customer support team is available for you day and night.', 'add-to-cart': 'Add to Cart', 'added-to-cart': 'Added!', 'no-products': 'No products found matching your criteria.', 'back-to-products': 'Back to All Products', 'returnable': '30-Day Returnable', 'not-returnable': 'Not Returnable', 'return-policy-button-label': 'View return policy', 'secure-payments': 'Secure Payments', 'size': 'Size:', 'storage': 'Storage:', 'color': 'Color:', 'product-description': 'Product Description', 'product-specifications': 'Product Specifications', 'specifications': 'Specification', 'value': 'Value', 'no-specs': 'No specifications available for this product.', 'product-reviews': 'Product Reviews', 'no-reviews': 'There are no reviews for this product yet.', 'cart': 'Your Cart', 'cart-empty': 'Your cart is empty.', 'total': 'Total:', 'checkout': 'Checkout', 'your-wishlist': 'Your Wishlist', 'wishlist-empty': 'Your wishlist is empty. Add some products!', 'your-account': 'Your Account', 'signin-google': 'Sign in with Google', 'logout': 'Logout', 'toast-cart-added': 'Product added to cart!', 'toast-wishlist-added': 'Product added to wishlist!', 'toast-wishlist-removed': 'Product removed from wishlist!', 'toast-login-success': 'Successfully logged in!', 'toast-logout-success': 'Successfully logged out!',
                 'toast-register-success': 'Account created successfully!', 'login': 'Login', 'register': 'Register Account', 'auth-login-heading': 'Welcome Back', 'auth-register-heading': 'Create Your Account', 'auth-reset-heading': 'Reset Password', 'auth-login-subtitle': 'Sign in to manage your orders, wishlist, and saved addresses.', 'auth-register-subtitle': 'Create a free TangailBuzz account in minutes.', 'auth-reset-subtitle': 'Enter your email and we will send a secure reset link.', 'auth-login-tab': 'Log In', 'auth-register-tab': 'Sign Up', 'auth-reset-tab': 'Reset', 'auth-social-divider': 'Or Continue With', 'auth-security-note': 'Your credentials are encrypted and never shared.', 'auth-new-here': 'New Here?', 'auth-have-account': 'Already Have an Account?', 'create-account': 'Create Account', 'forgot-password': 'Forgot Password?', 'reset-password-desc': 'Enter your registered email so we can send a secure reset link.', 'send-reset-link': 'Send Reset Link', 'back-to-login': 'Back to Login', 'login-google': 'Sign In with Google', 'login-facebook': 'Sign In with Facebook', 'full-name': 'Full Name', 'mobile-number': 'Mobile Number', 'location': 'Location', 'upload-photo': 'Upload Photo', 'remove-photo': 'Remove Photo', 'save-changes': 'Save Changes', 'cancel': 'Cancel', 'account-options': 'Account Options', 'edit-profile': 'Edit Profile', 'manage-address': 'Manage Addresses', 'delete-account': 'Delete Account', 'saved-addresses': 'Saved Addresses', 'manage-address-help': 'Manage your delivery addresses.', 'address-form-title': 'Add New Address', 'address-line1': 'Address Line 1', 'address-line2-optional': 'Address Line 2 (Optional)', 'city': 'City', 'area-district': 'Area / District', 'set-as-default': 'Set as Default', 'save-address': 'Save Address', 'toast-select-variant': 'Please select all required options!', 'select-variants': 'Select Options', 'buy-now': 'Buy Now', 'payment-method': 'Select Payment Method', 'cod': 'Cash on Delivery', 'online-payment': 'Online Payment', 'confirm-order': 'Confirm Order', 'order-placed-success': 'Your order has been placed successfully!', 'order-placed-fail': 'Failed to place order. Please try again.', 'cart-is-empty': 'Your cart is empty. Cannot checkout.', 'mobile-banking': 'Mobile Banking', 'payment-instruction-bkash': 'Please send {amount} Taka to this Bkash number: +8801863205976 from your app.', 'payment-instruction-nagad': 'Please send {amount} Taka to this Nagad number: +8801863205976 from your app.', 'payment-instruction-cod': 'Our delivery person will collect the payment upon delivery.', 'profile-updated': 'Profile updated successfully!', 'profile-update-fail': 'Failed to update profile.', 'toast-storage-permission-error': 'Storage permission denied. Check Firebase rules.', 'toast-update-profile': 'Please update your location and mobile number in your profile before ordering.', 'emergency-contact': 'Support', 'message-sent': 'Message sent successfully!', 'out-of-stock': 'Out of Stock', 'toast-out-of-stock': 'Sorry, this product is currently out of stock.', 'subtotal': 'Subtotal', 'delivery-charge': 'Delivery Charge', 'my-orders': 'My Orders',
                 'delete-account-confirm': 'Are you sure you want to delete your account? This action cannot be undone. All data will be lost.',
                 'account-deleted': 'Your account has been successfully deleted.',
@@ -4343,12 +4775,18 @@
                 'review-success': 'Review submitted successfully! Thank you.',
                 'review-failed': 'Failed to submit review. Please try again.',
                 'variant-available-sizes': 'Available Sizes',
+                'variant-available-ram': 'Available RAM',
                 'variant-available-storage': 'Available Variants',
+                'variant-available-storage-gb': 'Available Storage (GB)',
+                'variant-available-storage-tb': 'Available Storage (TB)',
+                'variant-available-storage-mixed': 'Additional Variants',
                 'variant-available-colors': 'Available Colors',
                 'variant-instruction-size': 'Pick the size that fits you best.',
+                'variant-instruction-ram': 'Choose the RAM configuration you need.',
                 'variant-instruction-storage': 'Select the variant or storage you prefer.',
                 'variant-instruction-color': 'Choose the color you like most.',
                 'variant-instruction-final': 'Use the option buttons above before completing your order.',
+                'ram': 'RAM:',
                 'storage-gb-hint': 'Pick a storage option measured in GB.',
                 'storage-tb-hint': 'Pick a storage capacity measured in TB.',
                 'see-more': 'See More',
@@ -4357,6 +4795,7 @@
                 'all-in-category': 'All in',
                 // Footer
                 'footer-tagline': 'Your trusted online shopping destination for quality products at fair prices.',
+                'footer-secure-payment': 'Secure Payment',
                 'footer-important-links': 'Important Links',
                 'footer-nav-home': 'Home',
                 'footer-nav-products': 'Products',
@@ -4428,6 +4867,7 @@
                 'invoice-download-success': 'Invoice downloaded successfully!',
                 'invoice-download-error': 'Unable to download invoice right now.',
                 'invoice-missing-order': 'We could not find the order for this invoice.',
+                'secure-payments-button-label': 'View secure payment policy',
                 'about-heading': 'About Us',
                 'about-tagline-title': 'TangailBuzz: Your Trusted Online Shopping Destination',
                 'about-tagline-body': 'TangailBuzz is a committed e-commerce platform reshaping online shopping in Bangladesh with customer-first service and inspiring value.',
@@ -4453,7 +4893,7 @@
                 'about-founder-conclusion': 'Under his leadership, TangailBuzz stands as an inspiring brand in Bangladesh’s e-commerce landscape.',
             },
             bn: {
-                'deliver-to': 'ডেলিভারি লোকেশন', 'home': 'হোম', 'products': 'পণ্য', 'categories': 'ক্যাটাগরি', 'offers': 'অফার', 'search-placeholder': 'পণ্য খুঁজুন...', 'featured-products': 'বৈশিষ্ট্যযুক্ত পণ্য', 'shop-by-category': 'ক্যাটাগরি অনুসারে কেনাকাটা করুন', 'cat-electronics': 'ইলেকট্রনিক্স', 'cat-fashion': 'ফ্যাশন', 'cat-home-garden': 'হোম অ্যান্ড গার্ডেন', 'cat-health-beauty': 'স্বাস্থ্য ও সৌন্দর্য', 'cat-sports': 'খেলাধুলা ও আউটডোর', 'cat-books': 'বই ও স্টেশনারি', 'cat-kids': 'বাচ্চা ও খেলনা', 'cat-cars': 'গাড়ি ও বাইক', 'why-choose-us': 'আমাদেরকে কেন বেছে নিবেন', 'feature-delivery-title': 'দ্রুত ডেলিভারি', 'feature-delivery-desc': 'আমরা ২-৩ কার্যদিবসের মধ্যে আপনার দোরগোড়ায় পণ্য পৌঁছে দিই।', 'feature-payment-title': 'নিরাপদ পেমেন্ট', 'feature-payment-desc': 'আপনার নিরাপত্তা ও গোপনীয়তার জন্য সকল লেনদেন এনক্রিপ্টেড।', 'feature-return-title': 'সহজ রিটার্ন', 'feature-return-desc': 'পছন্দ না হলে ৩০ দিনের মধ্যে পণ্য ফেরত দিন এবং সম্পূর্ণ মূল্য ফেরত পান।', 'feature-support-title': '২৪/৭ সাপোর্ট', 'feature-support-desc': 'আমাদের গ্রাহক সহায়তা দল দিনরাত আপনার জন্য উপলব্ধ।', 'add-to-cart': 'কার্টে যোগ করুন', 'added-to-cart': 'যোগ হয়েছে!', 'no-products': 'আপনার অনুসন্ধানের সাথে মেলে এমন কোনো পণ্য পাওয়া যায়নি।', 'back-to-products': 'সকল পণ্যে ফিরে যান', 'returnable': '৩০-দিনের মধ্যে ফেরতযোগ্য', 'not-returnable': 'ফেরতযোগ্য নয়', 'secure-payments': 'নিরাপদ পেমেন্ট', 'size': 'সাইজ:', 'storage': 'স্টোরেজ:', 'color': 'রঙ:', 'product-description': 'পণ্যের বিবরণ', 'product-specifications': 'পণ্যের স্পেসিফিকেশন', 'specifications': 'স্পেসিফিকেশন', 'value': 'মান', 'no-specs': 'এই পণ্যের জন্য কোন স্পেসিফিকেশন উপলব্ধ নেই।', 'product-reviews': 'পণ্যের রিভিউ', 'no-reviews': 'এই পণ্যের জন্য এখনো কোনো রিভিউ নেই।', 'cart': 'আপনার কার্ট', 'cart-empty': 'আপনার কার্ট খালি।', 'total': 'মোট মূল্য:', 'checkout': 'চেকআউট করুন', 'your-wishlist': 'আপনার উইশলিস্ট', 'wishlist-empty': 'আপনার উইশলিস্ট খালি। কিছু পণ্য যোগ করুন!', 'your-account': 'আপনার অ্যাকাউন্ট', 'signin-google': 'Google দিয়ে সাইন ইন করুন', 'logout': 'লগআউট', 'toast-cart-added': 'পণ্য কার্টে যোগ করা হয়েছে!', 'toast-wishlist-added': 'পণ্য উইশলিস্টে যোগ করা হয়েছে!', 'toast-wishlist-removed': 'পণ্য উইশলিস্ট থেকে সরানো হয়েছে!', 'toast-login-success': 'সফলভাবে লগইন হয়েছে!', 'toast-logout-success': 'সফলভাবে লগআউট হয়েছে!',
+                'deliver-to': 'ডেলিভারি লোকেশন', 'home': 'হোম', 'products': 'পণ্য', 'categories': 'ক্যাটাগরি', 'offers': 'অফার', 'search-placeholder': 'পণ্য খুঁজুন...', 'featured-products': 'বৈশিষ্ট্যযুক্ত পণ্য', 'shop-by-category': 'ক্যাটাগরি অনুসারে কেনাকাটা করুন', 'cat-electronics': 'ইলেকট্রনিক্স', 'cat-fashion': 'ফ্যাশন', 'cat-home-garden': 'হোম অ্যান্ড গার্ডেন', 'cat-health-beauty': 'স্বাস্থ্য ও সৌন্দর্য', 'cat-sports': 'খেলাধুলা ও আউটডোর', 'cat-books': 'বই ও স্টেশনারি', 'cat-kids': 'বাচ্চা ও খেলনা', 'cat-cars': 'গাড়ি ও বাইক', 'why-choose-us': 'আমাদেরকে কেন বেছে নিবেন', 'feature-delivery-title': 'দ্রুত ডেলিভারি', 'feature-delivery-desc': 'আমরা ২-৩ কার্যদিবসের মধ্যে আপনার দোরগোড়ায় পণ্য পৌঁছে দিই।', 'feature-payment-title': 'নিরাপদ পেমেন্ট', 'feature-payment-desc': 'আপনার নিরাপত্তা ও গোপনীয়তার জন্য সকল লেনদেন এনক্রিপ্টেড।', 'feature-return-title': 'সহজ রিটার্ন', 'feature-return-desc': 'পছন্দ না হলে ৩০ দিনের মধ্যে পণ্য ফেরত দিন এবং সম্পূর্ণ মূল্য ফেরত পান।', 'feature-support-title': '২৪/৭ সাপোর্ট', 'feature-support-desc': 'আমাদের গ্রাহক সহায়তা দল দিনরাত আপনার জন্য উপলব্ধ।', 'add-to-cart': 'কার্টে যোগ করুন', 'added-to-cart': 'যোগ হয়েছে!', 'no-products': 'আপনার অনুসন্ধানের সাথে মেলে এমন কোনো পণ্য পাওয়া যায়নি।', 'back-to-products': 'সকল পণ্যে ফিরে যান', 'returnable': '৩০-দিনের মধ্যে ফেরতযোগ্য', 'not-returnable': 'ফেরতযোগ্য নয়', 'return-policy-button-label': 'রিটার্ন নীতি দেখুন', 'secure-payments': 'নিরাপদ পেমেন্ট', 'size': 'সাইজ:', 'storage': 'স্টোরেজ:', 'color': 'রঙ:', 'product-description': 'পণ্যের বিবরণ', 'product-specifications': 'পণ্যের স্পেসিফিকেশন', 'specifications': 'স্পেসিফিকেশন', 'value': 'মান', 'no-specs': 'এই পণ্যের জন্য কোন স্পেসিফিকেশন উপলব্ধ নেই।', 'product-reviews': 'পণ্যের রিভিউ', 'no-reviews': 'এই পণ্যের জন্য এখনো কোনো রিভিউ নেই।', 'cart': 'আপনার কার্ট', 'cart-empty': 'আপনার কার্ট খালি।', 'total': 'মোট মূল্য:', 'checkout': 'চেকআউট করুন', 'your-wishlist': 'আপনার উইশলিস্ট', 'wishlist-empty': 'আপনার উইশলিস্ট খালি। কিছু পণ্য যোগ করুন!', 'your-account': 'আপনার অ্যাকাউন্ট', 'signin-google': 'Google দিয়ে সাইন ইন করুন', 'logout': 'লগআউট', 'toast-cart-added': 'পণ্য কার্টে যোগ করা হয়েছে!', 'toast-wishlist-added': 'পণ্য উইশলিস্টে যোগ করা হয়েছে!', 'toast-wishlist-removed': 'পণ্য উইশলিস্ট থেকে সরানো হয়েছে!', 'toast-login-success': 'সফলভাবে লগইন হয়েছে!', 'toast-logout-success': 'সফলভাবে লগআউট হয়েছে!',
                 'toast-register-success': 'অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে!', 'login': 'লগইন', 'register': 'অ্যাকাউন্ট রেজিস্টার', 'auth-login-heading': 'পুনরায় স্বাগতম', 'auth-register-heading': 'আপনার অ্যাকাউন্ট তৈরি করুন', 'auth-reset-heading': 'পাসওয়ার্ড রিসেট করুন', 'auth-login-subtitle': 'অর্ডার, উইশলিস্ট ও ঠিকানা পরিচালনা করতে লগইন করুন।', 'auth-register-subtitle': 'কয়েক মিনিটেই বিনামূল্যে TangailBuzz অ্যাকাউন্ট তৈরি করুন।', 'auth-reset-subtitle': 'আপনার ইমেইল দিন, আমরা একটি নিরাপদ রিসেট লিঙ্ক পাঠাবো।', 'auth-login-tab': 'লগইন', 'auth-register-tab': 'রেজিস্টার', 'auth-reset-tab': 'রিসেট', 'auth-social-divider': 'অথবা চালিয়ে যান', 'auth-security-note': 'আপনার তথ্য এনক্রিপ্টেড এবং নিরাপদে সংরক্ষিত থাকে।', 'auth-new-here': 'নতুন সদস্য?', 'auth-have-account': 'ইতোমধ্যে অ্যাকাউন্ট আছে?', 'create-account': 'অ্যাকাউন্ট তৈরি করুন', 'forgot-password': 'পাসওয়ার্ড ভুলে গেছেন?', 'reset-password-desc': 'আপনার নিবন্ধিত ইমেইল দিন, আমরা একটি নিরাপদ রিসেট লিঙ্ক পাঠাবো।', 'send-reset-link': 'রিসেট লিঙ্ক পাঠান', 'back-to-login': 'লগইনে ফিরে যান', 'login-google': 'গুগল দিয়ে লগইন করুন', 'login-facebook': 'ফেসবুক দিয়ে লগইন করুন', 'full-name': 'পূর্ণ নাম', 'mobile-number': 'মোবাইল নম্বর', 'location': 'অবস্থান', 'upload-photo': 'ছবি আপলোড করুন', 'remove-photo': 'ছবি সরান', 'save-changes': 'পরিবর্তন সংরক্ষণ করুন', 'cancel': 'বাতিল', 'account-options': 'অ্যাকাউন্ট অপশন', 'edit-profile': 'প্রোফাইল সম্পাদনা', 'manage-address': 'ঠিকানা ম্যানেজ করুন', 'delete-account': 'অ্যাকাউন্ট মুছুন', 'saved-addresses': 'সংরক্ষিত ঠিকানাসমূহ', 'manage-address-help': 'আপনার ডেলিভারি ঠিকানাগুলো পরিচালনা করুন।', 'address-form-title': 'নতুন ঠিকানা যোগ করুন', 'address-line1': 'ঠিকানা লাইন ১', 'address-line2-optional': 'ঠিকানা লাইন ২ (ঐচ্ছিক)', 'city': 'শহর', 'area-district': 'এলাকা/জেলা', 'set-as-default': 'ডিফল্ট হিসেবে নির্ধারণ করুন', 'save-address': 'ঠিকানা সংরক্ষণ করুন', 'toast-select-variant': 'অনুগ্রহ করে সব অপশন সিলেক্ট করুন!', 'select-variants': 'অপশন নির্বাচন করুন', 'buy-now': 'এখনই কিনুন', 'payment-method': 'পেমেন্ট পদ্ধতি নির্বাচন করুন', 'cod': 'ক্যাশ অন ডেলিভারি', 'online-payment': 'অনলাইন পেমেন্ট', 'confirm-order': 'অর্ডার নিশ্চিত করুন', 'order-placed-success': 'আপনার অর্ডারটি সফলভাবে সম্পন্ন হয়েছে!', 'order-placed-fail': 'অর্ডার করতে ব্যর্থ হয়েছে। আবার চেষ্টা করুন।', 'cart-is-empty': 'আপনার কার্ট খালি। চেকআউট করা সম্ভব নয়।', 'mobile-banking': 'মোবাইল ব্যাংকিং', 'payment-instruction-bkash': 'অনুগ্রহ করে আপনার অ্যাপ থেকে এই বিকাশ নম্বরে ৳{amount} পাঠান: +8801863205976।', 'payment-instruction-nagad': 'অনুগ্রহ করে আপনার অ্যাপ থেকে এই নগদ নম্বরে ৳{amount} পাঠান: +8801863205976।', 'payment-instruction-cod': 'আমাদের ডেলিভারি প্রতিনিধি পণ্য পৌঁছানোর সময় আপনার থেকে টাকা সংগ্রহ করবে।', 'profile-updated': 'প্রোফাইল সফলভাবে আপডেট হয়েছে!', 'profile-update-fail': 'প্রোফাইল আপডেট করতে ব্যর্থ হয়েছে।', 'toast-storage-permission-error': 'স্টোরেজ পারমিশন সমস্যা। অনুগ্রহ করে Firebase রুলস চেক করুন।', 'toast-update-profile': 'অর্ডার করার পূর্বে অনুগ্রহ করে আপনার প্রোফাইলে ঠিকানা ও মোবাইল নম্বর আপডেট করুন।', 'emergency-contact': 'সাপোর্ট', 'message-sent': 'আপনার বার্তা সফলভাবে পাঠানো হয়েছে!', 'out-of-stock': 'স্টক শেষ', 'toast-out-of-stock': 'দুঃখিত, এই পণ্যটি বর্তমানে স্টক আউট।', 'subtotal': 'মোট', 'delivery-charge': 'ডেলিভারি চার্জ', 'my-orders': 'আমার অর্ডার',
                 'delete-account-confirm': 'আপনি কি নিশ্চিত যে আপনি আপনার অ্যাকাউন্টটি মুছে ফেলতে চান? এই কাজটি ফিরিয়ে আনা যাবে না। আপনার সমস্ত ডেটা হারানো হবে।',
                 'account-deleted': 'আপনার অ্যাকাউন্ট সফলভাবে মুছে ফেলা হয়েছে।',
@@ -4494,12 +4934,18 @@
                 'review-success': 'রিভিউ সফলভাবে জমা দেওয়া হয়েছে! ধন্যবাদ।',
                 'review-failed': 'রিভিউ জমা দিতে ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।',
                 'variant-available-sizes': 'উপলব্ধ সাইজ',
+                'variant-available-ram': 'উপলব্ধ র‍্যাম',
                 'variant-available-storage': 'উপলব্ধ ভ্যারিয়েন্ট',
+                'variant-available-storage-gb': 'উপলব্ধ স্টোরেজ (GB)',
+                'variant-available-storage-tb': 'উপলব্ধ স্টোরেজ (TB)',
+                'variant-available-storage-mixed': 'অন্যান্য ভ্যারিয়েন্ট',
                 'variant-available-colors': 'উপলব্ধ রঙ',
                 'variant-instruction-size': 'সঠিক ফিটের জন্য আপনার সাইজ বেছে নিন।',
+                'variant-instruction-ram': 'আপনার প্রয়োজনের সাথে মিলিয়ে র‍্যাম নির্বাচন করুন।',
                 'variant-instruction-storage': 'আপনার পছন্দের ভ্যারিয়েন্ট বা অপশন নির্বাচন করুন।',
                 'variant-instruction-color': 'আপনার পছন্দের রঙটি নির্বাচন করুন।',
                 'variant-instruction-final': 'অর্ডার সম্পন্ন করার আগে উপরের অপশনগুলো থেকে নির্বাচন করুন।',
+                'ram': 'র‌্যাম:',
                 'storage-gb-hint': 'GB মাপের স্টোরেজ থেকে পছন্দ করুন।',
                 'storage-tb-hint': 'TB মাপের স্টোরেজ থেকে পছন্দ করুন।',
                 'see-more': 'আরও দেখুন',
@@ -4517,6 +4963,7 @@
                 'footer-col-customer-service': 'গ্রাহক সেবা',
                 'footer-faq': 'FAQ',
                 'footer-return-policy': 'রিটার্ন নীতি',
+                'footer-secure-payment': 'নিরাপদ পেমেন্ট',
                 'footer-shipping-info': 'শিপিং তথ্য',
                 'footer-privacy-policy': 'গোপনীয়তা নীতি',
                 'footer-terms': 'শর্তাবলী',
@@ -4576,6 +5023,7 @@
                 'invoice-download-success': 'ইনভয়েস সফলভাবে ডাউনলোড হয়েছে!',
                 'invoice-download-error': 'এখন ইনভয়েস ডাউনলোড করা যাচ্ছে না।',
                 'invoice-missing-order': 'এই অর্ডারের ইনভয়েসের তথ্য পাওয়া যায়নি।',
+                'secure-payments-button-label': 'নিরাপদ পেমেন্ট নীতি দেখুন',
                 'about-heading': 'আমাদের সম্পর্কে',
                 'about-tagline-title': 'TangailBuzz: আপনার বিশ্বস্ত অনলাইন শপিং গন্তব্য',
                 'about-tagline-body': 'TangailBuzz একটি প্রতিশ্রুতিশীল ই-কমার্স প্ল্যাটফর্ম, যা ক্রেতা-কেন্দ্রিক পরিষেবা প্রদানের মাধ্যমে বাংলাদেশের অনলাইন শপিং-এর অভিজ্ঞতাকে নতুন মাত্রা দিতে বদ্ধপরিকর।',
@@ -5127,6 +5575,30 @@
             window.scrollTo(0, 0);
         }
         window.showPage = showPage; // Exported to global scope
+
+        function navigateToStaticInfoPage(pageId, logLabel = pageId) {
+            try {
+                showPage(pageId);
+            } catch (error) {
+                console.warn(`Failed to show ${logLabel}`, error);
+            }
+
+            const container = document.getElementById('main-content-container');
+            if (container && typeof container.scrollTo === 'function') {
+                container.scrollTo({ top: 0, behavior: 'smooth' });
+            } else if (typeof window.scrollTo === 'function') {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+        function navigateToReturnPolicy() {
+            navigateToStaticInfoPage('return-policy-page', 'return policy page');
+        }
+        window.navigateToReturnPolicy = navigateToReturnPolicy;
+
+        function navigateToSecurePayment() {
+            navigateToStaticInfoPage('secure-payment-page', 'secure payment page');
+        }
+        window.navigateToSecurePayment = navigateToSecurePayment;
 
         function scrollToElement(elementId) {
             document.getElementById(elementId)?.scrollIntoView({ behavior: 'smooth' });
@@ -8188,32 +8660,85 @@
 
         function renderInfoDetails(product) {
             const infoDetails = document.getElementById('product-info-details');
-            const returnableText = product.isReturnable ? translations[currentLanguage]['returnable'] : translations[currentLanguage]['not-returnable'];
-            const returnableIcon = product.isReturnable ? 'fas fa-undo text-green-500' : 'fas fa-ban text-red-500';
-            const variantConfig = [
-                { key: 'sizes', type: 'size' },
-                { key: 'storage', type: 'storage' },
-                { key: 'colors', type: 'color' }
-            ];
+            if (!infoDetails) return;
+
+            const normalizedProduct = ensureProductVariantArrays(product || {});
+            const translate = (key, fallbackBn = '', fallbackEn = '') => {
+                const langPack = translations[currentLanguage] || {};
+                if (Object.prototype.hasOwnProperty.call(langPack, key)) {
+                    return langPack[key];
+                }
+                if (translations.en && Object.prototype.hasOwnProperty.call(translations.en, key)) {
+                    return translations.en[key];
+                }
+                if (currentLanguage === 'bn' && fallbackBn) return fallbackBn;
+                return fallbackEn || fallbackBn || '';
+            };
+
+            const isReturnable = normalizedProduct.isReturnable === true;
+            const returnableTextRaw = translate(
+                isReturnable ? 'returnable' : 'not-returnable',
+                isReturnable ? '৩০-দিনের মধ্যে ফেরতযোগ্য' : 'ফেরতযোগ্য নয়',
+                isReturnable ? '30-Day Returnable' : 'Not Returnable'
+            );
+            const returnableText = escapeHtml(returnableTextRaw);
+            const returnableIcon = isReturnable ? 'fas fa-undo text-green-500' : 'fas fa-ban text-red-500';
+            const returnableButtonLabel = escapeHtml(
+                translate(
+                    'return-policy-button-label',
+                    'রিটার্ন নীতি দেখতে ক্লিক করুন',
+                    'View return policy'
+                )
+            );
+
+            const variantFieldMap = { size: 'sizes', ram: 'ram', storage: 'storage', color: 'colors' };
+            const variantOrder = getVariantTypesForProduct(normalizedProduct);
+            const variantConfig = variantOrder
+                .map(type => ({ key: variantFieldMap[type], type }))
+                .filter(entry => entry.key);
 
             const variantLabelMap = {
-                size: translations[currentLanguage]['variant-available-sizes'] || (currentLanguage === 'bn' ? 'উপলব্ধ সাইজ' : 'Available Sizes'),
-                storage: translations[currentLanguage]['variant-available-storage'] || (currentLanguage === 'bn' ? 'উপলব্ধ ভ্যারিয়েন্ট/স্টোরেজ' : 'Available Variants'),
-                color: translations[currentLanguage]['variant-available-colors'] || (currentLanguage === 'bn' ? 'উপলব্ধ রঙ' : 'Available Colors')
+                size: translate('variant-available-sizes', 'উপলব্ধ সাইজ', 'Available Sizes'),
+                ram: translate('variant-available-ram', 'উপলব্ধ র‍্যাম', 'Available RAM'),
+                storage: translate('variant-available-storage', 'উপলব্ধ ভ্যারিয়েন্ট/স্টোরেজ', 'Available Variants'),
+                color: translate('variant-available-colors', 'উপলব্ধ রঙ', 'Available Colors')
             };
 
             const variantInstructionMap = {
-                size: translations[currentLanguage]['variant-instruction-size'] || (currentLanguage === 'bn' ? 'সঠিক ফিটের জন্য আপনার সাইজ বেছে নিন।' : 'Pick the size that fits you best.'),
-                storage: translations[currentLanguage]['variant-instruction-storage'] || (currentLanguage === 'bn' ? 'আপনার প্রয়োজনীয় ভ্যারিয়েন্ট বা স্টোরেজ নির্বাচন করুন।' : 'Select the variant or storage you prefer.'),
-                color: translations[currentLanguage]['variant-instruction-color'] || (currentLanguage === 'bn' ? 'আপনার পছন্দের রঙটি নির্বাচন করুন।' : 'Choose the color you like most.')
+                size: translate('variant-instruction-size', 'সঠিক ফিটের জন্য আপনার সাইজ বেছে নিন।', 'Pick the size that fits you best.'),
+                ram: translate('variant-instruction-ram', 'পারফরম্যান্সের জন্য প্রয়োজনীয় র‍্যাম বেছে নিন।', 'Choose the RAM configuration you need.'),
+                storage: translate('variant-instruction-storage', 'আপনার প্রয়োজনীয় ভ্যারিয়েন্ট বা স্টোরেজ নির্বাচন করুন।', 'Select the variant or storage you prefer.'),
+                color: translate('variant-instruction-color', 'আপনার পছন্দের রঙটি নির্বাচন করুন।', 'Choose the color you like most.')
             };
 
             const variantInfoLines = [];
             const variantInstructionLines = [];
 
             variantConfig.forEach(({ key, type }) => {
-                const rawOptions = Array.isArray(product[key]) ? product[key] : [];
-                const options = rawOptions.map(opt => escapeHtml(opt)).filter(opt => opt);
+                if (type === 'storage') {
+                    const { gb, tb, mixed } = getStorageOptionGroups(normalizedProduct);
+                    const storageGroups = [
+                        { values: gb, label: translate('variant-available-storage-gb', 'উপলব্ধ স্টোরেজ (GB)', 'Available Storage (GB)') },
+                        { values: tb, label: translate('variant-available-storage-tb', 'উপলব্ধ স্টোরেজ (TB)', 'Available Storage (TB)') },
+                        { values: mixed, label: translate('variant-available-storage-mixed', 'অন্যান্য ভ্যারিয়েন্ট', 'Additional Variants') }
+                    ].filter(group => Array.isArray(group.values) && group.values.length);
+
+                    if (!storageGroups.length) return;
+
+                    storageGroups.forEach(group => {
+                        const labelText = escapeHtml(group.label || '');
+                        const options = group.values.map(opt => escapeHtml(opt)).filter(Boolean);
+                        if (!options.length) return;
+                        variantInfoLines.push(`<p><strong>${labelText}:</strong> ${options.join(', ')}</p>`);
+                    });
+
+                    const instructionText = escapeHtml(variantInstructionMap[type] || '');
+                    if (instructionText) variantInstructionLines.push(`<p>${instructionText}</p>`);
+                    return;
+                }
+
+                const optionSource = Array.isArray(normalizedProduct[key]) ? normalizedProduct[key] : [];
+                const options = optionSource.map(opt => escapeHtml(opt)).filter(Boolean);
                 if (!options.length) return;
 
                 const labelText = escapeHtml(variantLabelMap[type] || '');
@@ -8222,20 +8747,37 @@
                 if (instructionText) variantInstructionLines.push(`<p>${instructionText}</p>`);
             });
 
-            const finalPromptRaw = translations[currentLanguage]['variant-instruction-final'] || (currentLanguage === 'bn' ? 'অর্ডার সম্পন্ন করার আগে উপরের বাটন থেকে প্রয়োজনীয় অপশন নির্বাচন করুন।' : 'Use the option buttons above before completing your order.');
+            const finalPromptRaw = translate(
+                'variant-instruction-final',
+                'অর্ডার সম্পন্ন করার আগে উপরের বাটন থেকে প্রয়োজনীয় অপশন নির্বাচন করুন।',
+                'Use the option buttons above before completing your order.'
+            );
             const finalPrompt = escapeHtml(finalPromptRaw);
             const variantInfoHtml = variantInfoLines.length
                 ? `<div class="variant-info-box">${variantInfoLines.join('')}<div class="mt-2">${variantInstructionLines.join('')}<p class="font-semibold mt-2">${finalPrompt}</p></div></div>`
                 : '';
 
+            const securePaymentsText = escapeHtml(translate('secure-payments', 'নিরাপদ পেমেন্ট', 'Secure Payments'));
+            const securePaymentsButtonLabel = escapeHtml(
+                translate(
+                    'secure-payments-button-label',
+                    'নিরাপদ পেমেন্ট নীতি দেখুন',
+                    'View secure payment policy'
+                )
+            );
+            const returnableContent = isReturnable
+                ? `<button type="button" class="text-sm text-gray-600 dark:text-gray-300 underline decoration-dotted underline-offset-4 hover:text-primary focus:text-primary focus:outline-none" onclick="navigateToReturnPolicy()" aria-label="${returnableButtonLabel}">${returnableText}</button>`
+                : `<span class="text-sm text-gray-600 dark:text-gray-300">${returnableText}</span>`;
+            const securePaymentsContent = `<button type="button" class="text-sm text-gray-600 dark:text-gray-300 underline decoration-dotted underline-offset-4 hover:text-primary focus:text-primary focus:outline-none" onclick="navigateToSecurePayment()" aria-label="${securePaymentsButtonLabel}" data-lang="secure-payments">${securePaymentsText}</button>`;
+
             infoDetails.innerHTML = `
                 <div class="flex items-center space-x-2">
                     <i class="${returnableIcon}"></i>
-                    <span class="text-sm text-gray-600 dark:text-gray-300">${returnableText}</span>
+                    ${returnableContent}
                 </div>
                 <div class="flex items-center space-x-2">
                     <i class="fas fa-lock text-green-500"></i>
-                    <span class="text-sm text-gray-600 dark:text-gray-300" data-lang="secure-payments">${translations[currentLanguage]['secure-payments']}</span>
+                    ${securePaymentsContent}
                 </div>
                 ${variantInfoHtml}`;
         }
@@ -8254,9 +8796,29 @@
         }
 
         function renderAllVariants(product) {
-            renderSimpleVariantOptions('size', product.sizes);
-            renderStorageVariantOptions(product);
-            renderSimpleVariantOptions('color', product.colors);
+            const normalizedProduct = ensureProductVariantArrays(product || {});
+            const variantOrder = getVariantTypesForProduct(normalizedProduct);
+            const optionSource = {
+                size: normalizedProduct.sizes,
+                ram: normalizedProduct.ram,
+                color: normalizedProduct.colors
+            };
+            let storageRendered = false;
+
+            variantOrder.forEach(type => {
+                if (type === 'storage') {
+                    if (!storageRendered) {
+                        renderStorageVariantOptions(normalizedProduct);
+                        storageRendered = true;
+                    }
+                    return;
+                }
+                renderSimpleVariantOptions(type, optionSource[type]);
+            });
+
+            if (!storageRendered) {
+                renderStorageVariantOptions(normalizedProduct);
+            }
         }
 
         function renderSimpleVariantOptions(variantType, options) {
@@ -8268,26 +8830,38 @@
             if (!options || options.length === 0) {
                 containerDiv.classList.add('hidden');
                 container.innerHTML = '';
+                delete selectedVariants[variantType];
                 return;
             }
 
             const accessibleLabels = {
                 size: currentLanguage === 'bn' ? 'সাইজ নির্বাচন' : 'Select size',
-                color: currentLanguage === 'bn' ? 'রঙ নির্বাচন' : 'Select color'
+                color: currentLanguage === 'bn' ? 'রঙ নির্বাচন' : 'Select color',
+                ram: currentLanguage === 'bn' ? 'র‍্যাম নির্বাচন' : 'Select RAM'
             };
 
             containerDiv.classList.remove('hidden');
+            const selectedValue = selectedVariants[variantType] === undefined || selectedVariants[variantType] === null
+                ? ''
+                : String(selectedVariants[variantType]).trim();
+            const selectedKey = normalizeVariantKey(selectedValue);
+
             container.innerHTML = options.map(option => {
                 const rawValue = option === undefined || option === null ? '' : String(option).trim();
                 const safeValue = escapeHtml(rawValue);
                 const encodedValue = encodeURIComponent(rawValue);
+                const valueKey = normalizeVariantKey(rawValue);
+                const isActive = selectedKey && valueKey && selectedKey === valueKey;
                 if (variantType === 'color') {
-                    const sanitizedColor = rawValue.replace(/[^#a-zA-Z0-9(),.%\s-]/g, '');
+                    const swatchStyle = resolveColorSwatchStyle(rawValue);
                     const label = `${accessibleLabels.color}${safeValue ? `: ${safeValue}` : ''}`;
-                    return `<button type="button" class="color-variant" style="background:${sanitizedColor || '#d1d5db'};" data-variant-type="color" data-value="${encodedValue}" aria-label="${label}" aria-pressed="false" title="${label}"></button>`;
+                    return `<button type="button" class="color-variant${isActive ? ' color-variant-active' : ''}" data-variant-type="color" data-value="${encodedValue}" aria-label="${label}" aria-pressed="${isActive ? 'true' : 'false'}" title="${label}">
+                        <span class="color-variant-swatch" style="${swatchStyle}"></span>
+                        ${safeValue ? `<span class="color-variant-label">${safeValue}</span>` : ''}
+                    </button>`;
                 }
-                const label = `${accessibleLabels[variantType]}${safeValue ? `: ${safeValue}` : ''}`;
-                return `<button type="button" class="variant-btn" data-variant-type="${variantType}" data-value="${encodedValue}" aria-label="${label}" aria-pressed="false">${safeValue || '-'}</button>`;
+                const label = `${accessibleLabels[variantType] || 'Select option'}${safeValue ? `: ${safeValue}` : ''}`;
+                return `<button type="button" class="variant-btn${isActive ? ' variant-btn-active' : ''}" data-variant-type="${variantType}" data-value="${encodedValue}" aria-label="${label}" aria-pressed="${isActive ? 'true' : 'false'}">${safeValue || '-'}</button>`;
             }).join('');
         }
 
@@ -8315,6 +8889,7 @@
                 mixedContainer.innerHTML = '';
                 if (gbHint) gbHint.textContent = '';
                 if (tbHint) tbHint.textContent = '';
+                delete selectedVariants.storage;
                 return;
             }
 
@@ -8705,13 +9280,13 @@
         }
         
         function getRequiredVariants(product) {
+            const variantOrder = getVariantTypesForProduct(product);
             const required = [];
-            if (product.sizes && product.sizes.length > 0) required.push('size');
-            const storagePresent = (Array.isArray(product.storage) && product.storage.length > 0)
-                || (Array.isArray(product.storageGbOptions) && product.storageGbOptions.length > 0)
-                || (Array.isArray(product.storageTbOptions) && product.storageTbOptions.length > 0);
-            if (storagePresent) required.push('storage');
-            if (product.colors && product.colors.length > 0) required.push('color');
+            variantOrder.forEach(type => {
+                if (hasOptionsForVariant(product, type)) {
+                    required.push(type);
+                }
+            });
             return required;
         }
 
@@ -8750,8 +9325,9 @@
             }
 
             // Only include variant keys that are actually applicable to this product
-            const variantFieldMap = { size: 'sizes', storage: 'storage', color: 'colors' };
-            const applicableVariantKeys = ['size','storage','color'].filter(k => {
+            const variantFieldMap = { size: 'sizes', ram: 'ram', storage: 'storage', color: 'colors' };
+            const variantOrder = getVariantTypesForProduct(product);
+            const applicableVariantKeys = variantOrder.filter(k => {
                 const fieldName = variantFieldMap[k];
                 const val = product[fieldName];
                 return Array.isArray(val) ? val.length > 0 : !!val;
@@ -8761,7 +9337,7 @@
                 if (selectedVariants[key]) selectedForProduct[key] = selectedVariants[key];
             }
             // Use distinct codes for variants to avoid collisions (legacy used _S: for both size and storage)
-            const codeMap = { size: 'SZ', storage: 'ST', color: 'C' };
+            const codeMap = { size: 'SZ', ram: 'RM', storage: 'ST', color: 'C' };
             const sortedVariantKeys = Object.keys(selectedForProduct).sort();
             const variantString = sortedVariantKeys.map(key => `_${codeMap[key]}:${selectedForProduct[key]}`).join('');
             const cartItemId = productId + variantString;
@@ -9890,10 +10466,36 @@
                 if (nameEl) nameEl.textContent = product.name || '';
                 if (priceEl) priceEl.textContent = `৳${Number(product.price || 0).toFixed(2)}`;
 
-                // Render options
-                renderVariantOptionsModal('size', product.sizes, currentVariantModal.selected.size);
-                renderVariantOptionsModal('storage', product.storage, currentVariantModal.selected.storage);
-                renderVariantOptionsModal('color', product.colors, currentVariantModal.selected.color);
+                const renderModalVariant = (type) => {
+                    switch (type) {
+                        case 'size':
+                            renderVariantOptionsModal('size', product.sizes, currentVariantModal.selected.size);
+                            break;
+                        case 'ram':
+                            renderVariantOptionsModal('ram', product.ram, currentVariantModal.selected.ram);
+                            break;
+                        case 'storage':
+                            renderVariantOptionsModal('storage', product.storage, currentVariantModal.selected.storage);
+                            break;
+                        case 'color':
+                            renderVariantOptionsModal('color', product.colors, currentVariantModal.selected.color);
+                            break;
+                        default:
+                            break;
+                    }
+                };
+
+                const modalVariantOrder = getVariantTypesForProduct(product);
+                const renderedModalTypes = new Set();
+                modalVariantOrder.forEach(type => {
+                    renderModalVariant(type);
+                    renderedModalTypes.add(type);
+                });
+                DEFAULT_VARIANT_ORDER.forEach(type => {
+                    if (!renderedModalTypes.has(type)) {
+                        renderModalVariant(type);
+                    }
+                });
 
                 const modal = document.getElementById('variant-modal');
                 if (modal) {
@@ -9915,7 +10517,8 @@
         window.closeVariantModal = closeVariantModal;
 
     function renderVariantOptionsModal(variantType, options, selectedValue = '') {
-        const normalizedSelected = selectedValue === undefined || selectedValue === null ? '' : String(selectedValue).trim();
+    const normalizedSelected = selectedValue === undefined || selectedValue === null ? '' : String(selectedValue).trim();
+    const normalizedSelectedKey = normalizeVariantKey(normalizedSelected);
 
         if (variantType === 'storage') {
             const wrapper = document.getElementById('vm-storage-options');
@@ -9942,6 +10545,9 @@
                 mixedContainer.innerHTML = '';
                 if (gbHint) gbHint.textContent = '';
                 if (tbHint) tbHint.textContent = '';
+                if (currentVariantModal?.selected) {
+                    delete currentVariantModal.selected.storage;
+                }
                 return;
             }
 
@@ -10003,11 +10609,15 @@
         if (!options || options.length === 0) {
             wrapper.classList.add('hidden');
             container.innerHTML = '';
+            if (currentVariantModal?.selected) {
+                delete currentVariantModal.selected[variantType];
+            }
             return;
         }
         const accessibleLabels = {
             size: currentLanguage === 'bn' ? 'সাইজ নির্বাচন' : 'Select size',
-            color: currentLanguage === 'bn' ? 'রঙ নির্বাচন' : 'Select color'
+            color: currentLanguage === 'bn' ? 'রঙ নির্বাচন' : 'Select color',
+            ram: currentLanguage === 'bn' ? 'র‍্যাম নির্বাচন' : 'Select RAM'
         };
 
         wrapper.classList.remove('hidden');
@@ -10015,14 +10625,18 @@
             const rawValue = option === undefined || option === null ? '' : String(option).trim();
             const safeValue = escapeHtml(rawValue);
             const encodedValue = encodeURIComponent(rawValue);
+            const valueKey = normalizeVariantKey(rawValue);
             if (variantType === 'color') {
-                const sanitizedColor = rawValue.replace(/[^#a-zA-Z0-9(),.%\s-]/g, '');
+                const swatchStyle = resolveColorSwatchStyle(rawValue);
                 const label = `${accessibleLabels.color}${safeValue ? `: ${safeValue}` : ''}`;
-                const isActive = normalizedSelected && rawValue === normalizedSelected;
-                return `<button type="button" class="color-variant${isActive ? ' color-variant-active' : ''}" style="background:${sanitizedColor || '#d1d5db'};" data-vm-variant-type="color" data-value="${encodedValue}" aria-label="${label}" aria-pressed="${isActive ? 'true' : 'false'}" title="${label}"></button>`;
+                const isActive = normalizedSelectedKey && valueKey && normalizedSelectedKey === valueKey;
+                return `<button type="button" class="color-variant${isActive ? ' color-variant-active' : ''}" data-vm-variant-type="color" data-value="${encodedValue}" aria-label="${label}" aria-pressed="${isActive ? 'true' : 'false'}" title="${label}">
+                    <span class="color-variant-swatch" style="${swatchStyle}"></span>
+                    ${safeValue ? `<span class="color-variant-label">${safeValue}</span>` : ''}
+                </button>`;
             }
             const label = `${accessibleLabels[variantType]}${safeValue ? `: ${safeValue}` : ''}`;
-            const isActive = normalizedSelected && rawValue === normalizedSelected;
+            const isActive = normalizedSelectedKey && valueKey && normalizedSelectedKey === valueKey;
             return `<button type="button" class="variant-btn${isActive ? ' variant-btn-active' : ''}" data-vm-variant-type="${variantType}" data-value="${encodedValue}" aria-label="${label}" aria-pressed="${isActive ? 'true' : 'false'}">${safeValue || '-'}</button>`;
         }).join('');
     }
