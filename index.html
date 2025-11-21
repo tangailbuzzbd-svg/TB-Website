@@ -1,7 +1,8 @@
+
 <!DOCTYPE html><html lang="bn"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>টাঙ্গাইলবাজ - অনলাইন শপিং</title>
+    <title>TangailBuzz — Shop Local, Shop Online</title>
     <!-- FAVICON UPDATE: Added the new provided logo URL as the favicon -->
     <link rel="icon" type="image/png" href="https://github.com/tangailbuzzbd-svg/TangailBuzz-Picture-/blob/main/gdrg_upscaled%20(1).png?raw=true">
     <!-- Google Fonts -->
@@ -2209,15 +2210,34 @@
                         <span id="auth-social-divider" data-lang="auth-social-divider">অথবা চালিয়ে যান</span>
                     </div>
 
-                    <div class="grid gap-3">
-                        <button id="login-google-btn" type="button" class="auth-social-btn">
+                    <div class="grid gap-3 grid-cols-1">
+                        <button id="login-google-btn" type="button" class="auth-social-btn w-full flex items-center justify-center gap-3 px-4 py-3" aria-live="polite">
                             <span class="auth-social-icon google"><i class="fab fa-google"></i></span>
                             <span data-lang="login-google">গুগল দিয়ে লগইন করুন</span>
+                            <!-- inline spinner (hidden by default) -->
+                            <span class="btn-spinner hidden ml-2" aria-hidden="true">
+                                <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                                </svg>
+                            </span>
                         </button>
-                        <button id="login-facebook-btn" type="button" class="auth-social-btn">
-                            <span class="auth-social-icon facebook"><i class="fab fa-facebook-f"></i></span>
-                            <span data-lang="login-facebook">ফেসবুক দিয়ে লগইন করুন</span>
-                        </button>
+                    </div>
+
+                    <!-- Phone / OTP login block -->
+                    <div id="phone-login-section" class="mt-4 p-4 border rounded bg-gray-50">
+                        <h4 class="font-bold mb-2">মোবাইল দিয়ে লগইন করুন</h4>
+                        
+                        <div id="phone-input-group">
+                            <input type="tel" id="phone-number" placeholder="+8801xxxxxxxxx" class="w-full p-2 border rounded mb-2" value="+880">
+                            <div id="recaptcha-container" class="mb-2"></div>
+                            <button id="send-otp-btn" class="w-full bg-blue-600 text-white py-2 rounded">Send OTP</button>
+                        </div>
+
+                        <div id="otp-input-group" class="hidden">
+                            <input type="text" id="otp-code" placeholder="123456" class="w-full p-2 border rounded mb-2">
+                            <button id="verify-otp-btn" class="w-full bg-green-600 text-white py-2 rounded">Verify &amp; Login</button>
+                        </div>
                     </div>
 
                     <p id="auth-security-note" class="auth-meta-note" data-lang="auth-security-note">আপনার তথ্য এনক্রিপ্টেড এবং নিরাপদে সংরক্ষিত থাকে।</p>
@@ -3244,7 +3264,7 @@
     <!-- Firebase SDK Scripts (Modular v9+) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-    import { getAuth, onAuthStateChanged, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, deleteUser, signInWithCustomToken, signInAnonymously, sendPasswordResetEmail, reauthenticateWithCredential, EmailAuthProvider, reauthenticateWithPopup, fetchSignInMethodsForEmail } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getAuth, RecaptchaVerifier, signInWithPhoneNumber, onAuthStateChanged, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, deleteUser, signInWithCustomToken, signInAnonymously, sendPasswordResetEmail, reauthenticateWithCredential, EmailAuthProvider, reauthenticateWithPopup, fetchSignInMethodsForEmail, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
     import { getFirestore, doc, setDoc, getDoc, deleteDoc, onSnapshot, updateDoc, increment, deleteField, collection, addDoc, serverTimestamp, getDocs, writeBatch, runTransaction, query, where, arrayUnion, orderBy, limit, FieldPath } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
         
@@ -3259,10 +3279,109 @@
             measurementId: "G-7HYDCZTN2H"
         };
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    // Phone auth helper
+    let confirmationResult = null;
+
+        // Ensure auth persistence uses browser local persistence so user stays logged in across refreshes
+        // Expose a promise so other startup code can wait for persistence to be configured
+        window._authPersistencePromise = setPersistence(auth, browserLocalPersistence)
+            .then(() => { console.debug('Firebase auth persistence set to browserLocalPersistence'); })
+            .catch((err) => { console.warn('Failed to set Firebase auth persistence', err); });
         const db = getFirestore(app);
         const storage = getStorage(app);
+
+        // reCAPTCHA setup and phone auth handlers (robust rendering + UX)
+        const setupRecaptcha = () => {
+            try {
+                const container = document.getElementById('recaptcha-container');
+                if (!container) {
+                    console.warn('recaptcha container not found');
+                    return Promise.reject(new Error('recaptcha container not found'));
+                }
+
+                if (!window.recaptchaVerifier) {
+                    window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
+                        size: 'normal', // change to 'invisible' for invisible captcha
+                        callback: (response) => { console.debug('reCAPTCHA solved'); }
+                    }, auth);
+                    // store render promise so multiple calls reuse it
+                    window.recaptchaVerifier._renderPromise = window.recaptchaVerifier.render()
+                        .then((widgetId) => { window.recaptchaVerifier._widgetId = widgetId; return widgetId; })
+                        .catch((err) => { console.warn('recaptcha render failed', err); throw err; });
+                }
+
+                return window.recaptchaVerifier._renderPromise || Promise.resolve(window.recaptchaVerifier._widgetId);
+            } catch (e) {
+                console.warn('setupRecaptcha failed', e);
+                return Promise.reject(e);
+            }
+        };
+
+        // helper to show feedback using in-app toast if available
+        const showFeedback = (msg, success = true) => {
+            if (typeof showToast === 'function') {
+                showToast(msg, success);
+            } else {
+                alert(msg);
+            }
+        };
+
+        // Send OTP (async: wait for recaptcha to render)
+        document.getElementById('send-otp-btn')?.addEventListener('click', async (ev) => {
+            ev.preventDefault();
+            const sendBtn = document.getElementById('send-otp-btn');
+            const phoneNumberEl = document.getElementById('phone-number');
+            if (!phoneNumberEl) return;
+            const phoneNumber = String(phoneNumberEl.value || '').trim();
+            if (!phoneNumber || phoneNumber.length < 11) {
+                showFeedback('সঠিক মোবাইল নম্বর দিন (+880...)', false);
+                return;
+            }
+
+            if (sendBtn) { sendBtn.disabled = true; sendBtn.classList.add('opacity-60', 'cursor-not-allowed'); }
+
+            try {
+                await setupRecaptcha();
+                const appVerifier = window.recaptchaVerifier;
+                const result = await signInWithPhoneNumber(auth, phoneNumber, appVerifier);
+                confirmationResult = result;
+                showFeedback('SMS পাঠানো হয়েছে! কোডটি লিখুন।', true);
+                document.getElementById('phone-input-group')?.classList.add('hidden');
+                document.getElementById('otp-input-group')?.classList.remove('hidden');
+            } catch (error) {
+                console.error('SMS Error:', error);
+                showFeedback('SMS পাঠানো যায়নি। কনসোল চেক করুন।', false);
+                try {
+                    const wid = window.recaptchaVerifier?._widgetId;
+                    if (typeof wid !== 'undefined' && typeof grecaptcha !== 'undefined' && grecaptcha.reset) {
+                        grecaptcha.reset(wid);
+                    }
+                } catch (e) { /* ignore */ }
+            } finally {
+                if (sendBtn) { sendBtn.disabled = false; sendBtn.classList.remove('opacity-60', 'cursor-not-allowed'); }
+            }
+        });
+
+        // Verify OTP
+        document.getElementById('verify-otp-btn')?.addEventListener('click', async (ev) => {
+            ev.preventDefault();
+            const codeEl = document.getElementById('otp-code');
+            if (!codeEl) return;
+            const code = String(codeEl.value || '').trim();
+            if (!confirmationResult) { showFeedback('কোনো কোড পাঠানো হয়নি। প্রথমে OTP পাঠান।', false); return; }
+            try {
+                const result = await confirmationResult.confirm(code);
+                const user = result.user;
+                console.debug('User Logged In via phone:', user);
+                showFeedback('সফলভাবে লগইন হয়েছে!', true);
+                if (typeof closeDrawer === 'function') closeDrawer();
+            } catch (error) {
+                console.error('OTP confirm failed', error);
+                showFeedback('ভুল কোড দিয়েছেন। আবার চেষ্টা করুন।', false);
+            }
+        });
 
     const PRELOADER_FADE_MS = 300;
     const preloaderEl = document.getElementById('preloader');
@@ -4666,8 +4785,10 @@
             }
         };
 
-        // Initial ping
-    ensurePresenceAuth().catch(() => {}).finally(() => { sendPresence(true); });
+        // Initial ping — defer anonymous signin until auth persistence is configured to avoid race with persisted user restore
+    (window._authPersistencePromise || Promise.resolve()).then(() => {
+        ensurePresenceAuth().catch(() => {});
+    }).finally(() => { sendPresence(true); });
 
         // Refresh on auth changes
         onAuthStateChanged(auth, (user) => {
@@ -5076,7 +5197,7 @@
             toast: document.getElementById('toast-notification'), toastMessage: document.getElementById('toast-message'), productList: document.getElementById('product-list'), flashSaleSection: document.getElementById('flash-sale-section'), flashSaleGrid: document.getElementById('flash-sale-grid'), flashSaleEmpty: document.getElementById('flash-sale-empty'), flashSaleMasterCountdown: document.getElementById('flash-sale-master-countdown'), flashSaleCountdownLabel: document.getElementById('flash-sale-countdown-label'), flashSaleToggle: document.getElementById('flash-sale-toggle'), megaSaleSection: document.getElementById('mega-sale-section'), megaSaleGrid: document.getElementById('mega-sale-grid'), megaSaleEmpty: document.getElementById('mega-sale-empty'), megaSaleToggle: document.getElementById('mega-sale-toggle'), forYouSection: document.getElementById('for-you-section'), forYouGrid: document.getElementById('for-you-grid'), forYouEmpty: document.getElementById('for-you-empty'), forYouToggle: document.getElementById('for-you-toggle'), cartCount: document.getElementById('cart-count'), mobileCartCount: document.getElementById('mobile-cart-count'), cartItems: document.getElementById('cart-items'), cartSubtotal: document.getElementById('cart-subtotal'), deliveryCharge: document.getElementById('delivery-charge'), cartTotal: document.getElementById('cart-total'), wishlistItems: document.getElementById('wishlist-items'), authOptions: document.getElementById('auth-options'), 
             userProfileView: document.getElementById('user-profile-view'), userPhoto: document.getElementById('user-photo'), userName: document.getElementById('user-name'), userEmail: document.getElementById('user-email'), userMobile: document.getElementById('user-mobile'), userLocation: document.getElementById('user-location'),
             authCardHeading: document.getElementById('auth-card-heading'), authSubtitle: document.getElementById('auth-subtitle'), authHeroIcon: document.querySelector('.auth-hero-icon i'), authTabs: Array.from(document.querySelectorAll('.auth-tab')),
-            loginBtn: document.getElementById('login-google-btn'), loginFacebookBtn: document.getElementById('login-facebook-btn'), logoutBtn: document.getElementById('logout-btn'), 
+            loginBtn: document.getElementById('login-google-btn'), logoutBtn: document.getElementById('logout-btn'), 
             editProfileBtn: document.getElementById('edit-profile-btn'), editProfileForm: document.getElementById('edit-profile-form'), saveProfileBtn: document.getElementById('save-profile-btn'), cancelEditBtn: document.getElementById('cancel-edit-btn'),
             profileFullSection: document.getElementById('profile-full-section'), mobileProfileToggleBtn: document.getElementById('mobile-profile-toggle'),
             profileQuickActions: Array.from(document.querySelectorAll('.profile-quick-action')),
@@ -9870,16 +9991,21 @@
         
         async function handleGoogleLogin() {
             const provider = new GoogleAuthProvider();
+            const btn = DOMElements.loginBtn || document.getElementById('login-google-btn');
+            const spinner = btn ? btn.querySelector('.btn-spinner') : null;
             try {
+                if (btn) { btn.disabled = true; btn.classList.add('opacity-60', 'cursor-not-allowed'); }
+                if (spinner) spinner.classList.remove('hidden');
+
                 const result = await signInWithPopup(auth, provider);
                 const user = result.user;
                 const userDocRef = doc(db, 'users', user.uid);
                 const docSnap = await getDoc(userDocRef);
-             if (!docSnap.exists()) {
-                 await setDoc(userDocRef, { email: user.email, name: user.displayName, photoURL: user.photoURL, cart: {}, wishlist: {}, usedCoupons: [], mobile: '', location: '', addresses: [], isBlocked: false, createdAt: serverTimestamp() });
-             } else if (!docSnap.data()?.createdAt) {
-                 await updateDoc(userDocRef, { createdAt: serverTimestamp() });
-             }
+                if (!docSnap.exists()) {
+                    await setDoc(userDocRef, { email: user.email, name: user.displayName, photoURL: user.photoURL, cart: {}, wishlist: {}, usedCoupons: [], mobile: '', location: '', addresses: [], isBlocked: false, createdAt: serverTimestamp() });
+                } else if (!docSnap.data()?.createdAt) {
+                    await updateDoc(userDocRef, { createdAt: serverTimestamp() });
+                }
                 closeDrawer();
                 showToast('toast-login-success');
             } catch (error) {
@@ -9889,36 +10015,13 @@
                 } else {
                     DOMElements.authError.textContent = error.message;
                 }
+            } finally {
+                if (spinner) spinner.classList.add('hidden');
+                if (btn) { btn.disabled = false; btn.classList.remove('opacity-60', 'cursor-not-allowed'); }
             }
         }
 
-        async function handleFacebookLogin() {
-            const provider = new FacebookAuthProvider();
-            // Optional: request additional scopes
-            // provider.addScope('public_profile');
-            try {
-                const result = await signInWithPopup(auth, provider);
-                const user = result.user;
-                const userDocRef = doc(db, 'users', user.uid);
-                const docSnap = await getDoc(userDocRef);
-                if (!docSnap.exists()) {
-                    await setDoc(userDocRef, { email: user.email || '', name: user.displayName || 'Facebook User', photoURL: user.photoURL || '', cart: {}, wishlist: {}, usedCoupons: [], mobile: '', location: '', addresses: [], isBlocked: false, createdAt: serverTimestamp() });
-                } else if (!docSnap.data()?.createdAt) {
-                    await updateDoc(userDocRef, { createdAt: serverTimestamp() });
-                }
-                closeDrawer();
-                showToast('toast-login-success');
-            } catch (error) {
-                console.error('Facebook sign-in error', error);
-                if (error.code === 'auth/account-exists-with-different-credential') {
-                    DOMElements.authError.textContent = 'An account already exists with the same email. Please sign in with the provider you used previously.';
-                } else if (error.code === 'auth/unauthorized-domain') {
-                    DOMElements.authError.textContent = 'This domain is not authorized for Facebook login. Add it in your Firebase console Auth settings.';
-                } else {
-                    DOMElements.authError.textContent = error.message;
-                }
-            }
-        }
+        // Facebook login removed
 
         async function handleLogout() {
             try {
@@ -11866,7 +11969,7 @@
             
             // 3. Attach Event Listeners
             DOMElements.loginBtn.addEventListener('click', handleGoogleLogin);
-            if (DOMElements.loginFacebookBtn) DOMElements.loginFacebookBtn.addEventListener('click', handleFacebookLogin);
+            // Facebook login removed — no event to attach
             DOMElements.logoutBtn.addEventListener('click', handleLogout); 
             DOMElements.loginForm.addEventListener('submit', handleLogin);
             DOMElements.registerForm.addEventListener('submit', handleRegister);
