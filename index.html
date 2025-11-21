@@ -3296,23 +3296,21 @@
         const setupRecaptcha = () => {
             try {
                 const container = document.getElementById('recaptcha-container');
-                if (!container) {
-                    console.warn('recaptcha container not found');
-                    return Promise.reject(new Error('recaptcha container not found'));
-                }
+                if (!container) return Promise.reject(new Error('recaptcha container not found'));
 
                 if (!window.recaptchaVerifier) {
-                    window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
-                        size: 'normal', // change to 'invisible' for invisible captcha
-                        callback: (response) => { console.debug('reCAPTCHA solved'); }
-                    }, auth);
-                    // store render promise so multiple calls reuse it
-                    window.recaptchaVerifier._renderPromise = window.recaptchaVerifier.render()
-                        .then((widgetId) => { window.recaptchaVerifier._widgetId = widgetId; return widgetId; })
-                        .catch((err) => { console.warn('recaptcha render failed', err); throw err; });
+                    // লজিক ফিক্স: auth প্রথমে বসবে
+                    window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+                        'size': 'normal', 
+                        'callback': (response) => { 
+                            console.debug('reCAPTCHA solved'); 
+                        },
+                        'expired-callback': () => {
+                            console.warn('reCAPTCHA expired');
+                        }
+                    });
                 }
-
-                return window.recaptchaVerifier._renderPromise || Promise.resolve(window.recaptchaVerifier._widgetId);
+                return window.recaptchaVerifier.render();
             } catch (e) {
                 console.warn('setupRecaptcha failed', e);
                 return Promise.reject(e);
