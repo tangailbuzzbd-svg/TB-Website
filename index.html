@@ -68,6 +68,10 @@
         #toast-notification {
             transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
         }
+        /* Hide the old duplicate phone login section */
+        #phone-login-section {
+            display: none !important;
+        }
         html, body {
             overflow-x: hidden;
             height: 100%;
@@ -1926,6 +1930,17 @@
         </div>
     </header>
 
+    <!-- Email Verification Warning Banner -->
+    <div id="email-verification-banner" class="hidden bg-yellow-500 text-gray-900 py-3 px-4 text-center shadow-lg z-30">
+        <div class="container mx-auto flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4">
+            <i class="fas fa-exclamation-triangle text-xl"></i>
+            <span class="font-semibold" id="verification-banner-text"></span>
+            <button id="resend-verification-btn" class="bg-white text-yellow-600 px-4 py-1 rounded-full font-semibold hover:bg-gray-100 transition-colors text-sm">
+                <span data-lang="resend-verification">পুনরায় পাঠান</span>
+            </button>
+        </div>
+    </div>
+
     <!-- Global Breadcrumb (shown on details page) -->
     <div id="global-breadcrumb" class="hidden border-b border-gray-200 dark:border-gray-800 bg-gray-50/60 dark:bg-gray-900/60">
         <div class="container mx-auto px-4 py-2">
@@ -2127,27 +2142,26 @@
                         <span class="auth-hero-icon" aria-hidden="true">
                             <i class="fas fa-shield-alt"></i>
                         </span>
-                        <div class="space-y-1">
+                        <div class="space-y-1 text-center">
                             <h4 id="auth-card-heading" class="text-2xl font-bold" data-lang="auth-login-heading">পুনরায় স্বাগতম</h4>
-                            <p id="auth-subtitle" class="auth-subtitle" data-lang="auth-login-subtitle">অর্ডার, উইশলিস্ট ও ঠিকানা পরিচালনা করতে লগইন করুন।</p>
+                            <p class="text-sm font-semibold text-theme-blue dark:text-theme-blue" data-lang="login">লগইন</p>
                         </div>
                     </header>
-                    <div class="auth-tabs" role="tablist">
-                        <button type="button" class="auth-tab auth-tab-active" data-auth-tab="login" aria-selected="true">
-                            <i class="fas fa-sign-in-alt"></i>
-                            <span data-lang="auth-login-tab">লগইন</span>
-                        </button>
-                        <button type="button" class="auth-tab" data-auth-tab="register" aria-selected="false">
-                            <i class="fas fa-user-plus"></i>
-                            <span data-lang="auth-register-tab">রেজিস্টার</span>
-                        </button>
-                        <button type="button" class="auth-tab" data-auth-tab="reset" aria-selected="false">
-                            <i class="fas fa-unlock-alt"></i>
-                            <span data-lang="auth-reset-tab">রিসেট</span>
-                        </button>
-                    </div>
 
                     <div class="space-y-6">
+                        <!-- Login Method Tabs -->
+                        <div class="flex gap-2 p-1 bg-gray-100 dark:bg-gray-700 rounded-lg" role="tablist" aria-label="Login Methods">
+                            <button type="button" id="email-login-tab" class="flex-1 py-2 px-4 rounded-md font-semibold transition-all bg-white dark:bg-gray-600 text-theme-blue dark:text-white shadow" data-login-method="email" aria-selected="true">
+                                <i class="fas fa-envelope mr-2"></i>
+                                <span data-lang="login-method-email">ইমেইল</span>
+                            </button>
+                            <button type="button" id="mobile-login-tab" class="flex-1 py-2 px-4 rounded-md font-semibold transition-all text-gray-600 dark:text-gray-300" data-login-method="mobile" aria-selected="false">
+                                <i class="fas fa-mobile-alt mr-2"></i>
+                                <span data-lang="login-method-mobile">মোবাইল</span>
+                            </button>
+                        </div>
+
+                        <!-- Email Login Form -->
                         <form id="login-form" class="space-y-4 text-left">
                             <div class="space-y-1">
                                 <label for="login-email" class="block text-sm font-semibold text-gray-700 dark:text-gray-200" data-lang="email">ইমেইল</label>
@@ -2166,6 +2180,31 @@
                                 <button id="show-reset-form" type="button" class="auth-link" data-lang="forgot-password">পাসওয়ার্ড ভুলে গেছেন?</button>
                             </div>
                         </form>
+
+                        <!-- Mobile Login Form -->
+                        <div id="mobile-login-form" class="hidden space-y-4 text-left">
+                            <div class="space-y-1">
+                                <label for="phone-number" class="block text-sm font-semibold text-gray-700 dark:text-gray-200" data-lang="mobile-number">মোবাইল নম্বর</label>
+                                <input type="tel" id="phone-number" placeholder="+8801xxxxxxxxx" class="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-theme-blue" value="+880" required>
+                            </div>
+                            <div id="recaptcha-container" class="flex justify-center"></div>
+                            <button type="button" id="send-otp-btn" class="w-full py-3 rounded-lg bg-theme-blue text-white font-semibold hover:bg-theme-purple transition-colors" data-lang="send-otp">OTP পাঠান</button>
+                            
+                            <div id="otp-input-group" class="hidden space-y-4">
+                                <div class="space-y-1">
+                                    <label for="otp-code" class="block text-sm font-semibold text-gray-700 dark:text-gray-200" data-lang="otp-code">OTP কোড</label>
+                                    <input type="text" id="otp-code" placeholder="123456" class="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-theme-blue" required>
+                                </div>
+                                <button type="button" id="verify-otp-btn" class="w-full py-3 rounded-lg bg-green-600 text-white font-semibold hover:bg-green-700 transition-colors" data-lang="verify-and-login">যাচাই করুন ও লগইন করুন</button>
+                            </div>
+
+                            <div class="flex flex-wrap items-center justify-between gap-3 text-xs sm:text-sm text-gray-600 dark:text-gray-300">
+                                <div class="flex items-center gap-2">
+                                    <span data-lang="auth-new-here">নতুন সদস্য?</span>
+                                    <button id="show-register-form-mobile" type="button" class="auth-link" data-lang="create-account">অ্যাকাউন্ট তৈরি করুন</button>
+                                </div>
+                            </div>
+                        </div>
 
                         <form id="register-form" class="hidden space-y-4 text-left">
                             <div class="space-y-1">
@@ -2246,11 +2285,11 @@
             </div>
 
             <div id="user-profile-view" class="hidden space-y-6">
-                <div class="flex flex-col items-center text-center space-y-3">
-                    <img id="user-photo" src="https://placehold.co/96x96/6a0dad/white?text=User" alt="User avatar" class="w-24 h-24 rounded-full object-cover shadow-md">
+                <div class="flex flex-col items-center text-center space-y-4">
+                    <img id="user-photo" src="https://placehold.co/96x96/6a0dad/white?text=User" alt="User avatar" class="w-32 h-32 rounded-full object-cover shadow-xl border-4 border-theme-purple">
                     <div class="space-y-1 text-sm text-gray-600 dark:text-gray-300">
-                        <p id="user-name" class="text-lg font-semibold text-gray-900 dark:text-gray-100"></p>
-                        <p id="user-email"></p>
+                        <p id="user-name" class="text-xl font-bold text-gray-900 dark:text-gray-100"></p>
+                        <p id="user-email" class="font-medium"></p>
                         <p id="user-mobile"></p>
                         <p id="user-location"></p>
                     </div>
@@ -3264,7 +3303,7 @@
     <!-- Firebase SDK Scripts (Modular v9+) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-    import { getAuth, RecaptchaVerifier, signInWithPhoneNumber, onAuthStateChanged, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, deleteUser, signInWithCustomToken, signInAnonymously, sendPasswordResetEmail, reauthenticateWithCredential, EmailAuthProvider, reauthenticateWithPopup, fetchSignInMethodsForEmail, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getAuth, RecaptchaVerifier, signInWithPhoneNumber, onAuthStateChanged, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, deleteUser, signInWithCustomToken, signInAnonymously, sendPasswordResetEmail, sendEmailVerification, reauthenticateWithCredential, EmailAuthProvider, reauthenticateWithPopup, fetchSignInMethodsForEmail, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
     import { getFirestore, doc, setDoc, getDoc, deleteDoc, onSnapshot, updateDoc, increment, deleteField, collection, addDoc, serverTimestamp, getDocs, writeBatch, runTransaction, query, where, arrayUnion, orderBy, limit, FieldPath } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
         
@@ -4801,8 +4840,34 @@
     const startHB = () => { if (hbId) clearInterval(hbId); hbId = setInterval(() => sendPresence(false), 10000); };
         const stopHB = () => { if (hbId) { clearInterval(hbId); hbId = null; } };
         if (document.visibilityState === 'visible') startHB();
-        document.addEventListener('visibilitychange', () => {
-            if (document.visibilityState === 'visible') { sendPresence(false); startHB(); }
+        document.addEventListener('visibilitychange', async () => {
+            if (document.visibilityState === 'visible') { 
+                sendPresence(false); 
+                startHB();
+                
+                // Reload user to check if email verification changed
+                if (auth.currentUser && !auth.currentUser.isAnonymous) {
+                    try {
+                        await auth.currentUser.reload();
+                        const verificationBanner = document.getElementById('email-verification-banner');
+                        const bannerText = document.getElementById('verification-banner-text');
+                        
+                        if (auth.currentUser.emailVerified) {
+                            // Hide banner if verified
+                            if (verificationBanner) verificationBanner.classList.add('hidden');
+                        } else if (verificationBanner && bannerText) {
+                            // Show/update banner if not verified
+                            const message = currentLang === 'bn' 
+                                ? 'আপনার ইমেইল যাচাই করা হয়নি। অনুগ্রহ করে আপনার ইনবক্স চেক করে ইমেইল যাচাই করুন এবং অর্ডার করুন।'
+                                : 'Your email is not verified. Please check your inbox and verify your email to place orders.';
+                            bannerText.textContent = message;
+                            verificationBanner.classList.remove('hidden');
+                        }
+                    } catch (e) {
+                        console.warn('Failed to reload user:', e);
+                    }
+                }
+            }
             else { sendPresence(false); stopHB(); }
         });
         // On pagehide/blur try a final update
@@ -4860,7 +4925,7 @@
                 'mega-sale-nav': 'Mega Sale',
                 'add-product-nav': 'Add Product',
                 'search-placeholder': 'Search for products...', 'featured-products': 'Featured Products', 'shop-by-category': 'Shop by Category', 'cat-electronics': 'Electronics', 'cat-fashion': 'Fashion', 'cat-home-garden': 'Home & Garden', 'cat-health-beauty': 'Health & Beauty', 'cat-sports': 'Sports & Outdoors', 'cat-books': 'Books & Stationery', 'cat-kids': 'Kids & Toys', 'cat-cars': 'Cars & Bikes', 'why-choose-us': 'Why Choose Us', 'feature-delivery-title': 'Fast Delivery', 'feature-delivery-desc': 'We deliver to your doorstep within 2-3 business days.', 'feature-payment-title': 'Secure Payment', 'feature-payment-desc': 'All transactions are encrypted for your security and privacy.', 'feature-return-title': 'Easy Returns', 'feature-return-desc': 'Return products within 30 days for a full refund if you\'re not satisfied.', 'feature-support-title': '24/7 Support', 'feature-support-desc': 'Our customer support team is available for you day and night.', 'add-to-cart': 'Add to Cart', 'added-to-cart': 'Added!', 'no-products': 'No products found matching your criteria.', 'back-to-products': 'Back to All Products', 'returnable': '30-Day Returnable', 'not-returnable': 'Not Returnable', 'return-policy-button-label': 'View return policy', 'secure-payments': 'Secure Payments', 'size': 'Size:', 'storage': 'Storage:', 'color': 'Color:', 'product-description': 'Product Description', 'product-specifications': 'Product Specifications', 'specifications': 'Specification', 'value': 'Value', 'no-specs': 'No specifications available for this product.', 'product-reviews': 'Product Reviews', 'no-reviews': 'There are no reviews for this product yet.', 'cart': 'Your Cart', 'cart-empty': 'Your cart is empty.', 'total': 'Total:', 'checkout': 'Checkout', 'your-wishlist': 'Your Wishlist', 'wishlist-empty': 'Your wishlist is empty. Add some products!', 'your-account': 'Your Account', 'signin-google': 'Sign in with Google', 'logout': 'Logout', 'toast-cart-added': 'Product added to cart!', 'toast-wishlist-added': 'Product added to wishlist!', 'toast-wishlist-removed': 'Product removed from wishlist!', 'toast-login-success': 'Successfully logged in!', 'toast-logout-success': 'Successfully logged out!',
-                'toast-register-success': 'Account created successfully!', 'login': 'Login', 'register': 'Register Account', 'auth-login-heading': 'Welcome Back', 'auth-register-heading': 'Create Your Account', 'auth-reset-heading': 'Reset Password', 'auth-login-subtitle': 'Sign in to manage your orders, wishlist, and saved addresses.', 'auth-register-subtitle': 'Create a free TangailBuzz account in minutes.', 'auth-reset-subtitle': 'Enter your email and we will send a secure reset link.', 'auth-login-tab': 'Log In', 'auth-register-tab': 'Sign Up', 'auth-reset-tab': 'Reset', 'auth-social-divider': 'Or Continue With', 'auth-security-note': 'Your credentials are encrypted and never shared.', 'auth-new-here': 'New Here?', 'auth-have-account': 'Already Have an Account?', 'create-account': 'Create Account', 'forgot-password': 'Forgot Password?', 'reset-password-desc': 'Enter your registered email so we can send a secure reset link.', 'send-reset-link': 'Send Reset Link', 'back-to-login': 'Back to Login', 'login-google': 'Sign In with Google', 'login-facebook': 'Sign In with Facebook', 'full-name': 'Full Name', 'mobile-number': 'Mobile Number', 'location': 'Location', 'upload-photo': 'Upload Photo', 'remove-photo': 'Remove Photo', 'save-changes': 'Save Changes', 'cancel': 'Cancel', 'account-options': 'Account Options', 'edit-profile': 'Edit Profile', 'manage-address': 'Manage Addresses', 'delete-account': 'Delete Account', 'saved-addresses': 'Saved Addresses', 'manage-address-help': 'Manage your delivery addresses.', 'address-form-title': 'Add New Address', 'address-line1': 'Address Line 1', 'address-line2-optional': 'Address Line 2 (Optional)', 'city': 'City', 'area-district': 'Area / District', 'set-as-default': 'Set as Default', 'save-address': 'Save Address', 'toast-select-variant': 'Please select all required options!', 'select-variants': 'Select Options', 'buy-now': 'Buy Now', 'payment-method': 'Select Payment Method', 'cod': 'Cash on Delivery', 'online-payment': 'Online Payment', 'confirm-order': 'Confirm Order', 'order-placed-success': 'Your order has been placed successfully!', 'order-placed-fail': 'Failed to place order. Please try again.', 'cart-is-empty': 'Your cart is empty. Cannot checkout.', 'mobile-banking': 'Mobile Banking', 'payment-instruction-bkash': 'Please send {amount} Taka to this Bkash number: +8801863205976 from your app.', 'payment-instruction-nagad': 'Please send {amount} Taka to this Nagad number: +8801863205976 from your app.', 'payment-instruction-cod': 'Our delivery person will collect the payment upon delivery.', 'profile-updated': 'Profile updated successfully!', 'profile-update-fail': 'Failed to update profile.', 'toast-storage-permission-error': 'Storage permission denied. Check Firebase rules.', 'toast-update-profile': 'Please update your location and mobile number in your profile before ordering.', 'emergency-contact': 'Support', 'message-sent': 'Message sent successfully!', 'out-of-stock': 'Out of Stock', 'toast-out-of-stock': 'Sorry, this product is currently out of stock.', 'subtotal': 'Subtotal', 'delivery-charge': 'Delivery Charge', 'my-orders': 'My Orders',
+                'toast-register-success': 'Account created successfully!', 'login': 'Login', 'register': 'Register Account', 'email': 'Email', 'password': 'Password', 'login-method-email': 'Email', 'login-method-mobile': 'Mobile', 'send-otp': 'Send OTP', 'otp-code': 'OTP Code', 'verify-and-login': 'Verify & Login', 'auth-login-heading': 'Welcome Back', 'auth-register-heading': 'Create Your Account', 'auth-reset-heading': 'Reset Password', 'auth-login-subtitle': 'Sign in to manage your orders, wishlist, and saved addresses.', 'auth-register-subtitle': 'Create a free TangailBuzz account in minutes.', 'auth-reset-subtitle': 'Enter your email and we will send a secure reset link.', 'auth-login-tab': 'Log In', 'auth-register-tab': 'Sign Up', 'auth-reset-tab': 'Reset', 'auth-social-divider': 'Or Continue With', 'auth-security-note': 'Your credentials are encrypted and never shared.', 'auth-new-here': 'New Here?', 'auth-have-account': 'Already Have an Account?', 'create-account': 'Create Account', 'forgot-password': 'Forgot Password?', 'reset-password-desc': 'Enter your registered email so we can send a secure reset link.', 'send-reset-link': 'Send Reset Link', 'back-to-login': 'Back to Login', 'login-google': 'Sign In with Google', 'login-facebook': 'Sign In with Facebook', 'full-name': 'Full Name', 'mobile-number': 'Mobile Number', 'location': 'Location', 'upload-photo': 'Upload Photo', 'remove-photo': 'Remove Photo', 'save-changes': 'Save Changes', 'cancel': 'Cancel', 'account-options': 'Account Options', 'edit-profile': 'Edit Profile', 'manage-address': 'Manage Addresses', 'delete-account': 'Delete Account', 'saved-addresses': 'Saved Addresses', 'manage-address-help': 'Manage your delivery addresses.', 'address-form-title': 'Add New Address', 'address-line1': 'Address Line 1', 'address-line2-optional': 'Address Line 2 (Optional)', 'city': 'City', 'area-district': 'Area / District', 'set-as-default': 'Set as Default', 'save-address': 'Save Address', 'toast-select-variant': 'Please select all required options!', 'select-variants': 'Select Options', 'buy-now': 'Buy Now', 'payment-method': 'Select Payment Method', 'cod': 'Cash on Delivery', 'online-payment': 'Online Payment', 'confirm-order': 'Confirm Order', 'order-placed-success': 'Your order has been placed successfully!', 'order-placed-fail': 'Failed to place order. Please try again.', 'cart-is-empty': 'Your cart is empty. Cannot checkout.', 'mobile-banking': 'Mobile Banking', 'payment-instruction-bkash': 'Please send {amount} Taka to this Bkash number: +8801863205976 from your app.', 'payment-instruction-nagad': 'Please send {amount} Taka to this Nagad number: +8801863205976 from your app.', 'payment-instruction-cod': 'Our delivery person will collect the payment upon delivery.', 'profile-updated': 'Profile updated successfully!', 'profile-update-fail': 'Failed to update profile.', 'toast-storage-permission-error': 'Storage permission denied. Check Firebase rules.', 'toast-update-profile': 'Please update your location and mobile number in your profile before ordering.', 'emergency-contact': 'Support', 'message-sent': 'Message sent successfully!', 'out-of-stock': 'Out of Stock', 'toast-out-of-stock': 'Sorry, this product is currently out of stock.', 'subtotal': 'Subtotal', 'delivery-charge': 'Delivery Charge', 'my-orders': 'My Orders',
                 'delete-account-confirm': 'Are you sure you want to delete your account? This action cannot be undone. All data will be lost.',
                 'account-deleted': 'Your account has been successfully deleted.',
                 'delete-account-failed': 'Failed to delete account. Please try again.',
@@ -4987,6 +5052,8 @@
                 'invoice-download-error': 'Unable to download invoice right now.',
                 'invoice-missing-order': 'We could not find the order for this invoice.',
                 'secure-payments-button-label': 'View secure payment policy',
+                'resend-verification': 'Resend Verification Email',
+                'email-not-verified': 'Your email is not verified. Please check your inbox and verify your email to place orders.',
                 'about-heading': 'About Us',
                 'about-tagline-title': 'TangailBuzz: Your Trusted Online Shopping Destination',
                 'about-tagline-body': 'TangailBuzz is a committed e-commerce platform reshaping online shopping in Bangladesh with customer-first service and inspiring value.',
@@ -5013,7 +5080,7 @@
             },
             bn: {
                 'deliver-to': 'ডেলিভারি লোকেশন', 'home': 'হোম', 'products': 'পণ্য', 'categories': 'ক্যাটাগরি', 'offers': 'অফার', 'search-placeholder': 'পণ্য খুঁজুন...', 'featured-products': 'বৈশিষ্ট্যযুক্ত পণ্য', 'shop-by-category': 'ক্যাটাগরি অনুসারে কেনাকাটা করুন', 'cat-electronics': 'ইলেকট্রনিক্স', 'cat-fashion': 'ফ্যাশন', 'cat-home-garden': 'হোম অ্যান্ড গার্ডেন', 'cat-health-beauty': 'স্বাস্থ্য ও সৌন্দর্য', 'cat-sports': 'খেলাধুলা ও আউটডোর', 'cat-books': 'বই ও স্টেশনারি', 'cat-kids': 'বাচ্চা ও খেলনা', 'cat-cars': 'গাড়ি ও বাইক', 'why-choose-us': 'আমাদেরকে কেন বেছে নিবেন', 'feature-delivery-title': 'দ্রুত ডেলিভারি', 'feature-delivery-desc': 'আমরা ২-৩ কার্যদিবসের মধ্যে আপনার দোরগোড়ায় পণ্য পৌঁছে দিই।', 'feature-payment-title': 'নিরাপদ পেমেন্ট', 'feature-payment-desc': 'আপনার নিরাপত্তা ও গোপনীয়তার জন্য সকল লেনদেন এনক্রিপ্টেড।', 'feature-return-title': 'সহজ রিটার্ন', 'feature-return-desc': 'পছন্দ না হলে ৩০ দিনের মধ্যে পণ্য ফেরত দিন এবং সম্পূর্ণ মূল্য ফেরত পান।', 'feature-support-title': '২৪/৭ সাপোর্ট', 'feature-support-desc': 'আমাদের গ্রাহক সহায়তা দল দিনরাত আপনার জন্য উপলব্ধ।', 'add-to-cart': 'কার্টে যোগ করুন', 'added-to-cart': 'যোগ হয়েছে!', 'no-products': 'আপনার অনুসন্ধানের সাথে মেলে এমন কোনো পণ্য পাওয়া যায়নি।', 'back-to-products': 'সকল পণ্যে ফিরে যান', 'returnable': '৩০-দিনের মধ্যে ফেরতযোগ্য', 'not-returnable': 'ফেরতযোগ্য নয়', 'return-policy-button-label': 'রিটার্ন নীতি দেখুন', 'secure-payments': 'নিরাপদ পেমেন্ট', 'size': 'সাইজ:', 'storage': 'স্টোরেজ:', 'color': 'রঙ:', 'product-description': 'পণ্যের বিবরণ', 'product-specifications': 'পণ্যের স্পেসিফিকেশন', 'specifications': 'স্পেসিফিকেশন', 'value': 'মান', 'no-specs': 'এই পণ্যের জন্য কোন স্পেসিফিকেশন উপলব্ধ নেই।', 'product-reviews': 'পণ্যের রিভিউ', 'no-reviews': 'এই পণ্যের জন্য এখনো কোনো রিভিউ নেই।', 'cart': 'আপনার কার্ট', 'cart-empty': 'আপনার কার্ট খালি।', 'total': 'মোট মূল্য:', 'checkout': 'চেকআউট করুন', 'your-wishlist': 'আপনার উইশলিস্ট', 'wishlist-empty': 'আপনার উইশলিস্ট খালি। কিছু পণ্য যোগ করুন!', 'your-account': 'আপনার অ্যাকাউন্ট', 'signin-google': 'Google দিয়ে সাইন ইন করুন', 'logout': 'লগআউট', 'toast-cart-added': 'পণ্য কার্টে যোগ করা হয়েছে!', 'toast-wishlist-added': 'পণ্য উইশলিস্টে যোগ করা হয়েছে!', 'toast-wishlist-removed': 'পণ্য উইশলিস্ট থেকে সরানো হয়েছে!', 'toast-login-success': 'সফলভাবে লগইন হয়েছে!', 'toast-logout-success': 'সফলভাবে লগআউট হয়েছে!',
-                'toast-register-success': 'অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে!', 'login': 'লগইন', 'register': 'অ্যাকাউন্ট রেজিস্টার', 'auth-login-heading': 'পুনরায় স্বাগতম', 'auth-register-heading': 'আপনার অ্যাকাউন্ট তৈরি করুন', 'auth-reset-heading': 'পাসওয়ার্ড রিসেট করুন', 'auth-login-subtitle': 'অর্ডার, উইশলিস্ট ও ঠিকানা পরিচালনা করতে লগইন করুন।', 'auth-register-subtitle': 'কয়েক মিনিটেই বিনামূল্যে TangailBuzz অ্যাকাউন্ট তৈরি করুন।', 'auth-reset-subtitle': 'আপনার ইমেইল দিন, আমরা একটি নিরাপদ রিসেট লিঙ্ক পাঠাবো।', 'auth-login-tab': 'লগইন', 'auth-register-tab': 'রেজিস্টার', 'auth-reset-tab': 'রিসেট', 'auth-social-divider': 'অথবা চালিয়ে যান', 'auth-security-note': 'আপনার তথ্য এনক্রিপ্টেড এবং নিরাপদে সংরক্ষিত থাকে।', 'auth-new-here': 'নতুন সদস্য?', 'auth-have-account': 'ইতোমধ্যে অ্যাকাউন্ট আছে?', 'create-account': 'অ্যাকাউন্ট তৈরি করুন', 'forgot-password': 'পাসওয়ার্ড ভুলে গেছেন?', 'reset-password-desc': 'আপনার নিবন্ধিত ইমেইল দিন, আমরা একটি নিরাপদ রিসেট লিঙ্ক পাঠাবো।', 'send-reset-link': 'রিসেট লিঙ্ক পাঠান', 'back-to-login': 'লগইনে ফিরে যান', 'login-google': 'গুগল দিয়ে লগইন করুন', 'login-facebook': 'ফেসবুক দিয়ে লগইন করুন', 'full-name': 'পূর্ণ নাম', 'mobile-number': 'মোবাইল নম্বর', 'location': 'অবস্থান', 'upload-photo': 'ছবি আপলোড করুন', 'remove-photo': 'ছবি সরান', 'save-changes': 'পরিবর্তন সংরক্ষণ করুন', 'cancel': 'বাতিল', 'account-options': 'অ্যাকাউন্ট অপশন', 'edit-profile': 'প্রোফাইল সম্পাদনা', 'manage-address': 'ঠিকানা ম্যানেজ করুন', 'delete-account': 'অ্যাকাউন্ট মুছুন', 'saved-addresses': 'সংরক্ষিত ঠিকানাসমূহ', 'manage-address-help': 'আপনার ডেলিভারি ঠিকানাগুলো পরিচালনা করুন।', 'address-form-title': 'নতুন ঠিকানা যোগ করুন', 'address-line1': 'ঠিকানা লাইন ১', 'address-line2-optional': 'ঠিকানা লাইন ২ (ঐচ্ছিক)', 'city': 'শহর', 'area-district': 'এলাকা/জেলা', 'set-as-default': 'ডিফল্ট হিসেবে নির্ধারণ করুন', 'save-address': 'ঠিকানা সংরক্ষণ করুন', 'toast-select-variant': 'অনুগ্রহ করে সব অপশন সিলেক্ট করুন!', 'select-variants': 'অপশন নির্বাচন করুন', 'buy-now': 'এখনই কিনুন', 'payment-method': 'পেমেন্ট পদ্ধতি নির্বাচন করুন', 'cod': 'ক্যাশ অন ডেলিভারি', 'online-payment': 'অনলাইন পেমেন্ট', 'confirm-order': 'অর্ডার নিশ্চিত করুন', 'order-placed-success': 'আপনার অর্ডারটি সফলভাবে সম্পন্ন হয়েছে!', 'order-placed-fail': 'অর্ডার করতে ব্যর্থ হয়েছে। আবার চেষ্টা করুন।', 'cart-is-empty': 'আপনার কার্ট খালি। চেকআউট করা সম্ভব নয়।', 'mobile-banking': 'মোবাইল ব্যাংকিং', 'payment-instruction-bkash': 'অনুগ্রহ করে আপনার অ্যাপ থেকে এই বিকাশ নম্বরে ৳{amount} পাঠান: +8801863205976।', 'payment-instruction-nagad': 'অনুগ্রহ করে আপনার অ্যাপ থেকে এই নগদ নম্বরে ৳{amount} পাঠান: +8801863205976।', 'payment-instruction-cod': 'আমাদের ডেলিভারি প্রতিনিধি পণ্য পৌঁছানোর সময় আপনার থেকে টাকা সংগ্রহ করবে।', 'profile-updated': 'প্রোফাইল সফলভাবে আপডেট হয়েছে!', 'profile-update-fail': 'প্রোফাইল আপডেট করতে ব্যর্থ হয়েছে।', 'toast-storage-permission-error': 'স্টোরেজ পারমিশন সমস্যা। অনুগ্রহ করে Firebase রুলস চেক করুন।', 'toast-update-profile': 'অর্ডার করার পূর্বে অনুগ্রহ করে আপনার প্রোফাইলে ঠিকানা ও মোবাইল নম্বর আপডেট করুন।', 'emergency-contact': 'সাপোর্ট', 'message-sent': 'আপনার বার্তা সফলভাবে পাঠানো হয়েছে!', 'out-of-stock': 'স্টক শেষ', 'toast-out-of-stock': 'দুঃখিত, এই পণ্যটি বর্তমানে স্টক আউট।', 'subtotal': 'মোট', 'delivery-charge': 'ডেলিভারি চার্জ', 'my-orders': 'আমার অর্ডার',
+                'toast-register-success': 'অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে!', 'login': 'লগইন', 'register': 'অ্যাকাউন্ট রেজিস্টার', 'email': 'ইমেইল', 'password': 'পাসওয়ার্ড', 'login-method-email': 'ইমেইল', 'login-method-mobile': 'মোবাইল', 'send-otp': 'OTP পাঠান', 'otp-code': 'OTP কোড', 'verify-and-login': 'যাচাই করুন ও লগইন করুন', 'auth-login-heading': 'পুনরায় স্বাগতম', 'auth-register-heading': 'আপনার অ্যাকাউন্ট তৈরি করুন', 'auth-reset-heading': 'পাসওয়ার্ড রিসেট করুন', 'auth-login-subtitle': 'অর্ডার, উইশলিস্ট ও ঠিকানা পরিচালনা করতে লগইন করুন।', 'auth-register-subtitle': 'কয়েক মিনিটেই বিনামূল্যে TangailBuzz অ্যাকাউন্ট তৈরি করুন।', 'auth-reset-subtitle': 'আপনার ইমেইল দিন, আমরা একটি নিরাপদ রিসেট লিঙ্ক পাঠাবো।', 'auth-login-tab': 'লগইন', 'auth-register-tab': 'রেজিস্টার', 'auth-reset-tab': 'রিসেট', 'auth-social-divider': 'অথবা চালিয়ে যান', 'auth-security-note': 'আপনার তথ্য এনক্রিপ্টেড এবং নিরাপদে সংরক্ষিত থাকে।', 'auth-new-here': 'নতুন সদস্য?', 'auth-have-account': 'ইতোমধ্যে অ্যাকাউন্ট আছে?', 'create-account': 'অ্যাকাউন্ট তৈরি করুন', 'forgot-password': 'পাসওয়ার্ড ভুলে গেছেন?', 'reset-password-desc': 'আপনার নিবন্ধিত ইমেইল দিন, আমরা একটি নিরাপদ রিসেট লিঙ্ক পাঠাবো।', 'send-reset-link': 'রিসেট লিঙ্ক পাঠান', 'back-to-login': 'লগইনে ফিরে যান', 'login-google': 'গুগল দিয়ে লগইন করুন', 'login-facebook': 'ফেসবুক দিয়ে লগইন করুন', 'full-name': 'পূর্ণ নাম', 'mobile-number': 'মোবাইল নম্বর', 'location': 'অবস্থান', 'upload-photo': 'ছবি আপলোড করুন', 'remove-photo': 'ছবি সরান', 'save-changes': 'পরিবর্তন সংরক্ষণ করুন', 'cancel': 'বাতিল', 'account-options': 'অ্যাকাউন্ট অপশন', 'edit-profile': 'প্রোফাইল সম্পাদনা', 'manage-address': 'ঠিকানা ম্যানেজ করুন', 'delete-account': 'অ্যাকাউন্ট মুছুন', 'saved-addresses': 'সংরক্ষিত ঠিকানাসমূহ', 'manage-address-help': 'আপনার ডেলিভারি ঠিকানাগুলো পরিচালনা করুন।', 'address-form-title': 'নতুন ঠিকানা যোগ করুন', 'address-line1': 'ঠিকানা লাইন ১', 'address-line2-optional': 'ঠিকানা লাইন ২ (ঐচ্ছিক)', 'city': 'শহর', 'area-district': 'এলাকা/জেলা', 'set-as-default': 'ডিফল্ট হিসেবে নির্ধারণ করুন', 'save-address': 'ঠিকানা সংরক্ষণ করুন', 'toast-select-variant': 'অনুগ্রহ করে সব অপশন সিলেক্ট করুন!', 'select-variants': 'অপশন নির্বাচন করুন', 'buy-now': 'এখনই কিনুন', 'payment-method': 'পেমেন্ট পদ্ধতি নির্বাচন করুন', 'cod': 'ক্যাশ অন ডেলিভারি', 'online-payment': 'অনলাইন পেমেন্ট', 'confirm-order': 'অর্ডার নিশ্চিত করুন', 'order-placed-success': 'আপনার অর্ডারটি সফলভাবে সম্পন্ন হয়েছে!', 'order-placed-fail': 'অর্ডার করতে ব্যর্থ হয়েছে। আবার চেষ্টা করুন।', 'cart-is-empty': 'আপনার কার্ট খালি। চেকআউট করা সম্ভব নয়।', 'mobile-banking': 'মোবাইল ব্যাংকিং', 'payment-instruction-bkash': 'অনুগ্রহ করে আপনার অ্যাপ থেকে এই বিকাশ নম্বরে ৳{amount} পাঠান: +8801863205976।', 'payment-instruction-nagad': 'অনুগ্রহ করে আপনার অ্যাপ থেকে এই নগদ নম্বরে ৳{amount} পাঠান: +8801863205976।', 'payment-instruction-cod': 'আমাদের ডেলিভারি প্রতিনিধি পণ্য পৌঁছানোর সময় আপনার থেকে টাকা সংগ্রহ করবে।', 'profile-updated': 'প্রোফাইল সফলভাবে আপডেট হয়েছে!', 'profile-update-fail': 'প্রোফাইল আপডেট করতে ব্যর্থ হয়েছে।', 'toast-storage-permission-error': 'স্টোরেজ পারমিশন সমস্যা। অনুগ্রহ করে Firebase রুলস চেক করুন।', 'toast-update-profile': 'অর্ডার করার পূর্বে অনুগ্রহ করে আপনার প্রোফাইলে ঠিকানা ও মোবাইল নম্বর আপডেট করুন।', 'emergency-contact': 'সাপোর্ট', 'message-sent': 'আপনার বার্তা সফলভাবে পাঠানো হয়েছে!', 'out-of-stock': 'স্টক শেষ', 'toast-out-of-stock': 'দুঃখিত, এই পণ্যটি বর্তমানে স্টক আউট।', 'subtotal': 'মোট', 'delivery-charge': 'ডেলিভারি চার্জ', 'my-orders': 'আমার অর্ডার',
                 'delete-account-confirm': 'আপনি কি নিশ্চিত যে আপনি আপনার অ্যাকাউন্টটি মুছে ফেলতে চান? এই কাজটি ফিরিয়ে আনা যাবে না। আপনার সমস্ত ডেটা হারানো হবে।',
                 'account-deleted': 'আপনার অ্যাকাউন্ট সফলভাবে মুছে ফেলা হয়েছে।',
                 'delete-account-failed': 'অ্যাকাউন্ট মুছে ফেলার চেষ্টা ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।',
@@ -5143,6 +5210,8 @@
                 'invoice-download-error': 'এখন ইনভয়েস ডাউনলোড করা যাচ্ছে না।',
                 'invoice-missing-order': 'এই অর্ডারের ইনভয়েসের তথ্য পাওয়া যায়নি।',
                 'secure-payments-button-label': 'নিরাপদ পেমেন্ট নীতি দেখুন',
+                'resend-verification': 'পুনরায় যাচাইকরণ ইমেইল পাঠান',
+                'email-not-verified': 'আপনার ইমেইল যাচাই করা হয়নি। অনুগ্রহ করে আপনার ইনবক্স চেক করে ইমেইল যাচাই করুন এবং অর্ডার করুন।',
                 'about-heading': 'আমাদের সম্পর্কে',
                 'about-tagline-title': 'TangailBuzz: আপনার বিশ্বস্ত অনলাইন শপিং গন্তব্য',
                 'about-tagline-body': 'TangailBuzz একটি প্রতিশ্রুতিশীল ই-কমার্স প্ল্যাটফর্ম, যা ক্রেতা-কেন্দ্রিক পরিষেবা প্রদানের মাধ্যমে বাংলাদেশের অনলাইন শপিং-এর অভিজ্ঞতাকে নতুন মাত্রা দিতে বদ্ধপরিকর।',
@@ -5557,6 +5626,17 @@
 
             if (typeof toggleAuthForms === 'function') {
                 toggleAuthForms(currentAuthForm);
+            }
+            
+            // Update verification banner text if shown
+            if (currentUser && !currentUser.isAnonymous && !currentUser.emailVerified) {
+                const bannerText = document.getElementById('verification-banner-text');
+                if (bannerText) {
+                    const message = normalized === 'bn' 
+                        ? 'আপনার ইমেইল যাচাই করা হয়নি। অনুগ্রহ করে আপনার ইনবক্স চেক করে ইমেইল যাচাই করুন এবং অর্ডার করুন।'
+                        : 'Your email is not verified. Please check your inbox and verify your email to place orders.';
+                    bannerText.textContent = message;
+                }
             }
 
             refreshLanguageUIState();
@@ -9924,6 +10004,20 @@
             
             if (user && !user.isAnonymous) {
                 currentUser = user;
+                
+                // Check and show email verification banner
+                const verificationBanner = document.getElementById('email-verification-banner');
+                const bannerText = document.getElementById('verification-banner-text');
+                if (!user.emailVerified && verificationBanner && bannerText) {
+                    const message = currentLang === 'bn' 
+                        ? 'আপনার ইমেইল যাচাই করা হয়নি। অনুগ্রহ করে আপনার ইনবক্স চেক করে ইমেইল যাচাই করুন এবং অর্ডার করুন।'
+                        : 'Your email is not verified. Please check your inbox and verify your email to place orders.';
+                    bannerText.textContent = message;
+                    verificationBanner.classList.remove('hidden');
+                } else if (verificationBanner) {
+                    verificationBanner.classList.add('hidden');
+                }
+                
                 const userRef = doc(db, 'users', user.uid);
                 // Backfill createdAt if missing
                 getDoc(userRef).then(snap => {
@@ -9951,11 +10045,17 @@
                 currentUser = null;
                 isCurrentUserBlocked = false;
                 hideBlockedUI();
+                // Hide verification banner for anonymous users
+                const verificationBanner = document.getElementById('email-verification-banner');
+                if (verificationBanner) verificationBanner.classList.add('hidden');
                 setupFirestoreListeners(null);
             } else {
                 currentUser = null;
                 isCurrentUserBlocked = false;
                 hideBlockedUI();
+                // Hide verification banner when logged out
+                const verificationBanner = document.getElementById('email-verification-banner');
+                if (verificationBanner) verificationBanner.classList.add('hidden');
                 setupFirestoreListeners(null);
             }
         });
@@ -10114,16 +10214,56 @@
             const password = DOMElements.registerForm.querySelector('#register-password').value;
             DOMElements.authError.textContent = '';
 
+            // Email validation regex
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            
+            if (!emailRegex.test(email)) {
+                DOMElements.authError.textContent = currentLanguage === 'bn' 
+                    ? 'অনুগ্রহ করে একটি বৈধ ইমেইল প্রদান করুন।' 
+                    : 'Please provide a valid email address.';
+                return;
+            }
+
             try {
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                
+                // Send email verification
+                await sendEmailVerification(userCredential.user);
+                
                 await updateProfile(userCredential.user, {
                     displayName: name
                 });
                 const userDocRef = doc(db, 'users', userCredential.user.uid);
-                await setDoc(userDocRef, { email: userCredential.user.email, name, mobile, location, addresses: [], cart: {}, wishlist: {}, usedCoupons: [], isBlocked: false, createdAt: serverTimestamp() });
+                await setDoc(userDocRef, { 
+                    email: userCredential.user.email, 
+                    name, 
+                    mobile, 
+                    location, 
+                    addresses: [], 
+                    cart: {}, 
+                    wishlist: {}, 
+                    usedCoupons: [], 
+                    isBlocked: false, 
+                    emailVerified: false,
+                    createdAt: serverTimestamp() 
+                });
 
+                // Clear the form
+                DOMElements.registerForm.reset();
+                
+                // Sign out immediately to prevent profile view from opening
+                await signOut(auth);
+                
+                // Close drawer
                 closeDrawer();
-                showToast('toast-register-success', true); 
+                
+                // Show verification message as toast
+                const verificationMessage = currentLanguage === 'bn' 
+                    ? 'অ্যাকাউন্ট তৈরি হয়েছে! আপনার ইমেইলে একটি verification link পাঠানো হয়েছে। অনুগ্রহ করে verify করে লগইন করুন।'
+                    : 'Account created! A verification link has been sent to your email. Please verify and login.';
+                
+                showToast(verificationMessage, true);
+                
             } catch (error) {
                 DOMElements.authError.textContent = error.message;
             }
@@ -10137,7 +10277,18 @@
             DOMElements.authError.textContent = '';
 
             try {
-                await signInWithEmailAndPassword(auth, email, password);
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                
+                // Check if email is verified
+                if (!userCredential.user.emailVerified) {
+                    await signOut(auth);
+                    const errorMsg = currentLanguage === 'bn'
+                        ? 'আপনার ইমেইল এখনও verify করা হয়নি। অনুগ্রহ করে আপনার ইমেইল চেক করে verify করুন।'
+                        : 'Your email is not verified yet. Please check your email and verify your account.';
+                    DOMElements.authError.textContent = errorMsg;
+                    return;
+                }
+                
                 closeDrawer();
                 showToast('toast-login-success');
             } catch (error) {
@@ -10499,6 +10650,14 @@
             if (!currentUser || currentUser.isAnonymous) {
                 showToast('Please log in to check out.', false);
                 openDrawer('profile-drawer');
+                return;
+            }
+            // Check email verification
+            if (currentUser && !currentUser.emailVerified && !currentUser.isAnonymous) {
+                const msg = currentLang === 'bn' 
+                    ? 'অর্ডার করতে আপনার ইমেইল যাচাই করুন। আপনার ইমেইল ইনবক্স চেক করুন।' 
+                    : 'Please verify your email to place orders. Check your email inbox.';
+                showToast(msg, false);
                 return;
             }
             if (localCartCache.size === 0) {
@@ -11980,6 +12139,34 @@
             DOMElements.confirmOkBtn.addEventListener('click', handleConfirmClick);
             DOMElements.confirmCancelBtn.addEventListener('click', handleCancelClick);
             
+            // Email Verification Resend Button
+            const resendVerificationBtn = document.getElementById('resend-verification-btn');
+            if (resendVerificationBtn) {
+                resendVerificationBtn.addEventListener('click', async () => {
+                    if (!currentUser || currentUser.isAnonymous) {
+                        showToast('Please log in first.', false);
+                        return;
+                    }
+                    if (currentUser.emailVerified) {
+                        showToast('Your email is already verified!', true);
+                        return;
+                    }
+                    try {
+                        await sendEmailVerification(currentUser);
+                        const msg = currentLang === 'bn' 
+                            ? 'যাচাইকরণ ইমেইল পাঠানো হয়েছে! আপনার ইনবক্স চেক করুন।'
+                            : 'Verification email sent! Check your inbox.';
+                        showToast(msg, true);
+                    } catch (error) {
+                        console.error('Error sending verification email:', error);
+                        const errMsg = currentLang === 'bn'
+                            ? 'যাচাইকরণ ইমেইল পাঠাতে ব্যর্থ হয়েছে। আবার চেষ্টা করুন।'
+                            : 'Failed to send verification email. Try again.';
+                        showToast(errMsg, false);
+                    }
+                });
+            }
+            
             // Emergency Contact Button
             if(DOMElements.emergencyContactBtn) DOMElements.emergencyContactBtn.addEventListener('click', handleEmergencyChatClick);
             if(DOMElements.chatForm) DOMElements.chatForm.addEventListener('submit', sendChatMessage);
@@ -12036,6 +12223,51 @@
             }
 
             toggleAuthForms(currentAuthForm);
+
+            // Email/Mobile Login Tab Switching
+            const emailLoginTab = document.getElementById('email-login-tab');
+            const mobileLoginTab = document.getElementById('mobile-login-tab');
+            const loginForm = document.getElementById('login-form');
+            const mobileLoginForm = document.getElementById('mobile-login-form');
+            const showRegisterFormMobile = document.getElementById('show-register-form-mobile');
+
+            if (emailLoginTab && mobileLoginTab) {
+                emailLoginTab.addEventListener('click', () => {
+                    // Switch to email login
+                    emailLoginTab.classList.add('bg-white', 'dark:bg-gray-600', 'text-theme-blue', 'dark:text-white', 'shadow');
+                    emailLoginTab.classList.remove('text-gray-600', 'dark:text-gray-300');
+                    emailLoginTab.setAttribute('aria-selected', 'true');
+                    
+                    mobileLoginTab.classList.remove('bg-white', 'dark:bg-gray-600', 'text-theme-blue', 'dark:text-white', 'shadow');
+                    mobileLoginTab.classList.add('text-gray-600', 'dark:text-gray-300');
+                    mobileLoginTab.setAttribute('aria-selected', 'false');
+                    
+                    loginForm.classList.remove('hidden');
+                    mobileLoginForm.classList.add('hidden');
+                });
+
+                mobileLoginTab.addEventListener('click', () => {
+                    // Switch to mobile login
+                    mobileLoginTab.classList.add('bg-white', 'dark:bg-gray-600', 'text-theme-blue', 'dark:text-white', 'shadow');
+                    mobileLoginTab.classList.remove('text-gray-600', 'dark:text-gray-300');
+                    mobileLoginTab.setAttribute('aria-selected', 'true');
+                    
+                    emailLoginTab.classList.remove('bg-white', 'dark:bg-gray-600', 'text-theme-blue', 'dark:text-white', 'shadow');
+                    emailLoginTab.classList.add('text-gray-600', 'dark:text-gray-300');
+                    emailLoginTab.setAttribute('aria-selected', 'false');
+                    
+                    loginForm.classList.add('hidden');
+                    mobileLoginForm.classList.remove('hidden');
+                });
+            }
+
+            // Mobile login register button
+            if (showRegisterFormMobile) {
+                showRegisterFormMobile.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    toggleAuthForms('register');
+                });
+            }
 
             DOMElements.showRegisterLink.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -12277,4 +12509,4 @@
     </script>
 
 </body>
-</html>
+</html> 
