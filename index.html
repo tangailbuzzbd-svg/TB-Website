@@ -1,3 +1,33 @@
+    <script>
+    // --- Fallback: Demo categories for UI testing ---
+    if (!window.HEADER_CATEGORY_GROUPS) {
+        window.HEADER_CATEGORY_GROUPS = [
+            { label: { en: 'Clothing' }, id: 'clothing', items: [
+                { label: { en: 'Men' }, value: 'men' },
+                { label: { en: 'Women' }, value: 'women' },
+                { label: { en: 'Kids' }, value: 'kids' }
+            ]},
+            { label: { en: 'Electronics' }, id: 'electronics', items: [
+                { label: { en: 'Mobiles' }, value: 'mobiles' },
+                { label: { en: 'Laptops' }, value: 'laptops' },
+                { label: { en: 'Accessories' }, value: 'accessories' }
+            ]},
+            { label: { en: 'Home & Living' }, id: 'home', items: [
+                { label: { en: 'Furniture' }, value: 'furniture' },
+                { label: { en: 'Decor' }, value: 'decor' }
+            ]},
+            { label: { en: 'Beauty' }, id: 'beauty', items: [
+                { label: { en: 'Makeup' }, value: 'makeup' },
+                { label: { en: 'Skincare' }, value: 'skincare' }
+            ]}
+        ];
+    }
+    if (!window.toTitleCase) {
+        window.toTitleCase = function(str) {
+            return (str||'').replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+        }
+    }
+    </script>
 
 <!DOCTYPE html><html lang="bn"><head>
     <meta charset="UTF-8">
@@ -860,6 +890,35 @@
         .toggle-checkbox:checked + .toggle-slider .label-bn {
             color: #ffd54f;
         }
+        
+        /* Language Toggle Sliding Background */
+        .language-toggle-wrapper {
+            position: relative;
+            min-width: 70px;
+        }
+        .language-toggle-background {
+            position: absolute;
+            top: 0.125rem;
+            left: 0.125rem;
+            width: calc(50% - 0.125rem);
+            height: calc(100% - 0.25rem);
+            background: white;
+            border-radius: 9999px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 0;
+        }
+        .language-toggle-wrapper[data-active="en"] .language-toggle-background {
+            transform: translateX(calc(100% + 0.25rem));
+        }
+        .language-option {
+            position: relative;
+            z-index: 1;
+            flex: 1;
+            min-width: 32px;
+            white-space: nowrap;
+        }
+        
         #flash-sale-section .flash-sale-info {
             border-bottom: 1px solid rgba(79, 70, 229, 0.08);
         }
@@ -1499,32 +1558,32 @@
         <div class="preloader-inner">
             <div class="preloader-orbit">
                 <div class="preloader-orbit-core">
-                    <img src="https://firebasestorage.googleapis.com/v0/b/tangailbuzz47.firebasestorage.app/o/LOGO%2Fgdrg_upscaled%20(1).png?alt=media&token=05076826-d4f3-4b22-a569-c4a15fd5c5ad" alt="TangailBuzz logo" class="preloader-core-logo">
+                    <img src="https://firebasestorage.googleapis.com/v0/b/tangailbuzz47.firebasestorage.app/o/gdrg_upscaled%20(1).png?alt=media&token=45a31458-cf92-42dc-8302-024c2cd39262" alt="TangailBuzz logo" class="preloader-core-logo">
                 </div>
                 <div class="preloader-orbit-track">
                     <div class="preloader-orbit-logo" style="--slot: 0;">
-                        <img src="https://firebasestorage.googleapis.com/v0/b/tangailbuzz47.firebasestorage.app/o/LOGO%2Fgdrg_upscaled%20(1).png?alt=media&token=05076826-d4f3-4b22-a569-c4a15fd5c5ad" alt="TangailBuzz icon">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/tangailbuzz47.firebasestorage.app/o/gdrg_upscaled%20(1).png?alt=media&token=45a31458-cf92-42dc-8302-024c2cd39262" alt="TangailBuzz icon">
                     </div>
                     <div class="preloader-orbit-logo" style="--slot: 1;">
-                        <img src="https://firebasestorage.googleapis.com/v0/b/tangailbuzz47.firebasestorage.app/o/LOGO%2Fgdrg_upscaled%20(1).png?alt=media&token=05076826-d4f3-4b22-a569-c4a15fd5c5ad" alt="TangailBuzz icon">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/tangailbuzz47.firebasestorage.app/o/gdrg_upscaled%20(1).png?alt=media&token=45a31458-cf92-42dc-8302-024c2cd39262" alt="TangailBuzz icon">
                     </div>
                     <div class="preloader-orbit-logo" style="--slot: 2;">
-                        <img src="https://firebasestorage.googleapis.com/v0/b/tangailbuzz47.firebasestorage.app/o/LOGO%2Fgdrg_upscaled%20(1).png?alt=media&token=05076826-d4f3-4b22-a569-c4a15fd5c5ad" alt="TangailBuzz icon">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/tangailbuzz47.firebasestorage.app/o/gdrg_upscaled%20(1).png?alt=media&token=45a31458-cf92-42dc-8302-024c2cd39262" alt="TangailBuzz icon">
                     </div>
                     <div class="preloader-orbit-logo" style="--slot: 3;">
-                        <img src="https://firebasestorage.googleapis.com/v0/b/tangailbuzz47.firebasestorage.app/o/LOGO%2Fgdrg_upscaled%20(1).png?alt=media&token=05076826-d4f3-4b22-a569-c4a15fd5c5ad" alt="TangailBuzz icon">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/tangailbuzz47.firebasestorage.app/o/gdrg_upscaled%20(1).png?alt=media&token=45a31458-cf92-42dc-8302-024c2cd39262" alt="TangailBuzz icon">
                     </div>
                     <div class="preloader-orbit-logo" style="--slot: 4;">
-                        <img src="https://firebasestorage.googleapis.com/v0/b/tangailbuzz47.firebasestorage.app/o/LOGO%2Fgdrg_upscaled%20(1).png?alt=media&token=05076826-d4f3-4b22-a569-c4a15fd5c5ad" alt="TangailBuzz icon">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/tangailbuzz47.firebasestorage.app/o/gdrg_upscaled%20(1).png?alt=media&token=45a31458-cf92-42dc-8302-024c2cd39262" alt="TangailBuzz icon">
                     </div>
                     <div class="preloader-orbit-logo" style="--slot: 5;">
-                        <img src="https://firebasestorage.googleapis.com/v0/b/tangailbuzz47.firebasestorage.app/o/LOGO%2Fgdrg_upscaled%20(1).png?alt=media&token=05076826-d4f3-4b22-a569-c4a15fd5c5ad" alt="TangailBuzz icon">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/tangailbuzz47.firebasestorage.app/o/gdrg_upscaled%20(1).png?alt=media&token=45a31458-cf92-42dc-8302-024c2cd39262" alt="TangailBuzz icon">
                     </div>
                     <div class="preloader-orbit-logo" style="--slot: 6;">
-                        <img src="https://firebasestorage.googleapis.com/v0/b/tangailbuzz47.firebasestorage.app/o/LOGO%2Fgdrg_upscaled%20(1).png?alt=media&token=05076826-d4f3-4b22-a569-c4a15fd5c5ad" alt="TangailBuzz icon">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/tangailbuzz47.firebasestorage.app/o/gdrg_upscaled%20(1).png?alt=media&token=45a31458-cf92-42dc-8302-024c2cd39262" alt="TangailBuzz icon">
                     </div>
                     <div class="preloader-orbit-logo" style="--slot: 7;">
-                        <img src="https://firebasestorage.googleapis.com/v0/b/tangailbuzz47.firebasestorage.app/o/LOGO%2Fgdrg_upscaled%20(1).png?alt=media&token=05076826-d4f3-4b22-a569-c4a15fd5c5ad" alt="TangailBuzz icon">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/tangailbuzz47.firebasestorage.app/o/gdrg_upscaled%20(1).png?alt=media&token=45a31458-cf92-42dc-8302-024c2cd39262" alt="TangailBuzz icon">
                     </div>
                 </div>
             </div>
@@ -1866,7 +1925,7 @@
                 <div class="flex items-center text-2xl font-bold transform hover:scale-105 transition-transform cursor-pointer" onclick="renderAllProducts()">
                     <!-- LOGO STYLING UPDATE: Wrap icon in white circle -->
                     <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center p-1 shadow-md mr-2 flex-shrink-0">
-                         <img src="https://github.com/tangailbuzzbd-svg/TangailBuzz-Picture-/blob/main/gdrg_upscaled%20(1).png?raw=true" alt="TangailBuzz Logo Icon" class="h-full w-full object-contain">
+                         <img src="https://firebasestorage.googleapis.com/v0/b/tangailbuzz47.firebasestorage.app/o/gdrg_upscaled%20(1).png?alt=media&token=45a31458-cf92-42dc-8302-024c2cd39262" alt="TangailBuzz Logo Icon" class="h-full w-full object-contain">
                     </div>
                     <span class="text-white text-lg sm:text-xl font-semibold tracking-wide leading-tight">TangailBuzz</span>
                     <!-- END LOGO STYLING UPDATE -->
@@ -1877,8 +1936,82 @@
             <nav class="hidden md:flex">
                 <ul class="flex items-center space-x-6">
                     <li><a href="javascript:void(0);" onclick="renderAllProducts()" class="text-white hover:text-theme-pink font-semibold transition-colors" data-lang="home">হোম</a></li> <!-- Adjusted text color -->
-                    <li><a href="#products" onclick="showPage('home-page'); scrollToElement('products')" class="text-white hover:text-theme-pink font-semibold transition-colors" data-lang="products">পণ্য</a></li> <!-- Adjusted text color -->
-                    <li><a href="#categories" onclick="showPage('home-page'); scrollToElement('categories')" class="text-white hover:text-theme-pink font-semibold transition-colors" data-lang="categories">ক্যাটাগরি</a></li> <!-- Adjusted text color -->
+                    <li class="group relative">
+                        <a id="header-category-menu" href="#products" onclick="showPage('home-page'); scrollToElement('products')" class="text-white hover:text-theme-pink font-semibold transition-colors flex items-center gap-1" data-lang="products">
+                            <span id="header-category-label">ক্যাটাগরি</span>
+                            <i class="fas fa-chevron-down text-xs mt-0.5"></i>
+                        </a>
+                        <!-- Mega Dropdown (left-aligned and constrained to viewport) -->
+                        <div id="mega-category-dropdown" class="absolute left-0 mt-2 max-w-[95vw] w-[min(95vw,1100px)] bg-white dark:bg-gray-900 shadow-2xl rounded-2xl border border-gray-100 dark:border-gray-800 z-50 opacity-0 group-hover:opacity-100 group-hover:pointer-events-auto pointer-events-none transition-all duration-200 origin-top-left" style="min-height:180px;">
+                            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 p-6 pl-8 justify-start">
+                                <!-- Category/Subcategory buttons will be injected by JS -->
+                                <div class="col-span-full text-left text-gray-400 text-sm" id="mega-category-loading">Loading categories...</div>
+                            </div>
+                        </div>
+                    </li>
+    <script>
+    // --- Mega Dropdown Category Menu Logic ---
+    document.addEventListener('DOMContentLoaded', function() {
+        // Track selected category
+        window.selectedCategoryLabel = 'ক্যাটাগরি';
+        function setHeaderCategoryLabel(label) {
+            window.selectedCategoryLabel = label || 'ক্যাটাগরি';
+            var el = document.getElementById('header-category-label');
+            if (el) el.textContent = window.selectedCategoryLabel;
+        }
+        const megaDropdown = document.getElementById('mega-category-dropdown');
+        if (!megaDropdown) return;
+        // Helper: Capitalize only first letter, rest lowercase
+        function firstWordCapital(str) {
+            if (!str) return '';
+            str = String(str);
+            const first = str.charAt(0).toUpperCase();
+            const rest = str.slice(1).toLowerCase();
+            return first + rest;
+        }
+        function isMobile() {
+            return window.innerWidth <= 640; // Tailwind 'sm' breakpoint
+        }
+        function renderMegaMenu() {
+            const grid = megaDropdown.querySelector('.grid');
+            if (!window.HEADER_CATEGORY_GROUPS || !Array.isArray(window.HEADER_CATEGORY_GROUPS)) {
+                grid.innerHTML = '<div class="col-span-full text-center text-gray-400 text-sm">No categories found.</div>';
+                return;
+            }
+            let html = '';
+            window.HEADER_CATEGORY_GROUPS.forEach(cat => {
+                let catLabel = cat.label?.en || cat.label?.bn || cat.id;
+                catLabel = isMobile() ? firstWordCapital(catLabel) : window.toTitleCase(catLabel);
+                html += `<div>
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-theme-pink/10 text-theme-pink"><i class="fas fa-tag"></i></span>
+                        <button class="font-bold text-theme-purple text-base bg-transparent border-0 p-0 m-0 hover:underline focus:outline-none" style="cursor:pointer" onclick="setHeaderCategoryLabel('${catLabel}');">${catLabel}</button>
+                    </div>`;
+                if (Array.isArray(cat.items) && cat.items.length > 0) {
+                    html += '<div class="flex flex-col gap-1 pl-3">';
+                    cat.items.forEach(sub => {
+                        let subLabel = sub.label?.en || sub.label?.bn || sub.value;
+                        subLabel = isMobile() ? firstWordCapital(subLabel) : window.toTitleCase(subLabel);
+                        html += `<button class="text-left text-sm text-gray-700 dark:text-gray-200 hover:text-theme-pink py-1 px-2 rounded transition-colors" onclick="filterProducts('${cat.label?.en || cat.id}','${sub.value}'); setHeaderCategoryLabel('${catLabel}');">${subLabel}</button>`;
+                    });
+                    html += '</div>';
+                } else {
+                    html += '<div class="text-xs text-gray-400 italic pl-3">No subcategories</div>';
+                }
+                html += '</div>';
+            });
+            grid.innerHTML = html;
+        }
+        // Render on hover/click
+        const navItem = megaDropdown.closest('li');
+        navItem.addEventListener('mouseenter', renderMegaMenu);
+        navItem.addEventListener('focusin', renderMegaMenu);
+        // Also re-render on resize for mobile/desktop switch
+        window.addEventListener('resize', function() {
+            if (megaDropdown.classList.contains('opacity-100')) renderMegaMenu();
+        });
+    });
+    </script>
                     <li><a href="javascript:void(0);" onclick="showOffers()" class="text-white hover:text-theme-pink font-semibold transition-colors" data-lang="offers">অফার</a></li> <!-- Adjusted text color -->
                     <li><a href="javascript:void(0);" onclick="showPage('home-page'); scrollToElement('flash-sale-section')" class="text-white hover:text-theme-pink font-semibold transition-colors" data-lang="flash-sale-nav">ফ্ল্যাশ সেল</a></li>
                     <li><a href="javascript:void(0);" onclick="showPage('home-page'); scrollToElement('mega-sale-section')" class="text-white hover:text-theme-pink font-semibold transition-colors" data-lang="mega-sale-nav">মেগা সেল</a></li>
@@ -1908,15 +2041,14 @@
 
                 <!-- Language Toggle -->
                 <div class="hidden md:block">
-                    <div class="language-toggle-container">
-                        <input type="checkbox" id="lang-switch" class="toggle-checkbox" checked>
-                        <label for="lang-switch" class="toggle-slider" aria-label="Language Toggle" data-lang-aria-label="language-label">
-                            <span class="label-en">EN</span>
-                            <span class="label-bn">BN</span>
-                            <div class="toggle-knob">
-                                <img id="flag-icon" src="https://flagcdn.com/w40/bd.png" alt="Bangladesh Flag">
-                            </div>
-                        </label>
+                    <div class="language-toggle-wrapper flex items-center gap-1 bg-white/10 backdrop-blur-sm rounded-full p-0.5 border border-white/20" data-active="bn">
+                        <div class="language-toggle-background"></div>
+                        <button type="button" class="language-option px-2 py-1 text-[10px] rounded-full font-semibold transition-colors text-theme-purple" data-lang-option="bn">
+                            বাং
+                        </button>
+                        <button type="button" class="language-option px-2 py-1 text-[10px] rounded-full font-semibold transition-colors text-white/90" data-lang-option="en">
+                            EN
+                        </button>
                     </div>
                 </div>
                 
@@ -2061,6 +2193,19 @@
         </div>
     </div>
 
+    <!-- Subcategory Modal -->
+    <div id="subcategory-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-50 z-[100] hidden items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-4xl w-full max-h-[80vh] overflow-y-auto shadow-2xl">
+            <div class="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4 flex justify-between items-center z-10">
+                <h3 id="subcategory-modal-title" class="text-xl sm:text-2xl font-bold text-theme-purple">সাব ক্যাটাগরি</h3>
+                <button onclick="closeSubcategoryModal()" class="text-gray-500 hover:text-gray-800 dark:hover:text-gray-200 text-3xl transition-colors">×</button>
+            </div>
+            <div id="subcategory-modal-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 p-6">
+                <!-- Subcategories will be loaded dynamically -->
+            </div>
+        </div>
+    </div>
+
 
     <!-- Mobile Navigation Drawer (Left) -->
     <div id="nav-drawer" class="drawer left fixed top-0 left-0 h-full w-full sm:w-72 bg-white dark:bg-gray-800 shadow-lg z-50 p-6">
@@ -2158,6 +2303,111 @@
                 </form>
             </div>
             <button id="checkout-btn" class="w-full bg-theme-blue text-white py-4 rounded-md font-bold hover:bg-theme-purple transition-colors shadow-lg mt-4" data-lang="checkout">চেকআউট করুন</button>
+
+            <!-- bKash Payment Block (added by request) -->
+            <div class="payment-container" style="max-width: 400px; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px; font-family: sans-serif; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin: 24px auto 0 auto;">
+                <h3 style="color: #d12053; margin-top: 0;">bKash Payment</h3>
+                <p style="margin-bottom: 8px;">বিকাশ পার্সোনাল নম্বর:</p>
+                <div style="display: flex; align-items: center; background: #f5f5f5; padding: 10px; border-radius: 5px; justify-content: space-between; border: 1px solid #eee;">
+                    <span id="bkashNumber" style="font-weight: bold; font-size: 1.1em; color: #333;">+8801886931064</span>
+                    <button onclick="copyNumber()" id="copyBtn" style="background: #d12053; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold;">Copy</button>
+                </div>
+                <div style="margin-top: 15px;">
+                    <a href="intent://#Intent;scheme=bkash;package=com.bKash.customerapp;end" style="text-decoration: none; display: block; text-align: center; background: #e2136e; color: white; padding: 10px; border-radius: 5px; font-weight: bold; font-size: 0.9em;">Open bKash App</a>
+                </div>
+                <div style="margin-top: 20px;">
+                    <label for="trxId" style="display: block; margin-bottom: 5px;">Transaction ID প্রদান করুন:</label>
+                    <input type="text" id="trxId" placeholder="Example: 8N7S1K92LL" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
+                    <div style="margin-top: 5px; font-size: 12px; color: #666;">Sample: <span style="font-weight: bold; color: #d12053;">8N7S1K92LL</span></div>
+                </div>
+                <button id="checkout-verify-btn" onclick="verifyPayment()" style="width: 100%; margin-top: 15px; padding: 12px; background: #008000; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 1em;">Verify Payment</button>
+            </div>
+            <script>
+            function copyNumber() {
+                const number = document.getElementById('bkashNumber').innerText;
+                const btn = document.getElementById('copyBtn');
+                navigator.clipboard.writeText(number).then(() => {
+                    const originalText = btn.innerText;
+                    btn.innerText = "Copied!";
+                    btn.style.background = "#28a745";
+                    setTimeout(() => {
+                        btn.innerText = originalText;
+                        btn.style.background = "#d12053";
+                    }, 2000);
+                }).catch(err => {
+                    alert("Error copying text: " + err);
+                });
+            }
+            // global to hold pending bkash trx id when verifying from the checkout block
+            window.bkashTransactionId = window.bkashTransactionId || null;
+            function verifyPayment() {
+                const trxEl = document.getElementById('trxId');
+                const trxId = trxEl ? trxEl.value.trim() : '';
+                if(!trxId) {
+                    alert('দয়া করে Transaction ID প্রদান করুন।');
+                    return;
+                }
+                // store globally so order creation can include it
+                window.bkashTransactionId = trxId;
+
+                // Ensure payment modal radios are set so handlePlaceOrder picks Mobile Banking -> Bkash
+                const mainRadio = document.querySelector('input[name="main-payment"][value="Mobile Banking"]');
+                if (mainRadio) {
+                    mainRadio.checked = true;
+                    // dispatch change so any listeners react (show/hide panels)
+                    mainRadio.dispatchEvent(new Event('change', { bubbles: true }));
+                    // show mobile options panel if hidden as a fallback
+                    const mobilePanel = document.getElementById('mobile-banking-options');
+                    if (mobilePanel) mobilePanel.classList.remove('hidden');
+                }
+                const bkashSub = document.querySelector('input[name="sub-payment"][value="Bkash"]');
+                if (bkashSub) {
+                    bkashSub.checked = true;
+                    bkashSub.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+
+                // Open payment modal to show the user the selection (if not open)
+                const paymentModal = document.getElementById('payment-modal');
+                if (paymentModal && paymentModal.classList.contains('hidden')) {
+                    paymentModal.classList.remove('hidden');
+                    paymentModal.classList.add('flex');
+                }
+
+                // Trigger the confirm order flow (this will run handlePlaceOrder)
+                // Use the existing confirm order button to keep behavior consistent
+                const confirmBtn = document.getElementById('confirm-order-btn');
+                if (confirmBtn) {
+                    // slight delay to allow UI changes
+                    setTimeout(() => confirmBtn.click(), 250);
+                } else {
+                    alert('Confirm button not found. Please complete checkout from the payment modal.');
+                }
+            }
+
+            // Open bKash app link with number & (optional) amount for mobile
+            (function setupBkashIntent() {
+                const openLink = document.querySelector('.payment-container a[href^="intent:"]');
+                const number = document.getElementById('bkashNumber')?.innerText.replace(/\s+/g, '') || '+8801886931064';
+                // Try to compute cart total if available
+                function getCartTotal() {
+                    try {
+                        if (typeof window.getCartTotalAmount === 'function') return window.getCartTotalAmount();
+                        // fallback: try reading a global total (project-specific)
+                        if (window.cartTotalAmount) return window.cartTotalAmount;
+                    } catch (_) {}
+                    return null;
+                }
+                const amount = getCartTotal() || '';
+                if (openLink) {
+                    // Use Android intent format with data when amount available
+                    if (amount) {
+                        openLink.href = `intent://#Intent;scheme=bkash;package=com.bKash.customerapp;S.phone=${number};S.amount=${amount};end`;
+                    } else {
+                        openLink.href = `intent://#Intent;scheme=bkash;package=com.bKash.customerapp;S.phone=${number};end`;
+                    }
+                }
+            })();
+            </script>
         </div>
     </div>
     
@@ -2299,13 +2549,13 @@
                         <h4 class="font-bold mb-2">মোবাইল দিয়ে লগইন করুন</h4>
                         
                         <div id="phone-input-group">
-                            <input type="tel" id="phone-number" placeholder="+8801xxxxxxxxx" class="w-full p-2 border rounded mb-2" value="+880">
+                            <input type="tel" id="old-phone-number" placeholder="+8801xxxxxxxxx" class="w-full p-2 border rounded mb-2" value="+880">
                             <div id="recaptcha-container" class="mb-2"></div>
                             <button id="send-otp-btn" class="w-full bg-blue-600 text-white py-2 rounded">Send OTP</button>
                         </div>
 
                         <div id="otp-input-group" class="hidden">
-                            <input type="text" id="otp-code" placeholder="123456" class="w-full p-2 border rounded mb-2">
+                            <input type="text" id="old-otp-code" placeholder="123456" class="w-full p-2 border rounded mb-2">
                             <button id="verify-otp-btn" class="w-full bg-green-600 text-white py-2 rounded">Verify &amp; Login</button>
                         </div>
                     </div>
@@ -2498,14 +2748,6 @@
 
         <!-- Home Page -->
         <div id="home-page" class="page">
-            <!-- Top Category Strip (Under Header, Above Banner) -->
-            <section id="top-category-strip" class="container mx-auto px-4 pt-4">
-                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-md border border-gray-100 dark:border-gray-700">
-                    <div id="top-category-strip-list" class="flex gap-2 sm:gap-3 lg:gap-4 px-4 py-3 overflow-x-auto items-center scrollbar-thin">
-                        <!-- Dynamic category buttons will render here -->
-                    </div>
-                </div>
-            </section>
             <!-- Hero/Banner Composite (2-part layout) -->
             <section class="container mx-auto px-4 py-4">
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
@@ -2651,44 +2893,6 @@
                 </div>
             </section>
 
-            <!-- Categories Section -->
-            <section id="categories" class="container mx-auto px-4 py-10 sm:py-16">
-                <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-8 sm:mb-10 relative after:content-[''] after:absolute after:bottom-[-10px] after:left-1/2 after:-translate-x-1/2 after:w-16 sm:after:w-20 after:h-1 after:bg-theme-pink after:rounded-full" data-lang="shop-by-category">ক্যাটাগরি অনুসারে কেনাকাটা করুন</h2>
-                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-5 sm:gap-6 lg:gap-8">
-                    <div class="bg-white dark:bg-gray-800 p-5 sm:p-6 lg:p-8 rounded-3xl shadow-xl text-center transition-transform hover:-translate-y-2 hover:shadow-2xl cursor-pointer" onclick="filterProducts('electronics')">
-                        <div class="text-3xl sm:text-4xl lg:text-5xl text-theme-blue mb-3"><i class="fas fa-mobile-alt"></i></div>
-                        <h3 class="text-lg sm:text-xl font-semibold" data-lang="cat-electronics">ইলেকট্রনিক্স</h3>
-                    </div>
-                    <div class="bg-white dark:bg-gray-800 p-5 sm:p-6 lg:p-8 rounded-3xl shadow-xl text-center transition-transform hover:-translate-y-2 hover:shadow-2xl cursor-pointer" onclick="filterProducts('fashion')">
-                        <div class="text-3xl sm:text-4xl lg:text-5xl text-theme-blue mb-3"><i class="fas fa-tshirt"></i></div>
-                        <h3 class="text-lg sm:text-xl font-semibold" data-lang="cat-fashion">ফ্যাশন</h3>
-                    </div>
-                    <div class="bg-white dark:bg-gray-800 p-5 sm:p-6 lg:p-8 rounded-3xl shadow-xl text-center transition-transform hover:-translate-y-2 hover:shadow-2xl cursor-pointer" onclick="filterProducts('home-garden')">
-                        <div class="text-3xl sm:text-4xl lg:text-5xl text-theme-blue mb-3"><i class="fas fa-home"></i></div>
-                        <h3 class="text-lg sm:text-xl font-semibold" data-lang="cat-home-garden">হোম অ্যান্ড গার্ডেন</h3>
-                    </div>
-                    <div class="bg-white dark:bg-gray-800 p-5 sm:p-6 lg:p-8 rounded-3xl shadow-xl text-center transition-transform hover:-translate-y-2 hover:shadow-2xl cursor-pointer" onclick="filterProducts('health-beauty')">
-                        <div class="text-3xl sm:text-4xl lg:text-5xl text-theme-blue mb-3"><i class="fas fa-heartbeat"></i></div>
-                        <h3 class="text-lg sm:text-xl font-semibold" data-lang="cat-health-beauty">স্বাস্থ্য ও সৌন্দর্য</h3>
-                    </div>
-                    <div class="bg-white dark:bg-gray-800 p-5 sm:p-6 lg:p-8 rounded-3xl shadow-xl text-center transition-transform hover:-translate-y-2 hover:shadow-2xl cursor-pointer" onclick="filterProducts('sports')">
-                        <div class="text-3xl sm:text-4xl lg:text-5xl text-theme-blue mb-3"><i class="fas fa-dumbbell"></i></div>
-                        <h3 class="text-lg sm:text-xl font-semibold" data-lang="cat-sports">খেলাধুলা ও আউটডোর</h3>
-                    </div>
-                    <div class="bg-white dark:bg-gray-800 p-5 sm:p-6 lg:p-8 rounded-3xl shadow-xl text-center transition-transform hover:-translate-y-2 hover:shadow-2xl cursor-pointer" onclick="filterProducts('books')">
-                        <div class="text-3xl sm:text-4xl lg:text-5xl text-theme-blue mb-3"><i class="fas fa-book-open"></i></div>
-                        <h3 class="text-lg sm:text-xl font-semibold" data-lang="cat-books">বই ও স্টেশনারি</h3>
-                    </div>
-                    <div class="bg-white dark:bg-gray-800 p-5 sm:p-6 lg:p-8 rounded-3xl shadow-xl text-center transition-transform hover:-translate-y-2 hover:shadow-2xl cursor-pointer" onclick="filterProducts('kids')">
-                        <div class="text-3xl sm:text-4xl lg:text-5xl text-theme-blue mb-3"><i class="fas fa-baby"></i></div>
-                        <h3 class="text-lg sm:text-xl font-semibold" data-lang="cat-kids">বাচ্চা ও খেলনা</h3>
-                    </div>
-                    <div class="bg-white dark:bg-gray-800 p-5 sm:p-6 lg:p-8 rounded-3xl shadow-xl text-center transition-transform hover:-translate-y-2 hover:shadow-2xl cursor-pointer" onclick="filterProducts('cars')">
-                        <div class="text-3xl sm:text-4xl lg:text-5xl text-theme-blue mb-3"><i class="fas fa-car-side"></i></div>
-                        <h3 class="text-lg sm:text-xl font-semibold" data-lang="cat-cars">গাড়ি ও বাইক</h3>
-                    </div>
-                </div>
-            </section>
 
             <!-- Features Section -->
             <section class="bg-gray-200 dark:bg-gray-800 py-10 sm:py-16">
@@ -3289,7 +3493,7 @@
                         <h3 class="text-xl font-semibold mb-1" data-lang="support-phone">Phone Call</h3>
                         <p class="text-gray-600 dark:text-gray-300" data-lang="support-phone-desc">শুধুমাত্র জরুরি পেমেন্ট বা অর্ডার সংক্রান্ত সমস্যার জন্য</p>
                         <p class="text-sm text-gray-500 dark:text-gray-400 mt-2" data-lang="support-phone-hours">সময়: সকাল ১০টা - সন্ধ্যা ৬টা</p>
-                        <a href="tel:+8801863205976" class="mt-4 inline-flex items-center justify-center gap-2 bg-theme-blue text-white px-4 py-2 rounded-full hover:bg-theme-purple transition-colors">
+                        <a href="tel:+8801886931064" class="mt-4 inline-flex items-center justify-center gap-2 bg-theme-blue text-white px-4 py-2 rounded-full hover:bg-theme-purple transition-colors">
                             <span data-lang="support-call-now">Call Now</span>
                             <i class="fas fa-phone"></i>
                         </a>
@@ -3350,7 +3554,7 @@
                         </li>
                         <li class="flex items-center">
                             <i class="fas fa-phone mr-2 text-theme-pink"></i>
-                            <a href="tel:+8801863205976" class="hover:text-theme-pink transition-colors">+8801863205976</a>
+                            <a href="tel:+8801886931064" class="hover:text-theme-pink transition-colors">+8801886931064</a>
                         </li>
                         <li class="flex items-center">
                             <i class="fas fa-envelope mr-2 text-theme-pink"></i>
@@ -3432,6 +3636,30 @@
             .catch((err) => { console.warn('Failed to set Firebase auth persistence', err); });
         const db = getFirestore(app);
         const storage = getStorage(app);
+        
+        // Expose Firebase utilities globally for use in other parts of the code
+        window.db = db;
+        window.firestoreCollection = collection;
+        window.firestoreGetDocs = getDocs;
+        window.firestoreQuery = query;
+        window.firestoreWhere = where;
+        
+        console.log('✅ Firebase initialized successfully!');
+        console.log('✅ Firestore DB ready:', !!window.db);
+        
+        // Trigger category loading after Firebase is ready
+        if (typeof loadCategories === 'function') {
+            console.log('🔄 Triggering loadCategories() now that Firebase is ready...');
+            loadCategories();
+        } else {
+            // If loadCategories isn't defined yet, wait for it
+            window.addEventListener('load', () => {
+                if (typeof loadCategories === 'function') {
+                    console.log('🔄 Triggering loadCategories() after window load...');
+                    loadCategories();
+                }
+            });
+        }
 
         // reCAPTCHA setup and phone auth handlers (robust rendering + UX)
         const setupRecaptcha = () => {
@@ -3466,6 +3694,12 @@
                 alert(msg);
             }
         };
+        
+        // Get translated message based on current language
+        const getTranslatedMessage = (bnText, enText) => {
+            const currentLang = document.documentElement.lang || 'bn';
+            return currentLang === 'en' ? enText : bnText;
+        };
 
         // Send OTP (async: wait for recaptcha to render)
         document.getElementById('send-otp-btn')?.addEventListener('click', async (ev) => {
@@ -3475,7 +3709,7 @@
             if (!phoneNumberEl) return;
             const phoneNumber = String(phoneNumberEl.value || '').trim();
             if (!phoneNumber || phoneNumber.length < 11) {
-                showFeedback('সঠিক মোবাইল নম্বর দিন (+880...)', false);
+                showFeedback(getTranslatedMessage('সঠিক মোবাইল নম্বর দিন (+880...)', 'Please enter a valid mobile number (+880...)'), false);
                 return;
             }
 
@@ -3534,9 +3768,17 @@
         setTimeout(() => { preloaderEl.style.display = 'none'; }, PRELOADER_FADE_MS);
     };
 
+
     window.addEventListener('load', () => {
         preloaderState.windowReady = true;
         tryHidePreloader();
+        // Force hide preloader after 2 seconds, always
+        setTimeout(() => {
+            if (!preloaderState.hidden) {
+                console.warn('⚠️ Forcing preloader hide after 2s');
+                tryHidePreloader(true);
+            }
+        }, 2000);
     });
 
     const markPreloaderDataReady = () => {
@@ -5010,6 +5252,20 @@
         let currentCategory = null; // Tracks current main category filter
         let currentSubCategory = null; // Tracks current sub category filter
     let mobileCategoriesActiveCategory = null; // Tracks currently focused main category in mobile drawer
+        // Category groups array (will be populated from Firebase)
+        window.HEADER_CATEGORY_GROUPS = [];
+        const HEADER_CATEGORY_GROUPS = window.HEADER_CATEGORY_GROUPS; // Alias for easier access
+        
+        // Utility function to convert text to Title Case (First letter uppercase, rest lowercase)
+        window.toTitleCase = function(text) {
+            if (!text) return text;
+            return text
+                .split(' ')
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+                .join(' ');
+        };
+        const toTitleCase = window.toTitleCase; // Alias for easier access
+        
         // --- End Category Tracking State ---
         
         // --- User Blocking Logic ---
@@ -5027,7 +5283,7 @@
                 'mega-sale-nav': 'Mega Sale',
                 'add-product-nav': 'Add Product',
                 'search-placeholder': 'Search for products...', 'featured-products': 'Featured Products', 'shop-by-category': 'Shop by Category', 'cat-electronics': 'Electronics', 'cat-fashion': 'Fashion', 'cat-home-garden': 'Home & Garden', 'cat-health-beauty': 'Health & Beauty', 'cat-sports': 'Sports & Outdoors', 'cat-books': 'Books & Stationery', 'cat-kids': 'Kids & Toys', 'cat-cars': 'Cars & Bikes', 'why-choose-us': 'Why Choose Us', 'feature-delivery-title': 'Fast Delivery', 'feature-delivery-desc': 'We deliver to your doorstep within 2-3 business days.', 'feature-payment-title': 'Secure Payment', 'feature-payment-desc': 'All transactions are encrypted for your security and privacy.', 'feature-return-title': 'Easy Returns', 'feature-return-desc': 'Return products within 30 days for a full refund if you\'re not satisfied.', 'feature-support-title': '24/7 Support', 'feature-support-desc': 'Our customer support team is available for you day and night.', 'add-to-cart': 'Add to Cart', 'added-to-cart': 'Added!', 'no-products': 'No products found matching your criteria.', 'back-to-products': 'Back to All Products', 'returnable': '30-Day Returnable', 'not-returnable': 'Not Returnable', 'return-policy-button-label': 'View return policy', 'secure-payments': 'Secure Payments', 'size': 'Size:', 'storage': 'Storage:', 'color': 'Color:', 'product-description': 'Product Description', 'product-specifications': 'Product Specifications', 'specifications': 'Specification', 'value': 'Value', 'no-specs': 'No specifications available for this product.', 'product-reviews': 'Product Reviews', 'no-reviews': 'There are no reviews for this product yet.', 'cart': 'Your Cart', 'cart-empty': 'Your cart is empty.', 'total': 'Total:', 'checkout': 'Checkout', 'your-wishlist': 'Your Wishlist', 'wishlist-empty': 'Your wishlist is empty. Add some products!', 'your-account': 'Your Account', 'signin-google': 'Sign in with Google', 'logout': 'Logout', 'toast-cart-added': 'Product added to cart!', 'toast-wishlist-added': 'Product added to wishlist!', 'toast-wishlist-removed': 'Product removed from wishlist!', 'toast-login-success': 'Successfully logged in!', 'toast-logout-success': 'Successfully logged out!',
-                'toast-register-success': 'Account created successfully!', 'login': 'Login', 'register': 'Register Account', 'email': 'Email', 'password': 'Password', 'login-method-email': 'Email', 'login-method-mobile': 'Mobile', 'send-otp': 'Send OTP', 'otp-code': 'OTP Code', 'verify-and-login': 'Verify & Login', 'auth-login-heading': 'Welcome Back', 'auth-register-heading': 'Create Your Account', 'auth-reset-heading': 'Reset Password', 'auth-login-subtitle': 'Sign in to manage your orders, wishlist, and saved addresses.', 'auth-register-subtitle': 'Create a free TangailBuzz account in minutes.', 'auth-reset-subtitle': 'Enter your email and we will send a secure reset link.', 'auth-login-tab': 'Log In', 'auth-register-tab': 'Sign Up', 'auth-reset-tab': 'Reset', 'auth-social-divider': 'Or Continue With', 'auth-security-note': 'Your credentials are encrypted and never shared.', 'auth-new-here': 'New Here?', 'auth-have-account': 'Already Have an Account?', 'create-account': 'Create Account', 'forgot-password': 'Forgot Password?', 'reset-password-desc': 'Enter your registered email so we can send a secure reset link.', 'send-reset-link': 'Send Reset Link', 'back-to-login': 'Back to Login', 'login-google': 'Sign In with Google', 'login-facebook': 'Sign In with Facebook', 'full-name': 'Full Name', 'mobile-number': 'Mobile Number', 'location': 'Location', 'upload-photo': 'Upload Photo', 'remove-photo': 'Remove Photo', 'save-changes': 'Save Changes', 'cancel': 'Cancel', 'account-options': 'Account Options', 'edit-profile': 'Edit Profile', 'manage-address': 'Manage Addresses', 'delete-account': 'Delete Account', 'saved-addresses': 'Saved Addresses', 'manage-address-help': 'Manage your delivery addresses.', 'address-form-title': 'Add New Address', 'address-line1': 'Address Line 1', 'address-line2-optional': 'Address Line 2 (Optional)', 'city': 'City', 'area-district': 'Area / District', 'set-as-default': 'Set as Default', 'save-address': 'Save Address', 'toast-select-variant': 'Please select all required options!', 'select-variants': 'Select Options', 'buy-now': 'Buy Now', 'payment-method': 'Select Payment Method', 'cod': 'Cash on Delivery', 'online-payment': 'Online Payment', 'confirm-order': 'Confirm Order', 'order-placed-success': 'Your order has been placed successfully!', 'order-placed-fail': 'Failed to place order. Please try again.', 'cart-is-empty': 'Your cart is empty. Cannot checkout.', 'mobile-banking': 'Mobile Banking', 'payment-instruction-bkash': 'Please send {amount} Taka to this Bkash number: +8801863205976 from your app.', 'payment-instruction-nagad': 'Please send {amount} Taka to this Nagad number: +8801863205976 from your app.', 'payment-instruction-cod': 'Our delivery person will collect the payment upon delivery.', 'profile-updated': 'Profile updated successfully!', 'profile-update-fail': 'Failed to update profile.', 'toast-storage-permission-error': 'Storage permission denied. Check Firebase rules.', 'toast-update-profile': 'Please update your location and mobile number in your profile before ordering.', 'emergency-contact': 'Support', 'message-sent': 'Message sent successfully!', 'out-of-stock': 'Out of Stock', 'toast-out-of-stock': 'Sorry, this product is currently out of stock.', 'subtotal': 'Subtotal', 'delivery-charge': 'Delivery Charge', 'my-orders': 'My Orders',
+                'toast-register-success': 'Account created successfully!', 'login': 'Login', 'register': 'Register Account', 'email': 'Email', 'password': 'Password', 'login-method-email': 'Email', 'login-method-mobile': 'Mobile', 'send-otp': 'Send OTP', 'otp-code': 'OTP Code', 'verify-and-login': 'Verify & Login', 'auth-login-heading': 'Welcome Back', 'auth-register-heading': 'Create Your Account', 'auth-reset-heading': 'Reset Password', 'auth-login-subtitle': 'Sign in to manage your orders, wishlist, and saved addresses.', 'auth-register-subtitle': 'Create a free TangailBuzz account in minutes.', 'auth-reset-subtitle': 'Enter your email and we will send a secure reset link.', 'auth-login-tab': 'Log In', 'auth-register-tab': 'Sign Up', 'auth-reset-tab': 'Reset', 'auth-social-divider': 'Or Continue With', 'auth-security-note': 'Your credentials are encrypted and never shared.', 'auth-new-here': 'New Here?', 'auth-have-account': 'Already Have an Account?', 'create-account': 'Create Account', 'forgot-password': 'Forgot Password?', 'reset-password-desc': 'Enter your registered email so we can send a secure reset link.', 'send-reset-link': 'Send Reset Link', 'back-to-login': 'Back to Login', 'login-google': 'Sign In with Google', 'login-facebook': 'Sign In with Facebook', 'full-name': 'Full Name', 'mobile-number': 'Mobile Number', 'location': 'Location', 'upload-photo': 'Upload Photo', 'remove-photo': 'Remove Photo', 'save-changes': 'Save Changes', 'cancel': 'Cancel', 'account-options': 'Account Options', 'edit-profile': 'Edit Profile', 'manage-address': 'Manage Addresses', 'delete-account': 'Delete Account', 'saved-addresses': 'Saved Addresses', 'manage-address-help': 'Manage your delivery addresses.', 'address-form-title': 'Add New Address', 'address-line1': 'Address Line 1', 'address-line2-optional': 'Address Line 2 (Optional)', 'city': 'City', 'area-district': 'Area / District', 'set-as-default': 'Set as Default', 'save-address': 'Save Address', 'toast-select-variant': 'Please select all required options!', 'select-variants': 'Select Options', 'buy-now': 'Buy Now', 'payment-method': 'Select Payment Method', 'cod': 'Cash on Delivery', 'online-payment': 'Online Payment', 'confirm-order': 'Confirm Order', 'order-placed-success': 'Your order has been placed successfully!', 'order-placed-fail': 'Failed to place order. Please try again.', 'cart-is-empty': 'Your cart is empty. Cannot checkout.', 'mobile-banking': 'Mobile Banking', 'payment-instruction-bkash': 'Please send {amount} Taka to this Bkash number: +8801886931064 from your app.', 'payment-instruction-nagad': 'Please send {amount} Taka to this Nagad number: +8801886931064 from your app.', 'payment-instruction-cod': 'Our delivery person will collect the payment upon delivery.', 'profile-updated': 'Profile updated successfully!', 'profile-update-fail': 'Failed to update profile.', 'toast-storage-permission-error': 'Storage permission denied. Check Firebase rules.', 'toast-update-profile': 'Please update your location and mobile number in your profile before ordering.', 'emergency-contact': 'Support', 'message-sent': 'Message sent successfully!', 'out-of-stock': 'Out of Stock', 'toast-out-of-stock': 'Sorry, this product is currently out of stock.', 'subtotal': 'Subtotal', 'delivery-charge': 'Delivery Charge', 'my-orders': 'My Orders',
                 'delete-account-confirm': 'Are you sure you want to delete your account? This action cannot be undone. All data will be lost.',
                 'account-deleted': 'Your account has been successfully deleted.',
                 'delete-account-failed': 'Failed to delete account. Please try again.',
@@ -5202,7 +5458,7 @@
             },
             bn: {
                 'deliver-to': 'ডেলিভারি লোকেশন', 'home': 'হোম', 'products': 'পণ্য', 'categories': 'ক্যাটাগরি', 'offers': 'অফার', 'search-placeholder': 'পণ্য খুঁজুন...', 'featured-products': 'বৈশিষ্ট্যযুক্ত পণ্য', 'shop-by-category': 'ক্যাটাগরি অনুসারে কেনাকাটা করুন', 'cat-electronics': 'ইলেকট্রনিক্স', 'cat-fashion': 'ফ্যাশন', 'cat-home-garden': 'হোম অ্যান্ড গার্ডেন', 'cat-health-beauty': 'স্বাস্থ্য ও সৌন্দর্য', 'cat-sports': 'খেলাধুলা ও আউটডোর', 'cat-books': 'বই ও স্টেশনারি', 'cat-kids': 'বাচ্চা ও খেলনা', 'cat-cars': 'গাড়ি ও বাইক', 'why-choose-us': 'আমাদেরকে কেন বেছে নিবেন', 'feature-delivery-title': 'দ্রুত ডেলিভারি', 'feature-delivery-desc': 'আমরা ২-৩ কার্যদিবসের মধ্যে আপনার দোরগোড়ায় পণ্য পৌঁছে দিই।', 'feature-payment-title': 'নিরাপদ পেমেন্ট', 'feature-payment-desc': 'আপনার নিরাপত্তা ও গোপনীয়তার জন্য সকল লেনদেন এনক্রিপ্টেড।', 'feature-return-title': 'সহজ রিটার্ন', 'feature-return-desc': 'পছন্দ না হলে ৩০ দিনের মধ্যে পণ্য ফেরত দিন এবং সম্পূর্ণ মূল্য ফেরত পান।', 'feature-support-title': '২৪/৭ সাপোর্ট', 'feature-support-desc': 'আমাদের গ্রাহক সহায়তা দল দিনরাত আপনার জন্য উপলব্ধ।', 'add-to-cart': 'কার্টে যোগ করুন', 'added-to-cart': 'যোগ হয়েছে!', 'no-products': 'আপনার অনুসন্ধানের সাথে মেলে এমন কোনো পণ্য পাওয়া যায়নি।', 'back-to-products': 'সকল পণ্যে ফিরে যান', 'returnable': '৩০-দিনের মধ্যে ফেরতযোগ্য', 'not-returnable': 'ফেরতযোগ্য নয়', 'return-policy-button-label': 'রিটার্ন নীতি দেখুন', 'secure-payments': 'নিরাপদ পেমেন্ট', 'size': 'সাইজ:', 'storage': 'স্টোরেজ:', 'color': 'রঙ:', 'product-description': 'পণ্যের বিবরণ', 'product-specifications': 'পণ্যের স্পেসিফিকেশন', 'specifications': 'স্পেসিফিকেশন', 'value': 'মান', 'no-specs': 'এই পণ্যের জন্য কোন স্পেসিফিকেশন উপলব্ধ নেই।', 'product-reviews': 'পণ্যের রিভিউ', 'no-reviews': 'এই পণ্যের জন্য এখনো কোনো রিভিউ নেই।', 'cart': 'আপনার কার্ট', 'cart-empty': 'আপনার কার্ট খালি।', 'total': 'মোট মূল্য:', 'checkout': 'চেকআউট করুন', 'your-wishlist': 'আপনার উইশলিস্ট', 'wishlist-empty': 'আপনার উইশলিস্ট খালি। কিছু পণ্য যোগ করুন!', 'your-account': 'আপনার অ্যাকাউন্ট', 'signin-google': 'Google দিয়ে সাইন ইন করুন', 'logout': 'লগআউট', 'toast-cart-added': 'পণ্য কার্টে যোগ করা হয়েছে!', 'toast-wishlist-added': 'পণ্য উইশলিস্টে যোগ করা হয়েছে!', 'toast-wishlist-removed': 'পণ্য উইশলিস্ট থেকে সরানো হয়েছে!', 'toast-login-success': 'সফলভাবে লগইন হয়েছে!', 'toast-logout-success': 'সফলভাবে লগআউট হয়েছে!',
-                'toast-register-success': 'অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে!', 'login': 'লগইন', 'register': 'অ্যাকাউন্ট রেজিস্টার', 'email': 'ইমেইল', 'password': 'পাসওয়ার্ড', 'login-method-email': 'ইমেইল', 'login-method-mobile': 'মোবাইল', 'send-otp': 'OTP পাঠান', 'otp-code': 'OTP কোড', 'verify-and-login': 'যাচাই করুন ও লগইন করুন', 'auth-login-heading': 'পুনরায় স্বাগতম', 'auth-register-heading': 'আপনার অ্যাকাউন্ট তৈরি করুন', 'auth-reset-heading': 'পাসওয়ার্ড রিসেট করুন', 'auth-login-subtitle': 'অর্ডার, উইশলিস্ট ও ঠিকানা পরিচালনা করতে লগইন করুন।', 'auth-register-subtitle': 'কয়েক মিনিটেই বিনামূল্যে TangailBuzz অ্যাকাউন্ট তৈরি করুন।', 'auth-reset-subtitle': 'আপনার ইমেইল দিন, আমরা একটি নিরাপদ রিসেট লিঙ্ক পাঠাবো।', 'auth-login-tab': 'লগইন', 'auth-register-tab': 'রেজিস্টার', 'auth-reset-tab': 'রিসেট', 'auth-social-divider': 'অথবা চালিয়ে যান', 'auth-security-note': 'আপনার তথ্য এনক্রিপ্টেড এবং নিরাপদে সংরক্ষিত থাকে।', 'auth-new-here': 'নতুন সদস্য?', 'auth-have-account': 'ইতোমধ্যে অ্যাকাউন্ট আছে?', 'create-account': 'অ্যাকাউন্ট তৈরি করুন', 'forgot-password': 'পাসওয়ার্ড ভুলে গেছেন?', 'reset-password-desc': 'আপনার নিবন্ধিত ইমেইল দিন, আমরা একটি নিরাপদ রিসেট লিঙ্ক পাঠাবো।', 'send-reset-link': 'রিসেট লিঙ্ক পাঠান', 'back-to-login': 'লগইনে ফিরে যান', 'login-google': 'গুগল দিয়ে লগইন করুন', 'login-facebook': 'ফেসবুক দিয়ে লগইন করুন', 'full-name': 'পূর্ণ নাম', 'mobile-number': 'মোবাইল নম্বর', 'location': 'অবস্থান', 'upload-photo': 'ছবি আপলোড করুন', 'remove-photo': 'ছবি সরান', 'save-changes': 'পরিবর্তন সংরক্ষণ করুন', 'cancel': 'বাতিল', 'account-options': 'অ্যাকাউন্ট অপশন', 'edit-profile': 'প্রোফাইল সম্পাদনা', 'manage-address': 'ঠিকানা ম্যানেজ করুন', 'delete-account': 'অ্যাকাউন্ট মুছুন', 'saved-addresses': 'সংরক্ষিত ঠিকানাসমূহ', 'manage-address-help': 'আপনার ডেলিভারি ঠিকানাগুলো পরিচালনা করুন।', 'address-form-title': 'নতুন ঠিকানা যোগ করুন', 'address-line1': 'ঠিকানা লাইন ১', 'address-line2-optional': 'ঠিকানা লাইন ২ (ঐচ্ছিক)', 'city': 'শহর', 'area-district': 'এলাকা/জেলা', 'set-as-default': 'ডিফল্ট হিসেবে নির্ধারণ করুন', 'save-address': 'ঠিকানা সংরক্ষণ করুন', 'toast-select-variant': 'অনুগ্রহ করে সব অপশন সিলেক্ট করুন!', 'select-variants': 'অপশন নির্বাচন করুন', 'buy-now': 'এখনই কিনুন', 'payment-method': 'পেমেন্ট পদ্ধতি নির্বাচন করুন', 'cod': 'ক্যাশ অন ডেলিভারি', 'online-payment': 'অনলাইন পেমেন্ট', 'confirm-order': 'অর্ডার নিশ্চিত করুন', 'order-placed-success': 'আপনার অর্ডারটি সফলভাবে সম্পন্ন হয়েছে!', 'order-placed-fail': 'অর্ডার করতে ব্যর্থ হয়েছে। আবার চেষ্টা করুন।', 'cart-is-empty': 'আপনার কার্ট খালি। চেকআউট করা সম্ভব নয়।', 'mobile-banking': 'মোবাইল ব্যাংকিং', 'payment-instruction-bkash': 'অনুগ্রহ করে আপনার অ্যাপ থেকে এই বিকাশ নম্বরে ৳{amount} পাঠান: +8801863205976।', 'payment-instruction-nagad': 'অনুগ্রহ করে আপনার অ্যাপ থেকে এই নগদ নম্বরে ৳{amount} পাঠান: +8801863205976।', 'payment-instruction-cod': 'আমাদের ডেলিভারি প্রতিনিধি পণ্য পৌঁছানোর সময় আপনার থেকে টাকা সংগ্রহ করবে।', 'profile-updated': 'প্রোফাইল সফলভাবে আপডেট হয়েছে!', 'profile-update-fail': 'প্রোফাইল আপডেট করতে ব্যর্থ হয়েছে।', 'toast-storage-permission-error': 'স্টোরেজ পারমিশন সমস্যা। অনুগ্রহ করে Firebase রুলস চেক করুন।', 'toast-update-profile': 'অর্ডার করার পূর্বে অনুগ্রহ করে আপনার প্রোফাইলে ঠিকানা ও মোবাইল নম্বর আপডেট করুন।', 'emergency-contact': 'সাপোর্ট', 'message-sent': 'আপনার বার্তা সফলভাবে পাঠানো হয়েছে!', 'out-of-stock': 'স্টক শেষ', 'toast-out-of-stock': 'দুঃখিত, এই পণ্যটি বর্তমানে স্টক আউট।', 'subtotal': 'মোট', 'delivery-charge': 'ডেলিভারি চার্জ', 'my-orders': 'আমার অর্ডার',
+                'toast-register-success': 'অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে!', 'login': 'লগইন', 'register': 'অ্যাকাউন্ট রেজিস্টার', 'email': 'ইমেইল', 'password': 'পাসওয়ার্ড', 'login-method-email': 'ইমেইল', 'login-method-mobile': 'মোবাইল', 'send-otp': 'OTP পাঠান', 'otp-code': 'OTP কোড', 'verify-and-login': 'যাচাই করুন ও লগইন করুন', 'auth-login-heading': 'পুনরায় স্বাগতম', 'auth-register-heading': 'আপনার অ্যাকাউন্ট তৈরি করুন', 'auth-reset-heading': 'পাসওয়ার্ড রিসেট করুন', 'auth-login-subtitle': 'অর্ডার, উইশলিস্ট ও ঠিকানা পরিচালনা করতে লগইন করুন।', 'auth-register-subtitle': 'কয়েক মিনিটেই বিনামূল্যে TangailBuzz অ্যাকাউন্ট তৈরি করুন।', 'auth-reset-subtitle': 'আপনার ইমেইল দিন, আমরা একটি নিরাপদ রিসেট লিঙ্ক পাঠাবো।', 'auth-login-tab': 'লগইন', 'auth-register-tab': 'রেজিস্টার', 'auth-reset-tab': 'রিসেট', 'auth-social-divider': 'অথবা চালিয়ে যান', 'auth-security-note': 'আপনার তথ্য এনক্রিপ্টেড এবং নিরাপদে সংরক্ষিত থাকে।', 'auth-new-here': 'নতুন সদস্য?', 'auth-have-account': 'ইতোমধ্যে অ্যাকাউন্ট আছে?', 'create-account': 'অ্যাকাউন্ট তৈরি করুন', 'forgot-password': 'পাসওয়ার্ড ভুলে গেছেন?', 'reset-password-desc': 'আপনার নিবন্ধিত ইমেইল দিন, আমরা একটি নিরাপদ রিসেট লিঙ্ক পাঠাবো।', 'send-reset-link': 'রিসেট লিঙ্ক পাঠান', 'back-to-login': 'লগইনে ফিরে যান', 'login-google': 'গুগল দিয়ে লগইন করুন', 'login-facebook': 'ফেসবুক দিয়ে লগইন করুন', 'full-name': 'পূর্ণ নাম', 'mobile-number': 'মোবাইল নম্বর', 'location': 'অবস্থান', 'upload-photo': 'ছবি আপলোড করুন', 'remove-photo': 'ছবি সরান', 'save-changes': 'পরিবর্তন সংরক্ষণ করুন', 'cancel': 'বাতিল', 'account-options': 'অ্যাকাউন্ট অপশন', 'edit-profile': 'প্রোফাইল সম্পাদনা', 'manage-address': 'ঠিকানা ম্যানেজ করুন', 'delete-account': 'অ্যাকাউন্ট মুছুন', 'saved-addresses': 'সংরক্ষিত ঠিকানাসমূহ', 'manage-address-help': 'আপনার ডেলিভারি ঠিকানাগুলো পরিচালনা করুন।', 'address-form-title': 'নতুন ঠিকানা যোগ করুন', 'address-line1': 'ঠিকানা লাইন ১', 'address-line2-optional': 'ঠিকানা লাইন ২ (ঐচ্ছিক)', 'city': 'শহর', 'area-district': 'এলাকা/জেলা', 'set-as-default': 'ডিফল্ট হিসেবে নির্ধারণ করুন', 'save-address': 'ঠিকানা সংরক্ষণ করুন', 'toast-select-variant': 'অনুগ্রহ করে সব অপশন সিলেক্ট করুন!', 'select-variants': 'অপশন নির্বাচন করুন', 'buy-now': 'এখনই কিনুন', 'payment-method': 'পেমেন্ট পদ্ধতি নির্বাচন করুন', 'cod': 'ক্যাশ অন ডেলিভারি', 'online-payment': 'অনলাইন পেমেন্ট', 'confirm-order': 'অর্ডার নিশ্চিত করুন', 'order-placed-success': 'আপনার অর্ডারটি সফলভাবে সম্পন্ন হয়েছে!', 'order-placed-fail': 'অর্ডার করতে ব্যর্থ হয়েছে। আবার চেষ্টা করুন।', 'cart-is-empty': 'আপনার কার্ট খালি। চেকআউট করা সম্ভব নয়।', 'mobile-banking': 'মোবাইল ব্যাংকিং', 'payment-instruction-bkash': 'অনুগ্রহ করে আপনার অ্যাপ থেকে এই বিকাশ নম্বরে ৳{amount} পাঠান: +8801886931064।', 'payment-instruction-nagad': 'অনুগ্রহ করে আপনার অ্যাপ থেকে এই নগদ নম্বরে ৳{amount} পাঠান: +8801886931064।', 'payment-instruction-cod': 'আমাদের ডেলিভারি প্রতিনিধি পণ্য পৌঁছানোর সময় আপনার থেকে টাকা সংগ্রহ করবে।', 'profile-updated': 'প্রোফাইল সফলভাবে আপডেট হয়েছে!', 'profile-update-fail': 'প্রোফাইল আপডেট করতে ব্যর্থ হয়েছে।', 'toast-storage-permission-error': 'স্টোরেজ পারমিশন সমস্যা। অনুগ্রহ করে Firebase রুলস চেক করুন।', 'toast-update-profile': 'অর্ডার করার পূর্বে অনুগ্রহ করে আপনার প্রোফাইলে ঠিকানা ও মোবাইল নম্বর আপডেট করুন।', 'emergency-contact': 'সাপোর্ট', 'message-sent': 'আপনার বার্তা সফলভাবে পাঠানো হয়েছে!', 'out-of-stock': 'স্টক শেষ', 'toast-out-of-stock': 'দুঃখিত, এই পণ্যটি বর্তমানে স্টক আউট।', 'subtotal': 'মোট', 'delivery-charge': 'ডেলিভারি চার্জ', 'my-orders': 'আমার অর্ডার',
                 'delete-account-confirm': 'আপনি কি নিশ্চিত যে আপনি আপনার অ্যাকাউন্টটি মুছে ফেলতে চান? এই কাজটি ফিরিয়ে আনা যাবে না। আপনার সমস্ত ডেটা হারানো হবে।',
                 'account-deleted': 'আপনার অ্যাকাউন্ট সফলভাবে মুছে ফেলা হয়েছে।',
                 'delete-account-failed': 'অ্যাকাউন্ট মুছে ফেলার চেষ্টা ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।',
@@ -5701,9 +5957,27 @@
 
         function refreshLanguageUIState() {
             const currentLabel = getLanguageLabel(currentLanguage);
+            
+            // Update header language toggle wrapper
+            const headerToggleWrapper = document.querySelector('.language-toggle-wrapper');
+            if (headerToggleWrapper) {
+                headerToggleWrapper.setAttribute('data-active', currentLanguage);
+            }
+            
             document.querySelectorAll('[data-lang-option]').forEach(button => {
                 const isActive = button.dataset.langOption === currentLanguage;
                 button.classList.toggle('language-option-active', isActive);
+                
+                // Update text colors for header buttons
+                if (button.closest('.language-toggle-wrapper')) {
+                    if (isActive) {
+                        button.classList.remove('text-white/90');
+                        button.classList.add('text-theme-purple');
+                    } else {
+                        button.classList.remove('text-theme-purple');
+                        button.classList.add('text-white/90');
+                    }
+                }
                 const indicator = button.querySelector('.lang-active-indicator');
                 if (indicator) indicator.classList.toggle('hidden', !isActive);
                 button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
@@ -5711,16 +5985,32 @@
                     button.setAttribute('aria-checked', isActive ? 'true' : 'false');
                 }
             });
-            const langSwitch = document.getElementById('lang-switch');
-            if (langSwitch) {
-                langSwitch.checked = currentLanguage === 'bn';
-            }
-            const flagIcon = document.getElementById('flag-icon');
-            if (flagIcon) {
-                const flagAsset = LANGUAGE_FLAG_ASSETS[currentLanguage];
-                if (flagAsset?.src) flagIcon.src = flagAsset.src;
-                if (flagAsset?.alt) flagIcon.alt = flagAsset.alt;
-            }
+            // Language switch checkbox removed - now using button-based toggle
+        }
+
+        // Update category card language dynamically without reloading from Firebase
+        function updateCategoryCardLanguage() {
+            const categoriesGrid = document.getElementById('categories-grid');
+            if (!categoriesGrid) return;
+            
+            // Update all category card titles
+            categoriesGrid.querySelectorAll('h3[data-bn-name]').forEach(heading => {
+                const bnName = heading.getAttribute('data-bn-name');
+                const enName = heading.getAttribute('data-en-name');
+                if (bnName && enName) {
+                    heading.textContent = currentLanguage === 'bn' ? bnName : enName;
+                }
+            });
+            
+            // Update item count text
+            categoriesGrid.querySelectorAll('p.text-xs').forEach(p => {
+                const text = p.textContent;
+                const match = text.match(/(\d+)\s*(items|আইটেম)/);
+                if (match) {
+                    const count = match[1];
+                    p.textContent = `${count} ${currentLanguage === 'bn' ? 'আইটেম' : 'items'}`;
+                }
+            });
         }
 
         function setLanguage(languageCode = DEFAULT_LANGUAGE, options = {}) {
@@ -5741,6 +6031,10 @@
 
             applyLanguageAttributes(normalized);
             updateTextContent();
+            
+            // Update category card names dynamically
+            updateCategoryCardLanguage();
+            
             renderProducts(currentDisplayedProducts);
             renderFlashSaleSection(productsData);
             renderMegaSaleSection(productsData);
@@ -5752,13 +6046,17 @@
             if (currentCategory && typeof renderSubCategories === 'function') {
                 try { renderSubCategories(currentCategory); } catch (_) {}
             }
+            
+            // --- FIX WAS HERE: Added closing brace for this if block ---
             if (DOMElements.mobileCategoriesDrawer && DOMElements.mobileCategoriesDrawer.classList.contains('active')) {
                 if (mobileCategoriesActiveCategory) {
                     showMobileSubcategories(mobileCategoriesActiveCategory);
                 } else {
                     renderMobileCategoriesMainView();
                 }
-            }
+            } 
+            // -----------------------------------------------------------
+
             const detailsPage = document.getElementById('product-details-page');
             if (detailsPage && !detailsPage.classList.contains('hidden')) {
                 const addToCartBtn = document.getElementById('add-to-cart-details');
@@ -5796,15 +6094,7 @@
         window.setLanguage = setLanguage;
 
         function setupLanguageControls() {
-            const langSwitch = document.getElementById('lang-switch');
-            if (langSwitch && langSwitch.dataset.boundLanguageSwitch !== 'true') {
-                langSwitch.addEventListener('change', (event) => {
-                    event.preventDefault();
-                    const targetLang = event.target.checked ? 'bn' : 'en';
-                    setLanguage(targetLang);
-                });
-                langSwitch.dataset.boundLanguageSwitch = 'true';
-            }
+            // Old toggle switch removed - now using button-based language selection
 
             document.querySelectorAll('[data-lang-option]').forEach(button => {
                 if (button.dataset.boundLanguageOption === 'true') return;
@@ -6146,7 +6436,17 @@
                 if (!rawValue) return;
                 const display = item?.label?.[currentLanguage] || item?.label?.en || item?.label?.bn || rawValue;
                 const encoded = encodeURIComponent(String(rawValue));
-                parts.push(`<button type="button" class="${buttonClass}" data-subcategory="${encoded}">${display}</button>`);
+                
+                // Check if item has an image
+                const itemImage = item?.image || null;
+                let imageHTML = '';
+                if (itemImage) {
+                    imageHTML = `<img src="${itemImage}" class="w-12 h-12 object-contain rounded-lg" alt="${display}" onerror="this.style.display='none';">`;
+                } else {
+                    imageHTML = `<div class="w-12 h-12 flex items-center justify-center bg-gray-100 dark:bg-gray-700 rounded-lg"><i class="fas fa-tag text-theme-blue text-xl"></i></div>`;
+                }
+                
+                parts.push(`<button type="button" class="${buttonClass}" data-subcategory="${encoded}">${imageHTML}<span class="flex-1 text-left">${display}</span></button>`);
             });
 
             subList.innerHTML = parts.join('');
@@ -7307,114 +7607,7 @@
         }
 
         // Curated top categories to always show (merged with categories found in products)
-        const HEADER_CATEGORY_GROUPS = [
-            {
-                id: 'electronics',
-                label: { en: 'Electronics', bn: 'ইলেকট্রনিক্স' },
-                items: [
-                    { value: 'Mobile Phone', label: { en: 'Mobile Phone', bn: 'মোবাইল ফোন' } },
-                    { value: 'Laptop & Computer', label: { en: 'Laptop & Computer', bn: 'ল্যাপটপ ও কম্পিউটার' } },
-                    { value: 'Tablet', label: { en: 'Tablet', bn: 'ট্যাবলেট' } },
-                    { value: 'TV & Home Theater', label: { en: 'TV & Home Theater', bn: 'টিভি ও হোম থিয়েটার' } },
-                    { value: 'Headphone & Speaker', label: { en: 'Headphone & Speaker', bn: 'হেডফোন ও স্পিকার' } },
-                    { value: 'Camera & Accessories', label: { en: 'Camera & Accessories', bn: 'ক্যামেরা ও এক্সেসরিজ' } },
-                    { value: 'Wearable Smart Watch', label: { en: 'Wearable Smart Watch', bn: 'স্মার্ট ওয়াচ' } },
-                    { value: 'Gaming Console', label: { en: 'Gaming Console', bn: 'গেমিং কনসোল' } }
-                ]
-            },
-            {
-                id: 'fashion',
-                label: { en: 'Fashion', bn: 'ফ্যাশন' },
-                items: [
-                    { value: "Men's Clothing", label: { en: "Men's Clothing", bn: 'পুরুষদের পোশাক' } },
-                    { value: "Women's Clothing", label: { en: "Women's Clothing", bn: 'নারীদের পোশাক' } },
-                    { value: "Kids' Clothing", label: { en: "Kids' Clothing", bn: 'শিশুদের পোশাক' } },
-                    { value: 'Shoes & Sandals', label: { en: 'Shoes & Sandals', bn: 'জুতা ও স্যান্ডেল' } },
-                    { value: 'Watch & Jewelry', label: { en: 'Watch & Jewelry', bn: 'ঘড়ি ও জুয়েলারি' } },
-                    { value: 'Bags & Accessories', label: { en: 'Bags & Accessories', bn: 'ব্যাগ ও এক্সেসরিজ' } },
-                    { value: 'Traditional Wear', label: { en: 'Traditional Wear', bn: 'ঐতিহ্যবাহী পোশাক' } }
-                ]
-            },
-            {
-                id: 'home-garden',
-                label: { en: 'Home & Garden', bn: 'হোম অ্যান্ড গার্ডেন' },
-                items: [
-                    { value: 'Furniture', label: { en: 'Furniture', bn: 'ফার্নিচার' } },
-                    { value: 'Kitchen Items', label: { en: 'Kitchen Items', bn: 'রান্নাঘরের সামগ্রী' } },
-                    { value: 'Home Decor', label: { en: 'Home Decor', bn: 'হোম ডেকর' } },
-                    { value: 'Lighting', label: { en: 'Lighting', bn: 'লাইটিং' } },
-                    { value: 'Garden Tools', label: { en: 'Garden Tools', bn: 'বাগানের যন্ত্র' } },
-                    { value: 'Home Appliances', label: { en: 'Home Appliances', bn: 'হোম অ্যাপ্লায়েন্স' } },
-                    { value: 'Storage & Organizer', label: { en: 'Storage & Organizer', bn: 'স্টোরেজ ও অর্গানাইজার' } }
-                ]
-            },
-            {
-                id: 'health-beauty',
-                label: { en: 'Health & Beauty', bn: 'স্বাস্থ্য ও সৌন্দর্য' },
-                items: [
-                    { value: 'Skincare', label: { en: 'Skincare', bn: 'স্কিনকেয়ার' } },
-                    { value: 'Haircare', label: { en: 'Haircare', bn: 'হেয়ারকেয়ার' } },
-                    { value: 'Makeup', label: { en: 'Makeup', bn: 'মেকআপ' } },
-                    { value: 'Perfume', label: { en: 'Perfume', bn: 'পারফিউম' } },
-                    { value: 'Health Supplement', label: { en: 'Health Supplement', bn: 'স্বাস্থ্য সাপ্লিমেন্ট' } },
-                    { value: 'Fitness Equipment', label: { en: 'Fitness Equipment', bn: 'ফিটনেস সরঞ্জাম' } },
-                    { value: 'Personal Care', label: { en: 'Personal Care', bn: 'পার্সোনাল কেয়ার' } },
-                    { value: 'Oral Care', label: { en: 'Oral Care', bn: 'ওরাল কেয়ার' } }
-                ]
-            },
-            {
-                id: 'sports-outdoors',
-                label: { en: 'Sports & Outdoors', bn: 'খেলাধুলা ও আউটডোর' },
-                items: [
-                    { value: 'Sports Apparel', label: { en: 'Sports Apparel', bn: 'স্পোর্টস পোশাক' } },
-                    { value: 'Sports Shoes', label: { en: 'Sports Shoes', bn: 'স্পোর্টস জুতা' } },
-                    { value: 'Fitness Gear', label: { en: 'Fitness Gear', bn: 'ফিটনেস গিয়ার' } },
-                    { value: 'Cycles', label: { en: 'Cycles', bn: 'সাইকেল' } },
-                    { value: 'Gym Equipment', label: { en: 'Gym Equipment', bn: 'জিম সরঞ্জাম' } },
-                    { value: 'Outdoor Camping Gear', label: { en: 'Outdoor Camping Gear', bn: 'ক্যাম্পিং সরঞ্জাম' } },
-                    { value: 'Football, Cricket, Badminton Items', label: { en: 'Football, Cricket, Badminton Items', bn: 'ফুটবল, ক্রিকেট, ব্যাডমিন্টন সামগ্রী' } }
-                ]
-            },
-            {
-                id: 'books-stationery',
-                label: { en: 'Books & Stationery', bn: 'বই ও স্টেশনারি' },
-                items: [
-                    { value: 'Educational Books', label: { en: 'Educational Books', bn: 'শিক্ষামূলক বই' } },
-                    { value: 'Story Books', label: { en: 'Story Books', bn: 'গল্পের বই' } },
-                    { value: 'Religious Books', label: { en: 'Religious Books', bn: 'ধর্মীয় বই' } },
-                    { value: 'Office Stationery', label: { en: 'Office Stationery', bn: 'অফিস স্টেশনারি' } },
-                    { value: 'School Stationery', label: { en: 'School Stationery', bn: 'স্কুল স্টেশনারি' } },
-                    { value: 'Notebook & Diary', label: { en: 'Notebook & Diary', bn: 'নোটবুক ও ডায়েরি' } },
-                    { value: 'Arts & Crafts Supplies', label: { en: 'Arts & Crafts Supplies', bn: 'আর্টস ও ক্রাফটস' } }
-                ]
-            },
-            {
-                id: 'kids-toys',
-                label: { en: 'Kids & Toys', bn: 'বাচ্চা ও খেলনা' },
-                items: [
-                    { value: 'Educational Toys', label: { en: 'Educational Toys', bn: 'শিক্ষামূলক খেলনা' } },
-                    { value: 'Soft Toys', label: { en: 'Soft Toys', bn: 'নরম খেলনা' } },
-                    { value: 'Dolls & Action Figures', label: { en: 'Dolls & Action Figures', bn: 'পুতুল ও অ্যাকশন ফিগার' } },
-                    { value: 'Games & Puzzles', label: { en: 'Games & Puzzles', bn: 'গেমস ও পাজল' } },
-                    { value: 'Outdoor Toys', label: { en: 'Outdoor Toys', bn: 'বাইরের খেলনা' } },
-                    { value: 'Remote Control Toys', label: { en: 'Remote Control Toys', bn: 'রিমোট কন্ট্রোল খেলনা' } },
-                    { value: 'Lego & Building Blocks', label: { en: 'Lego & Building Blocks', bn: 'লেগো ও ব্লক' } }
-                ]
-            },
-            {
-                id: 'cars',
-                label: { en: 'Cars & Bikes', bn: 'গাড়ি ও বাইক' },
-                items: [
-                    { value: 'Car Accessories', label: { en: 'Car Accessories', bn: 'গাড়ির এক্সেসরিজ' } },
-                    { value: 'Bike Accessories', label: { en: 'Bike Accessories', bn: 'বাইকের এক্সেসরিজ' } },
-                    { value: 'Helmets & Riding Gear', label: { en: 'Helmets & Riding Gear', bn: 'হেলমেট ও রাইডিং গিয়ার' } },
-                    { value: 'Tires & Wheels', label: { en: 'Tires & Wheels', bn: 'টায়ার ও হুইল' } },
-                    { value: 'Car Care Products', label: { en: 'Car Care Products', bn: 'গাড়ির যত্ন সামগ্রী' } },
-                    { value: 'Motor Oil & Lubricants', label: { en: 'Motor Oil & Lubricants', bn: 'মটর তেল ও লুব্রিক্যান্ট' } },
-                    { value: 'Electric Scooters & Bikes', label: { en: 'Electric Scooters & Bikes', bn: 'ইলেকট্রিক স্কুটার ও বাইক' } }
-                ]
-            }
-        ];
+        // HEADER_CATEGORY_GROUPS is declared earlier in global scope and will be populated by Firebase
 
         const CATEGORY_SYNONYM_OVERRIDES = {
             'electronics': ['electronics', 'Electronic Devices', 'ইলেকট্রনিক্স'],
@@ -7465,7 +7658,20 @@
             if (!canonical) return [];
             const values = new Set();
             values.add(canonical);
-            const group = HEADER_CATEGORY_GROUPS.find(g => g.id === canonical);
+            
+            // Find group by ID
+            let group = HEADER_CATEGORY_GROUPS.find(g => g.id === canonical);
+            
+            // If not found by ID, try matching by name (for backward compatibility)
+            if (!group) {
+                const canonicalSlug = slugifyCategoryText(canonical);
+                group = HEADER_CATEGORY_GROUPS.find(g => {
+                    const labelEnSlug = slugifyCategoryText(g.label?.en || '');
+                    const labelBnSlug = slugifyCategoryText(g.label?.bn || '');
+                    return labelEnSlug === canonicalSlug || labelBnSlug === canonicalSlug;
+                });
+            }
+            
             if (group) {
                 if (group.label?.en) values.add(group.label.en);
                 if (group.label?.bn) values.add(group.label.bn);
@@ -7480,7 +7686,8 @@
         function matchesCategoryName(value, categoryId) {
             if (!value || !categoryId) return false;
             const normalized = slugifyCategoryText(value);
-            return getCategoryMatchValues(categoryId).some(candidate => slugifyCategoryText(candidate) === normalized);
+            const matchValues = getCategoryMatchValues(categoryId);
+            return matchValues.some(candidate => slugifyCategoryText(candidate) === normalized);
         }
 
         function resolveSubCategoryValue(categoryId, input) {
@@ -8016,11 +8223,12 @@
             const listEl = document.getElementById('top-category-strip-list');
             if (!listEl) return;
 
-            const chipBase = 'shrink-0 inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold border transition-colors whitespace-nowrap';
-            const activeCls = 'bg-theme-pink text-white border-theme-pink shadow-md';
-            const idleCls = 'bg-white text-gray-700 dark:bg-gray-900 dark:text-gray-200 border-gray-200 dark:border-gray-700 hover:bg-theme-pink/10 hover:text-theme-purple';
-            const subIdleCls = 'bg-white text-gray-700 dark:bg-gray-900 dark:text-gray-200 border-gray-200 dark:border-gray-700 hover:bg-theme-blue/10 hover:text-theme-blue';
-            const subActiveCls = 'bg-theme-blue text-white border-theme-blue shadow-md';
+            // Professional button styles with gradient and shadow effects
+            const chipBase = 'shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold border-2 transition-all duration-300 whitespace-nowrap shadow-sm hover:shadow-md transform hover:-translate-y-0.5';
+            const activeCls = 'bg-gradient-to-r from-theme-pink to-theme-purple text-white border-transparent shadow-lg';
+            const idleCls = 'bg-white text-gray-700 dark:bg-gray-800 dark:text-gray-200 border-gray-300 dark:border-gray-600 hover:border-theme-pink hover:bg-gradient-to-r hover:from-theme-pink/10 hover:to-theme-purple/10';
+            const subIdleCls = 'bg-white text-gray-700 dark:bg-gray-800 dark:text-gray-200 border-gray-300 dark:border-gray-600 hover:border-theme-blue hover:bg-theme-blue/10';
+            const subActiveCls = 'bg-gradient-to-r from-theme-blue to-blue-600 text-white border-transparent shadow-lg';
 
             const buttons = [];
             const allActive = !currentCategory;
@@ -8036,32 +8244,199 @@
             const renderCategoryButton = (group, isActiveOverride = false) => {
                 const isActive = isActiveOverride || activeCategoryId === resolveCategoryId(group.id);
                 const iconClass = getCategoryIconClass(group.id);
-                const label = group.label?.[currentLanguage] || group.label?.en || group.label?.bn || group.id;
-                return `
-                    <button type="button" class="${chipBase} ${isActive ? activeCls : idleCls}" onclick="filterProducts('${group.id}')" aria-pressed="${isActive}">
-                        <i class="fas ${iconClass} text-xs"></i>
-                        <span>${label}</span>
-                    </button>
-                `;
+                const labelRaw = group.label?.[currentLanguage] || group.label?.en || group.label?.bn || group.id;
+                const label = toTitleCase(labelRaw); // Title Case apply করা
+                
+                // Use category name (English) for filtering, not the auto-generated Firebase ID
+                const categoryNameForFilter = group.label?.en || group.label?.bn || group.id;
+                
+                // Check if category has subcategories
+                const hasSubcategories = group.items && group.items.length > 0;
+                const categoryData = HEADER_CATEGORY_GROUPS.find(g => g.id === group.id);
+                
+                console.log(`🔍 Category: ${group.label?.en}, has items: ${group.items?.length || 0}, hasSubcategories: ${hasSubcategories}`);
+                
+                if (hasSubcategories && categoryData) {
+                    // Create dropdown for categories with subcategories
+                    const dropdownId = `dropdown-${group.id}`;
+                    const subcategoryItems = group.items.map(item => {
+                        const subLabel = toTitleCase(item.label?.[currentLanguage] || item.label?.en || item.value);
+                        console.log(`  ↳ Subcategory: ${subLabel}, value: ${item.value}`);
+                        return `
+                            <button class="group/item block w-full text-left px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gradient-to-r hover:from-theme-pink/10 hover:to-theme-purple/10 hover:text-theme-purple dark:hover:text-theme-pink transition-all duration-200 border-l-4 border-transparent hover:border-theme-pink"
+                                    onclick="filterProducts('${categoryNameForFilter}', '${item.value}'); event.stopPropagation();">
+                                <i class="fas fa-tag mr-2 text-xs opacity-0 group-hover/item:opacity-100 transition-opacity"></i>${subLabel}
+                            </button>
+                        `;
+                    }).join('');
+                    
+                    console.log(`✅ Generated ${group.items.length} subcategory buttons for ${group.label?.en}`);
+                    
+                    // Professional dropdown styles - use fixed positioning to escape parent overflow
+                    const dropdownStyles = `
+                        position: fixed; 
+                        z-index: 99999; 
+                        min-width: 240px;
+                        max-width: 90vw;
+                        border-radius: 16px;
+                        box-shadow: 0 20px 40px rgba(0,0,0,0.2), 0 0 0 1px rgba(0,0,0,0.05);
+                        backdrop-filter: blur(10px);
+                        opacity: 0;
+                        visibility: hidden;
+                        transform: translateY(10px);
+                        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    `;
+                    
+                    // Add event listeners after render
+                    setTimeout(() => {
+                        const wrapper = document.querySelector('[data-dropdown="' + dropdownId + '"]');
+                        const dropdown = document.getElementById(dropdownId);
+                        const btn = wrapper?.querySelector('button');
+                        const chevron = btn?.querySelector('.fa-chevron-down');
+                        
+                        if (wrapper && dropdown && btn) {
+                            // Function to position dropdown relative to button
+                            const positionDropdown = () => {
+                                const rect = btn.getBoundingClientRect();
+                                const isMobile = window.innerWidth < 768;
+                                
+                                if (isMobile) {
+                                    // Mobile: Center dropdown and ensure it fits on screen
+                                    const dropdownWidth = Math.min(280, window.innerWidth - 32); // 16px padding each side
+                                    dropdown.style.width = `${dropdownWidth}px`;
+                                    dropdown.style.left = '50%';
+                                    dropdown.style.transform = 'translateX(-50%) translateY(0)';
+                                    dropdown.style.top = `${rect.bottom + 2}px`;
+                                } else {
+                                    // Desktop: Position below button, align left
+                                    dropdown.style.width = '240px';
+                                    dropdown.style.left = `${rect.left}px`;
+                                    dropdown.style.transform = 'translateY(0)';
+                                    dropdown.style.top = `${rect.bottom + 2}px`;
+                                    
+                                    // Check if dropdown goes off-screen to the right
+                                    const dropdownRect = dropdown.getBoundingClientRect();
+                                    if (dropdownRect.right > window.innerWidth) {
+                                        dropdown.style.left = 'auto';
+                                        dropdown.style.right = '16px';
+                                    }
+                                }
+                            };
+                            
+                            // Desktop: Hover effect with chevron rotation
+                            wrapper.addEventListener('mouseenter', () => {
+                                positionDropdown();
+                                dropdown.style.opacity = '1';
+                                dropdown.style.visibility = 'visible';
+                                dropdown.style.transform = 'translateY(0)';
+                                if (chevron) chevron.style.transform = 'rotate(180deg)';
+                            });
+                            
+                            wrapper.addEventListener('mouseleave', () => {
+                                dropdown.style.opacity = '0';
+                                dropdown.style.visibility = 'hidden';
+                                dropdown.style.transform = 'translateY(10px)';
+                                if (chevron) chevron.style.transform = 'rotate(0deg)';
+                            });
+
+                            // Mobile: Click/Touch toggle
+                            btn.addEventListener('click', (e) => {
+                                e.stopPropagation();
+                                const isVisible = dropdown.style.visibility === 'visible';
+                                
+                                // Close all other dropdowns
+                                document.querySelectorAll('[id^="dropdown-"]').forEach(d => {
+                                    if (d !== dropdown) {
+                                        d.style.opacity = '0';
+                                        d.style.visibility = 'hidden';
+                                        d.style.transform = 'translateY(10px)';
+                                    }
+                                });
+                                
+                                // Toggle current dropdown
+                                if (isVisible) {
+                                    dropdown.style.opacity = '0';
+                                    dropdown.style.visibility = 'hidden';
+                                    dropdown.style.transform = 'translateY(10px)';
+                                } else {
+                                    positionDropdown();
+                                    dropdown.style.opacity = '1';
+                                    dropdown.style.visibility = 'visible';
+                                    dropdown.style.transform = 'translateY(0)';
+                                }
+                            });
+                            
+                            // Close dropdown when clicking outside
+                            document.addEventListener('click', (e) => {
+                                if (!wrapper.contains(e.target)) {
+                                    dropdown.style.opacity = '0';
+                                    dropdown.style.visibility = 'hidden';
+                                    dropdown.style.transform = 'translateY(10px)';
+                                    if (chevron) chevron.style.transform = 'rotate(0deg)';
+                                }
+                            });
+                            
+                            // Reposition on scroll or resize
+                            let repositionTimer;
+                            const handleRepositioning = () => {
+                                clearTimeout(repositionTimer);
+                                repositionTimer = setTimeout(() => {
+                                    if (dropdown.style.visibility === 'visible') {
+                                        positionDropdown();
+                                    }
+                                }, 50);
+                            };
+                            
+                            window.addEventListener('scroll', handleRepositioning, true);
+                            window.addEventListener('resize', handleRepositioning);
+                        }
+                    }, 100);
+                    
+                    return `
+                        <div class="relative" style="position: relative;" data-dropdown="${dropdownId}">
+                            <button type="button" class="${chipBase} ${isActive ? activeCls : idleCls}" aria-pressed="${isActive}">
+                                <i class="fas ${iconClass} text-xs"></i>
+                                <span>${label}</span>
+                                <i class="fas fa-chevron-down text-xs ml-1 transition-transform duration-300"></i>
+                            </button>
+                            <!-- Professional Dropdown Menu -->
+                            <div id="${dropdownId}" class="bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700" 
+                                 style="${dropdownStyles}">
+                                <!-- View All Header -->
+                                <div class="bg-gradient-to-r from-theme-pink/10 to-theme-purple/10 dark:from-theme-pink/20 dark:to-theme-purple/20 border-b border-gray-200 dark:border-gray-700">
+                                    <button class="block w-full text-left px-3 py-2.5 text-sm font-bold text-gray-900 dark:text-white hover:bg-white/50 dark:hover:bg-gray-700/50 transition-all duration-200"
+                                            onclick="filterProducts('${categoryNameForFilter}'); event.stopPropagation();">
+                                        <i class="fas fa-th-large mr-2 text-theme-pink"></i>View All ${label}
+                                        <i class="fas fa-arrow-right ml-2 text-xs"></i>
+                                    </button>
+                                </div>
+                                <!-- Subcategories -->
+                                <div class="max-h-80 overflow-y-auto scrollbar-thin" style="display: block;">
+                                    ${subcategoryItems}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    // Regular button without dropdown
+                    return `
+                        <button type="button" class="${chipBase} ${isActive ? activeCls : idleCls}" 
+                                onclick="filterProducts('${categoryNameForFilter}')" aria-pressed="${isActive}">
+                            <i class="fas ${iconClass} text-xs"></i>
+                            <span>${label}</span>
+                        </button>
+                    `;
+                }
             };
 
-            if (!activeCategoryId) {
-                HEADER_CATEGORY_GROUPS.forEach(group => {
-                    buttons.push(renderCategoryButton(group, false));
-                });
-            } else {
-                const activeGroup = HEADER_CATEGORY_GROUPS.find(g => g.id === activeCategoryId);
-                if (activeGroup) {
-                    buttons.push(renderCategoryButton(activeGroup, true));
-                } else {
-                    HEADER_CATEGORY_GROUPS.forEach(group => {
-                        buttons.push(renderCategoryButton(group, false));
-                    });
-                }
-            }
+            // Always show all main categories as buttons
+            HEADER_CATEGORY_GROUPS.forEach(group => {
+                buttons.push(renderCategoryButton(group, activeCategoryId === resolveCategoryId(group.id)));
+            });
 
-            if (currentCategory) {
-                const group = HEADER_CATEGORY_GROUPS.find(g => g.id === resolveCategoryId(currentCategory));
+            // If a main category is selected, show its subcategories as chips (not products yet)
+            if (activeCategoryId) {
+                const group = HEADER_CATEGORY_GROUPS.find(g => g.id === activeCategoryId);
                 if (group && Array.isArray(group.items) && group.items.length > 0) {
                     buttons.push(`<span class="shrink-0 text-gray-400 dark:text-gray-500 text-lg">›</span>`);
                     group.items.forEach(item => {
@@ -8071,7 +8446,7 @@
                         const safeValue = String(value).replace(/'/g, "\\'");
                         const isActive = slugifyCategoryText(currentSubCategory) === slugifyCategoryText(value);
                         buttons.push(`
-                            <button type="button" class="${chipBase} ${isActive ? subActiveCls : subIdleCls}" onclick="filterSubCategory('${resolveCategoryId(currentCategory)}', '${safeValue}')" aria-pressed="${isActive}">
+                            <button type="button" class="${chipBase} ${isActive ? subActiveCls : subIdleCls}" onclick="filterProducts('${group.label?.en || group.id}', '${safeValue}')" aria-pressed="${isActive}">
                                 <i class="fas fa-angle-right text-xs"></i>
                                 <span>${label}</span>
                             </button>
@@ -8082,6 +8457,18 @@
 
             renderFiltersUI();
             listEl.innerHTML = buttons.join('');
+            
+            // Add global click handler to close dropdowns when clicking outside
+            document.addEventListener('click', function closeDropdowns(e) {
+                const isDropdownClick = e.target.closest('[data-dropdown]');
+                if (!isDropdownClick) {
+                    document.querySelectorAll('[id^="dropdown-"]').forEach(d => {
+                        d.style.opacity = '0';
+                        d.style.visibility = 'hidden';
+                        d.style.transform = 'translateY(10px)';
+                    });
+                }
+            });
         }
         // --- END TOP CATEGORY STRIP ---
         
@@ -10302,6 +10689,12 @@
                         } else {
                             hideBlockedUI();
                         }
+                        
+                        // Update profile UI with user data
+                        updateProfileModalUI(user, userData);
+                    } else {
+                        // Update profile UI without Firestore data
+                        updateProfileModalUI(user, null);
                     }
                 });
 
@@ -10313,6 +10706,8 @@
                 // Hide verification banner for anonymous users
                 const verificationBanner = document.getElementById('email-verification-banner');
                 if (verificationBanner) verificationBanner.classList.add('hidden');
+                // Update UI to show login form
+                updateProfileModalUI(null, null);
                 setupFirestoreListeners(null);
             } else {
                 currentUser = null;
@@ -10321,6 +10716,8 @@
                 // Hide verification banner when logged out
                 const verificationBanner = document.getElementById('email-verification-banner');
                 if (verificationBanner) verificationBanner.classList.add('hidden');
+                // Update UI to show login form
+                updateProfileModalUI(null, null);
                 setupFirestoreListeners(null);
             }
         });
@@ -10328,9 +10725,17 @@
         function updateProfileModalUI(user, data = null) {
             const userData = data || currentUserData;
             if (user && !user.isAnonymous) {
+                // Show profile view, hide auth forms
                 DOMElements.authOptions.classList.add('hidden');
                 DOMElements.userProfileView.classList.remove('hidden');
                 DOMElements.editProfileForm.classList.add('hidden');
+                
+                // Show profile full section with buttons
+                if (DOMElements.profileFullSection) {
+                    DOMElements.profileFullSection.classList.remove('hidden');
+                }
+                
+                // Update user info
                 DOMElements.userPhoto.src = user.photoURL || 'https://placehold.co/96x96/6a0dad/white?text=User';
                 DOMElements.userName.textContent = user.displayName || 'User';
                 DOMElements.userEmail.textContent = user.email;
@@ -10345,9 +10750,16 @@
                 }
 
             } else {
+                // Show auth forms, hide profile view
                 DOMElements.authOptions.classList.remove('hidden');
                 DOMElements.userProfileView.classList.add('hidden');
                 DOMElements.editProfileForm.classList.add('hidden');
+                
+                // Hide profile full section
+                if (DOMElements.profileFullSection) {
+                    DOMElements.profileFullSection.classList.add('hidden');
+                }
+                
                 const addrSec = DOMElements.addressesSection; if (addrSec) addrSec.classList.add('hidden');
             }
         }
@@ -10522,18 +10934,21 @@
             }
 
             try {
-                // Check if mobile number already exists in Firestore
+                // Create user account first
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                
+                // Now check if mobile number already exists (authenticated user can query)
                 const mobileQuery = query(collection(db, 'users'), where('mobile', '==', mobile));
                 const mobileSnapshot = await getDocs(mobileQuery);
                 
                 if (!mobileSnapshot.empty) {
+                    // Mobile number already exists, delete the newly created account
+                    await deleteUser(userCredential.user);
                     DOMElements.authError.textContent = currentLanguage === 'bn'
                         ? 'এই মোবাইল নম্বর দিয়ে ইতিমধ্যে একটি অ্যাকাউন্ট রয়েছে।'
                         : 'An account with this mobile number already exists.';
                     return;
                 }
-
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 
                 // Send email verification
                 await sendEmailVerification(userCredential.user);
@@ -10567,10 +10982,19 @@
                 
                 // Show verification message as toast
                 const verificationMessage = currentLanguage === 'bn' 
-                    ? 'অ্যাকাউন্ট তৈরি হয়েছে! আপনার ইমেইলে একটি verification link পাঠানো হয়েছে। অনুগ্রহ করে verify করে লগইন করুন।'
-                    : 'Account created! A verification link has been sent to your email. Please verify and login.';
+                    ? 'অ্যাকাউন্ট তৈরি হয়েছে! আপনার ইমেইলে একটি verification link পাঠানো হয়েছে। অনুগ্রহ করে ইনবক্স বা স্প্যাম ফোল্ডার চেক করে verify করুন।'
+                    : 'Account created! A verification link has been sent to your email. Please check inbox or spam folder to verify.';
                 
-                showToast(verificationMessage, true);
+                // Show toast with longer duration for verification message
+                DOMElements.toastMessage.textContent = verificationMessage;
+                DOMElements.toast.className = 'fixed top-20 right-5 text-white py-3 px-6 rounded-lg shadow-xl z-[200] transform transition-transform duration-500 bg-green-500';
+                DOMElements.toast.classList.remove('translate-x-[150%]', 'opacity-0');
+                DOMElements.toast.classList.add('translate-x-0', 'opacity-100');
+
+                setTimeout(() => {
+                    DOMElements.toast.classList.remove('translate-x-0', 'opacity-100');
+                    DOMElements.toast.classList.add('translate-x-[150%]', 'opacity-0');
+                }, 8000); // 8 seconds for verification message
                 
             } catch (error) {
                 // Handle duplicate email error
@@ -11327,6 +11751,12 @@
                 showToast('account-blocked', false);
                 return;
             }
+            // DEBUG: log payment state and bkash trx id
+            try {
+                const mainPaymentChecked = document.querySelector('input[name="main-payment"]:checked')?.value || 'NONE';
+                const subPaymentChecked = document.querySelector('input[name="sub-payment"]:checked')?.value || 'NONE';
+                console.log('handlePlaceOrder invoked. mainPayment:', mainPaymentChecked, 'subPayment:', subPaymentChecked, 'bkashTransactionId:', window.bkashTransactionId);
+            } catch (e) { console.warn('Debug log failed', e); }
             if (!currentUser || currentUser.isAnonymous) {
                 showToast('Please log in to place an order.', false);
                 openDrawer('profile-drawer');
@@ -11375,6 +11805,16 @@
                 }
                 finalPaymentMethod = subPayment.value;
             }
+
+            // If user selected Nagad, inform them it's not available yet
+            if (finalPaymentMethod === 'Nagad') {
+                const nagadMsg = currentLanguage === 'bn'
+                    ? 'Nagad পেমেন্ট এখনও উপলব্ধ নেই — শীঘ্রই আসছে।'
+                    : 'Nagad payment is not available yet — coming soon.';
+                // Show a quick modal/message so user knows
+                showToast(nagadMsg, false);
+                return;
+            }
             
             const subtotal = Array.from(localCartCache.values()).reduce((sum, item) => sum + (item.price * item.quantity), 0);
             const deliveryCharge = await getDeliveryCharge(subtotal);
@@ -11383,6 +11823,146 @@
             // ✅ Ensure totalAmount is valid (must be > 0 per Firestore rules)
             if (!totalAmount || totalAmount <= 0) {
                 showToast('Invalid order amount. Please check your cart.', false);
+                return;
+            }
+
+            // If payment is Bkash but we don't yet have a transaction id, pause order creation
+            // and prompt user to submit the transaction id. Once provided, handlePlaceOrder
+            // will be called again and will proceed to create the order (bkashTransactionId present).
+            if (finalPaymentMethod === 'Bkash' && !(window.bkashTransactionId && String(window.bkashTransactionId).trim())) {
+                // Close any open payment modal and show the order-success modal as a pre-order instruction
+                closePaymentModal();
+                closeDrawer();
+
+                const fallbackNumber = '+8801886931064';
+                const displayedNumber = (document.getElementById('bkashNumber')?.innerText || fallbackNumber).trim();
+                const safeNumber = displayedNumber.replace(/\s+/g, '');
+                const instructionKey = 'payment-instruction-bkash';
+                const instructionText = translations[currentLanguage][instructionKey].replace('{amount}', totalAmount.toFixed(2));
+
+                // Render modal with amount, bKash number, Android/iOS open buttons, copy and Help, trx input and submit/cancel
+                const payOnlyText = currentLanguage === 'bn'
+                    ? `দয়া করে <strong>${totalAmount.toFixed(2)} টাকা</strong> আপনার bKash অ্যাপে পাঠান এবং নিচে Transaction ID প্রদান করুন।`
+                    : `Please send <strong>${totalAmount.toFixed(2)} Taka</strong> via your bKash app and provide the Transaction ID below.`;
+
+                DOMElements.paymentInstruction.innerHTML = `
+                    <div style="line-height:1.4">
+                        <div style="margin-bottom:8px;font-weight:600;">${payOnlyText}</div>
+                        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:6px;">
+                            <div style="background:#f5f5f5;padding:8px 10px;border-radius:6px;border:1px solid #eee;display:flex;flex-direction:column;">
+                                <div style="font-size:0.95rem;color:#111;font-weight:700;">${currentLanguage === 'bn' ? 'bKash নম্বর' : 'bKash number'}</div>
+                                <div id="preorder-bkash-number" style="font-weight:800;color:#000;font-size:1.05rem;">${safeNumber}</div>
+                            </div>
+                            <div style="display:flex;flex-direction:column;gap:8px;min-width:200px;">
+                                <div style="display:flex;gap:8px;">
+                                    <a id="preorder-open-android" href="#" style="background:#e2136e;color:#fff;padding:8px 12px;border-radius:6px;text-decoration:none;font-weight:700;">${currentLanguage === 'bn' ? 'Open bKash (Android)' : 'Open bKash (Android)'}</a>
+                                    <a id="preorder-open-ios" href="#" style="background:#111827;color:#fff;padding:8px 12px;border-radius:6px;text-decoration:none;font-weight:700;">${currentLanguage === 'bn' ? 'Open bKash (iOS)' : 'Open bKash (iOS)'}</a>
+                                </div>
+                                <div style="display:flex;gap:8px;align-items:center;">
+                                    <button id="preorder-copy-btn" style="background:#d12053;color:#fff;border:none;padding:8px 12px;border-radius:6px;cursor:pointer;font-weight:700;">${currentLanguage === 'bn' ? 'নম্বর কপি করুন' : 'Copy number'}</button>
+                                    <button id="preorder-help-btn" style="background:#6b7280;color:#fff;border:none;padding:8px 12px;border-radius:6px;cursor:pointer;font-weight:700;">${currentLanguage === 'bn' ? 'Transaction ID কি?' : 'What is Transaction ID?'}</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="preorder-help-text" style="display:none;margin-top:10px;padding:10px;border-radius:6px;background:#f9fafb;border:1px solid #e5e7eb;font-size:0.95rem;">
+                            <strong>${currentLanguage === 'bn' ? 'কেন Transaction ID দরকার?' : 'Why do we need the Transaction ID?'}</strong>
+                            <p style="margin:6px 0 0 0;">${currentLanguage === 'bn' ? 'পেমেন্ট সম্পন্ন করার পরে আপনার bKash অ্যাপে একটি Transaction ID (trxID) দেখা যাবে — এটি সাধারণত অক্ষর ও সংখ্যার একটি সিরিজ। এখানে সেই ID টি পেস্ট করুন যাতে আমরা আপনার পেমেন্ট নিশ্চিত করতে পারি এবং অর্ডার প্রসেস করতে পারি।' : 'After you complete the payment in your bKash app you will see a Transaction ID (a short alphanumeric code). Paste that ID here so we can verify your payment and complete the order.'}</p>
+                        </div>
+                        <div style="display:flex;flex-direction:column;gap:8px;margin-top:10px;">
+                            <input id="preorder-trx-input" placeholder="Example: 8N7S1K92LL" style="padding:10px;border:1px solid #ccc;border-radius:6px;max-width:360px;" />
+                            <div style="display:flex;gap:8px;">
+                                <button id="preorder-submit-trx-btn" style="background:#008000;color:#fff;border:none;padding:10px;border-radius:6px;font-weight:700;cursor:pointer;">${currentLanguage === 'bn' ? 'Transaction ID সাবমিট করুন ও অর্ডার স্থাপন' : 'Submit Transaction ID & Place Order'}</button>
+                                <button id="preorder-cancel-btn" style="background:#6b7280;color:#fff;border:none;padding:10px;border-radius:6px;font-weight:700;cursor:pointer;">${currentLanguage === 'bn' ? 'বাতিল' : 'Cancel'}</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                DOMElements.orderSuccessModal.classList.remove('hidden');
+                DOMElements.orderSuccessModal.classList.add('flex');
+
+                // Wire up buttons after a short delay to ensure DOM insertion
+                setTimeout(() => {
+                    const copyBtn = document.getElementById('preorder-copy-btn');
+                    const helpBtn = document.getElementById('preorder-help-btn');
+                    const helpText = document.getElementById('preorder-help-text');
+                    const trxInput = document.getElementById('preorder-trx-input');
+                    const submitBtn = document.getElementById('preorder-submit-trx-btn');
+                    const cancelBtn = document.getElementById('preorder-cancel-btn');
+                    const openAndroid = document.getElementById('preorder-open-android');
+                    const openIos = document.getElementById('preorder-open-ios');
+                    const numberEl = document.getElementById('preorder-bkash-number');
+                    const numberToCopy = numberEl ? numberEl.innerText.replace(/\s+/g, '') : fallbackNumber;
+
+                    if (copyBtn) {
+                        copyBtn.addEventListener('click', () => {
+                            navigator.clipboard.writeText(numberToCopy).then(() => {
+                                const orig = copyBtn.innerText;
+                                copyBtn.innerText = (currentLanguage === 'bn') ? 'কপি হয়েছে' : 'Copied!';
+                                copyBtn.style.background = '#28a745';
+                                setTimeout(() => {
+                                    copyBtn.innerText = orig;
+                                    copyBtn.style.background = '#d12053';
+                                }, 2000);
+                            }).catch(err => {
+                                alert((currentLanguage === 'bn') ? 'কপি করা সম্ভব হলো না: ' + err : 'Could not copy: ' + err);
+                            });
+                        });
+                    }
+
+                    if (helpBtn && helpText) {
+                        helpBtn.addEventListener('click', () => {
+                            helpText.style.display = helpText.style.display === 'none' ? 'block' : 'none';
+                        });
+                    }
+
+                    // Android intent link (works on most Android devices with bKash app installed)
+                    if (openAndroid) {
+                        const amountForIntent = String(Math.round(totalAmount));
+                        openAndroid.href = amountForIntent
+                            ? `intent://#Intent;scheme=bkash;package=com.bKash.customerapp;S.phone=${encodeURIComponent(numberToCopy)};S.amount=${encodeURIComponent(amountForIntent)};end`
+                            : `intent://#Intent;scheme=bkash;package=com.bKash.customerapp;S.phone=${encodeURIComponent(numberToCopy)};end`;
+                        openAndroid.setAttribute('target', '_blank');
+                    }
+
+                    // iOS deep-link: many apps accept a bkash:// scheme; fallback to App Store if not installed
+                    if (openIos) {
+                        const amountForIos = totalAmount ? totalAmount.toFixed(2) : '';
+                        // This URL scheme may vary by app version; this is a best-effort deep link.
+                        openIos.href = amountForIos
+                            ? `bkash://payment?phone=${encodeURIComponent(numberToCopy)}&amount=${encodeURIComponent(amountForIos)}`
+                            : `bkash://payment?phone=${encodeURIComponent(numberToCopy)}`;
+                        openIos.setAttribute('target', '_blank');
+                    }
+
+                    if (cancelBtn) {
+                        cancelBtn.addEventListener('click', () => {
+                            DOMElements.orderSuccessModal.classList.add('hidden');
+                            DOMElements.orderSuccessModal.classList.remove('flex');
+                        });
+                    }
+
+                    if (submitBtn) {
+                        submitBtn.addEventListener('click', () => {
+                            const v = trxInput ? trxInput.value.trim() : '';
+                            if (!v) {
+                                alert((currentLanguage === 'bn') ? 'দয়া করে Transaction ID প্রদান করুন।' : 'Please provide Transaction ID.');
+                                return;
+                            }
+                            // set global trx id and re-run order placement
+                            window.bkashTransactionId = v;
+                            // hide modal and re-run
+                            DOMElements.orderSuccessModal.classList.add('hidden');
+                            DOMElements.orderSuccessModal.classList.remove('flex');
+                            // small delay to avoid UI race
+                            setTimeout(() => {
+                                handlePlaceOrder();
+                            }, 150);
+                        });
+                    }
+                }, 50);
+
+                // pause here until user provides trx id
                 return;
             }
             
@@ -11411,6 +11991,7 @@
                 couponCode: appliedCouponCode || null,
                 totalAmount: totalAmount, // ✅ Must be > 0 per rules
                 paymentMethod: finalPaymentMethod,
+                bkashTransactionId: finalPaymentMethod === 'Bkash' ? (window.bkashTransactionId || null) : null,
                 orderStatus: "pending", // ✅ Must be 'pending' or 'Pending' per rules
                 status: "Pending", // Legacy field for backward compatibility
                 createdAt: serverTimestamp()
@@ -11441,13 +12022,48 @@
                      instructionKey = 'payment-instruction-cod';
                 }
                 const instructionText = translations[currentLanguage][instructionKey].replace('{amount}', totalAmount.toFixed(2));
-                DOMElements.paymentInstruction.textContent = instructionText;
-                DOMElements.orderSuccessModal.classList.remove('hidden');
-                DOMElements.orderSuccessModal.classList.add('flex');
+                // If Bkash, render the number with copy + open-app buttons inside the success modal
+                if (finalPaymentMethod === 'Bkash') {
+                    // prefer the checkout area number if present so it's consistent
+                    const fallbackNumber = '+8801886931064';
+                    const displayedNumber = (document.getElementById('bkashNumber')?.innerText || fallbackNumber).trim();
+                    const safeNumber = displayedNumber.replace(/\s+/g, '');
+                    // Show a simple amount-only instruction (do NOT display the phone number here)
+                    const payOnlyTextSuccess = currentLanguage === 'bn'
+                        ? `অনুগ্রহ করে ${totalAmount.toFixed(2)} টাকা আপনার bKash অ্যাপ থেকে পাঠান। Transaction ID প্রদান করার পর অর্ডারটি সম্পন্ন হবে।`
+                        : `Please pay ${totalAmount.toFixed(2)} Taka via your bKash app. Provide the Transaction ID to complete the order.`;
+                    DOMElements.paymentInstruction.innerHTML = `
+                        <div style="line-height:1.4">
+                            <div style="margin-bottom:8px;font-weight:600;">${payOnlyTextSuccess}</div>
+                        </div>
+                    `;
+                    DOMElements.orderSuccessModal.classList.remove('hidden');
+                    DOMElements.orderSuccessModal.classList.add('flex');
+
+                } else {
+                    // non-bKash flows keep original text-only instruction
+                    DOMElements.paymentInstruction.textContent = instructionText;
+                    DOMElements.orderSuccessModal.classList.remove('hidden');
+                    DOMElements.orderSuccessModal.classList.add('flex');
+                }
 
             } catch (error) {
+                // Improved error handling for Firestore permission / network errors
                 console.error("Error placing order: ", error);
-                showToast('order-placed-fail', false);
+                // If this is a Firestore permission error, show a clearer message
+                const errMsg = (error && (error.code || error.message)) ? (error.code ? `${error.code}: ${error.message || ''}` : error.message) : 'Unknown error';
+                if (String(errMsg).toLowerCase().includes('permission') || String(errMsg).toLowerCase().includes('insufficient')) {
+                    // Friendly UI for permission errors
+                    const userMsg = currentLanguage === 'bn'
+                        ? 'অপারেশনটি অনুমতি নেই — আপনার অ্যাকাউন্টে পর্যাপ্ত অনুমতি নেই বা ডাটাবেস নীতিমালা (Firestore rules) আপডেট করতে হবে. কনসোলে বিস্তারিত দেখুন.'
+                        : 'Operation not permitted — your account lacks permission or Firestore security rules must be updated. See console for details.';
+                    showToast(userMsg, false);
+                    console.error('Firestore permission error while placing order:', errMsg);
+                } else {
+                    showToast('order-placed-fail', false);
+                }
+                // Re-throw for higher-level monitoring if needed (optional)
+                // throw error;
             }
         }
         
@@ -11615,14 +12231,35 @@
             showPage('home-page');
             scrollToElement('top-category-strip');
         };
-        window.filterProducts = (category) => {
+        window.filterProducts = (category, subCategory = null) => {
             resetFiltersOnCategoryChange(false);
             const canonical = resolveCategoryId(category);
-            const filtered = productsData.filter(p => matchesCategoryName(p.category, canonical));
-            updateCategoryHeader(canonical, null);
+            
+            let filtered;
+            if (subCategory) {
+                // Filter by both category and subcategory
+                const resolvedSub = resolveSubCategoryValue(canonical, subCategory);
+                filtered = productsData.filter(p => 
+                    matchesCategoryName(p.category, canonical) && 
+                    matchesSubCategoryName(p.subCategory, canonical, resolvedSub)
+                );
+                updateCategoryHeader(canonical, resolvedSub);
+            } else {
+                // Filter by category only
+                filtered = productsData.filter(p => matchesCategoryName(p.category, canonical));
+                updateCategoryHeader(canonical, null);
+            }
+            
             renderProducts(filtered);
             showPage('home-page');
             scrollToElement('top-category-strip');
+            
+            // Close all dropdowns after selection
+            document.querySelectorAll('[id^="dropdown-"]').forEach(d => {
+                d.style.opacity = '0';
+                d.style.visibility = 'hidden';
+                d.style.transform = 'translateY(10px)';
+            });
         };
         window.filterSubCategory = (category, subCategory) => {
             const canonical = resolveCategoryId(category);
@@ -12322,7 +12959,7 @@
             doc.setFontSize(10);
             doc.setFont("helvetica", "normal");
             doc.setTextColor(100);
-            doc.text("Your trusted online shop for quality products. | +8801863205976", marginX, y); 
+            doc.text("Your trusted online shop for quality products. | +8801886931064", marginX, y); 
             y += 10;
             
             doc.setFontSize(20);
@@ -12878,9 +13515,9 @@
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- Language Toggle -->
-                    <div class="flex items-center gap-1 bg-white/20 rounded-full p-1">
-                        <button id="chat-lang-bn" class="px-2 py-1 text-xs rounded-full bg-white text-theme-purple font-semibold transition-all">বাং</button>
-                        <button id="chat-lang-en" class="px-2 py-1 text-xs rounded-full text-white hover:bg-white/20 font-semibold transition-all">EN</button>
+                    <div class="flex items-center gap-1 bg-white/10 rounded-full p-1">
+                        <button id="chat-lang-bn" class="px-2 py-1 text-xs rounded-full bg-white text-theme-purple font-semibold transition-all shadow-sm">বাং</button>
+                        <button id="chat-lang-en" class="px-2 py-1 text-xs rounded-full text-white/90 hover:bg-white/20 font-semibold transition-all">EN</button>
                     </div>
                     <button id="chat-close-btn" class="text-white hover:bg-white/20 rounded-full p-2 transition-colors">
                         <i class="fas fa-times"></i>
@@ -13042,17 +13679,17 @@
         function setChatLanguage(lang) {
             chatLanguage = lang;
             
-            // Update button states
+            // Update button states with enhanced styling
             if (lang === 'bn') {
-                chatLangBn.classList.add('bg-white', 'text-theme-purple');
-                chatLangBn.classList.remove('text-white', 'hover:bg-white/20');
-                chatLangEn.classList.remove('bg-white', 'text-theme-purple');
-                chatLangEn.classList.add('text-white', 'hover:bg-white/20');
+                chatLangBn.classList.add('bg-white', 'text-theme-purple', 'shadow-sm');
+                chatLangBn.classList.remove('text-white/90', 'hover:bg-white/20');
+                chatLangEn.classList.remove('bg-white', 'text-theme-purple', 'shadow-sm');
+                chatLangEn.classList.add('text-white/90', 'hover:bg-white/20');
             } else {
-                chatLangEn.classList.add('bg-white', 'text-theme-purple');
-                chatLangEn.classList.remove('text-white', 'hover:bg-white/20');
-                chatLangBn.classList.remove('bg-white', 'text-theme-purple');
-                chatLangBn.classList.add('text-white', 'hover:bg-white/20');
+                chatLangEn.classList.add('bg-white', 'text-theme-purple', 'shadow-sm');
+                chatLangEn.classList.remove('text-white/90', 'hover:bg-white/20');
+                chatLangBn.classList.remove('bg-white', 'text-theme-purple', 'shadow-sm');
+                chatLangBn.classList.add('text-white/90', 'hover:bg-white/20');
             }
 
             // Update UI elements
@@ -13302,6 +13939,358 @@ Give brief and helpful responses.`;
             }
         }, 5000);
     })();
+    
+    </script>
+
+    <script>
+    // ==========================================
+    // Load Categories from Firebase
+    // ==========================================
+    let firebaseCategories = []; // Store categories globally
+    let categoryLoadRetryCount = 0; // Track retry attempts
+    const MAX_CATEGORY_LOAD_RETRIES = 10; // Maximum retry attempts
+
+    // Note: toTitleCase() function is already defined globally above
+
+    // Updated loadCategories function with better debugging
+    async function loadCategories() {
+        try {
+            console.log('--- Category Loading Started ---');
+            
+            const categoriesGrid = document.getElementById('categories-grid');
+            
+            // ১. ফায়ারবেস ইনিশিয়ালাইজ হয়েছে কিনা চেক করা
+            // যদি window.db না পাওয়া যায়, ১ সেকেন্ড পর আবার চেষ্টা করবে
+            if (!window.db || !window.firestoreCollection) {
+                console.warn('Firebase DB not ready yet. Retrying in 1 second...');
+                setTimeout(loadCategories, 1000);
+                return;
+            }
+
+            // ২. লোডিং এনিমেশন দেখানো
+            if(categoriesGrid) {
+                categoriesGrid.innerHTML = '<div class="col-span-full text-center"><div class="loader mx-auto"></div><p class="mt-2 text-gray-500">Loading Categories...</p></div>';
+            }
+            
+            // ৩. কালেকশন থেকে ডাটা আনা
+            // হুবহু 'categories' নাম ব্যবহার করা হচ্ছে
+            const categoriesRef = window.firestoreCollection(window.db, 'categories');
+            const categoriesSnapshot = await window.firestoreGetDocs(categoriesRef);
+            
+            console.log(`Total Categories Found: ${categoriesSnapshot.size}`);
+
+            if (categoriesSnapshot.empty) {
+                console.error('Warning: "categories" collection is empty or does not exist!');
+                if(categoriesGrid) {
+                    categoriesGrid.innerHTML = `
+                        <div class="col-span-full text-center py-8 text-red-500">
+                            <i class="fas fa-exclamation-circle text-3xl mb-2"></i>
+                            <p class="font-bold">No categories found in Database!</p>
+                            <p class="text-xs mt-1">Please check your Firebase Console.</p>
+                            <p class="text-xs">Collection name must be: <strong>categories</strong> (lowercase)</p>
+                        </div>`;
+                }
+                // Clear global header categories
+                if(typeof HEADER_CATEGORY_GROUPS !== 'undefined') HEADER_CATEGORY_GROUPS.length = 0;
+                return;
+            }
+
+            // ৪. ডাটা প্রসেসিং
+            const categories = [];
+            categoriesSnapshot.forEach(doc => {
+                const data = doc.data();
+                // কনসোলে ডাটা প্রিন্ট হবে, চেক করে দেখুন name ফিল্ড আছে কিনা
+                console.log('📦 Category Item:', doc.id, data);
+                if (data.image) {
+                    console.log('🖼️  Category image URL:', data.image);
+                }
+                categories.push({ id: doc.id, ...data });
+            });
+
+            // Sort by order field
+            categories.sort((a, b) => (a.order || 0) - (b.order || 0));
+
+            // ৫. HTML রেন্ডারিং
+            if(categoriesGrid) {
+                categoriesGrid.innerHTML = ''; // ক্লিয়ার লোডিং
+                
+                categories.forEach(category => {
+                    const categoryCard = document.createElement('div');
+                    categoryCard.className = 'bg-white dark:bg-gray-800 p-5 sm:p-6 lg:p-8 rounded-3xl shadow-xl text-center transition-transform hover:-translate-y-2 hover:shadow-2xl cursor-pointer border border-gray-100 dark:border-gray-700';
+                    
+                    // সাবক্যাটাগরি হ্যান্ডলিং - handle both object and array
+                    let hasSubcategories = false;
+                    if (category.subcategories) {
+                        if (Array.isArray(category.subcategories)) {
+                            hasSubcategories = category.subcategories.length > 0;
+                        } else if (typeof category.subcategories === 'object') {
+                            hasSubcategories = Object.keys(category.subcategories).length > 0;
+                        }
+                    }
+                    
+                    // Use category name (English) for filtering, not the auto-generated Firebase ID
+                    const categoryNameForFilter = category.nameEn || category.name || category.id;
+                    
+                    if (hasSubcategories && typeof showCategorySubcategoriesModal === 'function') {
+                        categoryCard.onclick = () => showCategorySubcategoriesModal(category);
+                    } else if (typeof filterProducts === 'function') {
+                        categoryCard.onclick = () => filterProducts(categoryNameForFilter);
+                    }
+                    
+                    // নাম ঠিক করা - Title Case apply করা (প্রথম অক্ষর বড়, বাকি ছোট)
+                    const displayName = toTitleCase(category.name || category.id);
+                    const displayNameEn = toTitleCase(category.nameEn || category.name || category.id);
+                    const finalName = (typeof currentLanguage !== 'undefined' && currentLanguage === 'bn') ? displayName : displayNameEn;
+                    
+                    // ইমেজ বা আইকন লজিক
+                    let visual = '';
+                    if (category.image) {
+                        visual = `<div class="h-20 mb-3 flex items-center justify-center">
+                                    <img src="${category.image}" class="max-h-full max-w-full object-contain" alt="${finalName}" loading="lazy" onerror="console.error('Failed to load image:', this.src); this.style.display='none'; this.nextElementSibling.style.display='block';">
+                                    <div class="text-4xl text-theme-blue hidden"><i class="fas ${category.icon || 'fa-box'}"></i></div>
+                                  </div>`;
+                    } else {
+                        visual = `<div class="text-3xl sm:text-4xl lg:text-5xl text-theme-blue mb-3"><i class="fas ${category.icon || 'fa-box'}"></i></div>`;
+                    }
+
+                    categoryCard.innerHTML = `
+                        ${visual}
+                        <h3 class="text-lg sm:text-xl font-semibold text-gray-800 dark:text-gray-100" data-bn-name="${displayName}" data-en-name="${displayNameEn}">${finalName}</h3>
+                        ${hasSubcategories ? `<p class="text-xs text-gray-500 dark:text-gray-400 mt-2">${category.subcategories.length} items</p>` : ''}
+                    `;
+                    categoriesGrid.appendChild(categoryCard);
+                });
+            }
+
+            // ৬. মোবাইল ড্রয়ার আপডেট (যদি গ্লোবাল ভেরিয়েবল থাকে)
+            if (typeof HEADER_CATEGORY_GROUPS !== 'undefined') {
+                HEADER_CATEGORY_GROUPS.length = 0;
+                categories.forEach(cat => {
+                    let subItems = [];
+                    
+                    // Handle subcategories - can be object or array
+                    if (cat.subcategories) {
+                        let subcatArray = [];
+                        
+                        // Convert object to array if needed
+                        if (typeof cat.subcategories === 'object' && !Array.isArray(cat.subcategories)) {
+                            subcatArray = Object.values(cat.subcategories);
+                            console.log(`📦 ${cat.name}: Converting object to array, found ${subcatArray.length} subcategories`);
+                        } else if (Array.isArray(cat.subcategories)) {
+                            subcatArray = cat.subcategories;
+                            console.log(`📦 ${cat.name}: Already array, found ${subcatArray.length} subcategories`);
+                        }
+                        
+                        subcatArray.forEach(sub => {
+                            if (typeof sub === 'string') {
+                                subItems.push({ value: sub, label: { en: sub, bn: sub } });
+                            } else if (typeof sub === 'object') {
+                                const sName = sub.name || sub.id || sub.nameEn || 'Unnamed';
+                                subItems.push({ 
+                                    value: sName, 
+                                    label: { en: sub.nameEn || sName, bn: sub.name || sName }, 
+                                    image: sub.image 
+                                });
+                            }
+                        });
+                    }
+                    
+                    console.log(`✅ ${cat.name}: Added ${subItems.length} subcategories to HEADER_CATEGORY_GROUPS`);
+                    
+                    HEADER_CATEGORY_GROUPS.push({
+                        id: cat.id,
+                        label: { en: cat.nameEn || cat.name, bn: cat.name },
+                        items: subItems
+                    });
+                });
+                
+                if (typeof renderMobileCategoriesMainView === 'function') {
+                    renderMobileCategoriesMainView();
+                }
+            }
+
+            console.log(`✅ Loaded ${categories.length} categories successfully`);
+
+        } catch (error) {
+            console.error('❌ Serious Error loading categories:', error);
+            const categoriesGrid = document.getElementById('categories-grid');
+            if (categoriesGrid) {
+                categoriesGrid.innerHTML = `<div class="col-span-full text-center py-8">
+                    <p class="text-red-500 font-bold">Category load failed!</p>
+                    <p class="text-xs text-gray-500 mt-2">${error.message}</p>
+                </div>`;
+            }
+        }
+    }
+
+    // Function to show subcategories modal for a category
+    function showCategorySubcategoriesModal(category) {
+        console.log('📋 Opening subcategory modal for category:', category.id);
+        console.log('📋 Category data:', category);
+        
+        const modal = document.getElementById('subcategory-modal');
+        const modalTitle = document.getElementById('subcategory-modal-title');
+        const modalGrid = document.getElementById('subcategory-modal-grid');
+        
+        if (!modal || !modalTitle || !modalGrid) {
+            console.error('❌ Subcategory modal elements not found');
+            if (typeof filterProducts === 'function') {
+                // Use category name for filtering, not the auto-generated Firebase ID
+                const categoryName = category.nameEn || category.name || category.id;
+                filterProducts(categoryName);
+            }
+            return;
+        }
+        
+        // Set title with language support - Title Case apply করা
+        const categoryName = currentLanguage === 'bn' ? toTitleCase(category.name || category.id) : toTitleCase(category.nameEn || category.name || category.id);
+        modalTitle.textContent = categoryName;
+        
+        // Clear previous content
+        modalGrid.innerHTML = '';
+        
+        console.log('📋 Has subcategories:', category.subcategories && category.subcategories.length > 0);
+        if (category.subcategories) {
+            console.log('📋 Subcategory count:', category.subcategories.length);
+            console.log('📋 Subcategories:', category.subcategories);
+        }
+        
+        // Add "View All" button first
+        const viewAllCard = document.createElement('div');
+        viewAllCard.className = 'bg-gradient-to-br from-theme-blue to-theme-purple p-4 sm:p-6 rounded-2xl shadow-lg text-center cursor-pointer transition-transform hover:-translate-y-1 hover:shadow-xl';
+        viewAllCard.onclick = () => {
+            // Use category name for filtering, not the auto-generated Firebase ID
+            const categoryNameForFilter = category.nameEn || category.name || category.id;
+            filterProducts(categoryNameForFilter);
+            closeSubcategoryModal();
+        };
+        viewAllCard.innerHTML = `
+            <div class="text-3xl sm:text-4xl text-white mb-2">
+                <i class="fas fa-th-large"></i>
+            </div>
+            <h4 class="text-sm sm:text-base font-bold text-white">${currentLanguage === 'bn' ? 'সকল দেখুন' : 'View All'}</h4>
+        `;
+        modalGrid.appendChild(viewAllCard);
+        
+        // Add subcategories - handle both object and array
+        if (category.subcategories) {
+            let subcatArray = [];
+            
+            // Convert object to array if needed
+            if (typeof category.subcategories === 'object' && !Array.isArray(category.subcategories)) {
+                subcatArray = Object.values(category.subcategories);
+            } else if (Array.isArray(category.subcategories)) {
+                subcatArray = category.subcategories;
+            }
+            
+            subcatArray.forEach(sub => {
+                const subCard = document.createElement('div');
+                subCard.className = 'bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-2xl shadow-md text-center cursor-pointer transition-transform hover:-translate-y-1 hover:shadow-xl border border-gray-100 dark:border-gray-700';
+                
+                let subName, subNameEn, subImage;
+                
+                if (typeof sub === 'string') {
+                    subName = sub;
+                    subNameEn = sub;
+                    subImage = null;
+                } else if (typeof sub === 'object' && sub !== null) {
+                    subName = sub.name || sub.id || '';
+                    subNameEn = sub.nameEn || subName;
+                    subImage = sub.image || null;
+                }
+                
+                subCard.onclick = () => {
+                    // Use category name for filtering, not the auto-generated Firebase ID
+                    const categoryNameForFilter = category.nameEn || category.name || category.id;
+                    filterSubCategory(categoryNameForFilter, subName);
+                    closeSubcategoryModal();
+                };
+                
+                let visual = '';
+                if (subImage) {
+                    visual = `<div class="h-20 mb-3 flex items-center justify-center">
+                                <img src="${subImage}" class="max-h-full max-w-full object-contain rounded-lg" alt="${subName}" loading="lazy" onerror="console.error('Failed to load subcategory image:', this.src); this.style.display='none'; this.nextElementSibling.style.display='block';">
+                                <div class="text-2xl sm:text-3xl text-theme-blue hidden"><i class="fas fa-tag"></i></div>
+                              </div>`;
+                } else {
+                    visual = `<div class="text-2xl sm:text-3xl text-theme-blue mb-3"><i class="fas fa-tag"></i></div>`;
+                }
+                
+                const displayName = currentLanguage === 'bn' ? toTitleCase(subName) : toTitleCase(subNameEn);
+                
+                subCard.innerHTML = `
+                    ${visual}
+                    <h4 class="text-sm sm:text-base font-semibold text-gray-800 dark:text-gray-100">${displayName}</h4>
+                `;
+                
+                modalGrid.appendChild(subCard);
+            });
+        }
+        
+        // Show modal
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+
+    // Function to close subcategory modal
+    function closeSubcategoryModal() {
+        const modal = document.getElementById('subcategory-modal');
+        if (modal) {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+    }
+
+    // Function to show subcategories for top category strip buttons
+    // This needs to reconstruct the full category data from HEADER_CATEGORY_GROUPS
+    function showTopCategoryWithSubcategories(categoryId) {
+        const group = HEADER_CATEGORY_GROUPS.find(g => g.id === categoryId);
+        if (!group || !group.items || group.items.length === 0) {
+            // No subcategories, just filter directly
+            // Use category name for filtering, not the auto-generated Firebase ID
+            const categoryName = group ? (group.label?.en || group.label?.bn || categoryId) : categoryId;
+            filterProducts(categoryName);
+            return;
+        }
+        
+        // Reconstruct category object for the modal
+        const categoryObj = {
+            id: group.id,
+            name: group.label?.bn || group.id,
+            nameEn: group.label?.en || group.label?.bn || group.id,
+            subcategories: group.items.map(item => {
+                if (typeof item.value === 'string') {
+                    return {
+                        name: item.label?.bn || item.value,
+                        nameEn: item.label?.en || item.label?.bn || item.value,
+                        image: item.image || null
+                    };
+                }
+                return item;
+            })
+        };
+        
+        showCategorySubcategoriesModal(categoryObj);
+    }
+
+    // Load categories when page loads
+    // NOTE: This is now triggered from within the Firebase initialization module
+    // to ensure Firebase is ready before attempting to load categories
+    console.log('Category loader script loaded. Waiting for Firebase initialization...');
+    
+    // Fallback: If Firebase module somehow calls this before it's defined,
+    // we can still handle it via the retry mechanism in loadCategories()
+    /*
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM loaded, now loading categories...');
+            loadCategories();
+        });
+    } else {
+        // DOM already loaded
+        loadCategories();
+    }
+    */
 </script>
 
 </body>
